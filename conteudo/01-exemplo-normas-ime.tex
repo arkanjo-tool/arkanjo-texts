@@ -2,92 +2,47 @@
 %("dica" para o editor de texto: este arquivo é parte de um documento maior)
 % para saber mais: https://tex.stackexchange.com/q/78101
 
-\chapter{O que o IME espera (normas)}
+\en
 
-Fica a critério do aluno definir os aspectos relacionados à aparência da
-tese, como o tamanho de fonte, margens, espaçamento, estilo de referências,
-cabeçalho, etc., considerando sempre o bom senso.
+\chapter{Background}
 
-A CPG, em reunião realizada em junho de 2007, aprovou que as
-teses/dissertações deverão seguir o formato padrão por ela definido.
-Esse padrão refere-se aos itens que devem estar presentes nas teses/dissertações
-(e.g. capa, formato de rosto, sumário, etc.), e não à formatação do documento.
-Ele define itens obrigatórios e opcionais, conforme segue:\index{Formatação}
-\index{Tese/Dissertação!itens obrigatórios}
-\index{Tese/Dissertação!itens opcionais}
+\section{Code Duplication Detection}
+
+Code Duplication Detection is a field in computer science studies that gets the attention of researchers back to 1988 \citep{firstman}.
+The occurrence of Code Duplication is a harmful artifact to have in a software, affecting software's related tasks such as code readability,
+introdution of bugs, addition of co-changed requirement, etc.   \citep{harmone}. 
+On most of the cases, the occurrence of Code Duplication tends to create a more unstable software then the nonduplicate code counterpart   \citep{harmtwo}.
+
+Through the years, the subject of studies about Code Duplication Detection branched out mainly in two fields of study,
+Code Clone Detection and Code Plagiarism Detection,
+with the former one focused on the technical aspect while the later one also introduces an social aspect on the field of research
+\citep{litreview}. For our research we are only interested on the Code Clone Detection branch given the nature of our work.
+
+
+
+\subsection{Types of Code Duplication}
+
+The categorization of two code artifacts as a duplication of each other is a subjective task (REFERENCE HERE). 
+To mitigate this human aspect on the given problem, the literature classified Code Duplication on the scale of changes in between 
+the code artifacts in four main types of Code Duplication \citep{litreview}. Given two code artifacts F and G, 
+the types of Code Duplication are described as follow \citep{litreview}:
 
 \begin{itemize}
-  \item \textsc{Capa} (obrigatória)
-  \begin{itemize}
-    \item O IME usa uma capa padrão de cartolina para todas as
-    teses/dissertações. Essa capa tem uma janela recortada por onde se
-    vê o título e o autor do trabalho e, portanto, a capa impressa do
-    trabalho deve incluir o título e o autor na posição correspondente da
-    página. Ela fica centralizada na página, tem 100mm de largura, 60mm de
-    altura e começa 47mm abaixo do topo da página.
+	\item \textbf{Type-1:} The differences between F and G are in the context of revision of comments, variable names, white spaces and any other kind of irrelevant elements. (ADD FIGURE) shows a typical example of Type-1 Code Duplication \citep{litreview}. 
 
-    \item O título da tese/dissertação deverá começar com letra maiúscula
-    e o resto deverá ser em minúsculas, salvo nomes próprios.
+	\item \textbf{Type-2:} The differences between F and G is the same as the Type-1, with the addition of considering addition and deletion of redudant codes. (ADD FIGURE) shows a typical example of Type-2 Code Duplication \citep{litreview}. 
 
-    \item O nome do aluno(a) deverá ser completo e sem abreviaturas.
+	\item \textbf{Type-3:} The difference between F and G is the same as the Type-2, with the addition of considering the reorder of code blocks as well as statements within code blocks. (ADD FIGURE) shows a typical example of Type-3 Code Duplication \citep{litreview}. 
 
-    \item É preciso explicitar se é uma tese ou dissertação (para
-    obtenção do título de doutor, tese; para obtenção do título de
-    mestre, dissertação).
-
-    \item O nome do programa deve constar da capa (Matemática,
-    Matemática Aplicada, Estatística, Ciência da Computação ou
-    Mestrado Profissional em Ensino de Matemática).
-
-    \item Também devem constar o nome completo do orientador e do
-    co-orientador, se houver.
-
-    \item Se o aluno recebeu bolsa, deve-se indicar a(s) agência(s).
-
-    \item É preciso informar o mês e ano do depósito ou da entrega da
-    versão corrigida.
-  \end{itemize}
-
-  \pagebreak % Às vezes, o uso da força é inevitável ;-)
-
-  \item \textsc{Folha de rosto} (obrigatória, tanto para a versão
-  depositada quanto para a versão corrigida)
-  \begin{itemize}
-    \item O título da tese/dissertação deverá seguir o padrão da capa.
-
-    \item Deve informar se se trata da versão original ou da versão
-    corrigida (veja mais sobre isso abaixo); no segundo caso, deve
-    também incluir os nomes dos membros da banca.
-  \end{itemize}
-
-  \item \textsc{Agradecimentos} (opcional)
-
-  \item \textsc{Resumo}, em português (obrigatório)
-
-  \item \textsc{Abstract}, em inglês (obrigatório)
-
-  \item \textsc{Sumário} (obrigatório)
-
-  \item \textsc{Listas} (opcionais)
-  \begin{itemize}
-    \item Lista de abreviaturas
-    \item Lista de símbolos
-    \item Lista de figuras
-    \item Lista de tabelas
-  \end{itemize}
-
-  \item \textsc{Referências} (obrigatório)
-
-  \item \textsc{Índice remissivo} (opcional\footnote{O índice remissivo
-   pode ser muito útil para a banca; assim, embora seja um item opcional,
-   recomendamos que você o crie.})
+	\item \textbf{Type-4:} The difference between F and G is the same as the Type-3, with the addtionf of considering changes on data sctrucure, the order of operands/operators in expresssions, or replacing part of codes with equivalent composition. (ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
 \end{itemize}
 
-\enlargethispage{-1\baselineskip}
 
-Ao terminar sua tese/dissertação, você deve entregar uma cópia (digital) dela
-para a CPG. Após a defesa, você tem 30 dias para revisar o texto e incorporar
-as sugestões da banca. Assim, há duas versões oficiais do documento: a versão
-original e a versão corrigida, o que deve ser indicado na folha de rosto.
+
+
+
+
+
+
 \index{Tese/Dissertação!versões}
 
