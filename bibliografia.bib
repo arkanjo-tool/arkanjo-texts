@@ -348,3 +348,104 @@ abstract = {It is said that the presence of duplicate code is one of the factors
 journal = {Adv. Soft. Eng.},
 month = {jan},
 }
+
+@inproceedings{textexample,
+author = {Roy, Chanchal K. and Cordy, James R.},
+title = {NICAD: Accurate Detection of Near-Miss Intentional Clones Using Flexible Pretty-Printing and Code Normalization},
+year = {2008},
+isbn = {9780769531762},
+publisher = {IEEE Computer Society},
+address = {USA},
+url = {https://doi.org/10.1109/ICPC.2008.41},
+doi = {10.1109/ICPC.2008.41},
+abstract = {This paper examines the effectiveness of a new language-specific parser-based but lightweight clone detection approach. Exploiting a novel application of a source transformation system, the method accurately finds near-miss clones using an efficient text line comparison technique. The transformation system assists the methodin three ways. First, using agile parsing it provides user-specified flexible pretty-printing to remove noise, standardize formatting and break program statements into parts such that potential changes can be detected as simple linewise text differences. Second, it provides efficient flexible extraction of potential clones to be compared using island grammars and agile parsing to select granularities and enumerate potential clones. Third, using transformation rules it provides flexible code normalization to allow for local editing differences between similar code segments and filtering out of uninteresting parts of potential clones. In this paper we introduce the theory and practice of the framework and demonstrate its use in finding function clones in C code. Early experiments indicate that the method is capable of finding near-miss clones with high precision and recall, and with reasonable performance.},
+booktitle = {Proceedings of the 2008 The 16th IEEE International Conference on Program Comprehension},
+pages = {172–181},
+keywords = {Clone Detection, Flexible Code Filtering, Flexible Code Normalization, Flexible Pretty-Printing, Near-Miss Intentional Clones},
+series = {ICPC '08}
+}
+
+@INPROCEEDINGS{tokenexample,
+  author={Han, Lifang and Cui, Baojiang and Zhang, Ru and Li, Zhongxian and Wang, Jianxin and Hao, Yongle},
+  booktitle={2010 International Conference on Multimedia Information Networking and Security}, 
+  title={Type Redefinition Plagiarism Detection of Token-Based Comparison}, 
+  year={2010},
+  volume={},
+  number={},
+  pages={351-355},
+  keywords={Plagiarism;Cloning;Accuracy;Software algorithms;Algorithm design and analysis;Open source software;homologous software;Token;type redefinition},
+  doi={10.1109/MINES.2010.80}
+ }
+
+@book{compiler,
+  author={AHO, A.V.; SETHI, R. and ULLMAN, J.D},
+  title={ Compilers, Principles, Techniques, and Tools},
+  publisher={Addison-Wesley Pub. Company},
+  year={1986},
+}
+
+@INPROCEEDINGS{treeexample,
+  author={Chilowicz, Michel and Duris, Etienne and Roussel, Gilles},
+  booktitle={2009 IEEE 17th International Conference on Program Comprehension},
+  title={Syntax tree fingerprinting for source code similarity detection},
+  year={2009},
+  volume={},
+  number={},
+  pages={243-247},
+  keywords={Fingerprint recognition;Cloning;Databases;Plagiarism;Software maintenance;Scalability;Pattern analysis;Indexes;Information retrieval;Pattern matching},
+  doi={10.1109/ICPC.2009.5090050}
+ }
+
+@misc{wordtovec,
+      title={Efficient Estimation of Word Representations in Vector Space}, 
+      author={Tomas Mikolov and Kai Chen and Greg Corrado and Jeffrey Dean},
+      year={2013},
+      eprint={1301.3781},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+
+@inproceedings{metricexample,
+author = {Choi, Eunjong and Yoshida, Norihiro and Ishio, Takashi and Inoue, Katsuro and Sano, Tateki},
+title = {Extracting code clones for refactoring using combinations of clone metrics},
+year = {2011},
+isbn = {9781450305884},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1985404.1985407},
+doi = {10.1145/1985404.1985407},
+abstract = {Code clone detection tools may report a large number of code clones, while software developers are interested in only a subset of code clones that are relevant to software development tasks such as refactoring. Our research group has supported many software developers with the code clone detection tool CCFinder and its GUI front-end Gemini. Gemini shows clone sets (i.e., a set of code clones identical or similar to each other) with several clone metrics including their length and the number of code clones; however, it is not clear how to use those metrics to extract interesting code clones for developers. In this paper, we propose a method combining clone metrics to extract code clones for refactoring activity. We have conducted an empirical study on a web application developed by a Japanese software company. The result indicates that combinations of simple clone metric is more effective to extract refactoring candidates in detected code clones than individual clone metric.},
+booktitle = {Proceedings of the 5th International Workshop on Software Clones},
+pages = {7–13},
+keywords = {code clone, industrial case study, refactoring},
+location = {Waikiki, Honolulu, HI, USA},
+series = {IWSC '11}
+}
+
+@article{prodg,
+author = {Ferrante, Jeanne and Ottenstein, Karl J. and Warren, Joe D.},
+title = {The program dependence graph and its use in optimization},
+year = {1987},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {9},
+number = {3},
+issn = {0164-0925},
+url = {https://doi.org/10.1145/24039.24041},
+doi = {10.1145/24039.24041},
+abstract = {In this paper we present an intermediate program representation, called the program dependence graph (PDG), that makes explicit both the data and control dependences for each operation in a program. Data dependences have been used to represent only the relevant data flow relationships of a program. Control dependences are introduced to analogously represent only the essential control flow relationships of a program. Control dependences are derived from the usual control flow graph. Many traditional optimizations operate more efficiently on the PDG. Since dependences in the PDG connect computationally related parts of the program, a single walk of these dependences is sufficient to perform many optimizations. The PDG allows transformations such as vectorization, that previously required special treatment of control dependence, to be performed in a manner that is uniform for both control and data dependences. Program transformations that require interaction of the two dependence types can also be easily handled with our representation. As an example, an incremental approach to modifying data dependences resulting from branch deletion or loop unrolling is introduced. The PDG supports incremental optimization, permitting transformations to be triggered by one another and applied only to affected dependences.},
+journal = {ACM Trans. Program. Lang. Syst.},
+month = {jul},
+pages = {319–349},
+}
+
+@INPROCEEDINGS{tailor,
+  author={Liu, Jiahao and Zeng, Jun and Wang, Xiang and Liang, Zhenkai},
+  booktitle={2023 IEEE/ACM 45th International Conference on Software Engineering (ICSE)},
+  title={Learning Graph-based Code Representations for Source-level Functional Similarity Detection},
+  year={2023},
+  volume={},
+  number={},
+  pages={345-357},
+  keywords={Representation learning;Codes;Source coding;Semantics;Cloning;Syntactics;Graph neural networks},
+  doi={10.1109/ICSE48619.2023.00040}}
