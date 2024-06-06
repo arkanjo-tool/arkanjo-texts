@@ -22,16 +22,12 @@ the types of Code Duplication are described as follow \citep{litreview}:
 \begin{itemize}
 	\item \textbf{Type-1:} The differences between F and G are in the context of revision of comments, variable names, white spaces and any other kind of irrelevant elements. (ADD FIGURE) shows a typical example of Type-1 Code Duplication \citep{litreview}. 
 
-	\item \textbf{Type-2:} The differences between F and G is the same as the Type-1, with the addition of considering addition and deletion of redudant codes. (ADD FIGURE) shows a typical example of Type-2 Code Duplication \citep{litreview}. 
+	\item \textbf{Type-2:} The differences between F and G is the same as the type-1, with the addition of considering addition and deletion of redudant codes. (ADD FIGURE) shows a typical example of Type-2 Code Duplication \citep{litreview}. 
 
-	\item \textbf{Type-3:} The difference between F and G is the same as the Type-2, with the addition of considering the reorder of code blocks as well as statements within code blocks. (ADD FIGURE) shows a typical example of Type-3 Code Duplication \citep{litreview}. 
+	\item \textbf{Type-3:} The difference between F and G is the same as the type-2, with the addition of considering the reorder of code blocks as well as statements within code blocks. (ADD FIGURE) shows a typical example of Type-3 Code Duplication \citep{litreview}. 
 
-	\item \textbf{Type-4:} The difference between F and G is the same as the Type-3, with the addtionf of considering changes on data sctrucure, the order of operands/operators in expresssions, or replacing part of codes with equivalent composition. (ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
+	\item \textbf{Type-4:} The difference between F and G is the same as the type-3, with the addtionf of considering changes on data sctrucure, the order of operands/operators in expresssions, or replacing part of codes with equivalent composition. (ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
 \end{itemize}
-
-Given the complexity of  types 3 and 4 of code duplications, the state-of-art approches that aims at this type of
-duplication constantly have a high cost in computational time and memory space \citep{litreview}, which is a concern in our research 
-that aim to work in large codebases scopes. For this reason we will look after mainly at type 1 and 2 of code duplications.
 
 \subsection{Literature approches for code clone detection}
 
@@ -65,6 +61,20 @@ five main methodologies given the main nature of their work \citep{litreview} , 
 	about program's control, statement and data dependencies. One example of usage of the program dependence graph is 
 	the recently work done by Liu et al. \citep{tailor}.
 \end{itemize}
+
+Given the necessity to evaluate and compare approches for code clone detection, it was developed and widely-adopted two datasets: 
+OJ-Clone, a dataset collected from a pedagogical online judge system \citep{ojclone}, and BigCloneBench, a datatset collected from over 
+25,000 Java software systems \citep{bigclonebench}. The existence of only two spreaded datasets is a open concern in literature as 
+the limited scope of OJ-Clone and the problems of BigCloneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail}
+
+The state-of-art methods for code clone detection usually have high computational time and memory space usage, as well being
+programming language specific approches, which cannot be easily implemented in programming languagues that were not used in 
+their research \citep{litreview}. These are main concern for our research and for this reason we will use a generalist textual-based 
+approach based solely on Natural Languague Processing (NLP) text similarity detection methods, which we will introduce and compare
+with the literature approches later on this document. 
+
+
+
 
 
 
