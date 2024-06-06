@@ -20,11 +20,11 @@ with the former one focused on the technical aspect while the later one also int
 
 
 
-\subsection{Types of code duplication}
+\subsection{Types of code clone duplication}
 
 The categorization of two code artifacts as a duplication of each other is a subjective task (REFERENCE HERE). 
 To mitigate this human aspect on the given problem, the literature classified code duplication on the scale of changes between 
-the code artifacts in four main types of code dlone duplication \citep{litreview}. Given two code artifacts F and G, 
+the code artifacts in four main types of code clone duplication \citep{litreview}. Given two code artifacts F and G, 
 the types of Code Duplication are described as follow \citep{litreview}:
 
 \begin{itemize}
@@ -36,6 +36,10 @@ the types of Code Duplication are described as follow \citep{litreview}:
 
 	\item \textbf{Type-4:} The difference between F and G is the same as the Type-3, with the addtionf of considering changes on data sctrucure, the order of operands/operators in expresssions, or replacing part of codes with equivalent composition. (ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
 \end{itemize}
+
+Given the complexity of Types 3 and 4 of code duplications, the state-of-art approches that aims at this type of
+duplication constantly have a high cost in computational time and memory space \citep{letreview}, which is a concern in our research 
+that aim to work in large codebases scopes. For this reason we will look after mainly at Type 1 and 2 of code duplications.
 
 \subsection{Literature approches for code clone detection}
 
