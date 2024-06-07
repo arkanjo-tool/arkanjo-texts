@@ -19,3 +19,15 @@ It is a famous fact that LLM have high computational cost, one example of such i
 finding the most similar pair in a collection of 10,000 sentences, that required about 65 hours with BERT \citep{bertsimilar}. This 
 is a similar magnitude of comparation pairs we want to do through our work and for this reason we chose to not use this kind of 
 vector embedding method, but it is a valid solution for smaller codebases.
+
+\subsection{Gensim}
+
+Gensim is a open source python library \citep{gensim} which the owners declare themselves as "The fastest library 
+for training of vector embeddings - Python or otherwise. The core algorithms in Gensim use battle-hardened, 
+highly optimized and parallelized C routines." \citep{gensimsite}. For the velocity of gensim we chose to use this library
+for doing our vector embeddings. 
+
+In this work we will not explore more alternatives for vector embeddings. We do not want to optimize the computational 
+cost or the code clone detection to the state-of-art as they are not the main objectives of our research.
+
+
