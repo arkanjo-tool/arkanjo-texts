@@ -1,14 +1,41 @@
 \en
 
 Our proposed tool is a Command Line Interface (CLI) software, the tool purpose is to enable developers to query 
-information about code clone duplication in a function level. The tool is separated in two steps. the 
-first one, denoted as Setup, is responsible for processing the codebase doing tasks such as extracting functions of the code files 
+information about code clone duplication in a function level, by function level we mean to find functions in a codebase that 
+are code duplications. The tool is separated in two steps. The 
+first one, denoted as Setup, is executed only once for each codebase and it is responsible for processing the
+codebase doing tasks such as extracting functions of the code files 
 and searching for code clone duplications. The second step, denoted as Query Responder, is
 responsible to execute the tool functionalities using the information obtained in the Setup step. More information about the 
-Setup and Query Responder behavior can be found in \ref{subsec:architecture} and in \ref{subsec:func}.
+Setup and Query Responder behavior can be found in \ref{subsec:architecture} and in \ref{subsec:func}. 
 
 \subsection{Tool architecture}
 \label{subsec:architecture}
+
+The Setup step is composed of two components, the Function Breaker and the Code Duplication Finder. the pipeline of this step work as
+follow: the Function Parser receives the codebase we are interested, extract the functions of the codebase along with metadata and
+creates a new temporary codebase where it function becomes a new code file. The Code Duplication Finder iterate over every pair of 
+files in the temporary codebase computing the code duplications and save them in the Code Duplication Database, which is a text file
+that stores every code duplication as a triple <function1,function2,similarity>, where function1 and function2 are the functions that 
+are a duplication of each other, and similarity is the metric given by the code duplication method utilized, which in our case, it is
+the cossine similiratiy explained in \ref{sec:similarity}. Finally, the Query Responder consumes the temporary codebase and the 
+Code Duplication Database to extract code duplication related information as per user request. A diagram to ilustrate the pipeline
+can be found in the Figure (ADD FIGURE HERE). There is a explanation of how each component work below.
+
+\subsubsection{Input codebase}
+
+The input codebase is expected to be a folder in the machine the tool is running into. All files in the codebase that is not a source
+code file from a programming language supported by the tool will be ignored.
+
+\subsubsection{Function Parser}
+
+\subsubsection{Code Duplication Finder}
+
+\subsubsection{Code Duplication Database}
+
+\subsubsection{Setup step}
+
+\subsubsection{Query Responder step}
 
 
 \subsection{Tool functionalites}
