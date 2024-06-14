@@ -1,0 +1,56 @@
+\en
+
+\subsection{Tool architecture}
+\label{subsec:architecture}
+
+The Setup step is composed of two components, the Function Breaker and the Code Duplication Finder. the pipeline of this step work as
+follow: the Function Parser receives the codebase we are interested, extract the functions of the codebase along with metadata and
+creates a new temporary codebase where it function becomes a new code file. The Code Duplication Finder iterate over every pair of 
+files in the temporary codebase computing the code duplications and save them in the Code Duplication Database, which is a text file
+that stores every code duplication as a triple <function1,function2,similarity>, where function1 and function2 are the functions that 
+are a duplication of each other, and similarity is the metric given by the code duplication method utilized, which in our case, it is
+the cossine similiratiy explained in \ref{sec:similarity}. Finally, the Query Responder consumes the temporary codebase and the 
+Code Duplication Database to extract code duplication related information as per user request. A diagram to ilustrate the pipeline
+can be found in the Figure (ADD FIGURE HERE). There is a explanation of how each component work below.
+
+\subsubsection{Input codebase}
+
+The input codebase is expected to be a folder in the machine the tool is running into. All files in the codebase that is not a source
+code file from a programming language supported by the tool will be ignored.
+
+\subsubsection{Function Parser}
+
+The Function Parser receives the input codebase and transforms it into the temporary codebase. The Function Parser iterates through
+every source code file from the programming language it support and use a specific programming languague's function 
+extractor to extract
+every function in the file, for each function extracted we create a new source code file and a metadata file in the temporary codebase
+which is represented by the pair \textbf{<source code file, function extracted>}, which represents the source code file the 
+function is extracted from and the 
+proper function. The new source code file only contains the source code from the function it represents, while the metadata file 
+contains extra relevant information such as function name, the line the function it began to be declared in the original souce code 
+file and the line the function's body ends in the original source code file. The programming language we support at the moment 
+is C and Java. Can be found a example of a transform of a source code in the (CRIAR UM APENDICE E COLOCAR AQUI).
+
+About the programming languague's function extractor, we approached this problem in a way that any person comfortable with a language
+can adapt our approach to their specific programming language. Usually, the code blocks can be easily extracted from 
+source code files, independently if the code blocks are defined by curly brackets or by indentation, and it is possible to
+infer if it represents a function's body given how deeply it is in the code context and a few lines before the start 
+of the code block. We followed exactly this approach to implement the function extractor for the languagues we implemented. 
+As a alternative approach, we can build the syntax tree \citep{compiler} of the programming language and use it to 
+extract the functions, which is a more complex task then our main approach. For the programming languages we support, we implemented
+it as follow:
+
+\begin{itemize}
+  \item \textbf{C}:
+  \item \textbf{Java}:
+\end{itemize}
+
+
+\subsubsection{Code Duplication Finder}
+
+\subsubsection{Code Duplication Database}
+
+\subsubsection{Setup step}
+
+\subsubsection{Query Responder step}
+
