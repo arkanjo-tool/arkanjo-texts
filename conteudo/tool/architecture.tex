@@ -1,6 +1,6 @@
 \en
 
-\subsection{Tool architecture}
+\section{Tool architecture}
 \label{subsec:architecture}
 
 The Setup step is composed of two components, the Function Breaker and the Code Duplication Finder. the pipeline of this step work as
@@ -13,12 +13,12 @@ the cossine similiratiy explained in \ref{sec:similarity}. Finally, the Query Re
 Code Duplication Database to extract code duplication related information as per user request. A diagram to ilustrate the pipeline
 can be found in the Figure (ADD FIGURE HERE). There is a explanation of how each component work below.
 
-\subsubsection{Input codebase}
+\subsection{Input codebase}
 
 The input codebase is expected to be a folder in the machine the tool is running into. All files in the codebase that is not a source
 code file from a programming language supported by the tool will be ignored.
 
-\subsubsection{Function Parser}
+\subsection{Function Parser}
 
 The Function Parser receives the input codebase and transforms it into the temporary codebase. The Function Parser iterates through
 every source code file from the programming language it support and use a specific programming languague's function 
@@ -29,7 +29,7 @@ function is extracted from and the
 proper function. The new source code file only contains the source code from the function it represents, while the metadata file 
 contains extra relevant information such as function name, the line the function it began to be declared in the original souce code 
 file and the line the function's body ends in the original source code file. The programming language we support at the moment 
-is C and Java. Can be found a example of a transform of a source code in the (CRIAR UM APENDICE E COLOCAR AQUI).
+is C and Java. Can be found a example of a transform of a source code in the (CREATE APENDIX AND ADD HERE).
 
 About the programming languague's function extractor, we approached this problem in a way that any person comfortable with a language
 can adapt our approach to their specific programming language. Usually, the code blocks can be easily extracted from 
@@ -46,11 +46,26 @@ it as follow:
 \end{itemize}
 
 
-\subsubsection{Code Duplication Finder}
+\subsection{Code Duplication Finder}
 
-\subsubsection{Code Duplication Database}
+The Code Duplication Finder iterates through every pair of source code files in the temporary codebase, which in this context represents
+functions of the input codebase, and for every pair of files, we execute a code duplication detection method that computes a metric
+that measures of how similar the pair of files are, which we call similarity. Finally, if the similarity is greater of equal then the
+minimum similarity threshold (a parameter passed by the user when it executes the Setup step), we store this pair of files along with
+it similarity in the Code Duplication Database.
 
-\subsubsection{Setup step}
+For the code duplication detection method, we visualize the source code files as texts and execute the TF-IDF vector embedding method
+implemented by the Gensim library \citep{gensim} and compute the cosine similarity as the similarity metric. We chose this method 
+given the alegated Gensim statements about itself performance, being a programming language independent method and the nonnecessity of 
+compilable code, which is expected to happen in the temporary codebase as it not stores complete code artifacts. Platis implemented
+this code cuplication detection method and distributed it to the public with a MIT license \citep{platistool} \citep{mitlicense}, 
+we utilize his implementation as it has some nice to have components such as removing code comments, we do the appropriated changes
+in the input and output of his implementation to respect the expected format of our tool. 
+It is feasible to change the duplication detection method in a manner similar to what we did with Platis's implementation.
 
-\subsubsection{Query Responder step}
+\subsection{Code Duplication Database}
+
+\subsection{Setup step}
+
+\subsection{Query Responder step}
 
