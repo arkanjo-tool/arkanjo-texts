@@ -23,13 +23,14 @@ code file from a programming language supported by the tool will be ignored.
 The Function Parser receives the input codebase and transforms it into the temporary codebase. The Function Parser iterates through
 every source code file from the programming language it support and use a specific programming languague's function 
 extractor to extract
-every function in the file, for each function extracted we create a new source code file and a metadata file in the temporary codebase
+every function in the file, for each function extracted we create two new source code files and a metadata file in the temporary codebase
 which is represented by the pair \textbf{<source code file, function extracted>}, which represents the source code file the 
 function is extracted from and the 
-proper function. The new source code file only contains the source code from the function it represents, while the metadata file 
-contains extra relevant information such as function name, the line the function it began to be declared in the original souce code 
+proper function. The first new source code file contains the function's body from the function it represents, while the other
+new source code file contains the function's signature, the metadata file 
+contains extra relevant information such as function name, the line the function signature starts in the original souce code 
 file and the line the function's body ends in the original source code file. The programming language we support at the moment 
-is C and Java. Can be found a example of a transform of a source code in the (CREATE APENDIX AND ADD HERE).
+is C and Java. Can be found a example of a transform of a source code in the Figure (CREATE APENDIX AND ADD HERE).
 
 About the programming languague's function extractor, we approached this problem in a way that any person comfortable with a language
 can adapt our approach to their specific programming language. Usually, the code blocks can be easily extracted from 
@@ -41,9 +42,37 @@ extract the functions, which is a more complex task then our main approach. For 
 it as follow:
 
 \begin{itemize}
-  \item \textbf{C}:
-  \item \textbf{Java}:
+	\begin{item}
+		\textbf{C}:
+	\end{item}
+	\begin{item}
+		\textbf{Java}:
+	\end{item}
 \end{itemize}
+
+\subsection{Temporary codebase}
+
+The temporary codebase is a transformation of the input codebase done by the Function Parser, every function in the input codebase
+is represented in the temporary codebase as three files. There are description of each file below and an example of each can found
+in the figure (CREATE FIGURE AND ADD HERE).
+
+\begin{itemize}
+	\begin{item}
+		\textbf{Header file}: This file contains the signature of the function it represents;
+	\end{item}
+	\begin{item}
+		\textbf{Source file:} This file contains the body of the function it represents;
+	\end{item}
+	\begin{item}
+		\textbf{Info file:} This file contains metadata of the function. The information this file contains is:
+		the function name, the file name that has the function, the relative path of the file related to the input codebase, 
+		the line that the function's signatures starts, the line that the functions body starts, the line that the function's body 
+		ends and if there is a line break between the end of the function's signature and the start of the function's body.
+		
+	\end{item}
+\end{itemize}
+
+There is a example of each file in the Appendix 
 
 
 \subsection{Code Duplication Finder}
@@ -64,6 +93,11 @@ in the input and output of his implementation to respect the expected format of 
 It is feasible to change the duplication detection method in a manner similar to what we did with Platis's implementation.
 
 \subsection{Code Duplication Database}
+
+The Code Duplication Database is a text file that contains the duplicated pairs of functions found by the Code Duplication Finder, 
+the first line of the file contains a number that represents the number of the duplicated pairs, after that, there is 
+a line of each duplicated pairs that contains the path of the functions in the temporary codebase and the similarity metric of the 
+pair. A example of the Code Duplication Database can be found in the figure (ADD FIGURE HERE). 
 
 \subsection{Setup step}
 
