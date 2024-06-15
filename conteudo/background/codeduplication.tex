@@ -2,10 +2,13 @@
 
 \section{Code Duplication Detection}
 
-Code Duplication Detection is a field in computer science studies that gets the attention of researchers back to 1988 \citep{firstman}.
-The occurrence of Code Duplication is a harmful artifact to have in a software, affecting software related tasks such as code readability,
+Code Duplication Detection is a field in computer science studies that gets the attention of researchers 
+back to 1988 \citep{firstman}.
+The occurrence of Code Duplication is a harmful artifact to have in a software, affecting software related 
+tasks such as code readability,
 introdution of bugs, etc.   \citep{harmone}. 
-On most of the cases, the occurrence of code duplication tends to create a more unstable software then the nonduplicate code counterpart.   \citep{harmtwo}
+On most of the cases, the occurrence of code duplication tends to create a more unstable software then the 
+nonduplicate code counterpart.   \citep{harmtwo}
 
 Through the years, the subject of studies about Code Duplication Detection branched out mainly in two fields of study,
 Code Clone Detection and Code Plagiarism Detection,
@@ -20,13 +23,28 @@ the code artifacts in four main types of code clone duplication \citep{litreview
 the types of Code Duplication are described as follow \citep{litreview}:
 
 \begin{itemize}
-	\item \textbf{Type-1:} The differences between F and G are in the context of revision of comments, variable names, white spaces and any other kind of irrelevant elements. (ADD FIGURE) shows a typical example of Type-1 Code Duplication \citep{litreview}. 
+	\begin{item}
+		\textbf{Type-1:} The differences between F and G are in the context of revision of comments, variable names, white spaces 
+		and any other kind of irrelevant elements. (ADD FIGURE) shows a typical example of Type-1 Code 
+		Duplication \citep{litreview}. 
+	\end{item}
+	\begin{item}
+		\textbf{Type-2:} The differences between F and G is the same as the type-1, with the addition of considering 
+		addition and deletion of redudant codes. (ADD FIGURE) shows a typical example of Type-2 Code Duplication \citep{litreview}. 
+	\end{item}
+	\begin{item}
+		\textbf{Type-3:} The difference between F and G is the same as the type-2, with the addition of considering 
+		the reorder of code blocks as well as statements within code blocks. (ADD FIGURE) shows a typical example of 
+		Type-3 Code Duplication \citep{litreview}. 
+	\end{item}
+	\begin{item}
+		\textbf{Type-4:} The difference between F and G is the same as the type-3, with the addition of considering 
+		changes on data sctrucure, the order of operands/operators in expresssions, or replacing part of codes with 
+		equivalent composition. (ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
+	\end{item}
 
-	\item \textbf{Type-2:} The differences between F and G is the same as the type-1, with the addition of considering addition and deletion of redudant codes. (ADD FIGURE) shows a typical example of Type-2 Code Duplication \citep{litreview}. 
 
-	\item \textbf{Type-3:} The difference between F and G is the same as the type-2, with the addition of considering the reorder of code blocks as well as statements within code blocks. (ADD FIGURE) shows a typical example of Type-3 Code Duplication \citep{litreview}. 
 
-	\item \textbf{Type-4:} The difference between F and G is the same as the type-3, with the addtionf of considering changes on data sctrucure, the order of operands/operators in expresssions, or replacing part of codes with equivalent composition. (ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
 \end{itemize}
 
 \subsection{Literature approches for code clone detection}
