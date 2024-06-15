@@ -72,9 +72,6 @@ in the figure (CREATE FIGURE AND ADD HERE).
 	\end{item}
 \end{itemize}
 
-There is a example of each file in the Appendix 
-
-
 \subsection{Code Duplication Finder}
 
 The Code Duplication Finder iterates through every pair of source code files in the temporary codebase, which in this context represents
@@ -101,5 +98,19 @@ pair. A example of the Code Duplication Database can be found in the figure (ADD
 
 \subsection{Setup step}
 
+The Setup step is a procedure executed by the user once per codebase. The Setup step receives the input codebase and the minimum
+similarity metric value to a pair of functions to be considered a duplication, then it executes the Function Parser and the Code 
+Duplication Finder, to generate the temporary codebase and the Code Duplication Database, which will be later used by the Query
+Responder step. The value of the minimum similarity metric is to reduce the Code Duplication Database, which optimize the
+memory usage and the computational cost of the Query Responder step. For example, if this parameter does not exist and we work in 
+a codebase of $10000$ functions and supposing each relative path plus the function name have $50$ charactes, the Code Duplication 
+Database will be a file of size approximately $5000^2 \times 50 ~= 5$ Gigabytes, as it is not expected to a real large codebase 
+to the majority of pairs of functions be a duplication of each other, this number can be reduced dramastically.
+
 \subsection{Query Responder step}
+
+The Query Responder step is the component that the user executes multiples times to consult information about code duplication in
+a codebase that was previously preprocessed by the Setup step. The Query Responder step consumes the temporary codebase and the 
+Code Duplication Database created by the Setup step. This component implements all the tool's functionalities exposed 
+for the user, which are described in the \ref{subsec:func}.
 
