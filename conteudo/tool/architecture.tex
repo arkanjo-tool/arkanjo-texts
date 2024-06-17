@@ -43,10 +43,22 @@ it as follow:
 
 \begin{itemize}
 	\begin{item}
-		\textbf{C}:
+		\textbf{C}: Given a source code file, we extract every code block from it, maintaining the depth of the code block in
+		the code context and som lines of code before the definition of the code block. By the C programming language's grammar, 
+		the functions are defined in a global context, with depth of 0. There are other elements with the same depth as functions,
+		we differentiate them by analysing if the first non-empty character before the curly brackets of the code block is a close 
+		parenthesis, since functions are the only elements that respect this pattern in the C programming language.
 	\end{item}
 	\begin{item}
-		\textbf{Java}:
+		\textbf{Java}: Given a source code file, we extract every code block from it, maintaining the depth of the code block in
+		the code context and som lines of code before the definition of the code block. By the Java's grammar, 
+		the functions are defined inside classes. There are different depths which we can have functions, as Java accepts inner
+		classes. We differentiate functions of other elements by analysing if the first non-empty character before the curly brackets of the code block is a close 
+		parenthesis, since there are others elements which also respect this pattern such as for loop, we would need to apply other 
+		filters. We chose to only analyse functions of depth 1, which ignores every others elements that respect the previously
+		filters, but as counterpart, functions declared inside Inner Classes are not supported by our extractor. We made this choice
+		as there are not inner classes on the codebases explored in this work.
+
 	\end{item}
 \end{itemize}
 
