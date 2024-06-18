@@ -2,3 +2,35 @@
 
 \section{Tool functionalites}
 \label{subsec:func}
+
+We proposes three main functionalities for the user in the tool, which are named duplication explorer, function information
+and duplication relatory. Each of the functionalities recevies their adequated parameters to execute, with a exception
+of a optional parameter shared by all of them, which is minimum similarity per query. The minimum similarity per query is different
+from the siminum similarity presented in \ref{subsec:setup}, as it enables a volatile change in the minimum similarity interested in a query specific
+context. There is a explanation of each of the main functionalities throughout this section.
+
+\subsection{Duplication explorer}
+
+
+\subsection{Function information}
+
+The Function information purpose it to give a more in depth information about a specific function. The functionality inform the user
+about the relative path, the function name and the lines the function exist in the code file that the function is contained for the
+function that the user is interested and every function that is a duplication of it. As there ca nbe multiple functions with the 
+same name in a codebase, we distinguish then by the user providing a pattern string and we use the first function find that match
+the pattern. We define that the a function matches a pattern if the string formed by the concatenation of the relative path of the 
+code file plus the function name. 
+A example of the functionality usage can be found in (ADD FIGURE HERE).
+
+\subsection{Duplication relatory}
+
+The duplication relatory purpose is to give a overview of the input codebase. The functionality extract the information
+of how much lines of duplicated code is found per folder in the codebase and present it to the user in a reasonable format. To extract
+the information, we use the Code Duplication Database to list the code duplications, and the temporary code to know how much lines of
+duplicated code contains in each of the functions. (DO I TALK ABOUT THE TRIE USAGE TO MAINTAIN THE HIERARCHICAL TREE STRUCTURE? I 
+THINK NOT). A example of the functionality usage can be found in (ADD FIGURE HERE).
+
+
+
+
+
