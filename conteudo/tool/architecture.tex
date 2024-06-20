@@ -9,9 +9,15 @@ creates a new temporary codebase where it function becomes a new code file. The 
 files in the temporary codebase computing the code duplications and save them in the Code Duplication Database, which is a text file
 that stores every code duplication as a triple <function1,function2,similarity>, where function1 and function2 are the functions that 
 are a duplication of each other, and similarity is the metric given by the code duplication method utilized, which in our case, it is
-the cossine similiratiy explained in \ref{sec:similarity}. Finally, the Query Responder consumes the temporary codebase and the 
+the cossine similarity explained in \ref{sec:similarity}. Finally, the Query Responder consumes the temporary codebase and the 
 Code Duplication Database to extract code duplication related information as per user request. A diagram to ilustrate the pipeline
-can be found in the Figure (ADD FIGURE HERE). There is a explanation of how each component work below.
+can be found in the Figure \ref{fig:diagram}. There is a explanation of how each component work below.
+
+\begin{figure}
+\includegraphics{diagrama_mestrado}
+\caption{The architecture diagram demonstrating the relationship between the components.}
+\label{fig:diagram}
+\end{figure}
 
 \subsection{Input codebase}
 
