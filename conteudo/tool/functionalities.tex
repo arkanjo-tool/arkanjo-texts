@@ -13,7 +13,7 @@ interested in a query specific context. There is a explanation of each of the ma
 
 The duplication explorer is the principal functionality of our tool, the functionality purpose is to expose for the user the code duplication
 pairs found by our tool. We implement optional filters methods to enable more complex queries, which are described below. A example
-of the functionality usage can be found in (ADD FIGURE HERE).
+of the functionality usage can be found in the figure \ref{fig:explorer_ex}.
 
 
 \begin{itemize}
@@ -36,6 +36,12 @@ of the functionality usage can be found in (ADD FIGURE HERE).
 	\end{item}
 \end{itemize}
 
+\begin{figure}
+\includegraphics{explorer_example}
+\caption{Explorer Example}
+\label{fig:explorer_ex}
+\end{figure}
+
 
 \subsection{Function information}
 
@@ -45,7 +51,15 @@ function that the user is interested and every function that is a duplication of
 same name in a codebase, we distinguish then by the user providing a pattern string and we use the first function find that match
 the pattern. We say that a function matches a pattern if the string formed by the concatenation of the relative path of the 
 code file plus the function name. 
-A example of the functionality usage can be found in (ADD FIGURE HERE).
+A example of the functionality usage can be found in the figure \ref{fig:function_ex}.
+
+
+\begin{figure}
+\includegraphics{function_example}
+\caption{Function Example}
+\label{fig:function_ex}
+\end{figure}
+
 
 \subsection{Duplication relatory}
 
@@ -53,7 +67,13 @@ The duplication relatory purpose is to give a overview of the input codebase. Th
 of how much lines of duplicated code is found per folder in the codebase and present it to the user in a reasonable format. To extract
 the information, we use the Code Duplication Database to list the code duplications, and the temporary code to know how much lines of
 duplicated code contains in each of the functions. (DO I TALK ABOUT THE TRIE USAGE TO MAINTAIN THE HIERARCHICAL TREE STRUCTURE? I 
-THINK NOT). A example of the functionality usage can be found in (ADD FIGURE HERE).
+THINK NOT). A example of the functionality usage can be found in the figure \ref{fig:relatory_ex}.
+
+\begin{figure}
+\includegraphics{relatory_example}
+\caption{Function Example}
+\label{fig:relatory_ex}
+\end{figure}
 
 
 
