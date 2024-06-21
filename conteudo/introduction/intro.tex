@@ -17,15 +17,20 @@ which is a important duty, given that AMD GPU represented 19 \% of the personal 
 When we iteracted with the maintainers of the AMD Display driver, they shared with us their pain with one of the characteristics
 bad quality code artifacts, that is duplicated code artifacts, which hinders the maintainment of the driver. While searching for a
 solution to them in the literature, we only found tools that given two code artifacts, infer if they are duplication of each other,
-and the research in this topic mainly focused in optimizing the accuracy of the tools in this given task. As we desired to the tools
+and the research in this topic mainly focused in optimizing the accuracy of these tools in this given task. As we desired to the tools
 to find the duplicated code artifacts for us, instead of given two code artifact that we know it is a duplication, confirm to us that
 is in fact a duplication, the literature cannot be applied purely in our problem. 
 
 As a alternative, we tried to search solutions in the gray literature, but without success. In the gray literature, the best solution
 we found were primitive solutions that finds every pair of code files that are duplications. As the AMD Display driver is a driver 
-created in 20XX and maintained until today, the code files that contains duplicated code normally also have specific code that is 
-only implemented in this file. Thus, a solution that finds duplication in a more deeply aspect is necessary to correct find 
-duplicatons.
+created in 20XX (TODO HERE) and maintained until today, the code files that contains duplicated code normally also have specific code that is 
+only implemented in this file. Thus, a solution that finds duplication in a more deeply context is necessary to correct find 
+duplicatons in the problem outlined.
+
+Since our searches for solution to the AMD Display driver problem with duplicated code became fruitless. We propose to create a tool
+that approaches the given problem and can be adapted with a moderated amount of effort to support other open source projects facing
+similar issues. Given our proposed tool, we desire to validate if it is capable of detecting duplicated code and if the tool 
+is in fact useful to mitigate the AMD Display driver problem with duplicated code.
 
 \section**{Research Questions}
 
