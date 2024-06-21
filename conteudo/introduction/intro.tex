@@ -2,6 +2,31 @@
 
 \section**{Problem outline}
 
+The Linux kernel is a major project in the open source community, containing more then 19 million lines of code and more
+then thirteen thousand contributors along the lifespan of the project \citep{linuxquantity}. Given the magnitude of the project,
+it is unrealistic to expect that all contributors followed the best programming practices and principles throughout every 
+contributions they made to the project. It is expected to find a good amount of bad quality code artifacts in the source code, 
+which could result in hindering or compromising the maintenance of this project, as well as the indication of new features for it.
+
+Device driver, as stated by Madieu, are a "piece of software whose aim is to control and manage a particular hardware device, hence the
+name device driver" \citep{driverdef}. Device drivers are major part of the Linux kernel, representing 66 \% of the source code and
+responsible for the management of crucial element such as keyboards, mouses and GPU \citep{marcelo}. 
+The AMD Display driver of the Linux kernel is a core driver to enable AMD GPU's to operate correctly in desktop linux environments,
+which is a important duty, given that AMD GPU represented 19 \% of the personal GPU market in 2023 \citep{gpumarket}.
+
+When we iteracted with the maintainers of the AMD Display driver, they shared with us their pain with one of the characteristics
+bad quality code artifacts, that is duplicated code artifacts, which hinders the maintainment of the driver. While searching for a
+solution to them in the literature, we only found tools that given two code artifacts, infer if they are duplication of each other,
+and the research in this topic mainly focused in optimizing the accuracy of the tools in this given task. As we desired to the tools
+to find the duplicated code artifacts for us, instead of given two code artifact that we know it is a duplication, confirm to us that
+is in fact a duplication, the literature cannot be applied purely in our problem. 
+
+As a alternative, we tried to search solutions in the gray literature, but without success. In the gray literature, the best solution
+we found were primitive solutions that finds every pair of code files that are duplications. As the AMD Display driver is a driver 
+created in 20XX and maintained until today, the code files that contains duplicated code normally also have specific code that is 
+only implemented in this file. Thus, a solution that finds duplication in a more deeply aspect is necessary to correct find 
+duplicatons.
+
 \section**{Research Questions}
 
 \section**{Research Design}
