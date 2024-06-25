@@ -2,14 +2,22 @@
 
 \section**{Problem outline}
 
-The Linux kernel is a major project in the open source community, containing more then 19 million lines of code and more
+
+Representing 3.77\% of the personal desktops and 70,69\% of the smartphones worldwide, the Linux kernel 
+is a open source project providing value to billions of people in their daily lives. 
+The magnitude that the project has reached over the years makes the addition of features, as well as handling bugs and security 
+vunerabilities, potentially affect a significant number of people, demonstrating the importance of maintaining the 
+kernel. 
+
+The maintainment of the Linux kernel is a complex task, as the project contains more then 19 million lines of code and have more
 then thirteen thousand contributors along the lifespan of the project \citep{linuxquantity}. Given the magnitude of the project,
 it is unrealistic to expect that all contributors followed the best programming practices and principles throughout every 
 contributions they made to the project. It is expected to find a good amount of bad quality code artifacts in the source code, 
-which could result in hindering or compromising the maintenance of this project, as well as the indication of new features for it.
+which could result in hindering or compromising the maintenance of this project, as well as the addition of new features for it.
 
-Device driver, as stated by Madieu, are a "piece of software whose aim is to control and manage a particular hardware device, hence the
-name device driver" \citep{driverdef}. Device drivers are major part of the Linux kernel, representing 66 \% of the source code and
+
+Device driver, as stated by Madieu, are a "piece of software whose aim is to control and manage a particular hardware device, hence 
+the name device driver" \citep{driverdef}. Device drivers are major part of the Linux kernel, representing 66 \% of the source code and
 responsible for the management of crucial element such as keyboards, mouses and GPU \citep{marcelo}. 
 The AMD Display driver of the Linux kernel is a core driver to enable AMD GPU's to operate correctly in desktop linux environments,
 which is a important duty, given that AMD GPU represented 19 \% of the personal GPU market in 2023 \citep{gpumarket}.
@@ -23,14 +31,19 @@ is in fact a duplication, the literature cannot be applied purely in our problem
 
 As a alternative, we tried to search solutions in the gray literature, but without success. In the gray literature, the best solution
 we found were primitive solutions that finds every pair of code files that are duplications. As the AMD Display driver is a driver 
-created in 20XX (TODO HERE) and maintained until today, the code files that contains duplicated code normally also have specific code that is 
-only implemented in this file. Thus, a solution that finds duplication in a more deeply context is necessary to correct find 
+created in 20XX (TODO HERE) and maintained until today, the code files that contains duplicated code normally also have specific code
+that is only implemented in this file. Thus, a solution that finds duplication in a more deeply context is necessary to correct find 
 duplicatons in the problem outlined.
 
-Since our searches for solution to the AMD Display driver problem with duplicated code became fruitless. We propose to create a tool
-that approaches the given problem and can be adapted with a moderated amount of effort to support other open source projects facing
-similar issues. Given our proposed tool, we desire to validate if it is capable of detecting duplicated code and if the tool 
-is in fact useful to mitigate the AMD Display driver problem with duplicated code.
+Since our searches for solutions to the duplicated code problem become fruitless. We
+intend to propose an approach to indentify and mitigate the code duplications in the Linux Kernel. For that, 
+we propose a tool capable to indentify code duplications in the kernel, and by participant observation analyse and mitigate the 
+code duplications found while cataloging the software engineer methods used in process such as refactoring methods.
+
+An additional usefulness of our proposed approach is to give a new method to people become contributors to the Linux kernel. The 
+process of starting to contribute to the Linux kernel can be unintuitive, which can cause people to distance themselves.
+Our approach provides to the community a new form of newcomers to start contributing by removing simple code duplications, 
+while they learn the whole process of being a Linux contribuitor.
 
 \section**{Research Questions}
 
