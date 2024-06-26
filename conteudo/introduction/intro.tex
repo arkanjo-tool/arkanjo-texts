@@ -1,7 +1,7 @@
 \en
 
 \section**{Problem outline}
-
+\label{sec:problem}
 
 Representing 3.77\% of the personal desktops and 70,69\% of the smartphones worldwide, the Linux kernel 
 is a open source project providing value to billions of people in their daily lives. 
@@ -15,37 +15,62 @@ it is unrealistic to expect that all contributors followed the best programming 
 contributions they made to the project. It is expected to find a good amount of bad quality code artifacts in the source code, 
 which could result in hindering or compromising the maintenance of this project, as well as the addition of new features for it.
 
-
 Device driver, as stated by Madieu, are a "piece of software whose aim is to control and manage a particular hardware device, hence 
 the name device driver" \citep{driverdef}. Device drivers are major part of the Linux kernel, representing 66 \% of the source code and
-responsible for the management of crucial element such as keyboards, mouses and GPU \citep{marcelo}. 
-The AMD Display driver of the Linux kernel is a core driver to enable AMD GPU's to operate correctly in desktop linux environments,
-which is a important duty, given that AMD GPU represented 19 \% of the personal GPU market in 2023 \citep{gpumarket}.
+responsible for the management of crucial element such as keyboards, mouses and GPU \citep{marcelo}. The moment the kernel addopts
+to support new hardwares, it requires to make alteration of existent device drivers or the creation of new ones, 
+this makes the maintainment of the devices drivers a important duty of the Linux community.
 
+The AMD Display driver of the Linux kernel is driver responsible to enable AMD GPU's to operate correctly in desktop linux
+environments, which is a important duty, given that AMD GPU represented 19 \% of the personal GPU market in 2023 \citep{gpumarket}.
 When we iteracted with the maintainers of the AMD Display driver, they shared with us their pain with one of the characteristics
-bad quality code artifacts, that is duplicated code artifacts, which hinders the maintainment of the driver. While searching for a
-solution to them in the literature, we only found tools that given two code artifacts, infer if they are duplication of each other,
-and the research in this topic mainly focused in optimizing the accuracy of these tools in this given task. As we desired to the tools
-to find the duplicated code artifacts for us, instead of given two code artifact that we know it is a duplication, confirm to us that
-is in fact a duplication, the literature cannot be applied purely in our problem. 
+bad quality code artifacts, that is duplicated code artifacts, which hinders the maintainment of the driver. 
 
-As a alternative, we tried to search solutions in the gray literature, but without success. In the gray literature, the best solution
-we found were primitive solutions that finds every pair of code files that are duplications. As the AMD Display driver is a driver 
-created in 20XX (TODO HERE) and maintained until today, the code files that contains duplicated code normally also have specific code
-that is only implemented in this file. Thus, a solution that finds duplication in a more deeply context is necessary to correct find 
-duplicatons in the problem outlined.
 
-Since our searches for solutions to the duplicated code problem become fruitless. We
-intend to propose an approach to indentify and mitigate the code duplications in the Linux Kernel. For that, 
-we propose a tool capable to indentify code duplications in the kernel, and by participant observation analyse and mitigate the 
-code duplications found while cataloging the software engineer methods used in process such as refactoring methods.
+Searching for solutions to the AMD Display driver problem with duplicated code artifacts, we were able to find tools that given 
+two code artifacts, infer if they are duplication of each other, and the formal literature in the code duplication mainly focused 
+in optimizing the accuracy of these tools in this given task. These solutions do not approach our problem, as we are not able to give them a codebase
+and they returns to us the code duplication in the codebase, and they do not guide us to how mitigate the code duplications after
+we detected them, requiring us to search for others alternatives.
 
-An additional usefulness of our proposed approach is to give a new method to people become contributors to the Linux kernel. The 
-process of starting to contribute to the Linux kernel can be unintuitive, which can cause people to distance themselves.
-Our approach provides to the community a new form of newcomers to start contributing by removing simple code duplications, 
-while they learn the whole process of being a Linux contribuitor.
+Given the unsuccessful results on our serach in the formal literature, we started to search for solutions in the gray literature, 
+but we ended up without success. In the gray literature, the best solutions we found were primitive solutions that finds every pair
+of code files that are duplications. As the AMD Display driver is a driver created in 20XX (TODO HERE) and maintained until today,
+the code 
+files that contains duplicated code normally also have specific code that is only implemented in this file. Thus, 
+a solution that finds duplication in a more deeply context is necessary to correct find duplicatons in the Linux kernel context.
 
-\section**{Research Questions}
+\section**{Research Design}
+
+The code duplication problem outlined in Section \ref{sec:problem} cannot be resolved by the solutions presented in the formal 
+literature nor the gray literature, we intend to propose an approach to indentify and mitigate the code duplications in the 
+Linux Kernel. For that, we propose a tool capable to indentify code duplications in the kernel, and we mitigate code duplications in the kernel. 
+On this research, we expect to extract patterns of software engineers techniques, such as refactoring methods, which we commonly 
+used to mitigate the code duplications, thus, serving as guidance to future contributors to approach the code duplications problem 
+in the given context. To properly investigate our proposed approach, we developed the research questions below to guie our research.
+
+\textbf{RQ1:} How effective is our approach in mitigating duplicate code in the Linux kernel?
+
+\textbf{RQ1:} How effective is our approach in identifying duplicate code in the Linux kernel?
+
+This research is divided into two phases. On the first phase, we will propose, build and validate a tool capable to indentify code 
+duplications in function level for the C programming language, we expects this proposed tool to indentify code duplications
+in the Linux kernel, as in our preliminary investigation the code files in the kernel is commonly a union of duplicated and 
+nonduplicated functions. To validate the tool, we will do a triangulation of results by evaluate our tool in the code duplication
+databases used in the formal literature and (DO NOT KNOW IF I REALLY WILL DO THIS) doing a empirical analyses in a set
+of randomly selected codes of the AMD Display driver which our proposed tool claims that is a duplications. 
+The detailed explication of how we will validate our tool is demonstrated in the Chapter \ref{cha:method}.
+
+Given the first phase completion, we have a validated tool to indentify code duplications in the Linux kernel 
+context and we can move on to how mitigate this duplications, which compreend the second phase of our research.
+
+
+
+
+(I DO NOT HAVE MORE A PLACE TO FIT THIS PARAGRAPH) An additional usefulness of our proposed approach, which we do not verify in our research, is to give a new method to people become 
+contributors to the Linux kernel. The process of starting to contribute to the Linux kernel can be unintuitive, which can cause 
+people to distance themselves. Our approach provides to the community a new form of newcomers to start contributing by removing 
+simple code duplications, while they learn the whole process of being a Linux contribuitor.
 
 \section**{Research Design}
 
