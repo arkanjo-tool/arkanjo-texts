@@ -12,9 +12,10 @@ defined by the formula \citep{cosineref}:
 
 $$\text{cosine similarity} = SC(A,B) = \frac{ A \cdot B}{ \lVert A \rVert \lVert B \rVert }$$
 
-
 Where $A$ and $B$ are the vector embeddings of the two texts. One of the advantages of the cosine similarity is that $SC(A,B)$ 
-is a number between $0$ and $1$, where $SC(A,B)$ values more close to the number $1$ means that two vectors are more similar. 
+is a number between $0$ and $1$, where $SC(A,B)$ values more close to the number $1$ means that two vectors are more similar,
+it is common to compare the cosine similarity to aproximation to a probability value, transforming the values between $0$ and $1$ to a
+porcentage between $0 \% $ and $100\%$, through our research we will use the porcentage form.
 
 It is a famous fact that LLM have high computational cost, one example of such is a experiment done by Reimers and Gurevych for 
 finding the most similar pair in a collection of 10,000 sentences, that required about 65 hours with BERT \citep{bertsimilar}. This 

@@ -44,14 +44,19 @@ a solution that finds duplication in a more deeply context is necessary to corre
 
 The code duplication problem outlined in Section \ref{sec:problem} cannot be resolved by the solutions presented in the formal 
 literature nor the gray literature, we intend to propose an approach to indentify and mitigate the code duplications in the 
-Linux Kernel. For that, we propose a tool capable to indentify code duplications in the kernel, and we mitigate code duplications in the kernel. 
-On this research, we expect to extract patterns of software engineers techniques, such as refactoring methods, which we commonly 
-used to mitigate the code duplications, thus, serving as guidance to future contributors to approach the code duplications problem 
-in the given context. To properly investigate our proposed approach, we developed the research questions below to guie our research.
+Linux Kernel. For that, we propose a tool capable to indentify duplicated functions in the kernel, and we intend to mitigate 
+code duplications in the kernel. On this research, we expect to extract patterns of software engineers techniques, 
+such as refactoring methods, which we commonly used to mitigate the code duplications, thus, serving as guidance to future 
+contributors to approach the code duplications problem in the given context. To properly investigate our proposed approach, 
+we developed our primarily research question below to guide our research.
 
-\textbf{RQ1:} How effective is our approach in mitigating duplicate code in the Linux kernel?
+\textbf{RQ1:} How effective is our approach in itendifying and mitigating duplicate code in the Linux kernel?
 
-\textbf{RQ1:} How effective is our approach in identifying duplicate code in the Linux kernel?
+Given the complexity of the proposed question, we created a supplementary research question, with the objective to verify midway 
+results, which is related to the performance of our proposed tool in the Linux kernel, the supplementary research question
+is defined as:
+
+\textbf{RQ1.1:} How accurate is the proposed tool for detecting duplicate functions?
 
 This research is divided into two phases. On the \textbf{Phase I}, we will propose, build and validate a tool capable to indentify code 
 duplications in function level for the C programming language, we expects this proposed tool to indentify code duplications

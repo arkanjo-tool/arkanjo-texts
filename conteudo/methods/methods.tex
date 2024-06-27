@@ -1,3 +1,47 @@
 \en
 
-Base file for Research Methods. TODO.
+To answer our proposed research questions, we opted to divide our research. Firstly, we will approach the supplementary research 
+RQ1.1, which will serve as a background to our research question RQ1. To answer the RQ1.1, we propose a multiple-method investigation,
+by validating our proposed tool in the BigCloneBench databaset \citep{bigclonebench}, which is the standard method used by the
+literature, and a empirical analyses of a selected subset of functions in which the tool infers.
+With the question RQ1.1 answered, we will return our focus to the RQ1. To answer the RQ1, we opted to create a etchnographic study, 
+using participant-observation methodology, we expect to mitigate a selected subset of duplicated functions by refactoring them using
+a designed sistematic approach, while iteracting with the Linux community to collect feedback of the mitigation made by us.
+
+\section{Multiple-method Investigation}
+
+The multiple-method investigation to verify the efficiency of our tool in a methodical way is a method in which we consider 
+trustworthy.
+The first method used is the evaluation of the proposed tool in the BigCloneBench database \citep{bigclonebench}, one of the 
+standard code duplication databases used by validation of tool presented in the formal literature. 
+As presented by Krinke and Ragkhitwetsagul, the BigCloneBench is not a perfect dataset \citep{bigfail}, and for that reason we opted to do
+a additional evalution, in which we will do a empirical analyses on a select subset of functions of the AMD Display driver in which
+our tool infers it is a duplication. To a concrete evaluatiion, in both of the methods we will apply a  variation of the similarity 
+metric (The similarity metric is a metric measuring the similarity of two code duplications, a proper explanation is made 
+in the Chapter \ref{cha:tool}).
+
+\subsection{Evaluation by the formal literature}
+
+The BigCloneBench dataset \citep{bigclonebench} is a collection of Java code with a selection of code duplications pairs categorized by the authors, these
+code duplications pairs are not separed solely if they are duplications, the pairs are also categorized by the code duplication
+types presented in Subsection \ref{subsec:types}. 
+
+Liut et al presented a sample method to evaluate the their code duplications detection method, in which they sample 20,000 pairs
+from each of the code duplication types, with the addition of 20,000 nonduplication pairs to act as the negative samples
+\citep{tailor}. To a fairness evaluation, we use the same sample method as them to evaluate our tool.
+
+The proposed tool does not differentiate the code duplication types and infers duplications in the function level instead of the 
+code file level, which is the standard in the state-of-art code duplication methods, we were required to adjust the form 
+we compute metrics of the evalution. To accomplish this, we will define that every pair of functions in which the similarity metric
+is equal or superior to a threshold X will be considered a duplication, and the pair of code files that the functions are contained
+are marked as duplication. If on this method, a code duplication pair is corretly indentified, it will count as a correct to its 
+code duplication types, if a incorrect duplication pair is infered, it will count as incorrect to all code duplication types. Given
+these definitions, we will compute the Recall metric presented in \ref{subsec:codemethods} for each of the code duplication types.
+
+To understand the variation of meaning when we change the similarity threshold, we will eval our tool for the given variations of
+the threshold X and discuss the results: 30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, 100\%.
+
+\subsection{Evaluation by Empirical analyses}
+
+
+\section{Ethcnographic study}

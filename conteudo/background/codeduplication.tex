@@ -17,6 +17,8 @@ with the former one focused on the technical aspect while the later one also int
 
 \subsection{Types of code clone duplication}
 
+\label{subsec:types}
+
 The categorization of two code artifacts as a duplication of each other is a subjective task (REFERENCE HERE). 
 To mitigate this human aspect on the given problem, the literature classified code duplication on the scale of changes between 
 the code artifacts in four main types of code clone duplication \citep{litreview}. Given two code artifacts F and G, 
@@ -80,17 +82,22 @@ five main methodologies given the main nature of their work \citep{litreview} , 
 	the recently work done by Liu et al. \citep{tailor}.
 \end{itemize}
 
-Given the necessity to evaluate and compare approches for code clone detection, it was developed and widely-adopted two datasets: 
-OJ-Clone, a dataset collected from a pedagogical online judge system \citep{ojclone}, and BigCloneBench, a datatset collected from over 
-25,000 Java software systems \citep{bigclonebench}. The existence of only two spreaded datasets is a open concern in literature as 
-the limited scope of OJ-Clone and the problems of BigCloneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail}
-
 The state-of-art methods for code clone detection usually have high computational time and memory space usage, as well being
 programming language specific approches, which cannot be easily implemented in programming languagues that were not used in 
 their research \citep{litreview}. These are main concern for our research and for this reason we will use a generalist textual-based 
 approach based solely on Natural Languague Processing (NLP) text similarity detection methods, which we will introduce and compare
 with the literature approches later on this document. 
 
+\subsection{Methodology to evaluate code duplication methods}
+
+\label{subsec:codumethods}
+
+Given the necessity to evaluate and compare approches for code clone detection, it was developed and widely-adopted two datasets: 
+OJ-Clone, a dataset collected from a pedagogical online judge system \citep{ojclone}, and BigCloneBench, a dataset collected from over 
+25,000 Java software systems \citep{bigclonebench}. The existence of only two spreaded datasets is a open concern in literature as 
+the limited scope of OJ-Clone and the problems of BigCloneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail}
+
+(ADD INFORMATION ABOUT THE MORE SEPARATION OF CLONE TYPES THE BIGCLONEBENCH makes)
 
 
 
