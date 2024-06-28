@@ -113,12 +113,13 @@ Finally, for each of the functions shared by all code files, we do a specific-ca
 If a function is shared perfectly by all the code files, we use a simply approach to only remove them and create the function in
 the source code file, if it is not shared perfectly, we look for refactoring methods which can be applied on this specific case. 
 
-Finishing our mitigation method, if the mitigation ended up working in a initial step, we move it foward to the 
+Finishing our mitigation method, if the mitigation ended up working in a initial step, we may move it foward to the 
 Ethnographic method, iteracting with the Linux community to understand what are their thoughts on the mitigation. If the mitigation
 ended up as not working as expected, we will categorized it in two categories, the first one is that the refactoring requires a
 decision in which we, as not specialist and non-maintainers of the Linux kernel, cannot make it correctly, although
 we believe a specialist would be able to refactoring it. The second categorization is that we do not know if it is in fact possible
-to refactoring the duplication. 
+to refactoring the duplication. With or without a sucessful mitigation, we will store our mitigations on (ADD REP AND PUT HERE) 
+to research tranparency.
 
 The figure (CREATE FIGURE AND ADD HERE) ilustrates the approach pipeline described in this section.
 
@@ -141,6 +142,24 @@ The functions pairs selected at random following our methodoly can be consulted 
 CREATE TABLE AND ADD HERE.
 
 \subsection{Ethnographic methodology}
+
+When we make a code duplication mitigation following our approach pipeline described in \citep{subsec:pipeline}, we are apt
+to initiate our ethnographic research. We resorted to a participant-observation approach as our ethnographic methodology, where we 
+will act as contributors of the Linux kernel to the AMD Display driver, interacting with the maintainers of the AMD Display driver
+attempting to get our mitigations added to the Linux kernel. 
+
+The Linux kernel communication is made through public mailing lists, where anyone can consult the discussions made in it.
+We plan to collect data artifacts through the AMD Display diver mainling list.
+The mainling list will register our iteractions with Linux community, with 
+their members sharing their opinions and suggestions to the mitigation we made, corroborating to the discussion about the 
+effectiveness of our proposed approach.
+
+Given the time limit of our research, we does not expect to be able to iteract with the Linux community throughtout successfully
+mitigation we made using the proposed approach, as it pass through factors we do not control, which is the time spent waiting 
+for Linux community's members interact with us.
+For this reason, we resorted to commit to do the participant-observation approach 
+in 5 of the successfully mitigation and use them for our discussion. 
+
 
 
 
