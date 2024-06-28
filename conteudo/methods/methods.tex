@@ -92,6 +92,8 @@ methodology to interact with the Linux community.
 
 \subsection{Generic approach pipeline to mitigate code duplication}
 
+\label{subsec:pipeline}
+
 The C programming language's way to communicate between source code files is through creation of header files, which is
 a library specification \citep{Cbook}. As the Linux kernel is mainly build in C, we resorted to remove code duplications by
 creating a library, where the code artifacts, instead of using their duplications, will pass to use the library.
@@ -120,11 +122,23 @@ to refactoring the duplication.
 
 The figure (CREATE FIGURE AND ADD HERE) ilustrates the approach pipeline described in this section.
 
-
-
-
-
 \subsection{Selection of the duplicated functions}
+
+As discussed in the empyrical analyses for the tool, it is impractical to evaluate every code duplication on Linux kernel. Thus,
+similarily to the empyrical analyses for the tool, we will limit the experiment scope to only the AMD Display driver and select
+a random sample of duplicated functions infered by our tool to initiate the mitigation approach defined in \ref{subsec:pipeline}. 
+We chose a sample size of 30 duplicated functions, as there are multiples studies demonstrated that a sample size of this size 
+have a statistical significance \citep{sample1,sample2}.
+
+On the the random selection of the duplicated functions, we deside to put a additional restriction on which functions pairs are 
+elegible to be selected. The restriction is that we will only select functions pairs with similarity metric equal 
+to 100\%, we made this choice because, as showed in the Figure \ref{fig:relatory_ex}, there are more then 20,000 lines codes 
+in the AMD Display driver in which the similarity metric reaches this value. On all function pairs that respect the restriction,
+we will choose then uniformly at random.
+
+The functions pairs selected at random following our methodoly can be consulted in the Table (CREATE TABLE AND ADD HERE).
+
+CREATE TABLE AND ADD HERE.
 
 \subsection{Ethnographic methodology}
 
