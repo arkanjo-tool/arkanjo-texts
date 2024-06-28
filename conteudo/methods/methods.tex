@@ -4,7 +4,7 @@ To answer our proposed research questions, we opted to divide our research. Firs
 RQ1.1, which will serve as a background to our research question RQ1. To answer the RQ1.1, we propose a multiple-method investigation,
 by validating our proposed tool in the BigCloneBench databaset \citep{bigclonebench}, which is the standard method used by the
 literature, and a empirical analyses of a selected subset of functions in which the tool infers.
-With the question RQ1.1 answered, we will return our focus to the RQ1. To answer the RQ1, we opted to create a etchnographic study, 
+With the question RQ1.1 answered, we will return our focus to the RQ1. To answer the RQ1, we opted to create a ethnographic study, 
 using participant-observation methodology, we expect to mitigate a selected subset of duplicated functions by refactoring them using
 a designed sistematic approach, while iteracting with the Linux community to collect feedback of the mitigation made by us.
 
@@ -43,5 +43,91 @@ the threshold X and discuss the results: 30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\
 
 \subsection{Evaluation by Empirical analyses}
 
+Given the problems of the BigCLoneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail} and the limitations of it in our
+scope such as being a Java dataset while the Linux kernel are primarily build in the C programming language, we opted to, together
+with the formal litarature evaluation, perform a empirical study analyzing the codes in which our tool infered as duplications. 
 
-\section{Ethcnographic study}
+The number of code lines and components in the Linux kernel makes it impractical to analyse every code duplication. To limit our
+scope, we will analyse solely code duplications in the AMD Display driver. This limitation is still does not reduce the code
+duplication to analyse, since in our preliminar tool execution showed in the Figure \ref{fig:relatory_ex}, there is over 20,000
+lines of code duplications on the AMD Display driver with similarity metric of 100\%.
+
+For conducting our empiricial analyses, we opted to do a random selection in the code duplications pairs infered by our tool. To
+do that, we will use the definition that if the similarity metric of a function pair is greater or equal to X, will be considered a
+duplication. To understand the optimal values of X we will analyse 10 functions pair randomic selected 
+that have similarity metric X for each of the variations of the parameter X, which are 
+30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, 100\%. 
+As it is not expected to have code duplications with similarity exactly a whole number, we will allow a
+variation of 1\% for greater or less to each of the variations of the parameter X. 
+
+To do the random selection of functions pairs, we list the code duplications for each of the variations of X and execute 
+a random selection algorithm
+builtin in in the source code language of our tool. The exactly algorithm of the random selection, along with the selected 
+function pairs can be found in Appendix (CREATE APENDICE AND ADD HERE).
+
+When we analyses the selected functions pairs, we will judged empiricaly if they are a duplication or not, then we are not
+going further as
+categorizing the duplications by code duplication type. We intend to collect the data on this empirical analyses and compare it
+to the formal literature method, to undertand if our tool in fact detect duplicated functions and 
+the difference it makes when varying the minimum similarity parameter of our tool.
+
+\section{Ethnographic study}
+
+Ethnography is a research method recognized as a significant qualitative empirical approach 
+suited to understanding people and cultures, and their associated social and work practices \citep{bookethno}. 
+The central tenet of the ethnography approach is to enable research to undertand values, beliefs or ideas shared for a 
+ community under study from the members' point of view \citep{ethnosoft}. Thus, the ethnographer is required to act as
+a member of  the community, learning and observing deeply what people do and why they do.
+
+Sharp et al discuss the application of the ethnography method in the software engineering research, demonstrating the low adoption 
+of the method and its advantages to uncover what practioners do and why they do \citep{ethnosoft}. In our research context, if we
+mitigate code duplications by ourselves without iteracting with the Linux community, we cannot undertand if the linux maintainers 
+would accept our approach for code duplication and what concerns they would have. Thus, we resorted to a ethnography research, where
+we will act as a member of the Linux kernel, begin a contributor with focus on removing code duplications found.
+
+On this section, we will describe a generic approach pipeline to mitigate code duplication found in the Linux kernel. Then we
+will describe the methodology to select a subset of duplicated functions found by our tool and finally, describe the ethnographic
+methodology to interact with the Linux community.
+
+
+\subsection{Generic approach pipeline to mitigate code duplication}
+
+The C programming language's way to communicate between source code files is through creation of header files, which is
+a library specification \citep{Cbook}. As the Linux kernel is mainly build in C, we resorted to remove code duplications by
+creating a library, where the code artifacts, instead of using their duplications, will pass to use the library.
+
+When removing duplicated functions, our desired behavior is to this function to every portion of the code it exist, only allowed a
+unique version existent in the library created by us. For this reason, given our initial duplicated function pair, we will use 
+the function information functionality(This functionality is described in \ref{subsec:functioncommand}) of our tool to find all 
+places that this function is defined in the source code. Thus, we finish with a collection of duplicated function and the collection
+of code files in which these functions are defined into.
+
+Given the semantics of a library to containing the shared code by a collection of code files, we added a additional step of the 
+approach, which is searching for others functions contained in all of code files of the collection we are working with. 
+On this moment, we have a collection of code files, and a non-empty set of functions which are shared by all of the code files 
+in the collection.
+
+Finally, for each of the functions shared by all code files, we do a specific-case aproach to mitigate each one of them.
+If a function is shared perfectly by all the code files, we use a simply approach to only remove them and create the function in
+the source code file, if it is not shared perfectly, we look for refactoring methods which can be applied on this specific case. 
+
+Finishing our mitigation method, if the mitigation ended up working in a initial step, we move it foward to the 
+Ethnographic method, iteracting with the Linux community to understand what are their thoughts on the mitigation. If the mitigation
+ended up as not working as expected, we will categorized it in two categories, the first one is that the refactoring requires a
+decision in which we, as not specialist and non-maintainers of the Linux kernel, cannot make it correctly, although
+we believe a specialist would be able to refactoring it. The second categorization is that we do not know if it is in fact possible
+to refactoring the duplication. 
+
+The figure (CREATE FIGURE AND ADD HERE) ilustrates the approach pipeline described in this section.
+
+
+
+
+
+\subsection{Selection of the duplicated functions}
+
+\subsection{Ethnographic methodology}
+
+
+
+
