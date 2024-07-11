@@ -3,7 +3,7 @@ on: [push]
 jobs:
   build-pdf:
     runs-on: ubuntu-latest
-    container: lucasoshiro/modelo-latex-ccsl
+    container: LipArcanjo/quali-text
     steps:
       - uses: actions/checkout@v4
       - run: make tese.pdf
