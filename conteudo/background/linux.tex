@@ -14,13 +14,24 @@ for managing and accepting contributions into the subsystem they care of \citep{
 
 The contributions to the Linux are coordinate with the usage of the Git source management tool. The contributions 
 made to the project are formated as patches, which are text documents describing differences between two different 
-versions of a source tree \citep{melissa}.
+versions of a source tree  The patches are sent and reviewed through the Linux mailing lists \citep{melissa}.
 
-AMD Display Driver is a linux's subsystem responsible for the management of AMD GPU's. This subsystem have a problem 
-with code clone duplication, which are acknowledged by the subsystem's maintainters. For this reason, we selected this
-subsystem as the primary focus for refactoring the detected code clone duplication by our tool.
-(MAYBE CHANGE TO: For this reason, we selected this subsystem as the primary focus for our empirical analysis in our research).
+Mailing lists are the official means of communication of the Linux community, through the mailing lists the community members 
+send and review
+contributions to the kernel, discuss topics related to the Linux such as which new features to add, et cetera. 
+As there are multiples
+subsystems in the Linux kernel, there are multiples mailing lists in the Linux to organize the discussion made. Every subsystem 
+have their own mailing list to concentrate the discussion related to the subsystem \citep{melissa}. The iteractions made in the
+mailing lists are documented and stored in the Linux kernel Lore \citep{linuxlore}, which serves as a repository of the
+discussion made in the Linux kernel to be consulted by anyone interested.
 
-(I WANT TO CHANGE THE AMD DISPLAY paragraph)
+One the the Linux kernel subsystem is the AMD Display Driver, a subsystem responsible for implement the drivers required to enable
+AMD GPU's work properly in the Linux environment. The maintainers of this subsystem reported a empirical problem they have in
+the subsystem, which is a significant amount of duplicated code in the subsystem, a problem that hinders the maintainment of the
+subsystem. This reported problem is the starting point that initiated our research, making the AMD Display Driver our principal
+objecte of study to undertand how to mitigate duplicated code in the Linux kernel.
 
-(ADD INFORMATION ABOUT MAILING LIST)
+
+(I WANT TO CHANGE THE AMD DISPLAY paragraph, WHY DO I NEED TO CHANGE IT? I SHOULD ANOTATE WHAT I WANTED, I MADE A CHANGE
+ TO MAKE IT BETTER BUT NOT SURE IF THERE IS SOME INFORMATION I WANTED TO PUT IN IT)
+
