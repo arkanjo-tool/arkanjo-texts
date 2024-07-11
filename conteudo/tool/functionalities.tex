@@ -4,16 +4,16 @@
 \label{subsec:func}
 
 We proposes three main functionalities for the user in the tool, which are named duplication explorer, function information
-and duplication relatory. Each of the functionalities recevies their adequated parameters to execute, with a exception
+and duplication relatory. Each of the functionalities receives their adequated parameters to execute, with a exception
 of a optional parameter shared by all of them, which is minimum similarity per query. The minimum similarity per query is different
 from the siminum similarity presented in \ref{subsec:setup}, as it enables a volatile change in the minimum similarity
-interested in a query specific context. There is a explanation of each of the main functionalities throughout this section.
+interested in a query specific context. There is a explanation of each of the main functionalities through this section.
 
 \subsection{Duplication explorer}
 
-The duplication explorer is the principal functionality of our tool, the functionality purpose is to expose for the user the code duplication
-pairs found by our tool. We implement optional filters methods to enable more complex queries, which are described below. A example
-of the functionality usage can be found in the figure \ref{fig:explorer_ex}.
+The duplication explorer is the principal functionality of our tool, the functionality purpose is to expose for the user the 
+duplicated functions pairs found by our tool. We implement optional filters methods to enable more complex queries, 
+which are described below. A example of the functionality usage can be found in the figure \ref{fig:explorer_ex}.
 
 
 \begin{itemize}
@@ -31,7 +31,8 @@ of the functionality usage can be found in the figure \ref{fig:explorer_ex}.
 	\begin{item}
 		\textbf{Pattern filter:} This filter make the explorer ignore every pair of duplicated functions that does not match a pattern
 		given by the user as a parameter. We say that a function matches a pattern if the string formed by the concatenation of
-		the relative path of the code file plus the function name. The user can define if both functions or at least one of the 
+		the relative path of the code file plus the function name contains the pattern as a substring. 
+		The user can define if both functions or at least one of the 
 		functions in the pair need to match the pattern by given a specific parameter.
 	\end{item}
 \end{itemize}
@@ -47,12 +48,14 @@ of the functionality usage can be found in the figure \ref{fig:explorer_ex}.
 
 \label{subsec:functioncommand}
 
-The Function information purpose it to give a more in depth information about a specific function. The functionality inform the user
-about the relative path, the function name and the lines the function exist in the code file that the function is contained for the
-function that the user is interested and every function that is a duplication of it. As there ca nbe multiple functions with the 
-same name in a codebase, we distinguish then by the user providing a pattern string and we use the first function find that match
-the pattern. We say that a function matches a pattern if the string formed by the concatenation of the relative path of the 
-code file plus the function name. 
+The Function information purpose it to give a more in depth information about a specific function. The functionality 
+receives a function the user is interested in and then inform the user
+about the relative path, the function name and the lines the function is defined for the function the user is interested and for
+every function that is a duplication of the given function.
+There can be multiple functions with the 
+same name in a codebase, to distinguish them, we receive a pattern string from the user, and  we use the first function find that match
+the given pattern. We say that a function matches a pattern if the string formed by the concatenation of the relative path of the 
+code file plus the function name contains the pattern as a substring. 
 A example of the functionality usage can be found in the figure \ref{fig:function_ex}.
 
 
@@ -67,7 +70,7 @@ A example of the functionality usage can be found in the figure \ref{fig:functio
 
 The duplication relatory purpose is to give a overview of the input codebase. The functionality extract the information
 of how much lines of duplicated code is found per folder in the codebase and present it to the user in a reasonable format. To extract
-the information, we use the Code Duplication Database to list the code duplications, and the temporary code to know how much lines of
+the information, we use the Code Duplication Database to list the duplicated functions, and the temporary code to know how much lines of
 duplicated code contains in each of the functions. (DO I TALK ABOUT THE TRIE USAGE TO MAINTAIN THE HIERARCHICAL TREE STRUCTURE? I 
 THINK NOT). A example of the functionality usage can be found in the figure \ref{fig:relatory_ex}.
 

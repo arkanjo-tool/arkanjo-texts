@@ -3,15 +3,20 @@
 \section{Tool architecture}
 \label{subsec:architecture}
 
-The Setup step is composed of two components, the Function Breaker and the Code Duplication Finder. the pipeline of this step work as
-follow: the Function Parser receives the codebase we are interested, extract the functions of the codebase along with metadata and
-creates a new temporary codebase where it function becomes a new code file. The Code Duplication Finder iterate over every pair of 
-files in the temporary codebase computing the code duplications and save them in the Code Duplication Database, which is a text file
-that stores every code duplication as a triple <function1,function2,similarity>, where function1 and function2 are the functions that 
-are a duplication of each other, and similarity is the metric given by the code duplication method utilized, which in our case, it is
+The Setup step is composed of two components, the Function Breaker and the Code Duplication Finder. The pipeline of this step work as
+follow: the Function Parser receives the codebase the user are interested, extract the functions of the codebase along with metadata 
+and
+creates a new temporary codebase where the functions extracted becomes news code files. 
+The Code Duplication Finder iterate over every pair of 
+files in the temporary codebase checking if they are a code clone and if so, save them in the Code Duplication Database, 
+which is a text file
+that stores every code duplication as a triple \textbf{<function1,function2,similarity>}
+, where function1 and function2 are the functions that 
+are a duplication of each other, and similarity is the metric given by the code duplication detection method utilized, which in our case, 
+it is
 the cossine similarity explained in \ref{sec:similarity}. Finally, the Query Responder consumes the temporary codebase and the 
-Code Duplication Database to extract code duplication related information as per user request. A diagram to ilustrate the pipeline
-can be found in the Figure \ref{fig:diagram}. There is a explanation of how each component work below.
+Code Duplication Database to extract duplicated functions related information as per user request. A diagram to ilustrate the pipeline
+can be found in the Figure \ref{fig:diagram}. There is a explanation of how each component work through this section.
 
 \begin{figure}
 \includegraphics{diagrama_mestrado}
@@ -22,7 +27,8 @@ can be found in the Figure \ref{fig:diagram}. There is a explanation of how each
 \subsection{Input codebase}
 
 The input codebase is expected to be a folder in the machine the tool is running into. All files in the codebase that is not a source
-code file from a programming language supported by the tool will be ignored.
+code file from a programming language supported by the tool will be ignored. The tool validates that a source file is supported through
+analyses of the file extension.
 
 \subsection{Function Parser}
 
@@ -44,26 +50,28 @@ source code files, independently if the code blocks are defined by curly bracket
 infer if it represents a function's body given how deeply it is in the code context and a few lines before the start 
 of the code block. We followed exactly this approach to implement the function extractor for the languagues we implemented. 
 As a alternative approach, we can build the syntax tree \citep{compiler} of the programming language and use it to 
-extract the functions, which is a more complex task then our main approach. For the programming languages we support, we implemented
-it as follow:
+extract the functions, which is a more complex task then our main approach. For the programming languages that e support, 
+we implemented them as follow:
 
 \begin{itemize}
 	\begin{item}
 		\textbf{C}: Given a source code file, we extract every code block from it, maintaining the depth of the code block in
-		the code context and som lines of code before the definition of the code block. By the C programming language's grammar, 
+		the code context and some of code lines before the definition of the code block. By the C programming language's grammar, 
 		the functions are defined in a global context, with depth of 0. There are other elements with the same depth as functions,
 		we differentiate them by analysing if the first non-empty character before the curly brackets of the code block is a close 
 		parenthesis, since functions are the only elements that respect this pattern in the C programming language.
 	\end{item}
 	\begin{item}
 		\textbf{Java}: Given a source code file, we extract every code block from it, maintaining the depth of the code block in
-		the code context and som lines of code before the definition of the code block. By the Java's grammar, 
+		the code context and some of code lines before the definition of the code block. By the Java's grammar, 
 		the functions are defined inside classes. There are different depths which we can have functions, as Java accepts inner
 		classes. We differentiate functions of other elements by analysing if the first non-empty character before the curly brackets of the code block is a close 
-		parenthesis, since there are others elements which also respect this pattern such as for loop, we would need to apply other 
-		filters. We chose to only analyse functions of depth 1, which ignores every others elements that respect the previously
-		filters, but as counterpart, functions declared inside Inner Classes are not supported by our extractor. We made this choice
-		as there are not inner classes on the codebases explored in this work.
+		parenthesis. There is a problem with this approach as respect the pattern we defined for functions such as for loop, 
+		and for this reason, it is required to apply other filters.
+		We chose to only analyse functions of depth 1, which ignores every others elements that respect are code blocks and have
+		a parentesis as the first non-empy character before the curly brackets. This choice has a counterpart, 
+		functions declared inside Inner Classes are not supported by our extractor. We made this choice
+		as there are not inner classes on the BigCloneBench \citep{bigclonebench}, which is the only codebase in Java explored in this work. 
 
 	\end{item}
 \end{itemize}
@@ -102,7 +110,7 @@ For the code duplication detection method, we visualize the source code files as
 implemented by the Gensim library \citep{gensim} and compute the cosine similarity as the similarity metric. We chose this method 
 given the alegated Gensim statements about itself performance, being a programming language independent method and the nonnecessity of 
 compilable code, which is expected to happen in the temporary codebase as it not stores complete code artifacts. Platis implemented
-this code cuplication detection method and distributed it to the public with a MIT license \citep{platistool} \citep{mitlicense}, 
+this code cuplication detection method and distributed it to the public with a MIT license \citep{platistool,mitlicense} ,
 we utilize his implementation as it has some nice to have components such as removing code comments, we do the appropriated changes
 in the input and output of his implementation to respect the expected format of our tool. 
 It is feasible to change the duplication detection method in a manner similar to what we did with Platis's implementation.
@@ -124,7 +132,7 @@ Duplication Finder, to generate the temporary codebase and the Code Duplication 
 Responder step. The value of the minimum similarity metric is to reduce the Code Duplication Database, which optimize the
 memory usage and the computational cost of the Query Responder step. For example, if this parameter does not exist and we work in 
 a codebase of $10000$ functions and supposing each relative path plus the function name have $50$ charactes, the Code Duplication 
-Database will be a file of size approximately $5000^2 \times 50 ~= 5$ Gigabytes, as it is not expected to a real large codebase 
+Database will be a file of size approximately $5000^2 \times 50 ~= 5$ Gigabytes, as it is not expected in a real large codebase 
 to the majority of pairs of functions be a duplication of each other, this number can be reduced dramastically.
 
 \subsection{Query Responder step}

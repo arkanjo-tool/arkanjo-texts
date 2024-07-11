@@ -6,7 +6,7 @@
 The standard methodology for text similarity detection are based on building vector embeddings of
 the texts and apply a distance function in these embeddings to measure the similarity between them. 
 There are multiple methods for building vector embeddings, such as bag-of-words, TF-IDF, LSI, Word2Vec \citep{gensimlivro}. 
-The recent works related to build vector embeddings uses Largue Language Models (LLM), for example the usage of BERT, ELMo 
+The recent works related to build vector embeddings uses Large Language Models (LLM), for example the usage of BERT, ELMo 
 and GPT \citep{llmsimilar}. The most popular distance function used by the literature are the cosine similarity 
 defined by the formula \citep{cosineref}:
 
@@ -17,9 +17,9 @@ is a number between $0$ and $1$, where $SC(A,B)$ values more close to the number
 it is common to compare the cosine similarity to aproximation to a probability value, transforming the values between $0$ and $1$ to a
 porcentage between $0 \% $ and $100\%$, through our research we will use the porcentage form.
 
-It is a famous fact that LLM have high computational cost, one example of such is a experiment done by Reimers and Gurevych for 
+It is a famous fact that LLM have high computational cost, one example of such is a analyse done by Reimers and Gurevych for 
 finding the most similar pair in a collection of 10,000 sentences, that required about 65 hours with BERT \citep{bertsimilar}. This 
-is a similar magnitude of comparation pairs we want to do through our work and for this reason we chose to not use this kind of 
+is a similar magnitude of comparation pairs we want to do through our work, and for this reason we chose to not use this kind of 
 vector embedding method, but it is a valid solution for smaller codebases.
 
 \subsection{Gensim}
