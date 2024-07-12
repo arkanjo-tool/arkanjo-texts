@@ -2,7 +2,7 @@ name: build-pdf
 on: [push]
 jobs:
   build-pdf:
-    runs-on: ubuntu-latesta
+    runs-on: ubuntu-latest
 	permission:
 	  contents: write
     container: lucasoshiro/modelo-latex-ccsl
