@@ -3,8 +3,6 @@ on: [push]
 jobs:
   build-pdf:
   	runs-on: ubuntu-latest
-	permission:
-	  contents: write
     container: lucasoshiro/modelo-latex-ccsl
     steps:
       - uses: actions/checkout@v4
