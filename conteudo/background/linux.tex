@@ -2,36 +2,39 @@
 
 \section{The Linux Kernel}
 
-The Linux kernel is an Unix-like operating system published by Linus Torvalds in 1992 as a free software and
-it started becoming popular in late 1990s \citep{linuxbook}. Against popular belief, linux is not a full 
-operating system as it do not includes applications such as filesystem utilities, windowing systems. The "Linux" 
-distributions know to the public are in fact GNU/Linux operating systems \citep{gnuref}.
+The Linux kernel is a Unix-like operating system published by Linus Torvalds in 1992 as a free software, and
+it started becoming popular in the late 1990s \citep{linuxbook}. Against popular belief, Linux is not a full 
+operating system as it does not include applications such as filesystem utilities or windowing systems. The "Linux" 
+distributions known to the public are, in fact, GNU/Linux operating systems \citep{gnuref}.
 
-The Linux kernel is monolithic organized as a set of subsystem such as process scheduler, memory management, 
-device driver infrastruture, networking and filesystems \citep{melissa}.
-Each subsystem usually have a maintainer or a group of maintainers, which are people responsible 
-for managing and accepting contributions into the subsystem they care of \citep{melissa}. 
+The Linux kernel is monolithic and organized as a set of subsystems such as process scheduler, memory management, 
+device driver infrastructure, networking, and filesystems \citep{melissa}.
+Each subsystem usually has a maintainer or a group of maintainers.  Maintainers are people responsible 
+for managing and accepting contributions to the subsystem they care for \citep{melissa}.
 
-The contributions to the Linux are coordinate with the usage of the Git source management tool. The contributions 
-made to the project are formated as patches, which are text documents describing differences between two different 
-versions of a source tree  The patches are sent and reviewed through the Linux mailing lists \citep{melissa}.
+The contributions to Linux are coordinated with the usage of the Git source management tool.
+The contributions to the project are formatted as patches, which are text documents describing differences 
+between two different versions of a source tree The patches are sent and reviewed through the 
+Linux mailing lists \citep{melissa}.
 
-Mailing lists are the official means of communication of the Linux community, through the mailing lists the community members 
-send and review
-contributions to the kernel, discuss topics related to the Linux such as which new features to add, et cetera. 
-As there are multiples
-subsystems in the Linux kernel, there are multiples mailing lists in the Linux to organize the discussion made. Every subsystem 
-have their own mailing list to concentrate the discussion related to the subsystem \citep{melissa}. The iteractions made in the
-mailing lists are documented and stored in the Linux kernel Lore \citep{linuxlore}, which serves as a repository of the
-discussion made in the Linux kernel to be consulted by anyone interested.
+Mailing lists are the official means of communication of the Linux community, through the mailing lists 
+the community members send and review contributions to the kernel, discuss topics related to Linux such as 
+which new features to add, et cetera. As there are multiple subsystems in the Linux kernel, there are 
+multiple mailing lists in the Linux to organize the discussion made. Every subsystem has its mailing 
+list to concentrate the discussion related to the subsystem \citep{melissa}. 
+The interactions made in the mailing lists are documented and stored in the Linux kernel Lore
+\citep{linuxlore}, which serves as a repository of the discussion made in the Linux kernel to be
+consulted by anyone interested.
 
-One the the Linux kernel subsystem is the AMD Display Driver, a subsystem responsible for implement the drivers required to enable
-AMD GPU's work properly in the Linux environment. The maintainers of this subsystem reported a empirical problem they have in
-the subsystem, which is a significant amount of duplicated code in the subsystem, a problem that hinders the maintainment of the
-subsystem. This reported problem is the starting point that initiated our research, making the AMD Display Driver our principal
-objecte of study to undertand how to mitigate duplicated code in the Linux kernel.
+One of the Linux kernel subsystems is the AMD Display Driver, a subsystem responsible for 
+implementing the drivers required to enable AMD GPU to work properly in the Linux environment. 
+The maintainers of this subsystem reported an empirical problem they have in the subsystem, which is 
+a significant amount of duplicated code in the subsystem, which hinders the maintenance of the subsystem.
+This reported problem is the starting point that initiated our research, making the AMD Display Driver our 
+principal object of study to understand how to mitigate duplicated code in the Linux kernel.
 
 
 (I WANT TO CHANGE THE AMD DISPLAY paragraph, WHY DO I NEED TO CHANGE IT? I SHOULD ANOTATE WHAT I WANTED, I MADE A CHANGE
- TO MAKE IT BETTER BUT NOT SURE IF THERE IS SOME INFORMATION I WANTED TO PUT IN IT)
+ TO MAKE IT BETTER BUT NOT SURE IF THERE IS SOME INFORMATION I WANTED TO PUT IN IT, 
+(MISSING AMD DISPLAY DRIVER MAILING LISTS, I WILL FIND IT LATTER)
 
