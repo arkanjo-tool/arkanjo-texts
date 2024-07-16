@@ -2,47 +2,52 @@
 
 \section{Code Duplication Detection}
 
-Code Duplication Detection is a field in computer science studies that gets the attention of researchers 
+Code Duplication Detection is a field in computer science studies that has the attention of researchers 
 back to 1988 \citep{firstman}.
-The occurrence of Code Duplication is a harmful artifact to have in a software, affecting software related 
-tasks such as code readability,
-introdution of bugs, etc.   \citep{harmone}. 
-On most of the cases, the occurrence of code duplication tends to create a more unstable software then the 
-nonduplicate code counterpart.   \citep{harmtwo}
+The occurrence of Code Duplication is a harmful artifact to have in software, affecting software-related 
+tasks such as code readability, introduction of bugs, etc \citep{harmone}. 
+In most cases, the occurrence of code duplication tends to create more unstable software 
+than the nonduplicate code counterpart \citep{harmtwo} .
 
-Through the years, the subject of studies about Code Duplication Detection branched out mainly in two fields of study,
-Code Clone Detection and Code Plagiarism Detection,
-with the former one focused on the technical aspect while the later one also introduces an social aspect on the field of research
-\citep{litreview}. For our research we are only interested on the Code Clone Detection branch given the nature of our work.
+Through the years, the subject of studies related to Code Duplication Detection branched out mainly in 
+two fields of study, Code Clone Detection and Code Plagiarism Detection, with the former focused on the 
+technical aspect while the latter also introduced a social aspect of the field of research
+\citep{litreview}. 
+In this work, we are only interested in the Code Clone Detection branch given the nature of our work.
 
 \subsection{Types of code clone duplication}
 
 \label{subsec:types}
 
-The categorization of two code artifacts as a duplication of each other is a subjective task (REFERENCE HERE). 
-To mitigate this human aspect on the given problem, the literature classified code duplication on the scale of changes between 
-the code artifacts in four main types of code clone duplication \citep{litreview}. Given two code artifacts F and G, 
-the types of Code Duplication are described as follow \citep{litreview}:
+The categorization of two artifacts as a duplication of each other can open the question of what is considered 
+a duplication. To approach this question, the literature classified code duplication on the scale of the 
+changes between the code artifacts, creating a classification of four types of code clone 
+duplications \citep{litreview}. 
+When comparing the two code artifacts, F and G, the four types of code duplication can be described 
+as follows \citep{litreview}:
 
 \begin{itemize}
 	\begin{item}
-		\textbf{Type-1:} The differences between F and G are in the context of revision of comments, variable names, white spaces 
-		and any other kind of irrelevant elements. (ADD FIGURE) shows a typical example of Type-1 Code 
+		\textbf{Type-1:} The differences between F and G are in the context of revision of comments, variable names,
+		white spaces, and any other kinds of irrelevant elements. 
+		(ADD FIGURE) shows a typical example of Type-1 Code 
 		Duplication \citep{litreview}. 
 	\end{item}
 	\begin{item}
-		\textbf{Type-2:} The differences between F and G is the same as the type-1, with the addition of considering 
-		addition and deletion of redudant codes. (ADD FIGURE) shows a typical example of Type-2 Code Duplication \citep{litreview}. 
+		\textbf{Type-2:} The differences between F and G are the same as type-1, with the addition of 
+		considering the addition and deletion of redundant codes.
+		(ADD FIGURE) shows a typical example of Type-2 Code Duplication \citep{litreview}. 
 	\end{item}
 	\begin{item}
-		\textbf{Type-3:} The difference between F and G is the same as the type-2, with the addition of considering 
-		the reorder of code blocks as well as statements within code blocks. (ADD FIGURE) shows a typical example of 
+		\textbf{Type-3:} The difference between F and G is the same as type-2, with the addition of considering 
+		the reorder of code blocks, as well as statements within code blocks. (ADD FIGURE) shows a typical example of 
 		Type-3 Code Duplication \citep{litreview}. 
 	\end{item}
 	\begin{item}
-		\textbf{Type-4:} The difference between F and G is the same as the type-3, with the addition of considering 
-		changes on data sctrucure, the order of operands/operators in expresssions, or replacing part of codes with 
-		equivalent composition. (ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
+		\textbf{Type-4:} The difference between F and G is the same as type-3, with the addition of considering 
+		changes in data structures, the order of operands/operators in expressions, or replacing part of codes 
+		with equivalent composition.
+		(ADD FIGURE) shows a typical example of Type-4 Code Duplication \citep{litreview}. 
 	\end{item}
 
 
@@ -51,42 +56,52 @@ the types of Code Duplication are described as follow \citep{litreview}:
 
 \subsection{Literature approches for code clone detection}
 
-Given the passage of time, the literature developed many techniques and methods to approach the code clone detection problem. 
-For better understanding and analyze of these approachs, the literature divided the researches done in
-five main methodologies given the main nature of their work \citep{litreview} , which are:
+Given the passage of time, the literature developed many techniques and methods to approach the code clone 
+detection problem. For a better understanding and analysis of these approaches, the literature divided the 
+research done into five methodologies given the nature of their work  \citep{litreview}, which are:
 
 \begin{itemize}
-	\item \textbf{Textual-based approaches:} The literature review made by Chen \citep{litreview}  states that this methodology
-	is the first to be investigated by the literature. This line of methodology is based on see code as a text artifact and apply
-	textual approachs for text similarity. One example of this methodology applied is the work of Roy and Cordy \citep{textexample}, 
+	\item \textbf{Textual-based approaches:}  The literature review made by Chen \citep{litreview}  
+	states that this methodology is the first to be investigated by the literature. This methodology line 
+	is based on seeing code as a text artifact and applying textual approaches for text similarity. One 
+	example of this methodology applied is the work of Roy and Cordy
+	\citep{textexample},
 	which uses parsing and grammar techniques to detect code clones.
 
-	\item \textbf{Token-based approaches:} This methodoly tries to approach the problem by seeing the code in a similar way to
-	the lexical analysis of the compiling process \citep{litreview} . That means doing work in the line of recognizing constants, keywords and other 
-	specific programming languages tokens, mapping variables to <pair,value> representations to become naming-independent, etc. One example of 
-	this methodology applied  is the work of Toomey et al. \citep{tokenexample} to detect code clones through hashed token sequences.
+	\item \textbf{Token-based approaches:} This method tries to approach the problem by seeing the code in a
+	similar way to the lexical analysis of the compiling process \citep{litreview}. 
+	That means doing work along the lines of recognizing constants, keywords, and other specific programming 
+	language tokens, mapping variables to representations to become naming-independent, etc. One example 
+	of this methodology applied is the work of Toomey et al. \citep{tokenexample} 
+	to detect code clones through hashed token sequences.
 
-	\item \textbf{Tree-based approaches:} While the token-based approach uses the lexical analysis of the compiling process, the 
-	tree-based approach uses the syntax tree, the structure that  stores the semantic information of a code artifact in respect of the 
-	programming language \citep{compiler}. One example of research that uses this information to detect code clones is the one done by
-	Chilowicz and Duris \citep{treeexample}.
+	\item \textbf{Tree-based approaches:} While the token-based approach uses the lexical analysis of the 
+	compiling process, the tree-based approach uses the syntax tree. The syntax tree is a data structure that 
+	stores the semantic information of a code artifact concerning the programming language \citep{compiler}. 
+	One example of research that uses this information to detect code clones is done by Chilowicz and Duris
+	\citep{treeexample}.
 
-	\item \textbf{Metric-based approaches:} This methodology approches the problem by extracting metrics from the code artifact and use 
-	those metrics as a embedding representation of the artifact to measure similarity \citep{litreview}, similarly to the famous  
-	Word2Vec work done by Mikolov et al \citep{wordtovec}. Examples of metrics can be program size, number of variables, number of 
-	access to memory, etc. One example of this methodology applied is the work done by Kaur and Sharma. \citep{metricexample}
+	\item \textbf{Metric-based approaches:} This methodology approaches the problem by extracting metrics 
+	from the code artifact and using those metrics as an embedding representation of the artifact to measure 
+	similarity \citep{litreview}, similar to the famous Word2Vec work done by Mikolov et al.
+	\citep{wordtovec}. Examples of metrics can be program size, number of variables, number of access to
+	memory, etc. One example of this methodology applied is the work done by Kaur and Sharm
+	\citep{metricexample}. 
 
-	\item \textbf{Graph-based approaches:} Similarly to the Tree-based approaches, this methotodology depends heavily on an intermediate
-	program representation, called program dependence graph (PDG) \citep{prodg}. The representation store information 
-	about program's control, statement and data dependencies. One example of usage of the program dependence graph is 
-	the recently work done by Liu et al. \citep{tailor}.
+	\item \textbf{Graph-based approaches:} Similarly to the Tree-based approaches, this methodology depends 
+	heavily on an intermediate program representation, called program dependence graph (PDG) \citep{prodg}. 
+	The representation stores information about the program’s control, statement, and data dependencies. 
+	One example of this methodology applied is the recent work done by Liu et al. \citep{tailor},
+	one of the state-of-the-art works in the field.
+
 \end{itemize}
 
-The state-of-art methods for code clone detection usually have high computational time and memory space usage, as well being
-programming language specific approches, which cannot be easily implemented in programming languagues that were not used in 
-their research \citep{litreview}. These are concerns for our research, for this reason we will use a generalist textual-based 
-approach based solely on Natural Languague Processing (NLP) text similarity detection methods, which we will introduce and compare
-with the literature approches later on this document. 
+The state-of-the-art methods for code clone detection usually have high computational time and memory space 
+usage, as well being programming language-specific approaches, which cannot be easily implemented in programming 
+languages that were not used in their research \citep{litreview}. 
+These are concerns for our research, and for this reason, we will use a generalist textual-based approach 
+based solely on Natural Language Processing (NLP) text similarity detection methods, which we will introduce 
+in Chapter \ref{cha:tool} and evaluate this approach in this work.
 
 \subsection{Methodology to evaluate code duplication methods}
 
