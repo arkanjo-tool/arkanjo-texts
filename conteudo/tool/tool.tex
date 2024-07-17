@@ -1,10 +1,11 @@
 \en
 
-Our proposed tool is a Command Line Interface (CLI) software, the tool purpose is to enable developers to query 
-information about code clone duplication in a function level, which means to find pairs of functions in a codebase
-that where the functions in the pair are code clones of each other. The tool is separated in two steps. The 
-first one, denoted as Setup, is executed only once for each codebase and it is responsible for processing the
-codebase doing tasks such as extracting functions of the code files 
-and searching for code clone duplications. The second step, denoted as Query Responder, is
-responsible to execute the tool functionalities using the information obtained in the Setup step. More information about the 
-Setup and Query Responder behavior can be found in \ref{subsec:architecture} and in \ref{subsec:func}. 
+Our proposed tool is a Command Line Interface (CLI) software. Its purpose is to enable developers to query 
+information about code clone duplication at the function level, which means finding pairs of functions in a codebase 
+that are code clones of each other. 
+
+The tool operates in two steps. The first step, called Setup, is executed only 
+once for each codebase and is responsible for processing the codebase by extracting functions from code files and 
+searching for code clone duplications. The second step, called Query Responder, executes the tool's functionalities 
+using the information obtained in the Setup step. More information about the Setup and Query Responder behavior can 
+be found in sections \ref{subsec:architecture}  and \ref{subsec:func}. 
