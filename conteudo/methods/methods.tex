@@ -1,168 +1,187 @@
 \en
 
-To answer our proposed research questions, we opted to divide our research. Firstly, we will approach the supplementary research 
-RQ1.1, which will serve as a background to our research question RQ1. To answer the RQ1.1, we propose a multiple-method investigation,
-by validating our proposed tool in the BigCloneBench databaset \citep{bigclonebench}, which is the standard method used by the
-literature, and a empirical analyses of a selected subset of functions in which the tool infers.
-With the question RQ1.1 answered, we will return our focus to the RQ1. To answer the RQ1, we opted to create a ethnographic study, 
-using participant-observation methodology, we expect to mitigate a selected subset of duplicated functions by refactoring them using
-a designed sistematic approach, while iteracting with the Linux community to collect feedback of the mitigation made by us.
+To answer our proposed research questions, we opted to divide our research. Firstly, we will approach 
+the supplementary research RQ1.1, which will serve as a background to our research question RQ1. 
+To answer the RQ1.1, we propose a multiple-method investigation by validating our proposed tool in 
+the BigCloneBench dataset \citep{bigclonebench}, which is the standard method used by the literature, 
+and an empirical analysis of a selected subset of functions in which the tool infers. With the question 
+RQ1.1 answered, we will return our focus to the RQ1. To answer the RQ1, we opted to create an 
+ethnographic study using participant-observation methodology. We expect to mitigate a selected subset 
+of duplicated functions by refactoring them using a designed systematic approach while interacting 
+with the Linux community to collect feedback on the mitigation made by us.
 
 \section{Multiple-method Investigation}
 
-The multiple-method investigation to verify the efficiency of our tool in a methodical way is a method in which we consider 
-trustworthy.
-The first method used is the evaluation of the proposed tool in the BigCloneBench database \citep{bigclonebench}, one of the 
-standard code duplication databases used by validation of tool presented in the formal literature. 
-As presented by Krinke and Ragkhitwetsagul, the BigCloneBench is not a perfect dataset \citep{bigfail}, and for that reason we opted to do
-a additional evalution, in which we will do a empirical analyses on a select subset of functions of the AMD Display driver in which
-our tool infers it is a duplication. To a concrete evaluatiion, in both of the methods we will apply a  variation of the similarity 
-metric (The similarity metric is a metric measuring the similarity of two code duplications, a proper explanation is made 
-in the Chapter \ref{cha:tool}).
+The multiple-method investigation to verify the efficiency of our tool is a method that we 
+consider trustworthy. The first method used is to evaluate the proposed tool in the BigCloneBench 
+database \citep{bigclonebench} one of the standard code duplication databases used to validate 
+the tool presented in the formal literature. As presented by Krinke and Ragkhitwetsagul, the 
+BigCloneBench is not a perfect dataset \citep{bigfail}. For that reason, we opted 
+to do an additional evaluation, in which we will do an empirical analysis on a select subset of 
+functions of the AMD Display driver, which our tool infers is a duplication. For a concrete evaluation,
+in both methods, we will apply a variation of the similarity metric (The similarity metric is a 
+metric that measures the similarity of two code duplications; a proper explanation is made
+in Chapter \ref{cha:tool}).
 
 \subsection{Evaluation by the formal literature}
 
-The BigCloneBench dataset \citep{bigclonebench} is a collection of Java code with a selection of code duplications pairs categorized by the authors, these
-code duplications pairs are not separed solely if they are duplications, the pairs are also categorized by the code duplication
-types presented in Subsection \ref{subsec:types}. 
+The BigCloneBench dataset \citep{bigclonebench} is a collection of Java code with a selection of
+code duplication pairs categorized by the authors. These code duplication pairs are labeled by 
+the code clone type described in \ref{subsec:types}.
 
-Liut et al presented a sample method to evaluate the their code duplications detection method, in which they sample 20,000 pairs
-from each of the code duplication types, with the addition of 20,000 nonduplication pairs to act as the negative samples
-\citep{tailor}. To a fairness evaluation, we use the same sample method as them to evaluate our tool.
+Liut et al. presented a sample method to evaluate their code duplication detection method, 
+in which they sample 20,000 pairs from each of the code duplication types with the addition 
+of 20,000 nonduplication pairs to act as the negative samples \citep{tailor}. 
+For a fair evaluation, we use the same sample method as them to evaluate our tool.
 
-The proposed tool does not differentiate the code duplication types and infers duplications in the function level instead of the 
-code file level, which is the standard in the state-of-art code duplication methods, we were required to adjust the form 
-we compute metrics of the evalution. To accomplish this, we will define that every pair of functions in which the similarity metric
-is equal or superior to a threshold X will be considered a duplication, and the pair of code files that the functions are contained
-are marked as duplication. If on this method, a code duplication pair is corretly indentified, it will count as a correct to its 
-code duplication types, if a incorrect duplication pair is infered, it will count as incorrect to all code duplication types. Given
-these definitions, we will compute the Recall metric presented in \ref{subsec:codemethods} for each of the code duplication types.
+The proposed tool does not differentiate the code duplication types and infers duplications 
+at the function level instead of the code file level, which is the standard in state-of-the-art 
+methods. We were required to adjust the form we computed metrics of the evaluation. To accomplish 
+this, we will define that every pair of functions in which the similarity metric is equal or 
+superior to a threshold X will be considered a duplication, and the pair of code files in which 
+the functions exist are labeled as duplication. If, on this method, a code duplication pair is 
+correctly identified, it will count as correct to its code duplication types. If an incorrect 
+duplication pair is inferred as a duplication, it will count as incorrect to all code duplication 
+types. Given these definitions, we will compute the Recall metric presented in \ref{subsec:codemethods}
+for each code duplication type.
 
-To understand the variation of meaning when we change the similarity threshold, we will eval our tool for the given variations of
-the threshold X and discuss the results: 30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, 100\%.
+To understand the variation of meaning when we change the similarity threshold, we will evaluate 
+our tool for the given variations of the threshold X and discuss the results: 
+30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, 100\%.
 
 \subsection{Evaluation by Empirical analyses}
 
-Given the problems of the BigCLoneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail} and the limitations of it in our
-scope such as being a Java dataset while the Linux kernel are primarily build in the C programming language, we opted to, together
-with the formal litarature evaluation, perform a empirical study analyzing the codes in which our tool infered as duplications. 
+Given the problems of the BigCLoneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail}
+and the limitations of it in our scope, such as being a Java dataset while the Linux kernel 
+is predominantly built in the C programming language, we opted to, together with the formal 
+literature evaluation, perform an empirical study analyzing the codes in which our tool inferred 
+as duplications.
 
-The number of code lines and components in the Linux kernel makes it impractical to analyse every code duplication. To limit our
-scope, we will analyse solely code duplications in the AMD Display driver. This limitation is still does not reduce the code
-duplication to analyse, since in our preliminar tool execution showed in the Figure \ref{fig:relatory_ex}, there is over 20,000
-lines of code duplications on the AMD Display driver with similarity metric of 100\%.
+The number of code lines and components in the Linux kernel makes it impractical to analyze every 
+code duplication. To limit our scope, we will analyze solely code duplications in the AMD Display 
+driver. This limitation still does not reduce the code duplication to analyze. In our preliminary 
+tool execution shown in Figure \ref{fig:relatory_ex}, there are over 20,000 lines of code 
+duplications on the AMD Display driver with a similarity metric of 100\%.
 
-For conducting our empiricial analyses, we opted to do a random selection in the code duplications pairs infered by our tool. To
-do that, we will use the definition that if the similarity metric of a function pair is greater or equal to X, will be considered a
-duplication. To understand the optimal values of X we will analyse 10 functions pair randomic selected 
-that have similarity metric X for each of the variations of the parameter X, which are 
+For our empirical analyses, we opted to make a random selection in the code duplication pairs 
+inferred by our tool. To do that, we will use the definition that if the similarity metric of a 
+function pair is greater or equal to X is considered a duplication. To understand the optimal 
+values of X, we will analyze 10 functions pair random selected that have similarity metric X 
+for each of the variations of the parameter X, which are 
 30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, 100\%. 
-As it is not expected to have code duplications with similarity exactly a whole number, we will allow a
-variation of 1\% for greater or less to each of the variations of the parameter X. 
+As it is unexpected to have code duplications with similarity equals a whole number, we will 
+allow a variation of 1\% for greater or less to each of the variations of the parameter X.
 
-To do the random selection of functions pairs, we list the code duplications for each of the variations of X and execute 
-a random selection algorithm
-builtin in in the source code language of our tool. The exactly algorithm of the random selection, along with the selected 
-function pairs can be found in Appendix (CREATE APENDICE AND ADD HERE).
+To make the random selection of function pairs, we list the code duplications for each of the 
+X variations and execute a random selection algorithm built into the source code language of 
+our tool. The exact algorithm of the random selection, with the selected function pairs, can 
+be found in the Appendix (CREATE Appendix AND ADD HERE).
 
-When we analyses the selected functions pairs, we will judged empiricaly if they are a duplication or not, then we are not
-going further as
-categorizing the duplications by code duplication type. We intend to collect the data on this empirical analyses and compare it
-to the formal literature method, to undertand if our tool in fact detect duplicated functions and 
-the difference it makes when varying the minimum similarity parameter of our tool.
+When we analyze the selected function pairs, we will empirically judge if they are duplications,
+which means we are not going deeper as categorizing the duplications by code duplication type. 
+We intend to collect the data on this empirical analysis and compare it to the formal literature 
+method to understand if our tool detects duplicated functions and the difference it makes when 
+varying the minimum similarity parameter of our tool.
 
 \section{Ethnographic study}
 
-Ethnography is a research method recognized as a significant qualitative empirical approach 
-suited to understanding people and cultures, and their associated social and work practices \citep{bookethno}. 
-The central tenet of the ethnography approach is to enable research to undertand values, beliefs or ideas shared for a 
- community under study from the members' point of view \citep{ethnosoft}. Thus, the ethnographer is required to act as
-a member of  the community, learning and observing deeply what people do and why they do.
+Ethnography is a research method recognized as a significant qualitative empirical approach to 
+understanding people, their cultures, and their associated social and work practices \citep{bookethno}.
+The central tenet of the ethnography approach is to enable researchers to understand values, 
+beliefs, or ideas shared by a community under study from the members’ point of view 
+\citep{ethnosoft}. Thus, the ethnographer acts as a community member, learning and observing 
+what people do and why they do it.
 
-Sharp et al discuss the application of the ethnography method in the software engineering research, demonstrating the low adoption 
-of the method and its advantages to uncover what practioners do and why they do \citep{ethnosoft}. In our research context, if we
-mitigate code duplications by ourselves without iteracting with the Linux community, we cannot undertand if the linux maintainers 
-would accept our approach for code duplication and what concerns they would have. Thus, we resorted to a ethnography research, where
-we will act as a member of the Linux kernel, begin a contributor with focus on removing code duplications found.
+Sharp et al. discuss the application of the ethnography method in software engineering research, 
+demonstrating the low adoption of the method and its advantages in uncovering what practitioners 
+do and why they do it \citep{ethnosoft}. In our research context, if we mitigate code 
+duplications by ourselves without interacting with the Linux community, we cannot understand if 
+the Linux maintainers would accept our approach for code duplication and what concerns they 
+would have. Thus, we resorted to ethnography research, where we will act as a member of the 
+Linux kernel and act as a contributor with a focus on removing code duplications found.
 
-On this section, we will describe a generic systematic approach to mitigate code duplication found in the Linux kernel. Then we
-will describe the methodology to select a subset of duplicated functions found by our tool and finally, describe the ethnographic
-methodology to interact with the Linux community.
+In this section, we will outline a systematic approach to mitigate code duplication in the 
+Linux kernel. Next, we will detail the methodology for selecting a subset of duplicated functions 
+identified by our tool. Finally, we will describe the ethnographic methodology for interacting 
+with the Linux community.
 
-
-\subsection{Generic systematic approach to mitigate code duplication}
+\subsection{Systematic approach to mitigate code duplication}
 
 \label{subsec:pipeline}
 
-The C programming language's way to communicate between source code files is through creation of header files, which is
-a library specification \citep{Cbook}. As the Linux kernel is mainly build in C, we resorted to remove code duplications by
-creating a library, where the code artifacts, instead of using their duplications, will pass to use the library.
+The C programming language’s way to communicate between source code files is through creating 
+header files, which is a library specification \citep{Cbook}. As the Linux kernel 
+is predominantly built in C, we remove code duplications by creating a library where the code 
+artifacts will use the library instead of their duplications.
 
-When removing duplicated functions, our desired behavior is to this function to every portion of the code it exist, only allowed a
-unique version existent in the library created by us. For this reason, given our initial duplicated function pair, we will use 
-the function information functionality(This functionality is described in \ref{subsec:functioncommand}) of our tool to find all 
-places that this function is defined in the source code. Thus, we finish with a collection of duplicated function and the collection
-of code files in which these functions are defined into.
+When removing duplicated functions, our desired behavior is to remove the functions in every 
+portion of the code in which the functions exist, only allowing a unique version to exist in 
+the library created. For this reason, given our initial duplicated function pair, we will use 
+the function information functionality(Described in \ref{subsec:functioncommand}) to find all
+places where this function exists in the source code. Thus, we finish with a collection of 
+duplicated functions and the code files in which these functions exist.
 
-Given the semantics of a library to containing the shared code by a collection of code files, we added a additional step of the 
-approach, which is searching for others functions contained in all of code files of the collection we are working with. 
-On this moment, we have a collection of code files, and a non-empty set of functions which are shared by all of the code files 
-in the collection.
+Given the semantics of a library containing the shared code by a collection of code files, 
+we added a step of the approach, which is searching for other functions contained in all of 
+the code files of the collection we are working with. Thus, we have a collection of code files 
+and a non-empty set of functions shared by all the code files in the collection.
 
-Finally, for each of the functions shared by all code files, we do a specific-case aproach to mitigate each one of them.
-If a function is shared perfectly by all the code files, we use a simply approach to only remove them and create the function in
-the source code file, if it is not shared perfectly, we look for refactoring methods which can be applied on this specific case. 
+Finally, for each of the functions shared by all code files, we make a specific-case approach 
+to mitigate each one of them. If a function is shared by all the code files without 
+modifications, we use a simple approach to only remove them and create the function in the 
+source code file. If it is shared with modifications, we look for refactoring methods applicable 
+to this specific case.
 
-Finishing our mitigation method, if the mitigation ended up working in a initial step, we may move it foward to the 
-Ethnographic method, iteracting with the Linux community to understand what are their thoughts on the mitigation. If the mitigation
-ended up as not working as expected, we will categorized it in two categories, the first one is that the refactoring requires a
-decision in which we, as not specialist and non-maintainers of the Linux kernel, cannot make it correctly, although
-we believe a specialist would be able to refactoring it. The second categorization is that we do not know if it is in fact possible
-to refactoring the duplication. With or without a sucessful mitigation, we will store our mitigations on (ADD REP AND PUT HERE) 
-to research tranparency.
+Finishing our mitigation method, if the mitigation ends up working in an initial step, we may 
+move it forward to the Ethnographic method, interacting with the Linux community to understand 
+their thoughts on the mitigation. If the mitigation ends up not working as expected, we will 
+categorize it in two categories, the first one is that the refactoring requires a decision in 
+which we, as not specialists and non-maintainers of the Linux kernel, cannot make it correctly,
+although we believe a specialist would be able to refactor it. The second categorization is 
+that we do not know if it is possible to refactor the duplication. With or without successful 
+mitigation, we will store our mitigations on (ADD REP AND PUT HERE) to research transparency.
 
-The figure (CREATE FIGURE AND ADD HERE) ilustrates the systematic approach described in this section.
+The figure (CREATE FIGURE AND ADD HERE) illustrates the systematic approach described in this section.
 
 \subsection{Selection of the duplicated functions}
 
-As discussed in the empyrical analyses for the tool, it is impractical to evaluate every code duplication on Linux kernel. Thus,
-similarily to the empyrical analyses for the tool, we will limit the experiment scope to only the AMD Display driver and select
-a random sample of duplicated functions infered by our tool to initiate the mitigation approach defined in \ref{subsec:pipeline}. 
-We chose a sample size of 30 duplicated functions, as there are multiples studies demonstrated that a sample size of this size 
-have a statistical significance \citep{sample1,sample2}.
+As discussed in the empirical analyses for the tool, it is impractical to evaluate every code 
+duplication on the Linux kernel. Thus, similarly to the empirical analyses for the tool, we will 
+limit the experiment scope to only the AMD Display driver and select a random sample of duplicated 
+functions inferred by our tool to initiate the mitigation approach defined in \ref{subsec:pipeline}. 
+We chose a sample size of 30 duplicated functions, as multiple studies demonstrated that a sample 
+size of this size has statistical significance \citep{sample1,sample2}.
 
-On the the random selection of the duplicated functions, we deside to put a additional restriction on which functions pairs are 
-elegible to be selected. The restriction is that we will only select functions pairs with similarity metric equal 
-to 100\%, we made this choice because, as showed in the Figure \ref{fig:relatory_ex}, there are more then 20,000 lines codes 
-in the AMD Display driver in which the similarity metric reaches this value. On all function pairs that respect the restriction,
-we will choose then uniformly at random.
+On the random selection of the duplicated functions, we decided to put an additional restriction 
+on which function pairs are eligible to be selected. The restriction is that we will choose function 
+pairs with a similarity metric equal to 100\%. We made this choice because, as shown in \ref{fig:relatory_ex},
+there are more than 20,000 lines of code in the AMD Display driver in which the similarity metric 
+reaches this value. On all function pairs that respect the restriction, we will choose them 
+uniformly at random.
 
 (MAYBE I SHOULD ADD A RESTRICTION ABOUT IGNORING AUTOMATED GENERATED CODE, such as DML folder)
 
-The functions pairs selected at random following our methodoly can be consulted in the Table (CREATE TABLE AND ADD HERE).
+The function pairs selected randomly following our methodology can be consulted in the Table
+(CREATE TABLE AND ADD HERE).
 
 CREATE TABLE AND ADD HERE.
 
 \subsection{Ethnographic methodology}
 
-When we make a code duplication mitigation following our systematic approach described in \ref{subsec:pipeline}, we are apt
-to initiate our ethnographic research. We resorted to a participant-observation approach as our ethnographic methodology, where we 
-will act as contributors of the Linux kernel to the AMD Display driver, interacting with the maintainers of the AMD Display driver
-attempting to get our mitigations added to the Linux kernel. 
+When we make a code duplication mitigation following our systematic approach described in 
+\ref{subsec:pipeline}, we are apt to initiate our ethnographic research. We resorted to a
+participant-observation approach as our ethnographic methodology, where we will act as 
+contributors of the Linux kernel to the AMD Display driver, interacting with the maintainers 
+of the AMD Display driver attempting to get our mitigations added to the Linux kernel. 
 
-The Linux kernel communication is made through public mailing lists, where anyone can consult the discussions made in it.
-We plan to collect data artifacts through the AMD Display diver mainling list.
-The mainling list will register our iteractions with Linux community, with 
-their members sharing their opinions and suggestions to the mitigation we made, corroborating to the discussion about the 
-effectiveness of our proposed approach.
+The Linux kernel communication is made through public mailing lists, where anyone can consult 
+the discussions. We plan to collect data artifacts through the AMD Display driver mailing list. 
+The mailing list will register our interactions with the Linux community, with their members 
+sharing their opinions and suggestions for the mitigation we made, corroborating the discussion 
+about the effectiveness of our proposed approach.
 
-Given the time limit of our research, we does not expect to be able to iteract with the Linux community throughtout successfully
-mitigation we made using the proposed approach, as it pass through factors we do not control, which is the time spent waiting 
-for Linux community's members interact with us.
-For this reason, we resorted to commit to do the participant-observation approach 
-in 5 of the successfully mitigation and use them for our discussion. 
-
-
-
-
-
+Given the time limit of our research, we do not expect to be able to interact with the Linux 
+community throughout the successful mitigation we made using the proposed approach, as it passes 
+through factors we do not control, which is the time spent waiting for Linux community’s members 
+interact with us. For this reason, we resorted to committing to do the participant-observation 
+approach in 5 of the successful mitigations and use them for our discussion.
