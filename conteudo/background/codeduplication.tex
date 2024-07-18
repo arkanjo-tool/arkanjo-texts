@@ -103,18 +103,51 @@ These are concerns for our research, and for this reason, we will use a generali
 based solely on Natural Language Processing (NLP) text similarity detection methods, which we will introduce 
 in Chapter \ref{cha:tool} and evaluate this approach in this work.
 
-\subsection{Methodology to evaluate code duplication methods}
+\subsection{Evaluating code duplication methods}
 
 \label{subsec:codemethods}
 
-Given the necessity to evaluate and compare approches for code clone detection, it was developed and widely-adopted two datasets: 
-OJ-Clone, a dataset collected from a pedagogical online judge system \citep{ojclone}, and BigCloneBench, a dataset collected from over 
-25,000 Java software systems \citep{bigclonebench}. The existence of only two spreaded datasets is a open concern in literature as 
-the limited scope of OJ-Clone and the problems of BigCloneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail}
+Given the necessity to evaluate and compare approaches for code clone detection, it was developed and widely 
+adopted: OJ-Clone, a dataset collected from a pedagogical online judge system \citep{ojclone},
+and BigCloneBench, a dataset collected from over 25,000 Java software systems \citep{bigclonebench}. 
+The existence of only two spread datasets is an open concern in literature as the limited scope of OJ-Clone 
+and the problems of BigCloneBench presented by Krinke and Ragkhitwetsagul \citep{bigfail}. The BigCloneBench
+is the dataset used by most of the literature works, given the limited pedagogical scope of the OJ-Clone.
 
-(ADD INFORMATION ABOUT THE MORE SEPARATION OF CLONE TYPES THE BIGCLONEBENCH makes)
+To evaluate the code clone detection approaches against the datasets, the works compute metrics using 
+the predictions made related to the instances of the dataset. There are four possible outcomes when an 
+instance is predicted by a code clone detection approach, which are:
 
+\begin{itemize}
+	\begin{item}
+		\textit{True positivity (TP)}: This outcome happens when the approach predicts that the instance 
+		is a code clone and the instance is a code clone.
+	\end{item}
+	\begin{item}
+		\textit{False positivity (FP)}: This outcome happens when the approach predicts that the instance 
+		is a code clone, but the instance is not a code clone.
+	\end{item}
+		\begin{item}
+		\textit{True negative (TN)}: This outcome happens when the approach predicts that the instance 
+		is not a code clone and the instance is not a code clone.
+	\end{item}
+	\begin{item}
+		\textit{False negative (FN)}: This outcome happens when the approach predicts that the instance 
+		is not a code clone, but the instance is a code clone.
+	\end{item}
+\end{itemize}
 
+Given the number of TP, FP, TN, and FN that resulted after an approach evaluation against a dataset,
+it is possible to compute classical metrics such as Precision, Recall, and F-Score \citep{recall}.
+In this work, we use the Recall metric as the code clone detection approaches usually make available 
+this metric to compare themselves in contrast with the others. The Recall metric is defined by the 
+following formula \citep{recall}:
+
+$$Recall = \frac{\sum TP}{\sum TP + \sum FN }$$
+
+Where $\sum TP$ is the number of true positives in the evaluation and $\sum FN$ is the number of 
+false negatives. The Recall metric is a number between $0$ and $1$, where a value closer to $1$ is 
+better, and a value closer to $0$ is worse.
 
 
 

@@ -26,13 +26,15 @@ The interactions made in the mailing lists are documented and stored in the Linu
 \citep{linuxlore}, which serves as a repository of the discussion made in the Linux kernel to be
 consulted by anyone interested.
 
-One of the Linux kernel subsystems is the AMD Display Driver, a subsystem responsible for 
-implementing the drivers required to enable AMD GPU to work properly in the Linux environment. 
-The maintainers of this subsystem reported an empirical problem they have in the subsystem, which is 
-a significant amount of duplicated code in the subsystem, which hinders the maintenance of the subsystem.
-This reported problem is the starting point that initiated our research, making the AMD Display Driver our 
-principal object of study to understand how to mitigate duplicated code in the Linux kernel.
-
+One of the Linux kernel subsystems is the AMD Display Driver, a subsystem responsible for implementing 
+the drivers required to enable AMD GPU to work correctly in the Linux environment. The maintainers of 
+this subsystem reported an empirical problem they have in the subsystem, which is a significant amount 
+of duplicated code in the subsystem, which hinders the maintenance of the subsystem. The reported issue 
+is the starting point that initiated our research, making the AMD Display Driver our principal object 
+of study to understand how to mitigate duplicated code in the Linux kernel. The AMD Display Driver 
+contains X code lines, Y functions/structs, and Z code files, representing a significant amount of 
+the Linux kernel. As with any other Linux subsystem, the discussions related to the AMD Display Driver 
+are made in its proper mailing list (FIND MAILING LIST AND CITE HERE).
 
 (I WANT TO CHANGE THE AMD DISPLAY paragraph, WHY DO I NEED TO CHANGE IT? I SHOULD ANOTATE WHAT I WANTED, I MADE A CHANGE
  TO MAKE IT BETTER BUT NOT SURE IF THERE IS SOME INFORMATION I WANTED TO PUT IN IT, 
