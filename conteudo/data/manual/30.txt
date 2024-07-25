@@ -1,39 +1,51 @@
 dc/gpio/dcn32/hw_factory_dcn32.c::define_hpd_registers 
 dc/gpio/dce80/hw_factory_dce80.c::HPD_REG_LIST_DCE8 
 Similarity: 29.260000
+Bugged
 
 dc/core/dc_state.c::dc_state_add_all_planes_for_stream 
 dc/resource/dcn20/dcn20_resource.c::dcn20_add_dsc_to_stream_resource 
 Similarity: 29.140000
+NO
 
 dc/gpio/dcn21/hw_factory_dcn21.c::define_ddc_registers 
 dc/link/protocols/link_ddc.c::ddc_service_destruct 
 Similarity: 30.890000
+NO
 
 dc/core/dc_resource.c::resource_find_free_secondary_pipe_legacy 
 dc/dml/dcn32/dcn32_fpu.c::update_pipe_slice_table_with_split_flags 
 Similarity: 29.610000
+NO
 
 dc/dml2/dml21/src/dml2_core/dml2_core_dcn4.c::lookup_uclk_dpm_index_by_freq 
 dc/dml2/dml2_dc_resource_mgmt.c::is_pipe_in_candidate_array 
 Similarity: 30.650000
+Type4  or NO . Does not share meaning, but both are for loop searching for 
+a if(A == B) the first one returns a int while the second returns a bool
 
 dc/resource/dce112/dce112_resource.c::dce112_resource_destruct 
 dc/resource/dcn20/dcn20_resource.c::dcn20_acquire_dsc 
 Similarity: 30.990000
+NO
 
 modules/hdcp/hdcp_ddc.c::mod_hdcp_write_no_stored_km 
-modules/hdcp/hdcp_ddc.c::mod_hdcp_write_ainfo Similarity: 
+modules/hdcp/hdcp_ddc.c::mod_hdcp_write_ainfo 
+Similarity: 
 29.820000
+NO
 
 dc/dml2/dml2_mall_phantom.c::all_pipes_have_stream_and_plane 
 dc/basics/dce_calcs.c::all_displays_in_sync 
 Similarity: 30.590000
+NO
 
 dc/resource/dcn302/dcn302_resource.c::dcn302_resource_destruct 
 dc/core/dc.c::dc_resume 
 Similarity: 29.340000
+NO
 
 dc/optc/dcn314/dcn314_optc.c::optc314_enable_crtc 
 dc/optc/dcn32/dcn32_optc.c::optc32_disable_phantom_otg 
 Similarity: 29.970000
+NO

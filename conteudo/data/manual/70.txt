@@ -1,39 +1,52 @@
 dc/resource/dce120/dce120_resource.c::aux_engine_regs 
 dc/resource/dcn31/dcn31_resource.c::aux_engine_regs
 Similarity: 69.050000
+BUGGED
 
 dc/resource/dcn201/dcn201_resource.c::hpd_regs 
 dc/resource/dcn302/dcn302_resource.c::hpd_regs
 Similarity: 70.490000
+BUGGED
 
 dc/resource/dcn21/dcn21_resource.c::read_dce_straps 
 dc/resource/dcn321/dcn321_resource.c::read_dce_straps
 Similarity: 69.520000
+Type-2
 
 amdgpu_dm/amdgpu_dm_pp_smu.c::pp_rv_set_min_deep_sleep_dcfclk 
 amdgpu_dm/amdgpu_dm_pp_smu.c::pp_rv_set_hard_min_fclk_by_freq
 Similarity: 69.110000
+Type-2 - Only in definition, because it is just a interface that calls
+a inner functions, both of them call diferent functions. 
 
 dc/hubbub/dcn35/dcn35_hubbub.c::convert_and_clamp 
 dc/dml/dml1_display_rq_dlg_calc.c::is_dual_plane
 Similarity: 69.410000
+NO
 
 dc/irq/dcn35/irq_service_dcn35.c::to_dal_irq_source_dcn35 
 dc/dml/calcs/dcn_calcs.c::tl_sw_mode_to_bw_defs
 Similarity: 70.650000
+NO - Both of them is a inf amount of IF THAT RETURN THIS
+but there are some difs and one of them calls debugger if
+something goes wrong
 
 dc/resource/dce112/dce112_resource.c::hpd_regs 
 dc/resource/dcn303/dcn303_resource.c::hpd_regs
 Similarity: 70.490000
+BUGGED
 
 dc/spl/dc_spl_scl_filters.c::spl_get_filter_4tap_16p 
 dc/spl/dc_spl_scl_filters.c::spl_get_filter_5tap_64p
 Similarity: 70.470000
+Type-2
 
 dc/clk_mgr/dcn401/dcn401_clk_mgr_smu_msg.c::smu_print 
 dc/dml/dml_logger.h::DTRACE
 Similarity: 69.310000
+BUGGED
 
 include/fixed31_32.h::dc_fixpt_max 
 dc/dml/calcs/dcn_calc_math.c::dcn_bw_max
 Similarity: 70.500000
+Type-3

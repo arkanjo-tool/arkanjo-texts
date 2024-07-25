@@ -1,39 +1,51 @@
 dc/resource/dcn10/dcn10_resource.c::hpd_regs 
 dc/resource/dcn31/dcn31_resource.c::audio_regs
 Similarity: 59.680000
+BUGGED
 
 dc/resource/dcn201/dcn201_resource.c::hpd_regs 
 dc/resource/dcn31/dcn31_resource.c::aux_regs
 Similarity: 59.050000
+BUGGED
 
 dc/hwss/dcn30/dcn30_hwseq.c::dcn30_set_avmute 
 dc/hwss/dcn10/dcn10_hwseq.c::dcn10_wait_for_pending_cleared
 Similarity: 59.990000
+NO
 
 dc/resource/dcn301/dcn301_resource.c::hpd_regs 
 dc/resource/dcn20/dcn20_resource.c::aux_regs
 Similarity: 59.050000
+BUGGED
 
 dc/irq/dcn30/irq_service_dcn30.c::to_dal_irq_source_dcn30 
 dc/link/link_detection.c::get_basic_signal_type
 Similarity: 60.970000
+NO
 
 dc/irq/dce60/irq_service_dce60.c::hpd_ack 
 dc/irq/irq_service.c::dal_irq_service_set_generic
 Similarity: 60.920000
+NO
 
 dc/dml/dcn20/dcn20_fpu.c::dcn20_populate_dml_pipes_from_context 
 dc/resource/dcn314/dcn314_resource.c::dcn314_populate_dml_pipes_from_context
 Similarity: 59.030000
+NO
 
 dc/dccg/dcn401/dcn401_dccg.c::dccg401_set_physymclk 
 dc/dccg/dcn35/dcn35_dccg.c::dccg35_set_physymclk
 Similarity: 60.430000
+Type-4
 
 dc/hwss/dcn20/dcn20_hwseq.c::dcn20_enable_plane 
 dc/hwss/dcn10/dcn10_hwseq.c::dcn10_enable_plane
 Similarity: 59.460000
+NO - I would say same interface and have 20% of same code, but do a considerable
+amount of non equal code 
 
 dc/dce/dce_stream_encoder.c::dce110_stream_encoder_lvds_set_stream_attribute 
 dc/dio/dcn10/dcn10_stream_encoder.c::enc1_stream_encoder_dvi_set_stream_attribute
 Similarity: 60.670000
+Type-4
+

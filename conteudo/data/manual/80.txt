@@ -1,39 +1,50 @@
 dc/resource/dcn302/dcn302_resource.c::OPP_MASK_SH_LIST_DCN20 
 dc/resource/dcn31/dcn31_resource.c::opp_regs
 Similarity: 79.330000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
 
 dc/resource/dcn30/dcn30_resource.c::DCE_PANEL_CNTL_MASK_SH_LIST 
 dc/resource/dcn30/dcn30_resource.c::DCN_PANEL_CNTL_REG_LIST
 Similarity: 80.260000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
 
 dc/resource/dcn21/dcn21_resource.c::stream_enc_regs 
 dc/resource/dcn401/dcn401_resource.c::DCN_AUX_MASK_SH_LIST
 Similarity: 79.780000
+BUGGED
 
 dc/resource/dcn31/dcn31_resource.c::OPP_MASK_SH_LIST_DCN20 
 dc/resource/dcn401/dcn401_resource.c::OPP_REG_LIST_DCN401_RI
 Similarity: 79.330000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
 
 dc/dpp/dcn401/dcn401_dpp.c::dpp401_dpp_setup 
 dc/dpp/dcn10/dcn10_dpp.c::dpp1_cnv_setup
 Similarity: 79.600000
+NO - Maybe Type4, it changes a lot the cas statements and 
+how each one deal with a lot of things
 
 dc/dml/dcn32/dcn32_fpu.c::dcn32_calculate_wm_and_dlg_fpu 
 dc/dml/dcn31/dcn31_fpu.c::dcn31_calculate_wm_and_dlg_fp
 Similarity: 80.410000
+I would say Type4 in a fast review, maybe it is in fact NO.
 
 dc/resource/dcn30/dcn30_resource.c::DCE_PANEL_CNTL_MASK_SH_LIST 
 dc/dce60/dce60_resource.c::DCE_PANEL_CNTL_REG_LIST
 Similarity: 80.260000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
 
 dc/resource/dcn20/dcn20_resource.c::DCE_PANEL_CNTL_MASK_SH_LIST 
 dc/resource/dcn30/dcn30_resource.c::DCN_PANEL_CNTL_REG_LIST
 Similarity: 80.260000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
 
 dc/resource/dcn316/dcn316_resource.c::dcn316_resource_construct 
 dc/resource/dce80/dce80_resource.c::dce81_construct
 Similarity: 79.370000
+Type4
 
 dc/resource/dcn303/dcn303_resource.c::DCE_PANEL_CNTL_MASK_SH_LIST 
 dc/resource/dce100/dce100_resource.c::DCE_PANEL_CNTL_REG_LIST
 Similarity: 80.260000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
