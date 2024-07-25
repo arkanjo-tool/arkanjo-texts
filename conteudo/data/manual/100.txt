@@ -1,0 +1,39 @@
+dc/gpio/dcn20/hw_factory_dcn20.c::define_ddc_registers 
+dc/gpio/dcn21/hw_factory_dcn21.c::define_ddc_registers
+Similarity: 100.000000
+
+dc/irq/dcn21/irq_service_dcn21.c::SRI_DMUB 
+dc/irq/dcn315/irq_service_dcn315.c::SRI_DMUB
+Similarity: 100.000000
+
+dc/resource/dcn316/dcn316_resource.c::dcn31_timing_generator_init 
+dc/resource/dcn35/dcn35_resource.c::dcn35_timing_generator_init
+Similarity: 100.000000
+
+dc/gpio/dcn10/hw_factory_dcn10.c::dal_hw_factory_dcn10_init 
+dc/gpio/dcn21/hw_factory_dcn21.c::dal_hw_factory_dcn21_init
+Similarity: 99.100000
+
+dc/resource/dcn302/dcn302_resource.c::SE_COMMON_MASK_SH_LIST_DCN30 
+dc/resource/dcn31/dcn31_resource.c::SE_COMMON_MASK_SH_LIST_DCN30
+Similarity: 100.000000
+
+dmub/src/dmub_dcn32.c::dmub_dcn32_is_supported 
+dmub/src/dmub_dcn35.c::dmub_dcn35_is_supported
+Similarity: 100.000000
+
+dc/bios/dce112/command_table_helper2_dce112.c::clock_source_id_to_atom_phy_clk_src_id 
+dc/bios/dce60/command_table_helper_dce60.c::clock_source_id_to_atom_phy_clk_src_id
+Similarity: 100.000000
+
+dc/resource/dcn301/dcn301_resource.c::DWBC_COMMON_REG_LIST_DCN30 
+dc/resource/dcn314/dcn314_resource.c::DWBC_COMMON_REG_LIST_DCN30
+Similarity: 100.000000
+
+dc/irq/dcn10/irq_service_dcn10.c::pflip_int_entry 
+dc/irq/dcn201/irq_service_dcn201.c::pflip_int_entry
+Similarity: 100.000000
+
+dc/gpio/dcn10/hw_factory_dcn10.c::GENERIC_REG_LIST 
+dc/gpio/dcn401/hw_factory_dcn401.c::GENERIC_REG_LIST
+Similarity: 100.000000

@@ -1,0 +1,39 @@
+dc/hwss/dcn10/dcn10_hwseq.c::dcn10_init_pipes 
+dc/hwss/dcn20/dcn20_hwseq.c::dcn20_program_front_end_for_ctx
+Similarity: 50.270000
+
+dc/resource/dcn10/dcn10_resource.c::aux_regs 
+dc/resource/dce110/dce110_resource.c::link_regs
+Similarity: 49.640000
+
+dc/bios/command_table_helper.c::dal_cmd_table_helper_encoder_id_to_atom 
+amdgpu_dm/amdgpu_dm.c::to_drm_connector_type
+Similarity: 50.510000
+
+dmub/src/dmub_dcn32.c::dmub_dcn32_get_inbox1_wptr 
+dmub/src/dmub_dcn31.c::dmub_dcn31_set_inbox1_wptr
+Similarity: 49.640000
+
+dc/irq/dcn401/irq_service_dcn401.c::vupdate_no_lock_int_entry 
+dc/irq/dcn302/irq_service_dcn302.c::vline0_int_entry
+Similarity: 49.340000
+
+dc/dcn30/dcn30_mpc.c::mpc3_program_luta 
+dc/dpp/dcn10/dcn10_dpp_cm.c::dpp1_cm_program_regamma_lutb_settings
+Similarity: 50.960000
+
+dc/pg/dcn35/dcn35_pg_cntl.c::pg_cntl35_io_clk_status 
+dc/pg/dcn35/dcn35_pg_cntl.c::dcn_pg_cntl_destroy
+Similarity: 49.520000
+
+dc/clk_mgr/dcn30/dcn30_clk_mgr_smu_msg.c::smu_print 
+dc/irq/dcn20/irq_service_dcn20.c::SRI
+Similarity: 49.230000
+
+dc/irq/dcn32/irq_service_dcn32.c::hpd_rx_int_entry 
+dc/irq/dcn302/irq_service_dcn302.c::vblank_int_entry
+Similarity: 49.050000
+
+dc/dml/dcn314/display_rq_dlg_calc_314.c::is_dual_plane 
+dc/hubbub/dcn30/dcn30_hubbub.c::convert_and_clamp
+Similarity: 49.200000

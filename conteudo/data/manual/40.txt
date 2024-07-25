@@ -1,0 +1,39 @@
+dc/dc_dmub_srv.c::dc_dmub_srv_is_restore_required 
+amdgpu_dm/amdgpu_dm.c::dm_dmub_hw_resume 
+Similarity: 39.920000
+
+dc/hwss/dce110/dce110_hwseq.c::dce110_program_front_end_for_pipe 
+dc/hwss/dcn20/dcn20_hwseq.c::dcn20_enable_stream 
+Similarity: 39.760000
+
+dc/core/dc_resource.c::dc_resource_find_first_free_pll 
+dc/core/dc_resource.c::find_free_hpo_dp_link_enc 
+Similarity: 40.640000
+
+dc/hwss/dcn10/dcn10_hwseq.c::dcn10_reset_back_end_for_pipe 
+dc/resource/dcn20/dcn20_resource.c::dcn20_add_dsc_to_stream_resource 
+Similarity: 39.000000
+
+dc/hubp/dcn20/dcn20_hubp.c::hubp2_read_state_common 
+dc/hubbub/dcn21/dcn21_hubbub.c::hubbub21_wm_read_state 
+Similarity: 40.600000
+
+dc/irq/dcn32/irq_service_dcn32.c::hpd_int_entry 
+dc/irq/dce80/irq_service_dce80.c::hpd_int_entry
+Similarity: 40.940000
+
+dc/resource/dcn314/dcn314_resource.c::hpd_regs 
+dc/irq/dcn201/irq_service_dcn201.c::vupdate_int_entry
+Similarity: 39.920000
+
+dc/hwss/dcn20/dcn20_hwseq.c::get_phyd32clk_src 
+dc/dml/calcs/dcn_calcs.c::tl_sw_mode_to_bw_defs
+Similarity: 39.000000
+
+dc/irq/dcn302/irq_service_dcn302.c::hpd_rx_int_entry 
+include/logger_interface.h::CONN_MSG_LT
+Similarity: 39.450000
+
+dc/resource/dcn10/dcn10_resource.c::audio_regs 
+dc/irq/dcn201/irq_service_dcn201.c::vupdate_int_entry
+Similarity: 39.260000

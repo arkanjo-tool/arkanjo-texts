@@ -1,0 +1,39 @@
+dc/dce/dce_opp.c::dce110_opp_program_fmt 
+dc/dce/dce_opp.c::dce60_opp_program_fmt
+Similarity: 89.590000
+
+dc/dpp/dcn10/dcn10_dpp_cm.c::dpp1_cm_get_gamut_remap 
+dc/dpp/dcn20/dcn20_dpp_cm.c::dpp2_cm_get_gamut_remap
+Similarity: 90.200000
+
+dc/resource/dcn30/dcn30_resource.c::dcn30_hubbub_create 
+dc/resource/dcn316/dcn316_resource.c::dcn31_hubbub_create
+Similarity: 89.020000
+
+dc/resource/dce110/dce110_resource.c::dce110_destroy_resource_pool 
+dc/resource/dce120/dce120_resource.c::dce120_destroy_resource_pool
+Similarity: 90.390000
+
+dc/resource/dce120/dce120_resource.c::dce120_clock_source_create 
+dc/resource/dcn301/dcn301_resource.c::dcn301_clock_source_create
+Similarity: 90.880000
+
+dc/dml/dcn32/dcn32_fpu.c::dcn32_enough_pipes_for_subvp 
+dc/dml2/dml2_mall_phantom.c::enough_pipes_for_subvp
+Similarity: 90.740000
+
+dc/pg/dcn35/dcn35_pg_cntl.c::pg_cntl35_io_clk_status 
+dc/pg/dcn35/dcn35_pg_cntl.c::pg_cntl35_mem_status
+Similarity: 90.290000
+
+dc/hwss/dcn20/dcn20_hwseq.c::dcn20_disable_writeback 
+dc/hwss/dcn30/dcn30_hwseq.c::dcn30_disable_writeback
+Similarity: 89.320000
+
+dc/dpp/dcn20/dcn20_dpp_cm.c::dpp20_program_shaper_luta_settings 
+dc/mpc/dcn32/dcn32_mpc.c::mpc32_program_shaper_lutb_settings
+Similarity: 89.340000
+
+dmub/src/dmub_dcn314.c::reg_name 
+dmub/src/dmub_dcn315.c::reg_name
+Similarity: 90.310000
