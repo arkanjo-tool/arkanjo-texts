@@ -49,3 +49,22 @@ dc/dio/dcn10/dcn10_stream_encoder.c::enc1_stream_encoder_dvi_set_stream_attribut
 Similarity: 60.670000
 Type-4
 
+dc/dml/dcn31/dcn31_fpu.c::dcn31_calculate_wm_and_dlg_fp 
+dc/dml/dcn20/dcn20_fpu.c::dcn21_calculate_wm
+Similarity: 59.460000
+NO
+
+dc/resource/dcn314/dcn314_resource.c::hpd_regs 
+dc/resource/dce120/dce120_resource.c::audio_regs
+Similarity: 59.680000
+BUGGED
+
+dc/resource/dcn10/dcn10_resource.c::dcn10_resource_destruct 
+dc/resource/dcn30/dcn30_resource.c::dcn30_resource_construct
+Similarity: 60.640000
+NO
+
+dc/clk_mgr/dcn30/dcn30_clk_mgr.c::dcn3_is_smu_present 
+dc/clk_mgr/dcn316/dcn316_clk_mgr.c::dcn316_enable_pme_wa
+Similarity: 60.540000
+NO

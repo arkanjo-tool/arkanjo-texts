@@ -47,3 +47,42 @@ dc/resource/dcn10/dcn10_resource.c::audio_regs
 dc/irq/dcn201/irq_service_dcn201.c::vupdate_int_entry
 Similarity: 39.260000
 BUGGED
+
+dc/resource/dcn315/dcn315_resource.c::hpd_regs 
+dc/irq/dcn401/irq_service_dcn401.c::pflip_int_entry
+Similarity: 40.800000
+BUGGED
+
+dc/hwss/dcn20/dcn20_hwseq.c::dcn20_init_sys_ctx 
+amdgpu_dm/amdgpu_dm.c::mmhub_read_system_context
+Similarity: 39.730000
+NO
+
+dc/resource/dcn10/dcn10_resource.c::aux_regs 
+dc/dc_trace.h::for. Similarity: 40.770000
+BUGGED
+
+dc/clk_mgr/dcn31/dcn31_clk_mgr.c::dcn31_update_clocks 
+dc/clk_mgr/dcn30/dcn30_clk_mgr.c::dcn3_init_clocks
+Similarity: 39.770000
+NO
+
+dc/dcn30/dcn30_afmt.h::afmt_powerdown
+dc/inc/hw/audio.h::destroy
+Similarity: 39.880000
+BUGGED
+
+modules/power/power_helpers.c::dmub_init_abm_config 
+dc/hwss/dce110/dce110_hwseq.c::dce110_is_hpo_enabled
+Similarity: 39.960000
+NO
+
+dc/resource/dcn20/dcn20_resource.c::DCCG_MASK_SH_LIST_DCN2 
+dc/resource/dcn10/dcn10_resource.c::CS_COMMON_MASK_SH_LIST_DCN1_0
+Similarity: 40.200000
+BUGGED
+
+modules/hdcp/hdcp_psp.c::mod_hdcp_add_display_to_topology 
+modules/hdcp/hdcp_ddc.c::mod_hdcp_read_ksvlist
+Similarity: 39.890000
+NO

@@ -50,3 +50,23 @@ include/fixed31_32.h::dc_fixpt_max
 dc/dml/calcs/dcn_calc_math.c::dcn_bw_max
 Similarity: 70.500000
 Type-3
+
+amdgpu_dm/amdgpu_dm_crc.c::dm_need_crc_dither 
+amdgpu_dm/amdgpu_dm_crc.c::dm_is_crc_source_dprx
+Similarity: 69.730000
+NO
+
+dc/optc/dcn35/dcn35_optc.c::optc35_set_drr 
+dc/optc/dcn35/dcn35_optc.c::optc35_set_long_vtotal
+Similarity: 70.460000
+NO
+
+dc/resource/dcn201/dcn201_resource.c::dcn201_hwseq_create 
+dc/resource/dcn10/dcn10_resource.c::dcn10_hwseq_create
+Similarity: 69.210000
+NO
+
+dc/resource/dce80/dce80_resource.c::dce80_link_encoder_create 
+dc/resource/dcn10/dcn10_resource.c::dcn10_link_encoder_create
+Similarity: 70.720000
+Type-4 or NO, I will stay as type-4

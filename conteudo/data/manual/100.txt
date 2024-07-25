@@ -48,3 +48,163 @@ dc/gpio/dcn10/hw_factory_dcn10.c::GENERIC_REG_LIST
 dc/gpio/dcn401/hw_factory_dcn401.c::GENERIC_REG_LIST
 Similarity: 100.000000
 BUGGED
+
+dc/resource/dcn302/dcn302_resource.c::afmt_regs 
+dc/resource/dcn321/dcn321_resource.c::AFMT_DCN3_REG_LIST_RI
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn315/dcn315_resource.c::afmt_regs 
+dc/resource/dcn316/dcn316_resource.c::afmt_regs
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn30/dcn30_resource.c::I2C_HW_ENGINE_COMMON_REG_LIST_DCN30 
+dc/resource/dcn301/dcn301_resource.c::I2C_HW_ENGINE_COMMON_REG_LIST
+Similarity: 99.200000
+BUGGED
+
+dc/resource/dce120/dce120_resource.c::DCE120_AUD_COMMON_MASK_SH_LIST 
+dc/resource/dcn20/dcn20_resource.c::DCE120_AUD_COMMON_MASK_SH_LIST
+Similarity: 100.000000
+BUGGED
+
+dc/dce60/dce60_resource.c::I2C_HW_ENGINE_COMMON_REG_LIST 
+dc/resource/dcn301/dcn301_resource.c::I2C_HW_ENGINE_COMMON_REG_LIST
+Similarity: 99.200000
+BUGGED
+
+dc/resource/dcn201/dcn201_resource.c::clk_src_regs 
+dc/resource/dcn316/dcn316_resource.c::clk_src_regs
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn314/dcn314_resource.c::dcn31_opp_create 
+dc/resource/dcn315/dcn315_resource.c::dcn31_opp_create
+Similarity: 100.000000
+Type-1
+
+dc/dce60/dce60_resource.c::IPP_COMMON_REG_LIST_DCE_BASE 
+dc/resource/dcn201/dcn201_resource.c::IPP_REG_LIST_DCN201
+Similarity: 99.390000
+BUGGED
+
+dc/resource/dce110/dce110_resource.c::HPD_REG_LIST 
+dc/gpio/dce60/hw_factory_dce60.c::HPD_REG_LIST_DCE6
+Similarity: 99.480000
+BUGGED
+
+dc/irq/dcn20/irq_service_dcn20.c::dm_write_reg 
+dc/irq/dcn314/irq_service_dcn314.c::dm_write_reg
+Similarity: 100.00000
+BUGGED
+
+dc/resource/dce110/dce110_resource.c::hpd_regs 
+dc/resource/dcn20/dcn20_resource.c::hpd_regs
+Similarity: 100.000000
+BUGGED
+
+dc/irq/dce120/irq_service_dce120.c::dm_write_reg 
+dc/irq/dcn351/irq_service_dcn351.c::dm_write_reg
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dce112/dce112_resource.c::SE_COMMON_REG_LIST 
+dc/resource/dcn302/dcn302_resource.c::SE_DCN3_REG_LIST
+Similarity: 99.580000
+BUGGED 
+
+dc/resource/dcn314/dcn314_resource.c::dcn31_apg_create 
+dc/resource/dcn316/dcn316_resource.c::dcn31_apg_create
+Similarity: 100.000000
+Type-1
+
+dc/resource/dcn315/dcn315_resource.c::clk_src_regs 
+dc/resource/dcn316/dcn316_resource.c::clk_src_regs
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dce112/dce112_resource.c::DCE_PANEL_CNTL_REG_LIST 
+dc/resource/dce120/dce120_resource.c::DCE_PANEL_CNTL_REG_LIST
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dce110/dce110_resource.c::hpd_regs 
+dc/resource/dce120/dce120_resource.c::hpd_regs
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn314/dcn314_resource.h::container_of 
+dc/resource/dcn35/dcn35_resource.h::container_of
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn30/dcn30_resource.c::dcn30_timing_generator_init 
+dc/resource/dcn321/dcn321_resource.c::dcn32_timing_generator_init
+Similarity: 100.000000
+BUGGED
+
+dmub/src/dmub_dcn20.c::dmub_dcn20_set_outbox0_rptr 
+dmub/src/dmub_dcn35.c::dmub_dcn35_set_outbox0_rptr
+Similarity: 100.000000
+Type-1
+
+dc/resource/dcn21/dcn21_resource.c::DSC_REG_LIST_DCN20 
+dc/resource/dcn316/dcn316_resource.c::DSC_REG_LIST_DCN20
+Similarity: 99.300000
+BUGGED
+
+dc/dce60/dce60_resource.c::DMCU_MASK_SH_LIST_DCE60 
+dc/resource/dce100/dce100_resource.c::DMCU_MASK_SH_LIST_DCE110
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn303/dcn303_resource.c::CS_COMMON_MASK_SH_LIST_DCN2_0 
+dc/resource/dcn316/dcn316_resource.c::CS_COMMON_MASK_SH_LIST_DCN2_0
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn302/dcn302_resource.c::abm_regs 
+dc/resource/dcn303/dcn303_resource.c::abm_regs
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn10/dcn10_resource.c::AUD_COMMON_MASK_SH_LIST_BASE 
+dc/resource/dcn201/dcn201_resource.c::AUD_COMMON_MASK_SH_LIST_BASE
+Similarity: 100.000000
+BUGGED
+
+dc/dce60/dce60_resource.c::DCE_PANEL_CNTL_REG_LIST 
+dc/resource/dce100/dce100_resource.c::DCE_PANEL_CNTL_REG_LIST
+Similarity: 100.000000
+BUGGED
+
+dc/resource/dcn301/dcn301_resource.c::dcn301_dpp_destroy 
+dc/resource/dcn31/dcn31_resource.c::dcn31_dpp_destroy
+Similarity: 100.000000
+Type-1
+
+dc/resource/dce110/dce110_resource.c::dce110_transform_destroy 
+dc/resource/dce80/dce80_resource.c::dce80_transform_destroy
+Similarity: 100.000000
+Type-1
+
+dc/irq/dcn314/irq_service_dcn314.c::hpd_int_entry 
+dc/irq/dcn32/irq_service_dcn32.c::hpd_int_entry
+Similarity: 100.000000
+BUGGED
+
+dc/dce60/dce60_resource.c::OPP_DCE_60_REG_LIST 
+dc/resource/dcn21/dcn21_resource.c::OPP_REG_LIST_DCN20
+Similarity: 99.990000
+BUGGED
+
+dc/resource/dcn32/dcn32_resource.c::dcn32_clock_source_create 
+dc/resource/dcn321/dcn321_resource.c::dcn321_clock_source_create
+Similarity: 100.000000
+Type-1
+
+dc/optc/dcn32/dcn32_optc.c::optc32_set_odm_bypass 
+dc/optc/dcn401/dcn401_optc.c::optc401_set_odm_bypass
+Similarity: 100.000000
+Type-1

@@ -48,3 +48,79 @@ dc/resource/dcn303/dcn303_resource.c::DCE_PANEL_CNTL_MASK_SH_LIST
 dc/resource/dce100/dce100_resource.c::DCE_PANEL_CNTL_REG_LIST
 Similarity: 80.260000
 THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
+
+dc/resource/dcn351/dcn351_resource.c::HPD_REG_LIST_RI 
+dc/resource/dcn401/dcn401_resource.c::DCN_AUX_MASK_SH_LIST
+Similarity: 79.780000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
+
+dc/dce60/dce60_resource.c::DCE_PANEL_CNTL_MASK_SH_LIST 
+dc/resource/dcn30/dcn30_resource.c::DCN_PANEL_CNTL_REG_LIST
+Similarity: 80.260000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
+
+dc/resource/dcn321/dcn321_resource.c::OPP_MASK_SH_LIST_DCN20 
+dc/resource/dcn314/dcn314_resource.c::opp_regs
+Similarity: 79.330000
+THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
+
+dc/mpc/dcn401/dcn401_mpc.c::get3dlut_config 
+dc/dpp/dcn20/dcn20_dpp_cm.c::get3dlut_config 
+Similarity: 80.620000
+Type-2
+
+dc/resource/dce100/dce100_resource.c::dce100_hwseq_create 
+dc/resource/dce120/dce120_resource.c::dce121_hwseq_create
+Similarity: 79.340000
+Type-2
+
+dc/gpio/dcn10/hw_factory_dcn10.c::GENERIC_MASK_SH_LIST 
+dc/gpio/dcn21/hw_factory_dcn21.c::generic_regs
+Similarity: 79.200000
+BUGGED
+
+dc/resource/dce80/dce80_resource.c::dce80_construct 
+dc/resource/dcn314/dcn314_resource.c::dcn314_resource_construct
+Similarity: 79.190000
+Type-4 or NO. A function with 200 lines, where 100 is copy paste
+
+dc/resource/dcn351/dcn351_resource.c::HPD_REG_LIST_RI 
+dc/resource/dcn35/dcn35_resource.c::DCN_AUX_MASK_SH_LIST
+Similarity: 79.780000
+BUGGED
+
+dc/clk_mgr/dcn315/dcn315_clk_mgr.c::dcn315_clk_mgr_destroy 
+dc/clk_mgr/dcn35/dcn35_clk_mgr.c::dcn35_clk_mgr_destroy
+Similarity: 79.160000
+Type-2
+
+dc/clk_mgr/dcn401/dcn401_clk_mgr_smu_msg.c::dcn401_smu_send_msg_with_param
+dc/clk_mgr/dcn30/dcn30_clk_mgr_smu_msg.c::dcn30_smu_send_msg_with_param
+Similarity: 80.300000
+Type-3 or Type-4, I will stay as Type-3
+
+dc/link/link_dpms.c::link_set_dpms_off 
+dc/link/link_dpms.c::link_set_dpms_on
+Similarity: 80.740000
+NO 
+
+dc/clk_mgr/dcn30/dcn30_clk_mgr_smu_msg.c::dcn30_smu_set_hard_min_by_freq 
+dc/clk_mgr/dcn401/dcn401_clk_mgr_smu_msg.c::dcn401_smu_set_hard_min_by_freq
+Similarity: 80.970000
+Type-3
+
+dc/resource/dcn21/dcn21_resource.c::DCE_PANEL_CNTL_MASK_SH_LIST 
+dc/dce60/dce60_resource.c::DCE_PANEL_CNTL_REG_LIST
+Similarity: 80.260000
+BUGGED
+
+dc/resource/dcn30/dcn30_resource.c::SRI 
+dc/resource/dcn32/dcn32_resource.c::DCN_AUX_MASK_SH_LIST
+Similarity: 79.780000
+BUGGED
+
+dc/dpp/dcn30/dcn30_dpp.c::dpp3_program_blnd_luta_settings 
+dc/dpp/dcn30/dcn30_dpp.c::dpp3_program_blnd_lutb_settings
+Similarity: 80.360000
+By definition it is Type-2, But nothing to refactor, it is a interface 
+that sets different values.

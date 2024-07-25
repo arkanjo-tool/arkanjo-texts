@@ -22,7 +22,8 @@ dc/dml2/dml21/src/dml2_core/dml2_core_dcn4.c::lookup_uclk_dpm_index_by_freq
 dc/dml2/dml2_dc_resource_mgmt.c::is_pipe_in_candidate_array 
 Similarity: 30.650000
 Type4  or NO . Does not share meaning, but both are for loop searching for 
-a if(A == B) the first one returns a int while the second returns a bool
+a if(A == B) the first one returns a int while the second returns a bool.
+I will stay as NO
 
 dc/resource/dce112/dce112_resource.c::dce112_resource_destruct 
 dc/resource/dcn20/dcn20_resource.c::dcn20_acquire_dsc 
@@ -48,4 +49,9 @@ NO
 dc/optc/dcn314/dcn314_optc.c::optc314_enable_crtc 
 dc/optc/dcn32/dcn32_optc.c::optc32_disable_phantom_otg 
 Similarity: 29.970000
+NO
+
+dc/irq/irq_service.c::dal_irq_service_ack 
+dc/irq/irq_service.c::find_irq_source_info
+Similarity: 30.650000
 NO

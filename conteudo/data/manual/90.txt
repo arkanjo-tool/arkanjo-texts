@@ -48,3 +48,8 @@ dmub/src/dmub_dcn314.c::reg_name
 dmub/src/dmub_dcn315.c::reg_name
 Similarity: 90.310000
 THIS IS A BUG IN MY TOOL, I WILL EXPLORER IT LATTER
+
+dc/clk_mgr/dcn31/dcn31_smu.c::dcn31_smu_enable_phy_refclk_pwrdwn 
+dc/clk_mgr/dcn314/dcn314_smu.c::dcn314_smu_enable_phy_refclk_pwrdwn
+Similarity: 89.030000
+Type-2

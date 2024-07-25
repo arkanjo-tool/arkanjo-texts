@@ -47,3 +47,33 @@ dc/dml/dcn314/display_rq_dlg_calc_314.c::is_dual_plane
 dc/hubbub/dcn30/dcn30_hubbub.c::convert_and_clamp
 Similarity: 49.200000
 NO
+
+dc/resource/dcn20/dcn20_resource.c::aux_regs 
+dc/resource/dcn21/dcn21_resource.c::opp_regs
+Similarity: 49.350000
+BUGGED
+
+dc/dce/dce_stream_encoder.c::dce110_stream_encoder_stop_hdmi_info_packets 
+dc/dio/dcn30/dcn30_dio_stream_encoder.c::enc3_stream_encoder_stop_hdmi_info_packets
+Similarity: 50.330000
+NO
+
+dc/dml/dcn32/dcn32_fpu.c::dcn32_calculate_wm_and_dlg_fpu 
+dc/dml/dcn30/dcn30_fpu.c::dcn30_fpu_update_soc_for_wm_a
+Similarity: 50.810000
+NO
+
+dc/irq/dcn21/irq_service_dcn21.c::vupdate_no_lock_int_entry 
+dc/irq/dcn314/irq_service_dcn314.c::vline0_int_entry
+Similarity: 49.340000
+BUGGED
+
+dc/resource/dcn301/dcn301_resource.c::dcn301_dpp_create 
+dc/resource/dcn321/dcn321_resource.c::dcn321_dpp_destroy
+Similarity: 50.390000
+NO
+
+dc/gpio/dce60/hw_translate_dce60.c::offset_to_id 
+dc/irq/dcn302/irq_service_dcn302.c::to_dal_irq_source_dcn302
+Similarity: 49.330000
+NO
