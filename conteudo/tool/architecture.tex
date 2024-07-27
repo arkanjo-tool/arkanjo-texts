@@ -18,7 +18,7 @@ the tool pipeline. There is an explanation of how each component works through t
 
 \begin{figure}
 \includegraphics{diagrama_mestrado}
-\caption{The architecture diagram demonstrating the relationship between the tool components.}
+\caption{Architecture diagram demonstrating the relationship between the tool components.}
 \label{fig:diagram}
 \end{figure}
 
@@ -39,8 +39,15 @@ The first new source code file contains the function’s body from the function 
 the other new source code file contains the function’s signature. The metadata file contains 
 additional relevant information about the function, such as the function name, the line where the 
 function signature starts in the source code file, and the line where the function’s body ends in 
-the source code file. The programming language we support at the moment is C and Java. Can be found 
-an example of a transformation of a source code in Figure (CREATE FIGURE AND ADD HERE).
+the source code file. The programming language we support at the moment is C and Java. 
+Figure \ref{fig:transform} illustrates an example of a function transformation into the 
+temporary codebase.
+
+\begin{figure}
+\includegraphics[scale=0.3]{example_function_parser/example_parser}
+\caption{Transformation of a function into the temporary codebase}
+\label{fig:transform}
+\end{figure}
 
 About the programming language’s function extractor, we approached this problem in a way that any 
 person comfortable with a language can adapt our approach to their specific programming language. 
@@ -86,7 +93,7 @@ our approach. For the programming languages that we support, we implemented them
 The temporary codebase is a transformation of the input codebase done by the Function Parser. 
 Each function in the input codebase is represented in the temporary codebase as three files.
 Descriptions of these files are provided below, and an example of each can be found in 
-the figure (CREATE FIGURE AND ADD HERE).
+the figure \ref{fig:transform}.
 
 \begin{itemize}
 	\begin{item}
