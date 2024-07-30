@@ -8,6 +8,23 @@ Finaly, we do a triangulation of data analysing our finds on the tool performanc
 
 \input{conteudo/eval/table_bigclone}
 
+As described in section \ref{sec:metbig}. For the evaluation of our proposed tool in the
+BigCLoneBench dataset  \citep{bigclonebench}, we define that every pair of functions in which the 
+similarity metric is equal or superior to a threshold X will be considered a duplication, and the 
+pair of code files in which the functions exist are labeled as duplication. If, on this method, 
+a code duplication pair is correctly identified, it will count as correct to its code duplication 
+types. If an incorrect duplication pair is inferred as a duplication, it will count as incorrect 
+to all code duplication types. Table \ref{tab:bigclone} shows the results obtained by our tool in the 
+BigCloneBench dataset \citep{bigclonebench}.
+
+The results obtained in Table \ref{tab:bigclone} indicate that our tool is a pessimist. There 
+is no negative sample inferred as duplication even for a minimum similarity threshold of 30\%, 
+on the other hand, it is bad for identifying code duplications of complex code duplication types, 
+that is Medium Type-3 and Weak Type-3/Type-4. As mentioned in Chapter \ref{cha:tool}, if a 
+better result is required on these complex code duplication types, it is possible to change 
+the code duplication detection method, as it is designed to be a replaceable component in our 
+tool, given the limitations.
+
 \subsection{Tool results on the empirical analyses}
 
 \input{conteudo/eval/table_empirical}
