@@ -1,3 +1,36 @@
 \en
 
-Base Content of the Preliminar Results of the research. TODO.
+We finished Phase 1 of our research, where we developed our proposed tool and 
+evaluated the tool on the BigCloneBench dataset and with our empirical analyses. 
+We discussed the results found to understand that the tool is capable of identifying 
+code clone duplications in the Linux kernel. With these results, we answered RQ1.1 
+(\textit{How accurate is the proposed tool for detecting duplicate functions?}).
+
+Related to our RQ1
+(\textit{How effective is our approach in mitigating duplicate code in the Linux kernel?}),
+we intend to approach our ethnographic study presented in \ref{sec:meteth} as the next steps 
+in our work. As an early validation to see the potential of this research, we conducted the 
+proposed systematic approach to mitigate code duplication on two function pairs. Table
+(CREATE TABLE AND ADD HERE) shows the early results found.
+
+CREATE TABLE AND ADD HERE
+
+The first function pair requires an expert/maintainer on the AMD Display driver to finalize 
+the refactorization. The reason for this is that the duplicated code artifacts use 
+copy-pasted code but import different configuration files. The AMD Display driver 
+configurations files design requires the code that uses it to import the exact configuration 
+in the compiler time without being generic. For this reason, the refactorization requires 
+a change in the form the AMD Display driver deals with configuration files, which is a more 
+complex task that requires an expert/maintainer on the AMD Display driver.
+
+The second function pair refactorization was successful. At the moment of writing this 
+report, we are sending the refactorization as a patch to the AMD Display driver to know 
+the opinion of the maintainers of the driver.
+
+\section{Next steps}
+
+As shown in our proposed schedule (Figure CREATE FIGURE AND ADD HERE), as we advance, 
+we intend to do the proper ethnographic study, starting by completing our systematic 
+approach to mitigate code duplications, and with this mitigation on hands we intend 
+to process to send them to the AMD Display driver mailing list to understand the 
+AMD Display driver maintainers about the mitigations made by us.
