@@ -41,4 +41,23 @@ For the ranges 79\%-81\% of similarity or greater, we have a high percentage of 
 With 69\%-71\% of similarity, the rate goes down to 50\%. With 59\%-61\%, the rate decreases to 20\%.
 With 49\%-51\% similarity or lower, we did not find any code duplications.
 
-\subsection{Discussion}
+\subsection{Triangulation of results}
+
+Both the BigCloneBench and the empirical method results point out that our tool has a good 
+result for detecting Type-1 and Type-2 code clone duplications and has a poor performance 
+in detecting the other types. Using a similarity metric between 80\% and 100\% shows good 
+results in both methods.
+
+There is a discrepancy in the results of non-code duplications inferred as duplications 
+between the two methods. In the BigCloneBench results, we did not find any negative samples,
+while in the empirical analyses, we found a higher percentage of negative samples. We have 
+two possible reasons for this discrepancy.
+
+The first reason is the limitations and problems of the BigCloneBench presented by Krinke 
+and Ragkhitwetsagul \citep{bigfail}. The second reason is that the AMD Display driver 
+is a system where each code artifact shares a meaning. While the BigCloneBench is a 
+collection of self-contained code artifacts without sharing meaning with each, as our 
+tool uses a text-based code clone detection method, it is expected to have poorer 
+performance in the AMD Display driver than in the BigCloneBench dataset. We do not know 
+if the state-of-the-art code duplication detection has the same problem and is obscured 
+by the evaluation in the BigCloneBench dataset.
