@@ -62,7 +62,7 @@ as duplications.
 
 The number of code lines and components in the Linux kernel makes it impractical to analyze every 
 code duplication. To limit our scope, we will analyze solely code duplications in the AMD Display 
-driver. This limitation still does not reduce the code duplication to analyze. In our preliminary 
+driver. This limitation still does not reduce the code duplication to analyze, in our preliminary 
 tool execution shown in Figure \ref{fig:relatory_ex}, there are over 20,000 lines of code 
 duplications on the AMD Display driver with a similarity metric of 100\%.
 
@@ -80,8 +80,7 @@ X variations and execute a random selection algorithm built into the source code
 our tool. The random selected function selected function pairs can 
 be found in the Appendix (CREATE Appendix AND ADD HERE).
 
-When we analyze the selected function pairs, we will empirically judge if they are duplications,
-which means we are not going deeper as categorizing the duplications by code duplication type. 
+When we analyze the selected function pairs, we will empirically judge if they are duplications. 
 We intend to collect the data on this empirical analysis and compare it to the formal literature 
 method to understand if our tool detects duplicated functions and the difference it makes when 
 varying the minimum similarity parameter of our tool.
