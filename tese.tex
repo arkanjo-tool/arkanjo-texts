@@ -336,9 +336,9 @@ texto texto texto texto. Texto opcional.
 
 % A introdução não tem número de capítulo, então os cabeçalhos também não
 \pagestyle{unnumberedchapter}
-\input{conteudo/00-exemplo-introducao}
+\input{conteudo/00-introducao}
 \pagestyle{mainmatter}
-\input{conteudo/01-exemplo-normas-ime}
+\input{conteudo/01-main}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% APÊNDICES E ANEXOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -375,25 +375,25 @@ texto texto texto texto. Texto opcional.
 % só há apêndices, sem anexos, provavelmente não é necessário.
 \addappheadtotoc
 
-\input{conteudo/apendice-exemplo-faq}
+\input{conteudo/apendices/emp-lista}
 \par
 
 %%%% Anexos %%%%
 
 \cleardoublepage
 
-\pagestyle{appendix} % repete o anterior, caso você não use apêndices
+%\pagestyle{appendix} % repete o anterior, caso você não use apêndices
 
-\annex
+%\annex
 
 % \addappheadtotoc acrescenta a palavra "Anexo" ao sumário; se
 % só há anexos, sem apêndices, provavelmente não é necessário.
-\addappheadtotoc
+%\addappheadtotoc
 
 %\input{conteudo/anexo-exemplo-imegoodies}
 %\par
-\input{conteudo/anexo-exemplo-pseudocodigo}
-\par
+%\input{conteudo/anexo-exemplo-pseudocodigo}
+%\par
 
 
 %%%%%%%%%%%%%%% SEÇÕES FINAIS (BIBLIOGRAFIA E ÍNDICE REMISSIVO) %%%%%%%%%%%%%%%%
@@ -414,6 +414,6 @@ texto texto texto texto. Texto opcional.
   heading=bibintoc, % Inclui a bibliografia no sumário
 ]
 
-\printindex % imprime o índice remissivo no documento (opcional)
+%\printindex % imprime o índice remissivo no documento (opcional)
 
 \end{document}
