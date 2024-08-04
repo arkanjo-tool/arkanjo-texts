@@ -1,0 +1,31 @@
+
+%%%%%%% Cronograma %%%%%%%
+
+\begin{figure}
+  \centering
+
+  % Package pgfgantt; veja o arquivo imegoodies.sty, em que vários
+  % aspectos da aparência deste diagrama foram definidos.
+  \begin{ganttchart}[
+                     time slot format=isodate-yearmonth,
+                     time slot unit=month,
+                    ]{2024-10}{2025-5}
+
+    \gantttitlecalendar{year,month=shortname} \ganttnewline
+	\ganttbar{
+		Sistematic approach to \ganttalignnewline
+		mitigate code duplication
+	}{2024-10}{2025-3} \ganttnewline
+
+	\ganttbar{
+		Submit mitigations to \ganttalignnewline
+		the Linux mailing list  
+	}{2024-11}{2025-3} \ganttnewline
+ 	\ganttbar{Analysis results }{2025-3}{2025-4} \ganttnewline
+ 	\ganttbar{Thesis Writing }{2025-2}{2025-5} \ganttnewline
+	\ganttmilestone{Thesis Submission}{2025-5}
+
+   \end{ganttchart}
+
+  \caption{Exemplo de cronograma.\label{fig:cronograma}}
+\end{figure}
