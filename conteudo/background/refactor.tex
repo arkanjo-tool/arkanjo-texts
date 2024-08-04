@@ -18,7 +18,14 @@ There is a brief explanation of the methods used in our research below.
 The Parameterize method consists of replacing multiple similar codes with a singular function. 
 The function created implements the different behaviors between similar codes by using parameters, 
 which tell which behavior the function should use \citep{refactorbook}.
-Figure (CREATE FIGURE AND ADD HERE) demonstrates an example of the Parameterize method usage.
+Figure \ref{fig:parameter} demonstrates an example of the Parameterize method usage.
+
+\begin{figure}
+\includegraphics[scale=0.36]{refactor/parameterize}
+\caption{Example of Parameterize method usage.}
+\label{fig:parameter}
+\end{figure}
+
 
 \paragraph{Extract method}
 
@@ -28,4 +35,11 @@ The Extract method consists of splitting a complex code artifact into multiple s
 One of the advantages of this method is enabling the created functions to be used multiple times through 
 the code project. In contrast, with only the complex code artifact, it is not always possible to reuse 
 it entirely, thus creating a new code duplication \citep{refactorbook}. 
-Figure (CREATE FIGURE AND ADD HERE) demonstrates an example of the Extract method usage.
+Figure \ref{fig:extract} demonstrates an example of the Extract method usage.
+
+\begin{figure}
+\includegraphics[scale=0.36]{refactor/extract}
+\caption{Example of Extract method usage.}
+\label{fig:extract}
+\end{figure}
+
