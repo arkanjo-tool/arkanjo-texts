@@ -4,42 +4,53 @@
 
 % As palavras-chave são obrigatórias, em português e em inglês, e devem ser
 % definidas antes do resumo/abstract. Acrescente quantas forem necessárias.
-\palavraschave{Palavra-chave1, Palavra-chave2, Palavra-chave3}
+\palavraschave{Linux, Duplicação de código, ferramenta}
 
-\keywords{Keyword1,Keyword2,Keyword3}
+\keywords{Linux,Code duplication,Tool}
 
 % O resumo é obrigatório, em português e inglês. Estes comandos também
 % geram automaticamente a referência para o próprio documento, conforme
 % as normas sugeridas da USP.
 \resumo{
-Elemento obrigatório, constituído de uma sequência de frases concisas e
-objetivas, em forma de texto. Deve apresentar os objetivos, métodos empregados,
-resultados e conclusões. O resumo deve ser redigido em parágrafo único, conter
-no máximo 500 palavras e ser seguido dos termos representativos do conteúdo do
-trabalho (palavras-chave). Deve ser precedido da referência do documento.
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto.
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto.
+
+O kernel Linux é um projeto de código aberto amplamente utilizado, alimentando 3,77\% 
+dos desktops pessoais e 70,69\% dos smartphones em todo o mundo. Dada a sua extensa 
+base de usuários, qualquer adição de recursos, correção de bugs ou tratamento de 
+vulnerabilidades de segurança pode impactar milhões de pessoas. Manter o kernel é 
+uma tarefa enorme, envolvendo mais de 19 milhões de linhas de código e contribuições 
+de mais de mil desenvolvedores. Devido à escala do projeto, nem todas as contribuições 
+seguem as melhores práticas, resultando em artefatos de código de baixa qualidade que 
+podem complicar a manutenção e o desenvolvimento de novos recursos. Um desses artefatos 
+é a duplicação de código, que é o foco desta pesquisa. As ferramentas existentes 
+para detectar duplicação de código normalmente comparam dois artefatos de código para 
+determinar se são duplicatas. No entanto, essas ferramentas não são adequadas para 
+identificar duplicações em bases de código em grande escala, como o kernel Linux, nem 
+oferecem orientações sobre como resolver as duplicações detectadas. Apesar das 
+pesquisas tanto na literatura formal quanto na cinza, as soluções existentes não 
+conseguem resolver os desafios específicos do kernel Linux. Para abordar esse tema, 
+esta pesquisa foca em dois objetivos principais. Primeiro, propõe uma nova ferramenta 
+para identificar duplicações de código dentro do kernel Linux. Segundo, analisa as 
+duplicações identificadas para extrair padrões e métodos de refatoração, oferecendo 
+orientações para futuros contribuintes.
+
 }
 
 \abstract{
-Elemento obrigatório, elaborado com as mesmas características do resumo em
-língua portuguesa. De acordo com o Regimento da Pós-Graduação da USP (Artigo
-99), deve ser redigido em inglês para fins de divulgação. É uma boa ideia usar
-o sítio \url{www.grammarly.com} na preparação de textos em inglês.
-Text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text.
-Text text text text text text text text text text text text text text text text
-text text text text text text text text text text text text text text text text
-text text text.
+
+The Linux kernel is a widely used open-source project, powering 3.77\% of personal desktops 
+and 70.69\% of smartphones worldwide. Given its extensive user base, any addition of features, 
+bug fixes, or handling of security vulnerabilities can impact millions. Maintaining the kernel 
+is an enormous task, involving more than 19 million lines of code and contributions from over 
+thirteen thousand developers. Due to the scale of the project, not all contributions adhere to best 
+practices, resulting in poor-quality code artifacts that may complicate maintenance and feature 
+development. One such artifact is code duplication, which is the focus of this research. 
+Existing tools for detecting code duplication typically compare two code artifacts to determine 
+if they are duplicates. However, these tools are not well-suited for identifying duplications 
+in large-scale codebases like the Linux kernel, nor do they guide on resolving detected 
+duplications. Despite searches in both formal and gray literature, existing solutions fall 
+short of addressing the specific challenges of the Linux kernel. To address this topic, this 
+research focuses on two key goals. First, it proposes a new tool to identify code duplications 
+within the Linux kernel. Second, it analyzes the identified duplications to extract patterns 
+and refactoring methods, offering guidance to future contributors.
+
 }
