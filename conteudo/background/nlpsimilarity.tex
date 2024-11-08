@@ -1,37 +1,42 @@
 \en
 
-\section{Text similarity detection methods}
-\label{sec:similarity}.
+\section{Text Similarity Detection Methods}
+\label{sec:similarity}
 
-The standard methodology for text similarity detection is grounded on building vector embeddings of 
-the texts and applying a distance function in these embeddings to measure the similarity between them. 
-There are multiple vector embedding methods proposed by the literature, such as bag-of-words, TF-IDF, 
-LSI, and Word2Vec \citep{gensimlivro}.
-Recent works related to building vector embeddings use Large Language Models (LLM), for example,
-the work of Ethayarajh, which uses BERT, ELMo, and GPT \citep{llmsimilar}. 
-The most popular distance function used by the literature is the cosine similarity defined by the formula
+The standard methodology for text similarity detection is based on building
+vector embeddings of texts and applying a distance function to these embeddings
+to measure the similarity between them. The literature proposes multiple vector
+embedding methods, such as bag-of-words, TF-IDF, LSI, and Word2Vec
+\citep{gensimlivro}. Recent works related to vector embedding construction
+utilize Large Language Models (LLMs), as exemplified by Ethayarajh's work,
+which employs BERT, ELMo, and GPT \citep{llmsimilar}. The most popular distance
+function used in the literature is cosine similarity, defined by the formula
 \citep{cosineref}:
 
 $$\text{cosine similarity} = SC(A,B) = \frac{ A \cdot B}{ \lVert A \rVert \lVert B \rVert }$$
 
-Where $A$ and $B$ are the vector embeddings of the two texts, an advantage of the cosine similarity is that $SC(A,B)$ is
-a number between $0$ and $1$, where $SC(A,B)$ values closer to the number $1$ means that two vectors are more similar, 
-it is usual to compare the cosine similarity to approximation to a probability value, transforming the values between 
-$0$ and $1$ to a percentage between $0 \% $ and $100\%$, through our research, we will use the percentage form.
+where $A$ and $B$ are the vector embeddings of the two texts. An advantage of
+cosine similarity is that $SC(A,B)$ produces a number between $0$ and $1$,
+where values closer to $1$ indicate higher similarity. It is common to
+interpret cosine similarity as an approximation of probability, transforming
+values between $0$ and $1$ into percentages between $0\%$ and $100\%$.
+Throughout our research, we will use this percentage form.
 
-It is a famous fact that LLM has a high computational cost. An example of the high computational cost is an analysis 
-done by Reimers and Gurevych to find the most similar pair in a collection of 10,000 sentences, 
-which required about 65 hours with BERT \citep{bertsimilar}. 
-We want to compare a similar magnitude of pairs in our work, so we decided not to use LLM for our vector embedding 
-method, even though it is a valid solution for smaller codebases.
+It is well-known that LLMs have a high computational cost. For instance, an
+analysis by Reimers and Gurevych found that finding the most similar pair in a
+collection of 10,000 sentences required about 65 hours with BERT
+\citep{bertsimilar}. Since we aim to compare a similar magnitude of pairs in
+our work, we decided not to use LLMs for our vector embedding method, even
+though they may be suitable for smaller codebases.
 
 \subsection{Gensim}
 
-Gensim is an open-source Python library \citep{gensim} which the owners declare themselves as "The fastest library 
-for training of vector embeddings - Python or otherwise. The core algorithms in Gensim use battle-hardened, highly 
-optimized and parallelized C routines." \citep{gensimsite}. For the velocity of Gensim, we chose to use this library 
-for our vector embedding method.
+Gensim is an open-source Python library \citep{gensim}, which its creators
+describe as "The fastest library for training of vector embeddings - Python or
+otherwise. The core algorithms in Gensim use battle-hardened, highly optimized,
+and parallelized C routines." \citep{gensimsite}. Due to Gensim's speed, we
+chose this library for our vector embedding method.
 
-In this work, we will not explore more alternatives for vector embeddings. We do not want to optimize the
-computational cost or the code clone detection to the state of the art as they are not the main objectives 
-of our research.
+In this work, we do not explore further alternatives for vector embeddings, as
+optimizing computational cost or achieving state-of-the-art code clone
+detection is not the primary objective of our research.

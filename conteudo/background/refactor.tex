@@ -2,44 +2,45 @@
 
 \section{Refactoring}
 
-Fowler defines refactoring in his book as "a controlled technique for improving the design of an existing code base. 
-Its essence is applying a series of small behavior-preserving transformations, each of which is too small to be worth 
-doing. However, the cumulative effect of each of these transformations is quite significant." \citep{refactorbook}. 
-The elimination of detected code clone duplication is a refactoring task that necessitates the 
-application of refactoring methods. Fowler presents multiple refactoring methods such as the 
-\textit{parameterize method}, the \textit{replace parameter with explicit methods} and 
-the \textit{replace parameter with method} \citep{refactorbook}. 
-There is a brief explanation of the methods used in our research below.
+Fowler defines refactoring as "a controlled technique for improving the design
+of an existing code base. Its essence is applying a series of small
+behavior-preserving transformations, each of which is too small to be worth
+doing. However, the cumulative effect of each of these transformations is quite
+significant" \citep{refactorbook}. The elimination of detected code clones and
+duplication is a refactoring task that requires the application of refactoring
+methods. Fowler presents several refactoring techniques, including
+\textit{parameterize method}, \textit{replace parameter with explicit methods},
+and \textit{replace parameter with method} \citep{refactorbook}. Below is a
+brief explanation of the methods used in our research.
 
-\paragraph{Parameterize method}
-
-\
-
-The Parameterize method consists of replacing multiple similar codes with a singular function. 
-The function created implements the different behaviors between similar codes by using parameters, 
-which tell which behavior the function should use \citep{refactorbook}.
-Figure \ref{fig:parameter} demonstrates an example of the Parameterize method usage.
-
-\begin{figure}
+\begin{figure}[ht]
 \includegraphics[scale=0.36]{refactor/parameterize}
-\caption{Example of Parameterize method usage.}
+\caption{Example of Parameterize Method usage.}
 \label{fig:parameter}
 \end{figure}
 
 
-\paragraph{Extract method}
-
-\
-
-The Extract method consists of splitting a complex code artifact into multiple simple methods/functions. 
-One of the advantages of this method is enabling the created functions to be used multiple times through 
-the code project. In contrast, with only the complex code artifact, it is not always possible to reuse 
-it entirely, thus creating a new code duplication \citep{refactorbook}. 
-Figure \ref{fig:extract} demonstrates an example of the Extract method usage.
-
-\begin{figure}
+\begin{figure}[ht]
 \includegraphics[scale=0.36]{refactor/extract}
-\caption{Example of Extract method usage.}
+\caption{Example of Extract Method usage.}
 \label{fig:extract}
 \end{figure}
+
+\paragraph{Parameterize Method.}
+
+The Parameterize Method involves replacing multiple similar code blocks with a
+single function. This function incorporates parameters to account for the
+different behaviors across similar code snippets, allowing it to adjust
+functionality based on the parameter values \citep{refactorbook}. Figure
+\ref{fig:parameter} illustrates an example of the Parameterize Method.
+
+\paragraph{Extract Method.}
+
+The Extract Method entails breaking down a complex code artifact into multiple,
+simpler methods or functions. One of the primary advantages of this method is
+that the newly created functions can be reused throughout the project. By
+contrast, a complex code artifact might not be entirely reusable, potentially
+resulting in further code duplication \citep{refactorbook}. Figure
+\ref{fig:extract} demonstrates an example of the Extract Method.
+
 
