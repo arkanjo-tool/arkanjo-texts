@@ -60,46 +60,13 @@ kernel context.
 
 \section**{Research Design}
 
-According to our studies and observations, the code duplication problem
-outlined in the section above cannot be resolved by the solutions presented in
-the formal or gray literature. To address this gap, we propose an approach to
-identify and mitigate code duplications in the Linux kernel. Specifically, we
-aim to develop a tool capable of detecting duplicated functions within the
-kernel and establish strategies for mitigating these duplications.
-
-In this research, we expect to extract patterns of software engineering
-techniques, such as refactoring methods commonly used to mitigate code
-duplications. These patterns will guide future contributors in tackling the
-code duplication problem in the given context. To properly investigate our
-proposed approach, we developed the following primary research question to
-guide our study:
-
-\textbf{RQ1:} What are effective approaches for identifying duplicate code in the
-Linux kernel?
-
-Given the complexity of the primary question, we formulated a supplementary
-research question to assess midway results related to the performance of our
-proposed tool in the Linux kernel. The supplementary research question is
-defined as follows:
-
-\textbf{RQ1.1:} How accurately does an approach detect duplicated functions
-within the Linux kernel?
-
-We adopt a multi-method research design utilizing various methodologies
-throughout the study to address our research questions. We structured this work
-into two phases, each employing distinct research methods.
-
-In \textbf{Phase I}, we will propose, develop, and validate a tool capable of
-identifying code duplications at the function level for the C programming
-language. We expect this tool to effectively identify code duplications in the
-Linux kernel, as our preliminary investigation suggests that code files in the
-kernel often contain a mix of duplicated and non-duplicated functions. To
-validate the tool, we will perform a triangulation of results by evaluating our
-tool against code duplication databases used in the formal literature and by
-conducting an empirical analysis on a randomly selected set of code files from
-the AMD Display driver, which our tool identifies as containing duplications.
-Chapter \ref{cha:method} provides a detailed explanation of our validation
-process.
+Our studies and observations reveal that the code duplication problem described
+in the previous section cannot be fully addressed by existing tools in
+either the formal or gray literature. To fill this gap, we propose an approach
+to identify and mitigate code duplications specifically within the Linux
+kernel. Our approach includes the development of a tool capable of detecting
+duplicated functions within the kernel and establishing strategies for
+addressing these duplications.
 
 \begin{figure}[h]
 \includegraphics[scale=0.7]{research_design}
@@ -107,16 +74,41 @@ process.
 \label{fig:reDesign}
 \end{figure}
 
-Upon completing the first phase, we will have a validated tool for identifying
-code duplications within the Linux kernel context. We can then proceed to the
-second phase of our research, which focuses on mitigating these duplications.
-In \textbf{Phase II}, we aim to discover practical strategies to address the
-code duplications detected in the Linux kernel. To achieve this objective, we
-have designed an ethnographic approach that allows us to interact with the
-Linux community and collect artifacts that validate or refute our proposed
-mitigation strategies.
+This research aims to identify patterns of software engineering techniques,
+such as refactoring methods commonly used to address code duplications. These
+patterns will serve as a guide for future contributors in mitigating code
+duplication issues within this context. To investigate our approach, we use the
+initial version of our tool to identify duplicate code in the Linux kernel,
+specifically targeting parts of the AMD Display driver code. We will then
+refactor portions of this code and submit patches to maintainers, providing
+evidence of the tool's accuracy in detecting duplicate functions.
 
-Figure \ref{fig:reDesign} summarizes the research steps proposed in this work.
+Our research design follows a multi-method approach, utilizing various
+methodologies to answer our research questions. We have structured the study
+into two phases, each employing different research methods.
+
+In \textbf{Phase I}, we propose, develop, and validate a tool capable of
+identifying code duplications at the function level within C codebases. We
+expect this tool to effectively detect code duplications in the Linux kernel,
+as preliminary investigations suggest that kernel code files often contain a
+mix of duplicated and unique functions. To validate the tool, we will use a
+triangulation method, comparing its results with established code duplication
+databases referenced in the literature, and conducting an empirical analysis on
+a randomly selected set of files from the AMD Display driver, which our tool
+flags as containing duplications. A detailed explanation of our validation
+process is provided in Chapter \ref{cha:method}.
+
+
+Upon completing the first phase, we anticipate having a validated tool for
+identifying code duplications within the Linux kernel context. We will then
+proceed to the second phase, which focuses on strategies for mitigating these
+duplications. In \textbf{Phase II}, our objective is to identify practical
+approaches to address the code duplications detected in the Linux kernel. To
+achieve this, we have designed an ethnographic approach that enables us to
+interact with the Linux development community and gather artifacts that either
+support or challenge our proposed mitigation strategies. Figure
+\ref{fig:reDesign} summarizes the research steps proposed in this study.
+
 
 \section**{Manuscript Structure}
 
