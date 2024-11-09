@@ -1,13 +1,18 @@
 \en
 
-Our proposed tool is a Command Line Interface (CLI) software. Its purpose is to enable developers to query 
-information about code clone duplication at the function level, which means finding pairs of functions in a codebase 
-that are code clones of each other. 
+Our proposed tool is a Command Line Interface (CLI) application designed to
+help developers identify code clone duplication at the function level.
+Specifically, it enables the detection of pairs of functions within a codebase
+that are clones of each other.
 
-The tool operates in two steps. The first step, called Setup, is executed only 
-once for each codebase and is responsible for processing the codebase by extracting functions from code files and 
-searching for code clone duplications. The second step, called Query Responder, executes the tool's functionalities 
-using the information obtained in the Setup step. More information about the Setup and Query Responder behavior can 
-be found in sections \ref{subsec:architecture}  and \ref{subsec:func}. 
+The tool operates in two main steps. The first step, called *Setup*, is
+executed only once for each codebase. This step processes the codebase by
+extracting functions from code files and identifying code clone duplications.
+The second step, called *Query Responder*, utilizes the information obtained in
+the Setup phase to execute the tool’s functionalities as needed. Detailed
+descriptions of the Setup and Query Responder processes can be found in
+Sections \ref{subsec:architecture} and \ref{subsec:func}.
 
-The tool is implemented and can be consulted at \url{https://github.com/LipArcanjo/test-duplication-code}.
+The tool has been implemented and is available for reference at
+\url{https://github.com/LipArcanjo/test-duplication-code}.
+
