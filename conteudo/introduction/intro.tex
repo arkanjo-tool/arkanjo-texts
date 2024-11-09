@@ -1,8 +1,5 @@
 \en
 
-\section**{Problem outline}
-\label{sec:problem}
-
 The Linux kernel is a Free/Libre/Open-Source project providing value to
 billions of people daily, representing 96.3\% of the top one million web
 servers and 85\% of smartphones worldwide. The magnitude that the project has
@@ -74,18 +71,7 @@ addressing these duplications.
 \label{fig:reDesign}
 \end{figure}
 
-This research aims to identify patterns of software engineering techniques,
-such as refactoring methods commonly used to address code duplications. These
-patterns will serve as a guide for future contributors in mitigating code
-duplication issues within this context. To investigate our approach, we use the
-initial version of our tool to identify duplicate code in the Linux kernel,
-specifically targeting parts of the AMD Display driver code. We will then
-refactor portions of this code and submit patches to maintainers, providing
-evidence of the tool's accuracy in detecting duplicate functions.
-
-Our research design follows a multi-method approach, utilizing various
-methodologies to answer our research questions. We have structured the study
-into two phases, each employing different research methods.
+This research aims to identify patterns of software engineering techniques, such as refactoring methods commonly used to address code duplications. These patterns will serve as a guide for future contributors in mitigating code duplication issues within this context. To investigate our approach, we are developing a tool to identify duplicate code in the Linux kernel, explicitly targeting parts of the AMD Display driver code. We are then refactoring portions of this code and submitting patches to maintainers, providing evidence of the tool's accuracy in detecting duplicate functions. Our research design follows a multi-method approach, structured into two phases, each employing different research methods.
 
 In \textbf{Phase I}, we propose, develop, and validate a tool capable of
 identifying code duplications at the function level within C codebases. We
@@ -120,6 +106,6 @@ and a review of refactoring methods used throughout this research. Chapter
 \ref{cha:tool} presents our proposed tool to detect code duplication in the
 Linux kernel, describing all the main components.  Chapter \ref{cha:method}
 describes the research methods selected to guide our work. Chapter
-\ref{cha:eval} shows the results obtained from the research methods to evaluate
-our proposed tool. Chapter \ref{cha:results} presents the current research
-stage and the work plan, with the addition of preliminary results obtained.
+\ref{cha:results} shows the first results obtained from the research methods to evaluate
+our proposed tool and presents the current research stage and the work plan,
+with the addition of a discussion about our preliminary results.

@@ -1,63 +1,32 @@
-On this Chapter, we exposes our experiment results bout the proposed tool performance following
-the methology described in Chapter \ref{cha:method}. Firstly, we shows the results obtained by our tool
-in the BigCloneBench dataset\citep{bigclonebench}, which is the standard form of the formal literature 
-\citep{litreview}. Secondly, we shows the results obtained by our tool on the empirical analyses. 
-Finaly, we do a triangulation of data analysing our finds on the tool performance.
+\en 
 
-\subsection{Tool results on the BigCloneBench dataset}
+\todo[inline]{Juntei os capítulos; veja se consegue colocar algo aqui no início; não sei se final remarks é o melhor nome para a segunda secao aqui}
+
+\section{Tool Evaluation}
+\label{sec:eval}
+
+In this section, we present the test results of our tool performance, following the methodology described in Chapter \ref{cha:method}. First, we provide the results obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}, which serves as a standard reference in the literature \citep{litreview}. Second, we discuss the results from our empirical analysis. Finally, we triangulate the data, analyzing our findings regarding the tool performance.
+
+\subsection{Tool Results on the BigCloneBench Dataset}
 
 \input{conteudo/eval/table_bigclone}
 
-As described in section \ref{sec:metbig}. For the evaluation of our proposed tool in the
-BigCLoneBench dataset  \citep{bigclonebench}, we define that every pair of functions in which the 
-similarity metric is equal or superior to a threshold X will be considered a duplication, and the 
-pair of code files in which the functions exist are labeled as duplication. If, on this method, 
-a code duplication pair is correctly identified, it will count as correct to its code duplication 
-types. If an incorrect duplication pair is inferred as a duplication, it will count as incorrect 
-to all code duplication types. Table \ref{tab:bigclone} shows the results obtained by our tool in the 
-BigCloneBench dataset \citep{bigclonebench}.
+As described in Section \ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset \citep{bigclonebench}, we define that every pair of functions with a similarity metric equal to or greater than a threshold \( X \) is considered a duplication. The pair of code files containing these functions are then labeled as duplications. If our tool correctly identifies a code duplication pair, it is counted as correct for the respective code duplication type. If it infers a duplication pair incorrectly, it is counted as incorrect for all code duplication types. Table \ref{tab:bigclone} shows the results obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}.
 
-The results presented in Table \ref{tab:bigclone} indicate that our tool is a pessimist. There 
-is no negative sample inferred as duplication even for a minimum similarity threshold of 30\%, 
-on the other hand, it is bad for identifying code duplications of complex code duplication types, 
-that is Medium Type-3 and Weak Type-3/Type-4. As mentioned in Chapter \ref{cha:tool}, if a 
-better result is required on these complex code duplication types, it is possible to change 
-the code duplication detection method, as it is designed to be a replaceable component in our 
-tool, given the limitations.
+The results in Table \ref{tab:bigclone} indicate that our tool is conservative in its predictions. No negative sample was inferred as a duplication, even with a minimum similarity threshold of 30\%. However, it performs poorly identifying complex duplication types, such as Medium Type-3 and Weak Type-3/Type-4. As discussed in Chapter \ref{cha:tool}, if improved performance on these complex types is needed, our tool allows replacing the current duplication detection method due to its modular design.
 
-\subsection{Tool results on the empirical analyses}
+\subsection{Tool Results on Empirical Analysis}
 
-As described in section \ref{sec:metemp} For the evaluation of our proposed tool by our empirical 
-analyses, we randomly selected ten function pairs for a variation of ranges of the similarity 
-metric computed by our tool. After that, we analyzed if they were duplications, and if yes, 
-we judged the duplication type. Table \ref{tab:emp} presents the results obtained by our tool 
-in the empirical analyses.
+As outlined in Section \ref{sec:metemp}, for the empirical evaluation of our tool, we randomly selected ten function pairs across various similarity metric ranges computed by our tool. We then examined each pair to determine whether they were duplications and, if so, categorized the duplication type. Table \ref{tab:emp} presents the results from our empirical analysis.
 
 \input{conteudo/eval/table_empirical}
 
-The results presented in Table \ref{tab:emp} indicate that as the similarity metric reduces, 
-there is a significant increase in function pairs that are not duplications in the Linux kernel. 
-For the ranges 79\%-81\% of similarity or greater, we have a high percentage of code duplications. 
-With 69\%-71\% of similarity, the rate goes down to 50\%. With 59\%-61\%, the rate decreases to 20\%.
-With 49\%-51\% similarity or lower, we did not find any code duplications.
+The results in Table \ref{tab:emp} show that as the similarity metric decreases, there is a notable increase in function pairs that are not duplications within the Linux kernel. For similarity ranges of 79\%-81\% or higher, there is a high percentage of code duplications. At 69\%-71\% similarity, the duplication rate drops to 50%. At 59\%-61%, it further decreases to 20%, and below 49\%-51%, no code duplications were found.
 
-\subsection{Triangulation of results}
+\subsection{Triangulation of Results}
 
-Both the BigCloneBench and the empirical method results point out that our tool has a good 
-result for detecting Type-1 and Type-2 code clone duplications and has a poor performance 
-in detecting the other types. Using a similarity metric between 80\% and 100\% shows good 
-results in both methods.
+The BigCloneBench results and our empirical methods indicate that our tool performs well in detecting Type-1 and Type-2 code clone duplications but struggles with more complex types. A similarity threshold between 80\% and 100\% yields favorable results in both methods.
 
-There is a discrepancy in the results of non-code duplications inferred as duplications 
-between the two methods. In the BigCloneBench results, we did not find any negative samples,
-while in the empirical analyses, we found a higher percentage of negative samples. We have 
-two possible reasons for this discrepancy.
+However, there is a discrepancy in the detection of non-duplication pairs between the two methods. In the BigCloneBench evaluation, we found no false positives (negative samples inferred as duplications), while the empirical analysis revealed a higher percentage of false positives. We propose two potential explanations for this discrepancy.
 
-The first reason is the limitations and problems of the BigCloneBench presented by Krinke 
-and Ragkhitwetsagul \citep{bigfail}. The second reason is that the AMD Display driver 
-is a system where each code artifact shares a meaning. While the BigCloneBench is a 
-collection of self-contained code artifacts without sharing meaning with each, as our 
-tool uses a text-based code clone detection method, it is expected to have poorer 
-performance in the AMD Display driver than in the BigCloneBench dataset. We do not know 
-if the state-of-the-art code duplication detection has the same problem and is obscured 
-by the evaluation in the BigCloneBench dataset.
+The first reason may be the limitations and known issues with BigCloneBench, as highlighted by Krinke and Ragkhitwetsagul \citep{bigfail}. The second reason could relate to the nature of the AMD Display driver, where each code artifact shares semantic meaning. In contrast, BigCloneBench comprises self-contained code artifacts without shared semantics. Given that our tool relies on a text-based code clone detection approach, it may naturally perform worse on the AMD Display driver than on the BigCloneBench dataset. We cannot determine if state-of-the-art code duplication detection tools face similar issues obscured by evaluations limited to the BigCloneBench dataset.
