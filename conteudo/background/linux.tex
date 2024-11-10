@@ -1,37 +1,49 @@
 \en
 
+\todo[inline]{Adicionar um "preambulo" antes da seções do capítulo}
+
 \section{The Linux Kernel}
 
-The Linux kernel is a Unix-like operating system published by Linus Torvalds in 1992 as a free software, and
-it started becoming popular in the late 1990s \citep{linuxbook}. Against popular belief, Linux is not a full 
-operating system as it does not include applications such as filesystem utilities or windowing systems. The "Linux" 
-distributions known to the public are, in fact, GNU/Linux operating systems \citep{gnuref}.
+The Linux kernel, a Unix-like operating system kernel, was published by Linus
+Torvalds in 1992 as free software. It began gaining popularity in the late
+1990s \citep{linuxbook}. Contrary to popular belief, Linux itself is not a
+complete operating system, as it lacks components like filesystem utilities and
+windowing systems. The so-called ``Linux distributions'' that are commonly
+recognized by the public are actually GNU/Linux operating systems, which
+include various essential applications alongside the Linux kernel
+\citep{gnuref}.
 
-The Linux kernel is monolithic and organized as a set of subsystems such as process scheduler, memory management, 
-device driver infrastructure, networking, and filesystems \citep{melissa}.
-Each subsystem usually has a maintainer or a group of maintainers.  Maintainers are people responsible 
-for managing and accepting contributions to the subsystem they care for \citep{melissa}.
+The Linux kernel is monolithic and organized into a set of subsystems, such as
+the process scheduler, memory management, device driver infrastructure,
+networking, and filesystems \citep{melissa}. Each subsystem typically has a
+dedicated maintainer or a team of maintainers responsible for overseeing its
+development and managing contributions \citep{melissa}.
 
-The contributions to Linux are coordinated with the usage of the Git source management tool.
-The contributions to the project are formatted as patches, which are text documents describing differences 
-between two different versions of a source tree The patches are sent and reviewed through the 
-Linux mailing lists \citep{melissa}.
+Development contributions to the Linux kernel are coordinated using the Git
+version control system. These contributions are formatted as patches—text
+documents that outline the differences between two versions of the source code.
+These patches are then submitted and reviewed via the Linux mailing lists
+\citep{melissa}.
 
-Mailing lists are the official means of communication of the Linux community, through the mailing lists 
-the community members send and review contributions to the kernel, discuss topics related to Linux such as 
-which new features to add, et cetera. As there are multiple subsystems in the Linux kernel, there are 
-multiple mailing lists in the Linux to organize the discussion made. Every subsystem has its mailing 
-list to concentrate the discussion related to the subsystem \citep{melissa}. 
-The interactions made in the mailing lists are documented and stored in the Linux kernel Lore
-\citep{linuxlore}, which serves as a repository of the discussion made in the Linux kernel to be
-consulted by anyone interested.
+Mailing lists are the primary means of communication within the Linux
+community. Members of the community use them to submit and review patches,
+discuss Linux-related topics, and debate potential new features. Given the
+kernel's extensive modularity, each subsystem has its mailing list, allowing
+discussions to be organized around specific areas of development
+\citep{melissa}. All interactions on these mailing lists are documented and
+archived in the Linux Kernel Lore \citep{linuxlore}, which serves as a
+repository for kernel discussions and can be accessed by anyone interested.
 
-One of the Linux kernel subsystems is the AMD Display Driver, a subsystem responsible for implementing 
-the drivers required to enable AMD GPU to work correctly in the Linux environment. The maintainers of 
-this subsystem reported an empirical problem they have in the subsystem, which is a significant amount 
-of duplicated code in the subsystem, which hinders the maintenance of the subsystem. The reported issue 
-is the starting point that initiated our research, making the AMD Display Driver our principal object 
-of study to understand how to mitigate duplicated code in the Linux kernel. The AMD Display Driver 
-contains X code lines, Y functions/structs, and Z code files, representing a significant amount of 
-the Linux kernel. As with any other Linux subsystem, the discussions related to the AMD Display Driver 
-are made in its proper mailing list (FIND MAILING LIST AND CITE HERE).
+One of the subsystems within the Linux kernel is the AMD Display Driver, which
+is responsible for implementing the drivers needed for AMD GPUs to function
+correctly in a Linux environment. The maintainers of this subsystem have
+reported a practical issue: a significant amount of duplicated code, which
+complicates the maintenance of this subsystem. This problem serves as the
+starting point for our research, with the AMD Display Driver as our primary
+object of study as we aim to understand and mitigate code duplication in the
+Linux kernel. The AMD Display Driver subsystem contains X lines of code, Y
+functions/structs, and Z code files, making it a considerable component within
+the Linux kernel. Like other subsystems, discussions about the AMD Display
+Driver are conducted on its designated mailing list.
+
+\todo[inline]{FIND MAILING LIST AND CITE HERE}
