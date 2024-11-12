@@ -10,7 +10,23 @@ As the next step, we plan to conduct an ethnographic study as outlined in Sectio
 
 In the first function pair, completing the refactoring requires the expertise of a maintainer for the AMD Display driver. This observation is because duplicated code artifacts involve copy-pasted code that imports different configuration files. The design of the AMD Display driver configuration files necessitates importing specific configurations at compile time, which prevents a generic approach. Consequently, refactoring this pair requires changes in how the AMD Display driver manages configuration files -- a complex task that demands input from an expert or maintainer.
 
-The refactoring of the second function pair, however, was successful. We submitted this refactoring as a patch to the AMD Display driver to obtain feedback from the maintainers.
+The refactoring of the second function pair, however, was successful. 
+We submitted this refactoring as a patch to the AMD Display driver to obtain feedback 
+from the maintainers. 
+
+The process of sending this patch did not yield satisfactory results in terms of 
+interaction with the AMD Display driver maintainers. We initially submitted the 
+patch on August 9th, 2024, but did not receive any replies. As a result, we had 
+to resend it on October 9th, 2024, and finally received an initial response on 
+November 3rd, 2024, from our point of contact at the AMD Display driver. 
+The response time from our interactions with the AMD Display driver is making 
+us reconsider the viability of our initial plans.
+
+Regarding the patch content, only minor changes were requested to align with code 
+style and best practices that were initially unknown to us. More details of the 
+patch can be found in Appendix (CREATE APPENDIX AND ADD HERE).
+
+
 \todo[inline]{Atualizar ... tentar colocar algo do feedback que recebeu da revisão do patch}
 
 \input{conteudo/preliminar/cronograma}
