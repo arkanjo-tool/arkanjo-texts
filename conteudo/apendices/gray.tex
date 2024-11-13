@@ -1,0 +1,118 @@
+\chapter{Gray Literature tools explored}
+
+\label{app:gray}
+
+
+This appendix contains the the list of gray literature tools 
+explored in this initial exploratory research mentioned
+in the Introduction. To test this tools, we created a simple 
+toy codebase with multiples duplicated code in C.
+
+\paragraph{Copy/Paste Detector (CPD)} 
+
+\
+
+\textbf{Is free to use:} Yes.
+
+We installed and tested it. It is a pretty primitive tool 
+with little practical usage, and our experience using it 
+was not good. It works by finding textual matches between files.
+
+Access from \url{https://pmd.github.io/pmd/pmd_userdocs_cpd}.
+
+\paragraph{CppDepend}
+
+\
+
+\textbf{Is free to use:} No. There is a free trial periody.
+
+Tools with paywalls do not meet our requirements, 
+so we did not investigate the tool further for this reason.
+
+Access from 
+\url{https://cppdepend.com/blog/tracking-the-hidden-duplicate-code-in-a-c-code-base/}.
+
+\paragraph{Duplo}
+
+\
+
+\textbf{Is free to use:} Yes.
+
+We installed and tested it. It is a pretty primitive tool 
+with little practical usage, and our experience using it was good. 
+It works by finding textual matches between files.
+
+Access from
+\url{https://github.com/dlidstrom/Duplo}.
+
+\paragraph{Duploq}
+
+\
+
+\textbf{Is free to use:} Yes.
+
+It is a front-end application for Duplo only, designed to 
+enable a more intuitive and configurable user experience. 
+We did not test it further, as it has the same capabilities 
+as Duplo itself.
+
+Access from
+\url{https://github.com/duploq/duploq}
+
+\paragraph{Simian} 
+
+\
+
+\textbf{Is free to use:} No. 
+There is a license for academic research and education use.
+
+Tools with paywalls do not meet our requirements, 
+so we did not investigate the tool further for this reason.
+
+Access from
+\url{https://simian.quandarypeak.com/}.
+
+\paragraph{Code Climate}
+
+\
+
+\textbf{Is free to use:} No. 
+There is a license for open source use.
+
+Tools with paywalls do not meet our requirements, so this 
+tool was initially skipped. Out of curiosity, we tried it 
+ourselves, and it did not work correctly with our toy
+dataset of code duplications.
+
+Access from
+\url{https://codeclimate.com/}.
+
+\paragraph{Visual Detection of Duplicated Code}
+
+\
+
+\textbf{Is free to use:} In principle, yes.
+
+We found this tool in a paper and found it interesting. 
+Unfortunately, we were not able to find an executable 
+version of this tool for testing.
+
+Access from
+\url{https://www.researchgate.net/publication/2866183_Visual_Detection_of_Duplicated_Code}.
+
+\paragraph{duplicate-code-detection-tool}
+
+\
+
+\textbf{Is free to use:} Yes.
+
+It is the only tool we found that is not based on textual 
+matching. It looks pretty good for small codebases but 
+performs poorly when used in complex codebases. This tool 
+provided significant inspiration for this work, as 
+mentioned in Chapter \ref{cha:tool}.
+
+Access from
+\url{https://github.com/platisd/duplicate-code-detection-tool}
+
+
