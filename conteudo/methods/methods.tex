@@ -9,7 +9,7 @@ methods, we triangulated the findings to analyze the results comprehensively.
 We chose triangulation because relying solely on the literature-based method has 
 limitations and may not be entirely reliable \citep{bigfail, litreview}.
 
-\section{Evaluation of the Tool by Formal Literature}
+\section{Evaluation of the Tool by the BigCloneBench dataset}
 
 \label{sec:metbig}
 
@@ -25,7 +25,10 @@ To understand the impact of varying the similarity threshold, we evaluated our t
 
 \label{sec:metemp}
 
-Due to the limitations of the BigCloneBench dataset, as noted by \cite{bigfail}, and its lack of suitability for our context (Java dataset vs. C-based Linux kernel), we complemented the formal evaluation with an empirical study of the tool inferred duplications.
+Due to the limitations of the BigCloneBench dataset, as noted by \cite{bigfail}, and its lack of suitability 
+for our context (Java dataset vs. C-based Linux kernel), we complemented the BigCloneBench evaluation with 
+an empirical study of the tool inferred duplications.
+
 %
 Given the vast number of lines and components in the Linux kernel, analyzing every duplication is impractical. We focused our scope on the AMD Display driver, which, as shown in Figure \ref{fig:relatory_ex}, contains over 20,000 lines of duplicated code at a similarity metric of 100\%.
 

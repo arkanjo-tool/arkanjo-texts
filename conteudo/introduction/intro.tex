@@ -38,14 +38,14 @@ the maintenance of the driver.
 In searching for solutions to the AMD Display driver problem related to
 duplicated code artifacts, we found tools capable of determining, given two
 code artifacts, whether they are duplications of each other. However, the
-formal literature on code duplication mainly focuses on optimizing the accuracy
+literature on code duplication mainly focuses on optimizing the accuracy
 of these tools for this specific task. These solutions do not address our
 problem, as we cannot provide a complete codebase and have the tools return the
 code duplications within it. Moreover, they do not guide us on how to mitigate
 the code duplications after detection, necessitating the exploration of
 alternative solutions.
 
-Given the unsuccessful results of our search in the formal literature, we
+Given the unsuccessful results of our search in the literature, we
 turned to explore related tools not present in literature for solutions, but were also met 
 with limited success.
 The best solutions we found were primitive, merely
@@ -70,7 +70,7 @@ duplicated functions within the kernel and establishing strategies for
 addressing these duplications.
 
 \begin{figure}[h]
-\includegraphics[scale=0.7]{research_design}
+\includegraphics[scale=0.46]{research_design}
 \caption{Diagram of the research design.}
 \label{fig:reDesign}
 \end{figure}
@@ -83,7 +83,7 @@ expect this tool to effectively detect code duplications in the Linux kernel,
 as preliminary investigations suggest that kernel code files often contain a
 mix of duplicated and unique functions. To validate the tool, we will use a
 triangulation method, comparing its results with established code duplication
-databases referenced in the literature, and conducting an empirical analysis on
+database referenced in the literature, and conducting an empirical analysis on
 a randomly selected set of files from the AMD Display driver, which our tool
 flags as containing duplications. A detailed explanation of our validation
 process is provided in Chapter \ref{cha:method}.
