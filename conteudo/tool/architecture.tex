@@ -45,9 +45,26 @@ The temporary codebase is a transformation of the input codebase performed by th
 
 \subsection{Code Duplication Finder}
 
+\label{subsec:code_finder}
+
 The Code Duplication Finder iterates through every pair of source code files in the temporary codebase, representing functions from the input codebase. For each pair of files, we execute a code duplication detection method that computes a metric measuring how similar the pair of files is, which we refer to as similarity. If the similarity is greater than or equal to the minimum similarity threshold (a parameter provided by the user during the Setup step), we store this pair of functions along with its similarity in the Code Duplication Database.
 
-For the code duplication detection method, we treat the source code files as text and apply the TF-IDF vector embedding method implemented by the Gensim library \citep{gensim}, then compute cosine similarity as the similarity metric. This method was chosen for its claimed performance, programming language independence, and the fact that it does not require compilable code, which is expected in the temporary codebase, as it does not contain complete code artifacts. \cite{platistool} implemented this code duplication detection method and released it under the MIT license \citep{mitlicense}. We adapted his implementation to fit our tool's expected input and output formats. Switching the duplication detection method is feasible, similar to how we adapted Plates' implementation.
+For the code duplication detection method, we treat the source code files 
+as text and apply the TF-IDF vector embedding method implemented by the 
+Gensim library \citep{gensim}, then compute cosine similarity as the 
+similarity metric. This method was chosen for its claimed performance, 
+programming language independence, and the fact that it does not require 
+compilable code, which is expected in the temporary codebase, as it does 
+not contain complete code artifacts. We expect our method to yield good 
+results for Type-1 and Type-2 code duplication types while performing 
+poorly for the other types. It is possible to change the code duplication 
+detection method to one of the state-of-the-art methods if needed.
+
+\cite{platistool} implemented this code duplication detection method and 
+released it under the MIT license \citep{mitlicense}. We adapted his 
+implementation to fit our tool's expected input and output formats. 
+Switching the duplication detection method is feasible, similar to how 
+we adapted Plates' implementation.
 
 \subsection{Code Duplication Database}
 
