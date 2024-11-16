@@ -14,13 +14,21 @@ The refactoring of the second function pair, however, was successful.
 We submitted this refactoring as a patch to the AMD Display driver to obtain feedback 
 from the maintainers. 
 
-The process of sending the patch did not yield satisfactory results in terms of 
-interaction with the AMD Display driver maintainers. We initially submitted the 
-patch on August 9th, 2024, but did not receive any replies. As a result, we had 
-to resend it on October 9th, 2024, and finally received an initial response on 
-November 3rd, 2024, from our point of contact at the AMD Display driver. 
-The response time from our interactions with the AMD Display driver is making 
-us reconsider the viability of our initial plans.
+The process of sending the patch was more time consuming then the expected . We 
+initially submitted the patch on August 9th, 2024, but did not receive any 
+replies. As a result, we had to resend it on October 9th, 2024, and finally 
+received an initial response on 
+November 3rd, 2024. 
+While talking to our point of contact for the AMD Display driver, we discovered 
+new information about the driver's processes. Some of the code in the driver is 
+shared across all operating systems that support the implemented GPUs. This creates 
+a challenging process within AMD to format and submit changes across the supported 
+systems while simultaneously applying measures to mitigate errors.
+Additionally, we discovered that duplicated code isn’t seen as negatively by AMD 
+display driver developers as it is in the literature. One example shared with us 
+is that duplicated code makes GPU driver code more independent, letting developers 
+make changes to a GPU without worrying about testing compatibility with other GPUs, 
+which helps save a lot of time and effort.
 
 Regarding the patch content, only minor changes were requested to align with code 
 style and best practices that were initially unknown to us. More details of the 
