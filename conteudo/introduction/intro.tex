@@ -83,7 +83,15 @@ addressing these duplications.
 \label{fig:reDesign}
 \end{figure}
 
-This research aims to identify patterns of software engineering techniques, such as refactoring methods commonly used to address code duplications. These patterns will serve as a guide for future contributors in mitigating code duplication issues within this context. To investigate our approach, we are developing a tool to identify duplicate code in the Linux kernel, explicitly targeting parts of the AMD Display driver code. We are then refactoring portions of this code and submitting patches to maintainers, providing evidence of the tool's accuracy in detecting duplicate functions. Our research design follows a multi-method approach, structured into two phases, each employing different research methods.
+This research aims to identify patterns of software engineering techniques, 
+such as refactoring methods commonly used to address code duplications. 
+These patterns will serve as a guide for future contributors in mitigating 
+code duplication issues within this context. To investigate our approach, 
+we are developing a tool to identify duplicate code in the Linux kernel, 
+explicitly targeting parts of the AMD Display driver code and the IIO driver. We are then refactoring 
+portions of this code and submitting patches to maintainers, providing evidence 
+of the tool's accuracy in detecting duplicate functions. Our research design follows 
+a multi-method approach, structured into two phases, each employing different research methods.
 
 In \textbf{Phase I}, we propose, develop, and validate a tool capable of
 identifying code duplications at the function level within C codebases. We
@@ -99,10 +107,10 @@ process is provided in Chapter \ref{cha:method}.
 
 Upon completing the first phase, we anticipate having a validated tool for
 identifying code duplications within the Linux kernel context. We will then
-proceed to the second phase, which focuses on strategies for mitigating these
-duplications. In \textbf{Phase II}, our objective is to identify practical
-approaches to address the code duplications detected in the Linux kernel. To
-achieve this, we have designed an ethnographic approach that enables us to
+proceed to the second phase, which focuses on mitigating these
+duplications. In \textbf{Phase II}, our objective is to verify if we can 
+practically mitigate the duplication finds by the developed tool. 
+To achieve this, we have designed an ethnographic approach that enables us to
 interact with the Linux development community and gather artifacts that either
 support or challenge our proposed mitigation strategies. Figure
 \ref{fig:reDesign} summarizes the research steps proposed in this study.
