@@ -11,12 +11,14 @@ if so, saves them in the Code Duplication Database, which is a text file that st
 \textbf{<function1,function2,similarity>}, where \textbf{function1} and \textbf{function2} are the functions that are duplicates 
 of each other, and \textbf{similarity} is the metric given by the code duplication detection method utilized in the Code Duplication Finder. ,
 
-The Query Responder consumes the Temporary Codebase and the Code Duplication Database to extract duplicated functions-related information per user request.
+The Query Responder consumes the Temporary Codebase and the Code Duplication Database to extract duplicated 
+functions-related information per user request. If the user executes the Query Responder without executing the 
+Preprocessor, the Query Responder calls the Preprocessor to create the required artifacts.
 
 Figure \ref{fig:diagram} illustrates the tool architecture. An explanation of how each component works is provided in this section.
 
 \begin{figure}
-\includegraphics[scale=0.5]{diagrama_mestrado}
+\includegraphics[scale=0.4]{diagrama_mestrado}
 \caption{Architecture diagram demonstrating the relationship between the tool components.}
 \label{fig:diagram}
 \end{figure}
@@ -85,7 +87,7 @@ The Code Duplication Finder iterates through every pair of source code files in 
 functions from the input codebase. For each pair of files, we execute a code duplication detection method that computes 
 a metric measuring how similar the pair of files is, which we refer to as similarity. 
 If the similarity is greater than or equal to the minimum similarity threshold 
-(a parameter provided by the user during the Setup step), we store this pair of functions along with its 
+(a parameter provided by the user during the Preprocessor), we store this pair of functions along with its 
 similarity in the Code Duplication Database.
 
 We implemented two methods for code duplication detection in the tool, in which the user can choose what to use.
@@ -150,7 +152,7 @@ As most function pairs are unlikely to be duplicated in large codebases, this fi
 
 \todo[inline]{I NEED TO CHANGE HERE}
 
-The Query Responder step is the component the user executes multiple times to consult information about duplicated functions in a codebase processed by the Setup step. The Query Responder step utilizes the temporary codebase and the Code Duplication Database as inputs to answer the user's request, such as querying the total number of duplicated functions in a specific input codebase or listing duplicated functions above a certain similarity threshold. This component was developed to be extensible, allowing other queries to be easily added. Currently, the Query Responder step supports the following queries:
+The Query Responder step is the component the user executes multiple times to consult information about duplicated functions in a codebase processed by the Preprocessor. The Query Responder step utilizes the temporary codebase and the Code Duplication Database as inputs to answer the user's request, such as querying the total number of duplicated functions in a specific input codebase or listing duplicated functions above a certain similarity threshold. This component was developed to be extensible, allowing other queries to be easily added. Currently, the Query Responder step supports the following queries:
 
 \begin{itemize}
 	\item Number of dupliddcated functions above a similarity threshold.
