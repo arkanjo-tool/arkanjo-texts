@@ -5,12 +5,13 @@ help developers identify code clone duplication at the function level.
 Specifically, it enables the detection of pairs of functions within a codebase
 that are clones of each other.
 
-The tool operates in two main steps. The first step, called \textbf{Setup}, is
-executed only once for each codebase. This step processes the codebase by
-extracting functions from code files and identifying code clone duplications.
-The second step, called \textbf{Query Responder}, utilizes the information obtained in
-the Setup phase to execute the tool functionalities as needed. Detailed
-descriptions of the Setup and Query Responder processes can be found in
+The tool operates in two main parts, the \textbf{Preprocessor} and the \textbf{Query Responder}. 
+The \textbf{Preprocessor} is responsible to perform the heavy computations to find the code duplications 
+accross a codebase and produce artifact to consulte information related to the duplications in a structured form.
+The \textbf{Query Responder} consumes the artifacts produced by the Preprocessor to execute the tool functionalites as requested.
+This choice enable the tool to concentrate the heavy and slows parts that can be execute only once per codebase, 
+thus allowing a fast performance for multiple queries related to a single codebase.
+More detailed descriptions of the Setup and Query Responder processes can be found in
 Sections \ref{subsec:architecture} and \ref{subsec:func}.
 
 The Arkanjo tool has been implemented and is available for reference at
