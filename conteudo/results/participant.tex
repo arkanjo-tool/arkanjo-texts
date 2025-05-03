@@ -7,7 +7,7 @@ We have completed Phase 1 of our research, during which we developed our propose
 
 As the next step, we plan to conduct an ethnographic study as outlined in Section \ref{sec:meteth}. To preliminarily assess the potential impact of this research, we applied our systematic approach for mitigating code duplication to two pairs of functions. Table \ref{tab:patch} presents the initial results obtained from this process.
 
-\input{conteudo/preliminar/table_patch}
+\input{conteudo/results/table_patch}
 
 In the first function pair, completing the refactoring requires the expertise of a maintainer for the AMD Display driver. This observation is because duplicated code artifacts involve copy-pasted code that imports different configuration files. The design of the AMD Display driver configuration files necessitates importing specific configurations at compile time, which prevents a generic approach. Consequently, refactoring this pair requires changes in how the AMD Display driver manages configuration files -- a complex task that demands input from an expert or maintainer.
 
@@ -21,7 +21,7 @@ Regarding the patch content, only minor changes were requested to align with cod
 style and best practices that were initially unknown to us. More details of the 
 patch can be found in Appendix \ref{app:feedback}.
 
-\input{conteudo/preliminar/cronograma}
+\input{conteudo/results/cronograma}
 
 Finally, as indicated in our proposed schedule in Table \ref{fig:cronograma}, 
 our upcoming tasks include conducting the complete ethnographic study.
@@ -38,3 +38,4 @@ To achieve our complementary goal of providing a solution for code duplication
 in the kernel, we plan to improve the documentation, refine the code structure, 
 and address any issues we encounter along the way, providing the Linux community 
 with a way to tackle the issue.
+
