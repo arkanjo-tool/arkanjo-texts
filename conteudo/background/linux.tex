@@ -58,4 +58,27 @@ designated mailing list, which can be accessed here:
 
 \todo[inline]{Require an introduction about IIO drivers.}
 
-\todo[inline]{Not exactly on this section, but I need to mention GIT, as one of the similarity methods is based on the GIT command.}
+
+\subsection{Diff command}
+
+The \textit{diff} command is a command line in Linux that allows the user to compare 
+two files line by line \citep{diffcommand}. There are multiple forms 
+that the results of the command can be shown, one example of the command being executed 
+can be found in Figure \ref{fig:diff}. With the command results, it is easy to visualize and extract 
+the number of lines that are equal and different between the two compared files.
+
+
+\begin{figure}
+\includegraphics[scale=0.3]{diff_command}
+\caption{Example of \textit{diff} command executed}
+File 1 content is shown in red and file 2 content is shown in green. \textit{-} 
+represents a line that only exist in file 1, \textit{+} represents a line that only exist in file 2,
+\textit{!} represents a line that exist in both file but has modifications between them, and empty on the
+start of a line represents that the line exist in both files without any modifications.
+\label{fig:diff}
+\end{figure}
+
+We use thhe \textit{diff} command as the base of one of the code duplication detection methods 
+on the tool proposed on this work, although it is not extensive explored as the text similarity
+method for code duplication detection.
+
