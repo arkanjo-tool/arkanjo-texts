@@ -59,23 +59,18 @@ kernel context.
 The list of related tools examined in this exploratory research 
 is available in Appendix \ref{app:gray}.
 
-\todo[inline]{Maybe talk about the tests on IIO software, as the test is not tested only on AMD Display driver anymore. Maybe mention the tool explicitly.}
-
 \section**{Research Design}
 
 \label{sec:intresearch}
-
-\todo[inline]{THIS SECTION NEEDS TO BE REMADE FROM ZERO.}
 
 Our studies and observations reveal that the code duplication problem described
 in the previous section cannot be fully addressed by existing tools in
 either the formal or grey literature. To fill this gap, we propose an approach
 to identify and mitigate code duplications specifically within the Linux
 kernel. Our approach includes the development of a tool capable of detecting
-duplicated functions within the kernel and establishing strategies for
-addressing these duplications.
-
-\todo[inline]{Focus more on the tool here.}
+duplicated functions and establishing strategies for
+addressing these duplications. We tested the approach in the context of two
+kernel components, the AMD Display Driver the the Industrial IO subsystem.
 
 \begin{figure}[h]
 \includegraphics[scale=0.46]{research_design}
@@ -87,8 +82,7 @@ This research aims to identify patterns of software engineering techniques,
 such as refactoring methods commonly used to address code duplications. 
 These patterns will serve as a guide for future contributors in mitigating 
 code duplication issues within this context. To investigate our approach, 
-we are developing a tool to identify duplicate code in the Linux kernel, 
-explicitly targeting parts of the AMD Display driver code and the IIO driver. We are then refactoring 
+we are developing a tool to identify duplicate code. We are then refactoring 
 portions of this code and submitting patches to maintainers, providing evidence 
 of the tool's accuracy in detecting duplicate functions. Our research design follows 
 a multi-method approach, structured into two phases, each employing different research methods.
@@ -104,7 +98,6 @@ a randomly selected set of files from the AMD Display driver, which our tool
 flags as containing duplications. A detailed explanation of our validation
 process is provided in Chapter \ref{cha:method}.
 
-
 Upon completing the first phase, we anticipate having a validated tool for
 identifying code duplications within the Linux kernel context. We will then
 proceed to the second phase, which focuses on mitigating these
@@ -115,17 +108,15 @@ interact with the Linux development community and gather artifacts that either
 support or challenge our proposed mitigation strategies. Figure
 \ref{fig:reDesign} summarizes the research steps proposed in this study.
 
-
-\section**{Manuscript Structure}
-
+\section**{Thesis Structure}
 
 This manuscript consists of five more chapters. Chapter \ref{cha:back} presents
 the literature overview for code duplication detection (main definitions,
-current approaches in the literature), a brief description of the Linux kernel,
+current approaches in the literature), a brief description of the Linux kernel and the components
+explored in this work, 
 and a review of refactoring methods used throughout this research. Chapter
-\ref{cha:tool} presents Arkanjo, our proposed tool to detect code duplication in the
-Linux kernel, describing all the main components.  Chapter \ref{cha:method}
+\ref{cha:tool} presents ArKanjo, our proposed tool to detect code duplication, 
+describing all the main components.  Chapter \ref{cha:method}
 describes the research methods selected to guide our work. Chapter
-\ref{cha:results} shows the first results obtained from the research methods to evaluate
-our tool and presents the current research stage and the work plan,
-with the addition of a discussion about our preliminary results.
+\ref{cha:results} shows the results we had through our work, from the research methods to 
+evaluate our tool and the ethnographic studies. Chapter \ref{cha:conclusion}udes this research.
