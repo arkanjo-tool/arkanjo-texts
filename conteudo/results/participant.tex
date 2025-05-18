@@ -16,12 +16,12 @@ in the next sections.
 
 \subsection{Mitigation 1}
 
-On the process of the systematic approach, we found that the \textit{offset\_to\_id} function exist in 10 files, enclosing
+On the process of the systematic approach, we found that the \textit{offset\_to\_id} function exist in code 10 files, enclosing
 multiple GPU architectures. The duplicated functions are not exactly equals, as there are some minimal specific logics applied
 to each GPU architecture. To address this issue, we applied the extract method to break the function in smaller parts and the 
 parameterize method to address the specific logics for the GPU's.
 
-The base idea on how we would mitigate the duplications found were done, but we could not complete the refactoring on a state 
+We reached a point with a scratch on how we would mitigate the duplications found were done, but we could not complete the refactoring on a state 
 capable to submit as a patch to the driver. 
 We found that the configuration files on the AMD Display driver are designed to be imported at compilation time
 using \textit{\#define} macros. The configuration files design choice makes the refactoring of duplications on generic 
@@ -31,16 +31,72 @@ on investigating this mitigation.
 
 \subsection{Mitigation 2}
 
+On the process of the systematic approach, we found that the \textit{phy\_id\_to\_atom} function exist in 5 code files, and 
+there are two other functions that are duplicated on those 5 code files, which . All functions across the files were
+exactly equal, thus there was no need to apply refactor methods presented in literature. The refactoring work was resumed
+to creating a generic library and fixing the compilation targets. 
+
+The code files touched in the second mitigation does 
+not depend on configuration files, thus we have not faced the same issues on the first mitigation. 
+The refactoring of the code to mitigate duplications reached a point we judged that was good enough to submit as a patch
+to contribute to the AMD Display driver code quality. Thus we moved to send the refactoring to the driver's maintainers 
+as patch, documenting or findings and experiences on the process.
+
+\todo[inline]{A image of the timeline of the patch can be good to not have only test here}
+
+The experience on submiting a patch was not as we expected.
+The overall process took 7 months and 16 days, which is a time significant slower then we expected.
+We initially submitted the patch on Auguest 9th, 2024, but we did not receive replies at first. Thus, we had
+to to resend it on October 9th 2024. We received an initial response on November 3rd, 2024 asked for minimal changes, 
+we submitted a second version with the changes request on November 16th, 2024. We did not receive replies
+at first and need to resend the patch on February 7th, 2025. 
+We received a reply on February 11th 2025 asking for additional changes. 
+We sent an third version on February 24th 2025 and the patch got accepted and integrated in the kernel codebase in 
+February 25th 2025.
+
+We discussed with our point of contact at the AMD Display driver to understand the reason of the slow process
+to submit a patch. 
+We learned that some of the code in the driver is shared across all operating systems that 
+support the implemented GPUs. 
+This fact creates a complex process within AMD to format and submit changes across the supported systems while 
+simultaneously implementing measures to mitigate errors.
+Additionally, we comprehended that AMD Display driver developers can not view duplicated code negatively, 
+as we understand it is a good practice in software engineering. One example shared with us is that duplicated 
+code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without 
+needing to test compatibility with others. This approach helps save significant time and effort. 
+
+Regarding the patch changes requested for the second version, 
+only minor changes were requested to align with code style, license correct use and best practices that
+were initially unkown to use. For the change requested on the third version, we were simple asked to 
+move the functions created in the generic library to a existent file, instead of creating a new one.
+More details of the patch can be found in Appendix \ref{app:feedback} and the patch submitted in 
+the linux codebase can be see here: \url{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}.
+
+The initial plan of this research was to approach and sent a large number of mitigations to
+collect a broad number of artifacts from the driver community, but the slow process to send a patch
+makes this plan unviable. Thus, we opted to redirect this research to work with students and refactoring duplicated function
+pairs found by the tool directly in the IIO and the AMD Display driver, without passing through the whole process 
+of the systematic approach proposed.
+This alternative allowed us to collect artifacts from the students experiences and findings, and not be 
+to dependable of the iteraction with the kernel community.
+A additional advantage is to accelerate the iteraction with the kernel community
+because we are not applying the whole systematic, meaning that the code changes became smaller.
 
 \subsection{OLD}
 
-In the first function pair, completing the refactoring requires the expertise of a maintainer for the AMD Display driver. This observation is because duplicated code artifacts involve copy-pasted code that imports different configuration files. The design of the AMD Display driver configuration files necessitates importing specific configurations at compile time, which prevents a generic approach. Consequently, refactoring this pair requires changes in how the AMD Display driver manages configuration files -- a complex task that demands input from an expert or maintainer.
+In the first function pair, completing the refactoring requires the expertise of a maintainer for the AMD Display driver. 
+This observation is because duplicated code artifacts involve copy-pasted code that imports different configuration files.
+The design of the AMD Display driver configuration files necessitates importing specific configurations at compile time, 
+which prevents a generic approach. Consequently, refactoring this pair requires changes in how the AMD Display driver 
+manages configuration files -- a complex task that demands input from an expert or maintainer.
 
-The refactoring of the second function pair, however, was successful. We submitted this refactoring as a patch to the AMD Display driver to obtain feedback from the maintainers. The process of sending the patch took more time than expected. We initially submitted the patch on August 9th, 2024, but we did not receive replies. As a result, we had to resend it on October 9th, 2024 and received an initial response on November 3rd, 2024. 
+The refactoring of the second function pair, however, was successful. We submitted this refactoring as a patch to the AMD 
+Display driver to obtain feedback from the maintainers. The process of sending the patch took more time than expected.
+We initially submitted the patch on August 9th, 2024, but we did not receive replies. As a result, we had to resend 
+it on October 9th, 2024 and received an initial response on November 3rd, 2024. 
 
-We understood new details about the driver evolution processes in discussions with our partner from the AMD Display driver. Some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors.
+We understood new details about the driver evolution processes in discussions with our partner from the AMD Display driver.
 
-Additionally, we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save significant time and effort. 
 
 Regarding the patch content, only minor changes were requested to align with code 
 style and best practices that were initially unknown to us. More details of the 
