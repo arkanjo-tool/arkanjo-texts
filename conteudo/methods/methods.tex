@@ -79,6 +79,7 @@ we present the participant observation research method explored by the author. T
 we present the methodolody of the experiment done with the students.
 
 \subsection{Participant observation method}
+\label{subsec:partmethod}
 
 Given the tool evaluations that demonstrate the tool capabilites of finding duplications, 
 we proceeded to undertand if the duplications found are possible to be mitigate and
@@ -91,7 +92,20 @@ As a first step of this experiment, we executed the tool in the AMD Display driv
 manually analysed the biggest duplications in terms of number of lines and raised to 
 two duplicated function pairs that we judged interesting to try to mitigate. 
 We have choose to approach the biggest duplications as a proof of concept that 
-we can make significant impacts. The two duplicated function pairs are shown in Table X.
+we can make significant impacts. The two duplicated function pairs chosen are:
+
+\begin{itemize}
+\item \textbf{Duplicated function pair 1}
+\begin{itemize}
+\item Function named \textit{offset\_to\_id} in file \textit{dc/gpio/dcn32/hw\_translate\_dcn32.c}.
+\item Function \textit{offset\_to\_id} in file \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}.
+\end{itemize}
+\item \textbf{Duplicated function pair 2}
+%\begin{itemize}
+\item Function named \textit{phy\_id\_to\_atom} in file \textit{dc/bios/dce110/command\_table\_helper\_dce110.c}.
+\item Function named \textit{phy\_id\_to\_atom} in file \textit{dc/bios/dce60/command\_table\_helper\_dce60.c}.
+%\end{itemize}
+\end{itemize}
 
 Given the two duplicated function pairs, we observed that the files that the functions exist contains 
 multiple other duplications. Thus, we proposed a simple systematic approach to mitigate all the 
@@ -104,6 +118,7 @@ maillist to validate the mitigations and see the maintainers opinion, while docu
 and our impressions.
 
 \subsubsection{Systematic Approach to Mitigate Code Duplication}
+\label{subsubsec:systematic}
 
 In C programming, communication between source files is achieved by creating header files that specify 
 libraries \citep{Cbook}. Since the Linux kernel is primarily written in C, we eliminated code duplications 

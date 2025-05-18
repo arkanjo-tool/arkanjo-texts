@@ -10,6 +10,8 @@ analyzing our findings regarding the tool performance.
 As a reminder, we only expect our tool to yield good results for Type-1 and Type-2,
 as mentioned in \ref{subsec:code_finder}.
 
+\section{Tool Results on BigCloneBench}
+
 \input{conteudo/results/table_bigclone}
 
 As described in Section \ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset \citep{bigclonebench}, we define that every pair of functions with a similarity metric equal to or greater than a threshold \( X \) is considered a duplication. The pair of code files containing these functions are then labeled as duplications. If our tool correctly identifies a code duplication pair, it is counted as correct for the respective code duplication type. If it infers a duplication pair incorrectly, it is counted as incorrect for all code duplication types. Table \ref{tab:bigclone} shows the results obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}.

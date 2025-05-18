@@ -2,11 +2,37 @@
 
 \section{Participant Observation Experiment}
 
-We have completed Phase 1 of ourdd research, during which we developed our proposed tool and evaluated it using the BigCloneBench dataset and through empirical analyses. The results indicate our tool can identify code clone duplications within the Linux kernel.
+For our initial participant observation, we attempted to mitigate two code duplications found by ArKanjo tool
+in the AMD Display driver applying our systematic approach presented in \ref{subsubsec:systematic}. 
+As presented in section \ref{sec:meteth}, we opted for applying the systematic approach in the functions 
+\textit{offset\_to\_id} and \textit{phy\_id\_to\_atom} in the folders \textit{dc/gpio} and \text{dc/bios} respectively.
 
-As the next step, we plan to conduct an ethnographic study as outlined in Section \ref{sec:meteth}. To preliminarily assess the potential impact of this research, we applied our systematic approach for mitigating code duplication to two pairs of functions. Table \ref{tab:patch} presents the initial results obtained from this process.
+Hereafter, the mitigation on \textit{offset\_to\_id} will be referred to as mitigation 1, and the mitigation on 
+\textit{phy\_id\_to\_atom} will be referred to as mitigation 2. Table \ref{tab:patch} summarizes the impact of the mitigations
+in terms of files and lines changed, and the refactoring method used. We present our experience and learning for each mitigation 
+in the next sections.
 
 \input{conteudo/results/table_patch}
+
+\subsection{Mitigation 1}
+
+On the process of the systematic approach, we found that the \textit{offset\_to\_id} function exist in 10 files, enclosing
+multiple GPU architectures. The duplicated functions are not exactly equals, as there are some minimal specific logics applied
+to each GPU architecture. To address this issue, we applied the extract method to break the function in smaller parts and the 
+parameterize method to address the specific logics for the GPU's.
+
+The base idea on how we would mitigate the duplications found were done, but we could not complete the refactoring on a state 
+capable to submit as a patch to the driver. 
+We found that the configuration files on the AMD Display driver are designed to be imported at compilation time
+using \textit{\#define} macros. The configuration files design choice makes the refactoring of duplications on generic 
+approachs trickier, as refactoring code that depends on these files requires significant refactor on the configuration files
+design and deep knowledge of the codebase, which us as first-timer contributors do not have. Thus, we opted to not continue 
+on investigating this mitigation.
+
+\subsection{Mitigation 2}
+
+
+\subsection{OLD}
 
 In the first function pair, completing the refactoring requires the expertise of a maintainer for the AMD Display driver. This observation is because duplicated code artifacts involve copy-pasted code that imports different configuration files. The design of the AMD Display driver configuration files necessitates importing specific configurations at compile time, which prevents a generic approach. Consequently, refactoring this pair requires changes in how the AMD Display driver manages configuration files -- a complex task that demands input from an expert or maintainer.
 
@@ -19,22 +45,4 @@ Additionally, we comprehended that AMD Display driver developers can not view du
 Regarding the patch content, only minor changes were requested to align with code 
 style and best practices that were initially unknown to us. More details of the 
 patch can be found in Appendix \ref{app:feedback}.
-
-\input{conteudo/results/cronograma}
-
-Finally, as indicated in our proposed schedule in Table \ref{fig:cronograma}, 
-our upcoming tasks include conducting the complete ethnographic study.
-This step will start with completing our systematic approach to code 
-duplication mitigation. Once we have finalized the mitigations, we intend 
-to submit them to the AMD Display driver mailing list to gather insights 
-and feedback from the maintainers regarding the changes we implemented.
-
-Our upcoming tasks also include implementing improvements to our proposed tool. 
-While the tool’s current state allowed us to conduct the experiments described in 
-Chapter \ref{cha:method},
-it is not yet adequately user-friendly or manageable for external users. 
-To achieve our complementary goal of providing a solution for code duplication 
-in the kernel, we plan to improve the documentation, refine the code structure, 
-and address any issues we encounter along the way, providing the Linux community 
-with a way to tackle the issue.
 
