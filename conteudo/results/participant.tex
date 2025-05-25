@@ -80,25 +80,4 @@ of the systematic approach proposed.
 This alternative allowed us to collect artifacts from the students experiences and findings, and not be 
 to dependable of the iteraction with the kernel community.
 A additional advantage is to accelerate the iteraction with the kernel community
-because we are not applying the whole systematic, meaning that the code changes became smaller.
-
-\subsection{OLD}
-
-In the first function pair, completing the refactoring requires the expertise of a maintainer for the AMD Display driver. 
-This observation is because duplicated code artifacts involve copy-pasted code that imports different configuration files.
-The design of the AMD Display driver configuration files necessitates importing specific configurations at compile time, 
-which prevents a generic approach. Consequently, refactoring this pair requires changes in how the AMD Display driver 
-manages configuration files -- a complex task that demands input from an expert or maintainer.
-
-The refactoring of the second function pair, however, was successful. We submitted this refactoring as a patch to the AMD 
-Display driver to obtain feedback from the maintainers. The process of sending the patch took more time than expected.
-We initially submitted the patch on August 9th, 2024, but we did not receive replies. As a result, we had to resend 
-it on October 9th, 2024 and received an initial response on November 3rd, 2024. 
-
-We understood new details about the driver evolution processes in discussions with our partner from the AMD Display driver.
-
-
-Regarding the patch content, only minor changes were requested to align with code 
-style and best practices that were initially unknown to us. More details of the 
-patch can be found in Appendix \ref{app:feedback}.
-
+because we are not applying the systematic approach, which translate to smaller code changes.

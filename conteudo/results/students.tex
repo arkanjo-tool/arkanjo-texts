@@ -10,7 +10,7 @@ responsability was to think of how to mitigate the duplication and sent the patc
 maintainers. The student that worked in the AMD Display driver have the additional work
 to use the tool to find the duplications.
 
-Appendix (CREATE APPENDIX AND ADD HERE X) has references
+Appendix \ref{app:stuart} has references
 to the artifacts discussed in this section, including the duplication function pairs that students 
 mitigate, the students's reports, the patch students sent to the linux kernel, and the 
 answers of the questionary asked to the student that worked in the AMD Display driver and the 
@@ -18,9 +18,59 @@ teaching assistant that used the tool to find duplications in the IIO.
 
 \input{conteudo/results/table_students}
 
-Table (CREATE TABLE AND ADD HERE X) summarizes the mitigation approachs of the students in terms 
-of lines changed and refactor methods used. BLABLABLA
+Table \ref{tab:stu} summarizes the mitigation approachs of students's groups in terms 
+of lines changed and refactor methods used. A total of seven groups applied the parameterize refactor method,
+and two groups applied the extractor method on their approaches to mitigate the duplications. 
+The other three groups does not applied any refactor methods presented in the literature. 
+We discuss the groups's approaches and the subsystem maintainers opinions on the patches that students
+sent.
 
+Groups one and four have worked in similar duplications, where there are two functions returning a boolean mirroring
+the results. That means, when the first function returns true, the second function returns false, and when the first
+functions returns false, the second function return false. The group one have a simple approach and the maintainers 
+approved the changes quickly. The group four attempted to mitigate the duplication with macros, which is a method 
+found in the code file they were working. The maintainers disagree with the proposed approach, arguing 
+that the proposed changes decreases the code readability and asked for a approach similar to the group one. 
+The group four submitted the patch after coding the approach proposed by the maintainers.
+
+Group three, six and ten created a struct to encapsulate the parameters to mitigate the duplication when 
+applying the parameterize method. The group three mitigation was send to the maintainers and the approved 
+without significant comments, while the patch from group ten was reject by the same maintainer that approved
+the patch from group three. The maintainer justification to reject the patch is that group ten refactored 
+code files that has simple context, threfore adding a layer of abstraction to remove a duplication 
+deacrease the code readability without clear gains on the codebase quality.
+
+Group seven and eight used the extract method to approach the mitigations. The group eight send the 
+mitigations to the maintainers and the code changes was approved with minor requested changes
+about code style and smaller errors fix. For the group seven mitigation, the maintainers reject 
+their patch because the code changes adds layers of abstractions on the code, turning it more complex
+and harder to read. The maintainers proposed to the group seven to remove the duplicated functions 
+and insert the duplicated code multiple times were the functions were being called. 
+This suggestion we could think that it is a bad practice for code quality, as adds more complexity and 
+responsibality to a bigger function, it is view as the best choice for removing layers of abstraction 
+and making the code easier to read.
+
+Group nine and eleven faced similar issue as us, where configurations files
+designed as macros complicates to approach the mitigations. Group nine applied the parameterize method
+to not need to know the configurations in the generic function, which is reasonable as the duplication
+approach only depends on one configuration value. Group eleven worked with multiple configuration values,
+and to refactor the duplication they proposed to create a bigger macro that encapsulates the other macros,
+which is a clever solution but adds abstraction and complexity on macros, which makes the code harder
+to debug and read. We do not get the feedback of the maintainers on the group eleven approach to know their 
+opinions.
+
+Group twelve is the student that executed the tool and pass throught the process of findings duplications.
+The student found a duplication in the driver that happens accross eighteen code files, creating a patch
+of removing four hundreds lines of duplicated code. 
+The student send the mitigations to the maintainers and their feedback pointed to fix warning in the code, 
+without arguing about removing the duplications.
+
+Analysing the students approaches for the duplications and the maintainers feedback, 
+we saw that people without previous experience in the linux kernel development could approach 
+duplications found by the ArKanjo tool and become contributors to the kernel. We observed that 
+not all duplications are view as code with bad quality, with the maintainers analysing the trade off
+between what is the purpose of the duplicated code, the code readability, and the levels of abstraction 
+added to address the duplications.
 
 \subsection{Questionary Answers}
 
