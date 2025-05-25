@@ -1,0 +1,112 @@
+\chapter{Survey Results}
+
+\label{app:survey}
+
+This appendix includes the questions asked in the survey for the teaching assistant and the
+student that used the ArKanjo tool. Teaching assistant's answers are showed as answer one and 
+the student's answers are showed as answer two.
+
+\paragraph{Question 1}
+
+\
+
+\textbf{Question:} How was your experience with the installation process of the tool? 
+If there were any difficulties during the installation, please indicate them. 
+Please rate the tool from one to five in regard to this aspect.
+
+\textbf{Answer 1:} At first I've tried to install it on Arch Linux
+(which is not officially supported by ArKanjo), and had some trouble to find and install 
+the corresponding dependencies. Then, I've decided to run it on an Ubuntu container and 
+had no problems with the installation. Score: 5 out of 5.
+
+\textbf{Answer 2:}
+
+\paragraph{Question 2}
+
+\
+
+\textbf{Question:}How was your experience with the documentation and using the tool in general? 
+Do you feel there were any missing or unclear parts in the documentation? If so, which ones?
+Rate the tool  from one to five related to the documentation.
+
+\textbf{Answer 1:} There were some misleading information about the usage of some flags, 
+but Luan clarified it all and committed to correct the documentation. These problems, 
+regarding similarity percentage for queries, didn't cause significant issues to use ArKanjo, 
+but limited my workflow a bit. Score: 4 out of 5.
+
+\textbf{Answer 2:}
+
+
+\paragraph{Question 3}
+
+\
+
+\textbf{Question:}Regarding the preprocessing step to find duplicates, where you pass the codebase. 
+Did you experience any difficulties with this process? How was the user experience? 
+Was it clear enough what the process was doing and why there might be a delay in execution?
+Rate the tool  from one to five related to the preprocessing step.
+
+\textbf{Answer 1:} Running the preprocessor was intuitive and the documentation covered 
+it all correctly. My only complaint is that I was only able to preprocess with the gensim method. 
+The diff strategy kept running for hours and didn't complete when I gave up. Score: 4 out of 5.
+
+\textbf{Answer 2:} 
+
+\paragraph{Question 4}
+
+\
+
+\textbf{Question:} Regarding executing the commands implemented in the tool, did you 
+have difficulty understanding what the tool's output represented and how to execute the commands?
+What is your opinion on the formatting and presentation of the output? Would you change anything 
+in the output presentation that you believe would improve the experience?
+Rate the tool  from one to five related to executing and understanding the output of the commands.
+
+\textbf{Answer 1:} The command outputs were very intuitive and easy to analyze. My only complaint 
+is that some of it is colored and this is problematic to output directly onto a file for further analysis, 
+since the color chars are preserved. I would suggest a new flag that decides if output is highlighted 
+with colors, and either default it to no-color or having a clear documentation about the output colors.
+Score: 4 out of 5.
+
+\textbf{Anyyswer 2:}
+
+\paragraph{Question 5}
+
+\
+
+\textbf{Question:} Did the tool meet your expectations? Do you believe it effectively 
+fulfills its purpose, that is, detecting code duplications?
+
+\textbf{Answer 1:} It did fill my expectations. I've collected a bunch of code duplications with ArKanjo,
+presented the most promissing results to other people and most of them resulted in merged patches to the 
+IIO and DRM subsystems.
+
+\textbf{Anyyswer 2:}
+
+\paragraph{Question 6}
+
+\
+
+\textbf{Question:} Based on your current knowledge of the tool, do you have any ideas 
+for new features that you consider relevant or interesting?
+
+\textbf{Answer 1:} I would suggest polishing the diff heuristic to find duplications and/or add new ones. 
+Setting output colors with flags would be a good addition. Flags to highlight duplications that happen on 
+a same file or directory would also be good.
+
+\textbf{Anyyswer 2:}
+
+\paragraph{Question 7}
+
+\
+
+\textbf{Question:} Please provide any additional comments or insights you would like to 
+share that have not been covered in the previous questions.
+
+\textbf{Answer 1:} For some decentralized codebases, where a directory is maintained by different people 
+and open source communities, such as the Linux Kernel, it would be interesting to be able to filter 
+duplications that happen on a same file or directory. When using ArKanjo, I had to use external scripting 
+and AI to do this, and it would be great if ArKanjo had built-in features for output analysis.
+Otherwise, great tool that helped the improvement of code quality and reduce technical debt.
+
+\textbf{Answer 2:}
