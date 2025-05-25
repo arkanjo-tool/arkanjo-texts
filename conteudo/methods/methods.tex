@@ -1,6 +1,6 @@
 We employ a multi-method research approach, using different methodologies to achieve our goals
 to approach code duplication in some of the Linux subsystems. 
-To validate if the Arkanjo tool is capable of finding code duplications, 
+To validate if the ArKanjo tool is capable of finding code duplications, 
 applied two independent methods and perform triangulation on the results. 
 
 The first method evaluates the proposed tool using an approach from the literature, 
@@ -26,9 +26,6 @@ a code duplication found in the AMD Display Driver and sent it as a PATCH to ite
 Linux community and get their feedback. On a second phase, we proposed to students on the 
 course Free Software Development at University São Paulo to mitigate the code duplications found 
 by the tool in the IIO subsystems and the AMD Display Driver and pass the process of send the mitigations as PATCH.
-(DOUBLE CHECK IF THE STUDENTS HAVE SENT THE PATCHES). 
-
-\todo[inline]{I SHOULD mention that the test on the tool were made using the gensim similarity method and not the git method.}
 
 \section{Evaluation of the Tool by the BigCloneBench dataset}
 
@@ -46,8 +43,6 @@ To understand the impact of varying the similarity threshold, we evaluated our t
 
 \label{sec:metemp}
 
-\todo[inline]{I just mention the problem, maybe a more explictly mention of the problem here or on the background would be good.}
-
 Due to the limitations of the BigCloneBench dataset, as noted by \cite{bigfail}, and its lack of suitability 
 for our context (Java dataset vs. C-based Linux kernel), we complemented the BigCloneBench evaluation with 
 an empirical study of the tool inferred duplications.
@@ -57,8 +52,6 @@ Given the vast number of lines and components in the Linux kernel, analyzing eve
 In this empirical analysis, we randomly sampled function pairs identified by the tool as duplicates. For each similarity threshold \(X\) (30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, and 100\%), we randomly selected ten function pairs with a similarity close to \(X\), allowing for a 1\% deviation. We implemented the random selection using the tool's source code.
 
 Appendix \ref{app:emp} lists the randomly selected function pairs. We empirically evaluated these pairs to determine if they were duplications, comparing these results with the literature-based method to assess our tool's effectiveness and understand the impact of the minimum similarity parameter.
-
-\todo[inline]{Take care: Big focus on AMD display driver and the tone of the writing supports the focus. }
 
 \section{Ethnographic Study}
 
@@ -135,16 +128,14 @@ functions across all collection files. We then applied specific refactoring meth
 function. If the functions were identical across files, we removed the duplicates and created a single 
 function in the library. If modifications existed, we applied case-specific refactoring.
 
-\subsection{Research with students}
-
-\todo[inline]{Research with students does not look good.}
+\subsection{Study with University Students}
 
 Posterior of the initial participant observation that we made, we decided to expand the experiment 
 by proposing to students mitigate duplication found by the tool and send patches to the kernel community.
 
 In the Free Software Development course at University of São Paulo, ministred by the advisor 
 of this work at the first semester of 2025, we have proposed to the students the possibility
-of mitigating duplications in the IIO subsystem and the AMD display driver found with the Arkanjo tool.
+of mitigating duplications in the IIO subsystem and the AMD display driver found with the ArKanjo tool.
 The course had a total of 26 students, and of that, X students being undergraduate students
 and Y begin graduate students.
 
@@ -154,12 +145,12 @@ professor and teaching assistants prepares multiple alternatives on how to contr
 including simple contributions as updating documentation or code style fixes. In this context, 
 we have proposed two alternatives for the students related to the tool.
 
-For the first alternative, one of the teaching assistants used the Arkanjo tool in the IIO subsystem and
+For the first alternative, one of the teaching assistants used the ArKanjo tool in the IIO subsystem and
 listed interesting duplicated functions pair that the groups can simple mitigate this specific duplication pair, 
 and it is up to the students on how
 to refactor the code to mitigate the duplications and pass through the process to send patches to the IIO 
 maintainers to review. For the second alternative, we propose a similar experience then the 
-participant observation method, where the students pass through the whole process of executing the Arkanjo tool
+participant observation method, where the students pass through the whole process of executing the ArKanjo tool
 in the AMD display driver, analyze the duplications found, create a patch to mitigate a duplication and sent
 the patch to the AMD display driver's maintainers.
 
@@ -175,6 +166,6 @@ experience of submiting a patch to the Linux kernel in blogs. We had analyzed th
 patterns of refactor used for mitigating the duplications, the experience on send the patches and the 
 opinions of the subsystem maintainers on the mitigations. 
 
-For the teaching assistant and the student that executed the Arkanjo tool to explore duplications, 
+For the teaching assistant and the student that executed the ArKanjo tool to explore duplications, 
 we have asked them to answer some questions related to the experience of using the tool and what could be
 improved. The questions asked is the following: 
