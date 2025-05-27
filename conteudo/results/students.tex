@@ -74,7 +74,56 @@ added to address the duplications.
 
 \subsection{Survey Results Analysis}
 
-BLABLABLA
+We asked for the teaching assistant and the student that used the ArKanjo to answer a survey with some 
+question related to the tool experience, such as installation, documentation, facility of use, new ideas
+to improve the tool, etc. Appendix \ref{app:survey} has the complete survey with the answers.
+
+Related to the tool installation, the teaching assistant nor the students faced issues installing on the
+Debian distributions, although the teaching assistant attempted to install in the Arch Linux distribution and
+failed to install on this linux distribution.  About the tool documentation, the teaching assistant pointed errors in 
+the documentation that worsed his experience. The student asked for more examples 
+and tutorials on using the tool, in text or video formats. 
+
+On the ArKanjo tool preprocessing step, the student reported problems of disk space usage and crash errors,
+which we knew that could happen as the tool iterates and can save information about every pair of functions in
+a codebase, as we did not implemented any mechanism to control the memory usage. The teaching assistant reported 
+to only be able to execute the preprocessor with the \textit{gensim} similarity method, and the \textit{diff}
+method kepted running for hours without finishing. This was a unexpected behaviour to us, as the \textit{gensim}
+is a text similarity method while the \textit{diff} method is a simple counter of common lines with a operation system
+default command. The teaching assistant report corroborate the \textit{gensim} efficiency.
+
+Related to the functionalites of the tool, both the student assistant and the student 
+reported a missing of a mechanism to save the tool results on a separated file instead of the terminal output.
+The tool by default outputted with colors as show in the section \ref{subsec:func}, which complicates to redirect
+the terminal output to a file.
+
+We asked the overall impression of the tool and if met their expectations and to give a score from one 
+to five to installation, documentation, preprocessing, and functionalites. 
+Both the teaching assistant and the student gave a score of at least 4 to each mentioned point,
+thought that the tool fulfill their expectations and have a overall good experience.
+
+Finally, the teaching assistant the the student reported features ideas to the tool that may be interesting, which 
+is as follow:
+
+\begin{itemize}
+
+\item Enable the possibility to have several codebases preprocessor artifacts and to select one of them.
+
+\item Addition of different methods to find duplication.
+
+\item Addition of more filters to search duplication, such as , find duplicates with
+more than 90\% of similarity and more than 20 lines repeated.
+
+\item Addition of options to highligh and filter duplications that happen on same file or directory.
+
+\item Addition of support to save the tool output in files without manual preprocessing of the colored output.
+
+\end{itemize}
+
+With the survey feedback, we understood the the users had a good experience and found value in the ArKanjo tool,
+and provided critical points that could be improved in the tool. The most critical issues reported had been fixed,
+such as documentation errors and support for multiple linux distribution and different operation system. 
+The less critical issues became a open point that can be addressed in future works.
 
 \subsection{Students Contribution to the Tool}
 
