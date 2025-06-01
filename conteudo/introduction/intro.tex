@@ -9,8 +9,12 @@ people, demonstrating the importance of maintaining the kernel
 \citep{linuxdata}.
 
 Maintaining the Linux kernel is a complex task, as the project contains more
-than 19 million lines of code and has had over thirteen thousand contributors
-throughout its lifespan \citep{linuxquantity}. Given the magnitude of the Linux
+than 28 million lines of code and has had over twenty thousand contributors
+throughout its lifespan
+\footnote{Data directly extracted from Linux github repository \citep{linuxrepo}.
+Counted  28783390 lines of code and 20699 number of contributors in May 29th, 2025.
+Number of contributors counted as number of unique full name listed as author of a patch.}.
+Given the magnitude of the Linux
 kernel project, it is unrealistic to expect that all contributors have
 consistently followed the best programming practices and principles in every
 contribution made to the project. Consequently, it is expected that a
@@ -34,8 +38,6 @@ given that AMD GPUs represented 19\% of the personal GPU market in 2023
 driver, they shared with us their challenges regarding one of the
 characteristics of low-quality code artifacts: duplicated code, which hampers
 the maintenance of the driver.
-
-\todo[inline]{Require updated information about the linux kernel. Required from qualification exam.}
 
 In searching for solutions to the AMD Display driver problem related to
 duplicated code artifacts, we found tools capable of determining, given two
