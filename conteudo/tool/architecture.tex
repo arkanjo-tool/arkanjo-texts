@@ -41,33 +41,34 @@ Regarding the programming language's function extractor, we approached this prob
 
 \subsubsection{C Programming Language}
 
-For a source file in the C programming language, we extract the code blocks with depth 0, as per the programming 
-language's grammar, functions are defined in a global context at depth 0. To extract the code blocks, we firstly need to 
-identify the portions of code that are comments or \textit{\#define} directives and we mark them as irrelevant, after that, 
-it is simple work of finding the curly brackets that are in depth 0, and with that we find the body of the functions. 
+For a source file in the C programming language, we extract the code blocks with depth 0; 
+as per the programming language’s grammar, functions are defined in a global context at depth 0. 
+To extract the code blocks, we first need to identify the portions of code that are comments or 
+\textit{\#define} directives and mark them as irrelevant. After that, it is simple work to find 
+the curly brackets in depth 0, and with that, we find the body of the functions.
 
-To extract the header of the functions, we start at the open curly brackets and go back in the source file consireding 
-the programming language grammar  and the portions of code that have been marked as irrelevant because of comments and 
-\textit{\#define} directives.
-
-There are other elements in depth 0 that are not functions, we analyze if the code blocks is of a function at the same 
-we try to extract the header of the code block.
-
+To extract the header of the functions, we start at the open curly brackets and go back in the 
+source file considering the programming language grammar and the portions of code that have been 
+marked as irrelevant because of comments and \textit{\#define} directives.
+There are other elements in depth zero that are not functions. We analyze whether the code blocks 
+are functions at the same time that we extract the header of the code block.
 
 \subsubsection{Java Programming Language}
 
-For the Java programming language, we have decided to implemente a simpler approach that does not support 
-the programming language completely, as the only Java codebase explored in this work is the BigCloneBench \citep{bigclonebench} and 
-the approach implemented cover the needs of this codebase.
+For the Java programming language, we have decided to implement a more straightforward approach 
+that does not support the programming language completely, as the only Java codebase explored in 
+this work is the BigCloneBench \citep{bigclonebench}, and the approach implemented covers the 
+needs of this codebase.
 
-For a source file in Java, we extract the code blocks with depth 1 and some code lines before the definition of the code block. 
-Then, we check if the code blocks are functions by analyzing if the first non-empty character before the curly brackets of 
-the code block is a closing parenthesis. 
+For a source file in Java, we extract the code blocks with depth one and some code lines before 
+defining them. Then, we check if the code blocks are functions by analyzing whether the first 
+non-empty character before the curly brackets of the code block is a closing parenthesis.
 
-As per Java's grammar, functions are defined inside classes and can exist at different depths, as Java accepts inner classes, 
-that means that this approach does not work with inner classes. The challenge to implement a more generic approach 
-is that other elements of depth 2 or deeper, such as for-loops, can follow the closing parenthesis pattern, necessitating 
-a better analysis to different these elements. The BigCloneBench \citep{bigclonebench} does not contains inner classes.
+As per Java’s grammar, functions are defined inside classes and can exist at different depths. 
+As Java accepts inner classes, this approach does not work with inner classes. The challenge 
+to implementing a more generic approach is that other elements of depth two or deeper, such 
+as for-loops, can follow the closing parenthesis pattern, necessitating a better analysis of 
+these elements. The BigCloneBench \citep{bigclonebench} does not contain inner classes.
 
 \subsection{Temporary codebase}
 
@@ -90,10 +91,11 @@ If the similarity is greater than or equal to the minimum similarity threshold
 (a parameter provided by the user during the Preprocessor), we store this pair of functions along with its 
 similarity in the Code Duplication Database.
 
-We implemented two methods for code duplication detection in the tool, in which the user can choose what to use.
-The first method is based in text similarity, the second is based in simpler method based on the number of equal lines.
-The experiments and tests on this research were done using the text similarity method, the purpose of the 
-second method is to demonstrate that the tool can have multiple duplication detection methods.
+We implemented two methods for code duplication detection in the tool, which the user can 
+choose to use. The first method is based on text similarity, and the second is simpler and 
+based on the number of equal lines. The experiments and tests in this research were done 
+using the text similarity method. The purpose of the second method is to demonstrate that 
+the tool can have multiple duplication detection methods.
 
 \subsubsection{Text Similarity Method}
 
@@ -119,19 +121,19 @@ we adapted Plates' implementation.
 \subsubsection{Difference Method}
 
 For the difference method, 
-we implemented a method considering the number of exactly equal lines between two functions.
+we implemented a method that considered the number of exactly equal lines between two functions.
 For two functions \textit{function1} and \textit{function2}, let $NL_1$ be the number of lines in \textit{function1},
 $NL_2$ be the number of lines in \textit{function2}, and $EQ$ be the number of equal lines between \textit{function1} and
 \textit{function2}, we compute the similarity with the formula:
 
 $$\frac{2 \cdot EQ}{NL_1 + NL_2}$$
 
-This code duplication method is considerably simpler and more explainable then the text similarity method, 
+This code duplication method is considerably simpler and more explainable than the text similarity method, 
 as the metric is the ratio of common lines between the two functions. To compute the number of equal lines, we use
-the \textit{diff command} built-in in the Linux environment \citep{diffcommand}.
+the \textit{diff} command built-in in the Linux environment \citep{diffcommand}.
 
-The difference method was not tested on the evaluation of the tool and other phases of this research. 
-The method was implemented to show that tool can have multiple duplication detection methods.
+We did not test the Diff method during the tool evaluation and other phases of this research. 
+We implemented the technique to show that a tool can have multiple duplication detection methods.
 
 \subsection{Code Duplication Database}
 

@@ -1,151 +1,157 @@
 \section{Study with University Students}
 
-As presented in chapter \ref{cha:method}, we propose to students to mitigate duplications
-found by the ArKanjo tool and send patches to the linux subsystems maintainers, while
-documenting their experiences and learning through the process. 
+As presented in Chapter \ref{cha:method}, we propose that students mitigate duplications 
+found by the ArKanjo tool, send patches to the Linux subsystem maintainers, and document 
+their experiences and learnings.
 
-For the students that worked
-in the IIO subsytems, we gave them duplicated function pairs found by the tool and their 
-responsability was to think of how to mitigate the duplication and sent the patch to the 
-maintainers. The student that worked in the AMD Display driver have the additional work
-to use the tool to find the duplications.
+For the students who worked in the IIO subsystems, we gave them duplicated function pairs 
+found by the tool, and their responsibility was to think of how to mitigate the duplication 
+and send the patch to the maintainers. The student that worked in the AMD Display driver 
+have the additional work to use the tool to find the duplications.
 
-Appendix \ref{app:stuart} has references
-to the artifacts discussed in this section, including the duplication function pairs that students 
-mitigate, the students's reports, the patch students sent to the linux kernel, and the 
-answers of the questionary asked to the student that worked in the AMD Display driver and the 
-teaching assistant that used the tool to find duplications in the IIO.
+Appendix \ref{app:stuart} has references to the artifacts discussed in this section, 
+including the duplication function pairs that students mitigate, the students’ reports, 
+the patch students sent to the Linux kernel, and the answers to the questionnaire asked 
+of the students who worked in the AMD Display driver and the teaching assistant that used 
+the tool to find duplications in the IIO.
 
 \input{conteudo/results/table_students}
 
-Table \ref{tab:stu} summarizes the mitigation approachs of students's groups in terms 
-of lines changed and refactor methods used. A total of seven groups applied the parameterize refactor method,
-and two groups applied the extractor method on their approaches to mitigate the duplications. 
-The other three groups does not applied any refactor methods presented in the literature. 
-We discuss the groups's approaches and the subsystem maintainers opinions on the patches that students
-sent.
+Table \ref{tab:stu} summarizes students' groups' mitigation approaches regarding lines 
+changed and refactor methods used. Seven groups applied the parameterized refactor method, 
+and two applied the extractor method to their approaches to mitigate the duplications. 
+The other three groups do not use any refactor methods presented in the literature. 
+We discuss the groups' approaches and the subsystem maintainers' opinions on the patches 
+that students sent.
 
-Groups one and four have worked in similar duplications, where there are two functions returning a boolean mirroring
-the results. That means, when the first function returns true, the second function returns false, and when the first
-functions returns false, the second function return false. The group one have a simple approach and the maintainers 
-approved the changes quickly. The group four attempted to mitigate the duplication with macros, which is a method 
-found in the code file they were working. The maintainers disagree with the proposed approach, arguing 
-that the proposed changes decreases the code readability and asked for a approach similar to the group one. 
-The group four submitted the patch after coding the approach proposed by the maintainers.
+Groups one and four have worked in similar duplications, where two functions return a 
+boolean mirroring the results. That means when the first function returns true, the second 
+function returns false, and when the first function returns false, the second function 
+returns false. Group one had a simple approach, and the maintainers approved the changes quickly. 
+Group four attempted to mitigate the duplication with macros, a method found in the code file 
+they were working on. The maintainers disagreed with the proposed approach, arguing that the 
+proposed changes decrease the code readability, and asked for an approach similar to group one. 
+Group four submitted the patch after coding the approach proposed by the maintainers.
 
-Group three, six and ten created a struct to encapsulate the parameters to mitigate the duplication when 
-applying the parameterize method. The group three mitigation was send to the maintainers and the approved 
-without significant comments, while the patch from group ten was reject by the same maintainer that approved
-the patch from group three. The maintainer justification to reject the patch is that group ten refactored 
-code files that has simple context, threfore adding a layer of abstraction to remove a duplication 
-deacrease the code readability without clear gains on the codebase quality.
+Groups three, six, and ten created a struct to encapsulate the parameters and mitigate duplication 
+when applying the parameterized method. Group three sent the mitigation to the maintainers and 
+approved it without significant comments. In contrast, the patch from group ten was rejected by 
+the same maintainer who approved the patch from group three. The maintainer justification to reject 
+the patch is that group ten refactored code files that has simple context, threfore adding a layer 
+of abstraction to remove a duplication deacrease the code readability without clear gains on 
+the codebase quality.
 
-Group seven and eight used the extract method to approach the mitigations. The group eight send the 
-mitigations to the maintainers and the code changes was approved with minor requested changes
-about code style and smaller errors fix. For the group seven mitigation, the maintainers reject 
-their patch because the code changes adds layers of abstractions on the code, turning it more complex
-and harder to read. The maintainers proposed to the group seven to remove the duplicated functions 
-and insert the duplicated code multiple times were the functions were being called. 
-This suggestion we could think that it is a bad practice for code quality, as adds more complexity and 
-responsibality to a bigger function, it is view as the best choice for removing layers of abstraction 
-and making the code easier to read.
+Groups seven and eight used the extract method to approach the mitigations. Group eight sent the 
+mitigations to the maintainers, and the code changes were approved, with minor requested changes 
+in code style and smaller errors fixed. For group seven mitigation, the maintainers reject their 
+patch because the code changes add layers of abstractions to the code, making it more complex and 
+challenging to read. The maintainers proposed that group seven remove the duplicated functions and 
+insert the duplicated code multiple times where the functions were being called. This suggestion 
+may be bad practice for code quality, as it adds more complexity and responsibility to a bigger 
+function; it is viewed as the best choice for removing layers of abstraction and making the 
+code easier to read.
 
-Group nine and eleven faced similar issue as us, where configurations files
-designed as macros complicates to approach the mitigations. Group nine applied the parameterize method
-to not need to know the configurations in the generic function, which is reasonable as the duplication
-approach only depends on one configuration value. Group eleven worked with multiple configuration values,
-and to refactor the duplication they proposed to create a bigger macro that encapsulates the other macros,
-which is a clever solution but adds abstraction and complexity on macros, which makes the code harder
-to debug and read. We do not get the feedback of the maintainers on the group eleven approach to know their 
-opinions.
+Groups nine and eleven faced similar issues to those in Mitigaiton 1 on our participant observation 
+experiment, where configuration files designed as macros complicated the approach to the mitigations. 
+Group nine applied the parameterized method so as not to need to know the configurations in the 
+generic function, which is reasonable as the duplication approach only depends on one configuration 
+value. Group eleven worked with multiple configuration values, and to refactor the duplication, 
+they proposed to create a bigger macro that encapsulates the other macros, which is a clever 
+solution but adds abstraction and complexity to macros, which makes the code harder to debug and read.
+We do not get the feedback of the maintainers on the group eleven approach to know their opinions.
 
-Group twelve is the student that executed the tool and pass throught the process of findings duplications.
-The student found a duplication in the driver that happens accross eighteen code files, creating a patch
-of removing four hundreds lines of duplicated code. 
-The student send the mitigations to the maintainers and their feedback pointed to fix warning in the code, 
-without arguing about removing the duplications.
+Group twelve is the student who executed the tool and passed through the process of finding 
+duplications. The student found a duplication in the driver that happened across eighteen code files, 
+creating a patch to remove four hundred lines of duplicated code. The student sent the mitigations 
+to the maintainers, and their feedback pointed to fixing the warning in the code without arguing 
+about removing the duplications.
 
-Analysing the students approaches for the duplications and the maintainers feedback, 
-we saw that people without previous experience in the linux kernel development could approach 
-duplications found by the ArKanjo tool and become contributors to the kernel. We observed that 
-not all duplications are view as code with bad quality, with the maintainers analysing the trade off
-between what is the purpose of the duplicated code, the code readability, and the levels of abstraction 
-added to address the duplications.
+Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that 
+people without previous experience in Linux kernel development could approach duplications found 
+by the ArKanjo tool and become contributors to the kernel. We observed that not all duplications 
+are viewed as code with bad quality, with the maintainers analyzing the trade-off between the 
+purpose of the duplicated code, code readability, and the levels of abstraction added to 
+address the duplications.
 
 \subsection{Survey Results Analysis}
 
-We asked for the teaching assistant and the student that used the ArKanjo to answer a survey with some 
-question related to the tool experience, such as installation, documentation, facility of use, new ideas
-to improve the tool, etc. Appendix \ref{app:survey} has the complete survey with the answers.
+We asked the teaching assistant and the students who used the ArKanjo to answer a survey with 
+some questions related to the tool experience, such as installation, documentation, facility of 
+use, new ideas to improve the tool, etc. Appendix \ref{app:survey} has the complete survey 
+with the answers.
 
-Related to the tool installation, the teaching assistant nor the students faced issues installing on the
-Debian distributions, although the teaching assistant attempted to install in the Arch Linux distribution and
-failed to install on this linux distribution.  About the tool documentation, the teaching assistant pointed errors in 
-the documentation that worsed his experience. The student asked for more examples 
-and tutorials on using the tool, in text or video formats. 
+Related to the tool installation, neither the teaching assistant nor the students faced issues 
+installing on the Debian distributions. However, the teaching assistant attempted to install it 
+in the Arch Linux distribution and failed to install it on this Linux distribution. 
+Regarding the tool's documentation, the teaching assistant pointed out errors that worsened his 
+experience. The student asked for more examples and tutorials on using the tool in text or 
+video formats.
 
-On the ArKanjo tool preprocessing step, the student reported problems of disk space usage and crash errors,
-which we knew that could happen as the tool iterates and can save information about every pair of functions in
-a codebase, as we did not implemented any mechanism to control the memory usage. The teaching assistant reported 
-to only be able to execute the preprocessor with the \textit{gensim} similarity method, and the \textit{diff}
-method kepted running for hours without finishing. This was a unexpected behaviour to us, as the \textit{gensim}
-is a text similarity method while the \textit{diff} method is a simple counter of common lines with a operation system
-default command. The teaching assistant report corroborate the \textit{gensim} efficiency.
+On the ArKanjo tool preprocessing step, the student reported problems of disk space usage and 
+crash errors, which we knew could happen as the tool iterates and can save information about 
+every pair of functions in a codebase, as we did not implement any mechanism to control the 
+memory usage. The teaching assistant reported only being able to execute the preprocessor with 
+the text similarity method, and the diff method kept running for hours without finishing. 
+The teaching assistant's report was unexpected behavior for us, as the text similarity method 
+initially looked more complex; in contrast, the \textit{diff} method is a simple counter of equal lines 
+with an operation system default command. The teaching assistant report corroborates the 
+gensim efficiency \citep{gensim}.
 
-Related to the functionalites of the tool, both the student assistant and the student 
-reported a missing of a mechanism to save the tool results on a separated file instead of the terminal output.
-The tool by default outputted with colors as show in the section \ref{subsec:func}, which complicates to redirect
-the terminal output to a file.
+Related to the tool's functionalities, both the student assistant and the student reported 
+a missing mechanism to save the tool results on a separate file instead of the terminal output. 
+The tool, by default, outputted with colors, as shown in section \ref{subsec:func}, which complicates 
+redirecting the terminal output to a file.
 
-We asked the overall impression of the tool and if met their expectations and to give a score from one 
-to five to installation, documentation, preprocessing, and functionalites. 
-Both the teaching assistant and the student gave a score of at least 4 to each mentioned point,
-thought that the tool fulfill their expectations and have a overall good experience.
+We asked for the overall impression of the tool and if it met their expectations. We also asked 
+them to give a score of one to five for installation, documentation, preprocessing, and functionalities. 
+Both the teaching assistant and the student scored at least four on each mentioned point, thought that 
+the tool fulfilled their expectations, and had an overall good experience. Finally, the teaching assistant 
+the the student reported features ideas to the tool that may be interesting, which 
+are showed below.
 
-Finally, the teaching assistant the the student reported features ideas to the tool that may be interesting, which 
-is as follow:
+\paragraph{List of Possible Improvements}
 
 \begin{itemize}
 
-\item Enable the possibility to have several codebases preprocessor artifacts and to select one of them.
+\item Enable the possibility of having several codebases of preprocessor artifacts and selecting one of them.
 
-\item Addition of different methods to find duplication.
+\item Add different methods to find duplication.
 
-\item Addition of more filters to search duplication, such as , find duplicates with
-more than 90\% of similarity and more than 20 lines repeated.
+\item Adding more filters to search for duplicates, such as finding duplicates with more than 90\% 
+similarity and more than 20 lines repeated.
 
-\item Addition of options to highligh and filter duplications that happen on same file or directory.
+\item Add options to highlight and filter duplications on the same file or directory.
 
 \item Addition of support to save the tool output in files without manual preprocessing of the colored output.
 
 \end{itemize}
 
-With the survey feedback, we understood the the users had a good experience and found value in the ArKanjo tool,
-and provided critical points that could be improved in the tool. The most critical issues reported had been fixed,
-such as documentation errors and support for multiple linux distribution and different operation system. 
-The less critical issues became a open point that can be addressed in future works.
+With the survey feedback, we understood that users had a good experience and found value in the 
+ArKanjo tool. They also provided critical points that could be improved. The most critical 
+reported issues, such as documentation errors and a lack of support for multiple Linux distributions 
+and different operating systems, have been fixed. Less critical issues remain open points that 
+can be addressed in future work.
 
 \subsection{Students Contribution to the Tool}
 
-For the two groups opted to contribute directly to the ArKanjo tool development, 
-we listed multiple issues existed in the tool. The first group opted for working 
-in expand the tool suport for multiple operation systems. Some libraries used in the 
-tool development only had support for the Ubuntu distribution, and the first group was 
-responsible to migrate these libraries to libraries that have support to multiple operation
-systems. This issue was of our knowledge and pointed by the teaching assistant in the survey, as 
-he faced the issue while using the tool.
+We listed multiple issues in the tool for the two groups that opted to contribute directly 
+to developing the ArKanjo tool. The first group opted to work on expanding the tool's support 
+for multiple operating systems. Some libraries used in the tool development only supported the 
+Ubuntu distribution, and the first group was responsible for migrating these libraries to 
+libraries with support for multiple operating systems. This issue was of our knowledge and 
+was pointed out by the teaching assistant in the survey, as he reported the problem while 
+using the tool.
 
-The second group opted for working in a webpage for the tool documentation and support 
-for light and dark mode. The colored output presented in the figures in Chapter \ref{cha:tool} 
-were hard coded at first, does not considering the user terminal colors, 
-thus giving a bad user experience. The website is helpfull to 
-faciliate people to contribute or use the tool. We did not know how to approach the light and 
-dark mode at first and have not needed to look on how
-to fix the issue as the group search and found a solution on his own. 
+The second group opted to work on a webpage for the tool documentation and support for 
+light and dark modes. The colored output presented in the figures in Chapter \ref{cha:tool} was 
+hard coded at first, not considering the user terminal colors, thus giving a bad user experience. 
+The website helps facilitate people's contribution or use of the tool. We did not know how to 
+approach the light and dark modes at first and did not need to look at how to fix the issue as 
+the group searched and found a solution.
 
-The students successfully delivered the issues fix proposed. We found interesting to see 
-people able to contribute to the tool on issues that even us did not know how to approach.
-The issues helps the user experience and facilitates other researches using the ArKanjo tool 
-that we may explore in future works. Appendix \ref{app:contribution} has references to the
-students contributions, the issue list proposed to the students and figures of the 
-documentation webpage.
+The students successfully delivered the issues proposed. We found it interesting to see 
+people able to contribute to the tool on the problems that we did not even know how to approach.
+The issues help the user experience and facilitate other research using the ArKanjo tool that 
+we may explore in future works. Appendix \ref{app:contribution} references the 
+students' contributions, the issue list proposed to the students, and figures from 
+the documentation webpage.

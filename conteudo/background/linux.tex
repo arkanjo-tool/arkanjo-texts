@@ -1,9 +1,9 @@
 \en
 
 This chapter presents an overview of fundamental topics needed to understand 
-the research, such as Linux Kernel, refactoring, types of code duplication, 
+the research, such as the Linux Kernel, refactoring, types of code duplication, 
 code duplication detection methods presented in the literature and ways to 
-evaluating these methods. This foundation will make it easier to grasp the 
+evaluate these methods. This foundation will make it easier to grasp the 
 concepts discussed in the research.
 
 \section{The Linux Kernel}
@@ -19,7 +19,7 @@ such as system
 \citep{gnuref}. Examples of Linux distributions are Ubuntu \citep{ubuntu} 
 and Arch Linux \citep{archlinux}.
 
-The Linux kernel is monolithic and organized into a set of subsystems, such as
+The Linux kernel is monolithic and organized into subsystems, such as
 the process scheduler, memory management, device driver infrastructure,
 networking, and filesystems \citep{melissa}. Each subsystem typically has a
 dedicated maintainer or a team of maintainers responsible for overseeing its
@@ -27,7 +27,7 @@ development and managing contributions \citep{melissa}.
 
 Development contributions to the Linux kernel are coordinated using the Git
 version control system. These contributions are formatted as patches—text
-documents that outline the differences between two versions of the source code.
+documents that outline the differences between two source code versions.
 These patches are then submitted and reviewed via the Linux mailing lists
 \citep{melissa}.
 
@@ -45,7 +45,7 @@ is responsible for implementing the drivers needed for AMD GPUs to function
 correctly in a Linux environment. The maintainers of this subsystem have
 reported a practical issue: a significant amount of duplicated code, which
 complicates the maintenance of this subsystem. This problem serves as the
-starting point for our research, with the AMD Display Driver as our primary
+starting point for our research, with the AMD Display driver as our primary
 object of study as we aim to understand and mitigate code duplication in the
 Linux kernel. The AMD Display driver subsystem contains more then 391000 lines 
 of code and more then 1089 code files
@@ -58,17 +58,19 @@ subsystems, discussions about the AMD Display driver are conducted on its
 designated mailing list, which can be accessed here: 
 \url{https://lists.freedesktop.org/mailman/listinfo/amd-gfx}.
 
-Another subsytem within the Linux kernel explored in this work is the Industrial
-I/O subsytem (IIO). From the Linux kernel documentation, ''The main purpose of the 
-Industrial I/O subsystem (IIO) is to provide support for devices that in some sense 
-perform either analog-to-digital conversion (ADC) or digital-to-analog conversion (DAC) or both``\citep{iiodoc}.
-The IIO subsystem contains more then X lines of code and more then Y code files 
+Another subsystem within the Linux kernel explored in this work is the
+Industrial I/O subsystem (IIO). According to the Linux kernel documentation, 
+''The main purpose of the Industrial I/O subsystem (IIO) is to provide support 
+for devices that in some sense perform either analog-to-digital conversion (ADC) 
+or digital-to-analog conversion (DAC) or both''\citep{iiodoc}. The IIO subsystem 
+contains more than X lines of code and more than Y code files
 \footnote{
 Data extracted directly from the Linux repository with the help of the clol tool. \citep{cloc}
 }.
-We opted to include the IIO subsystem in our experiments to ensure our findings are not limited to a single subsystem. 
-Additionally, we have an established point of contact within the IIO subsystem to facilitate this work.
-. Like other subsystems, discussions about the IIO subsytem are conducted on its 
+We opted to include the IIO subsystem in our experiments to ensure our findings 
+are not limited to one subsystem. Additionally, we have an established point of
+contact within the IIO subsystem to facilitate this work.
+Like other subsystems, discussions about the IIO subsytem are conducted on its 
 designated mailing list, which can be found here: 
 \url{https://subspace.kernel.org/vger.kernel.org.html}.
 
@@ -76,23 +78,22 @@ designated mailing list, which can be found here:
 \subsection{Diff command}
 
 The \textit{diff} command is a command line in Linux that allows the user to compare 
-two files line by line \citep{diffcommand}. There are multiple forms 
-that the results of the command can be shown, one example of the command being executed 
-can be found in Figure \ref{fig:diff}. With the command results, it is easy to visualize and extract 
-the number of lines that are equal and different between the two compared files.
-
+two files line by line \citep{diffcommand}. There are multiple forms in which the command 
+results can be shown to the user, and Figure \ref{fig:diff} shows one of them. 
+With the command results, it is easy to visualize and extract the number of lines that 
+are equal and different between the two compared files.
 
 \begin{figure}
-\includegraphics[scale=0.3]{diff_command}
+\includegraphics[scale=0.25]{diff_command}
 \caption{Example of \textit{diff} command executed}
-File 1 content is shown in red and file 2 content is shown in green. \textit{-} 
-represents a line that only exist in file 1, \textit{+} represents a line that only exist in file 2,
-\textit{!} represents a line that exist in both file but has modifications between them, and empty on the
-start of a line represents that the line exist in both files without any modifications.
+File 1's content is shown in red, and file 2's content is shown in green. \textit{-} 
+represents a line that only exists in file 1, \textit{+} represents a line that only 
+exists in file 2,\textit{!} represents a line that exists in both files but has modifications 
+between them, and empty at the start of a line represents that the line exists in 
+both files without any modifications.
 \label{fig:diff}
 \end{figure}
 
-We use thhe \textit{diff} command as the base of one of the code duplication detection methods 
-on the tool proposed on this work, although it is not extensive explored as the text similarity
-method for code duplication detection.
-
+We use the \textit{diff} command as the base of one of the code duplication detection 
+methods on the tool proposed in this work, although it is not explored as the text 
+similarity method for code duplication detection.

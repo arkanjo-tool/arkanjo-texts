@@ -5,14 +5,13 @@ help developers identify code clone duplication at the function level.
 Specifically, it enables the detection of pairs of functions within a codebase
 that are clones of each other.
 
-The tool operates in two main parts, the \textbf{Preprocessor} and the \textbf{Query Responder}. 
-The \textbf{Preprocessor} is responsible to perform the heavy computations to find the code duplications 
-accross a codebase and produce artifact to consulte information related to the duplications in a structured form.
-The \textbf{Query Responder} consumes the artifacts produced by the Preprocessor to execute the tool functionalites as requested.
-This choice enable the tool to concentrate the heavy and slows parts that can be execute only once per codebase, 
+The tool operates in two main parts: the \textbf{Preprocessor} and the \textbf{Query Responder}. 
+The \textbf{Preprocessor} is responsible for performing heavy computations to find the code 
+duplications across a codebase and produce artifacts to consult information related to the 
+duplications in a structured form. The \textbf{Query Responder} consumes the artifacts produced 
+by the Preprocessor to execute the tool functionalities as requested. This choice enables the 
+tool to concentrate on the heavy and slow parts that can be executed only once per codebase, 
 thus allowing a fast performance for multiple queries related to a single codebase.
-More detailed descriptions of the Preprocessor and Query Responder can be found in
-Sections \ref{subsec:architecture} and \ref{subsec:func}.
 
 The ArKanjo tool has been implemented and is available for reference at
 \url{https://github.com/LipArcanjo/arkanjo}.

@@ -1,7 +1,7 @@
-We employ a multi-method research approach, using different methodologies to achieve our goals
-to approach code duplication in some of the Linux subsystems. 
-To validate if the ArKanjo tool is capable of finding code duplications, 
-applied two independent methods and perform triangulation on the results. 
+We employ a multi-method research approach, using different methodologies to achieve our 
+goals to approach code duplication in some of the Linux subsystems. To validate if the 
+ArKanjo tool can find code duplications, we applied two independent methods and performed 
+triangulation on the results.
 
 The first method evaluates the proposed tool using an approach from the literature, 
 comparing it against the BigCloneBench dataset \citep{bigclonebench}. 
@@ -9,23 +9,22 @@ The second method is an empirical analysis of a subset of functions within the
 AMD Display driver that our tool identified as duplicates. After completing these two 
 methods, we triangulated the findings to analyze the results comprehensively. 
 We chose triangulation because relying solely on the literature-based method has 
-limitations and may not be entirely reliable \citep{bigfail, litreview}. As a reminder, 
-all research approches were done using the text similarity method as the 
-code dupication method of the tool.
+limitations and may may be unreliable \citep{bigfail, litreview}. 
+As a reminder, all research approaches were done using the text similarity method 
+as the code duplication method of the tool.
 
-Given the validation of the tool's capabilities, we proceed to undertand the viability 
-to mitigate the code duplication finds by the tool. 
-To underdand the viability, our first choice is to conduct an ethnographic study using 
-a participant-observation methodology. 
-In this study, we aim to mitigate a subset of duplicated functions by refactoring them 
-while interacting with the Linux community to gather feedback on our mitigation efforts. 
+Given the validation of the tool’s capabilities, we proceed to understand the viability 
+of mitigating the code duplication found by the tool. We conducted an ethnographic study 
+using a participant-observation methodology to understand its viability. In this study, 
+we aim to mitigate a subset of duplicated functions by refactoring them while interacting 
+with the Linux community to gather feedback on our mitigation efforts.
 
-The ethnographic study happened in two phases. 
-In the first phase, the author of this research explored the process of mitigating
-a code duplication found in the AMD Display Driver and sent it as a PATCH to iteract with the
-Linux community and get their feedback. On a second phase, we proposed to students on the 
-course Free Software Development at University São Paulo to mitigate the code duplications found 
-by the tool in the IIO subsystems and the AMD Display Driver and pass the process of send the mitigations as PATCH.
+The ethnographic study had two phases. In the first phase, the author explored the process 
+of mitigating a code duplication found in the AMD Display driver and sent it as a PATCH to 
+interact with the Linux community and get their feedback. In the second phase, we proposed 
+to students in the course Free Software Development at the University of São Paulo to mitigate 
+the code duplications found by the tool in the IIO subsystems and the AMD Display driver and 
+pass the process of sending the mitigations as PATCH.
 
 \section{Evaluation of the Tool by the BigCloneBench dataset}
 
@@ -66,26 +65,26 @@ would accept our approach or identify their concerns. Thus, we will use ethnogra
 positioning ourselves and students as Linux kernel contributors focused on removing 
 identified  code duplications.
 
-This section outlines our approach for mitigating code duplication in the Linux kernel
-and describes the ethnographic methodology for engaging with the Linux community. Firstly, 
-we present the participant observation research method explored by the author. Then, 
-we present the methodolody of the experiment done with the students.
+This section outlines our approach to mitigating code duplication in the Linux kernel 
+and describes the ethnographic methodology for engaging with the Linux community. 
+Firstly, we present the participant observation research method explored by the author. 
+Then, we present the methodology of the experiment done with the students.
 
 \subsection{Participant observation method}
 \label{subsec:partmethod}
 
-Given the tool evaluations that demonstrate the tool capabilites of finding duplications, 
-we proceeded to undertand if the duplications found are possible to be mitigate and
-the kernel subsystem's maintainers opinions about the duplications and their respective mitigations.
-To accomplish this objective, we initialy proposed a participant-observation experiment, 
-where we, people that have never contribute to the Linux kernel, 
-act as contributors to the AMD Display driver and collect artifacts of our experience in the process.
+Given the tool evaluations demonstrating the tool's capabilities of finding duplications, 
+we proceeded to understand if the duplications found can be mitigated and the kernel 
+subsystem's maintainers' opinions about the duplications and their respective mitigations. 
+To accomplish this objective, we initially proposed a participant-observation experiment, 
+where we, people who have never contributed to the Linux kernel, act as contributors to 
+the AMD Display driver and collect artifacts of our experience in the process.
 
-As a first step of this experiment, we executed the tool in the AMD Display driver codebase and 
-manually analysed the biggest duplications in terms of number of lines and raised to 
-two duplicated function pairs that we judged interesting to try to mitigate. 
-We have choose to approach the biggest duplications as a proof of concept that 
-we can make significant impacts. The two duplicated function pairs chosen are:
+As a first step of this experiment, we executed the tool in the AMD Display driver codebase. 
+We manually analyzed the biggest duplications regarding the number of lines and raised them 
+to two duplicated function pairs that we judged interesting to try to mitigate. We have 
+chosen to approach the biggest duplications as proof of concept so that we can make 
+significant impacts. The two duplicated function pairs chosen are:
 
 \begin{itemize}
 \item \textbf{Duplicated function pair 1}
@@ -100,15 +99,15 @@ we can make significant impacts. The two duplicated function pairs chosen are:
 %\end{itemize}
 \end{itemize}
 
-Given the two duplicated function pairs, we observed that the files that the functions exist contains 
-multiple other duplications. Thus, we proposed a simple systematic approach to mitigate all the 
-functions duplicated in the context and not only the duplicated function pairs. 
+Given the two duplicated function pairs, we observed that the files in the functions 
+contain multiple other duplications. Thus, we proposed a simple systematic approach 
+to mitigate all the functions duplicated in the context, not just the duplicated 
+function pairs. 
+After we approached the duplications with the systematic approach, for the duplicated 
+function pairs that had successfully mitigated the duplication, we sent patches to the 
+AMD Display driver email list to validate the mitigations and see the maintainer's opinion 
+while documenting the process and our impressions.
 The systematic approach is defined below.
-
-After we approached the duplications with the systematic approach. For the duplicated function
-pairs that had successfully being mitigate the duplication, we sent patches to the AMD Display driver
-maillist to validate the mitigations and see the maintainers opinion, while documentaion the process 
-and our impressions.
 
 \subsubsection{Systematic Approach to Mitigate Code Duplication}
 \label{subsubsec:systematic}
@@ -120,7 +119,7 @@ duplication across the codebase.
 
 For each duplicated function pair, for each function in the pair, we used the \textit{function information} functionality 
 (described in Section \ref{subsec:functioncommand}) to locate all duplications of the function in the codebase, 
-as it may have been duplicated more times then the two occurences of the duplicated function pair. 
+as it may have been duplicated more times than the two occurrences of the duplicated function pair. 
 This strategy resulted in a collection of duplicated functions and corresponding code files.
 
 To identify shared code more effectively, we extended this approach to search for other common 
@@ -130,48 +129,47 @@ function in the library. If modifications existed, we applied case-specific refa
 
 \subsection{Study with University Students}
 
-Posterior of the initial participant observation that we made, we decided to expand the experiment 
-by proposing to students mitigate duplication found by the tool and send patches to the kernel community.
+Based on our initial participant observation, we decided to expand the experiment by proposing 
+to students how to mitigate duplication found by the tool and send patches to the kernel community.
 
-In the Free Software Development course at University of São Paulo, ministred by the advisor 
-of this work at the first semester of 2025, we have proposed to the students the possibility
-of mitigating duplications in the IIO subsystem and the AMD display driver found with the ArKanjo tool.
-The course had a total of 26 students, and of that, X students being undergraduate students
-and Y begin graduate students.
+In the Free Software Development course at the University of São Paulo, taught by the advisor of 
+this work in the first semester of 2025, we proposed to the students the possibility of mitigating 
+duplications in the IIO subsystem and the AMD display driver found with the ArKanjo tool. 
+The course had 26 students, of whom X were undergraduate students and Y were graduate students.
 
-On the course, the students are asked to form groups of one, two or three students and together 
-make a contribution to a open source software. To auxiliate the students on this task, the 
-professor and teaching assistants prepares multiple alternatives on how to contribute to open source projects, 
-including simple contributions as updating documentation or code style fixes. In this context, 
-we have proposed two alternatives for the students related to the tool.
+In the course, the students are asked to form groups of one, two, or three students and contribute 
+to free software together. To assist the students in this task, the professor and teaching assistants 
+prepare multiple alternatives for contributing to free software projects, including simple contributions 
+such as updating documentation or code style fixes. In this context, we have proposed two options 
+for the students related to the tool.
 
-For the first alternative, one of the teaching assistants used the ArKanjo tool in the IIO subsystem and
-listed interesting duplicated functions pair that the groups can simple mitigate this specific duplication pair, 
-and it is up to the students on how
-to refactor the code to mitigate the duplications and pass through the process to send patches to the IIO 
-maintainers to review. For the second alternative, we propose a similar experience then the 
-participant observation method, where the students pass through the whole process of executing the ArKanjo tool
-in the AMD display driver, analyze the duplications found, create a patch to mitigate a duplication and sent
-the patch to the AMD display driver's maintainers.
+For the first alternative, one of the teaching assistants used the ArKanjo tool in the IIO subsystem 
+and listed interesting duplicated function pairs that the groups could mitigate this specific 
+duplication pair. It is up to the students to refactor the code to mitigate the duplications and 
+pass through the process of sending patches to the IIO maintainers for review. For the second 
+alternative, we propose a similar experience to the participant observation method, where the 
+students pass through the whole process of executing the ArKanjo tool in the AMD display driver, 
+analyze the duplications found, create a patch to mitigate a duplication, and send the patch to the 
+AMD display driver’s maintainers.
 
-From the students enrolled in the in the course, 25 students opted for the first alternative and 1 student
-opted for the second alternative, forming 11 groups working on the first alternative and 1 group 
-working on the second alternative. It is worth highlighting that none of the students
-that choose to mitigate duplications had made a contribution to the Linux kernel before,
-meaning that the patch to mitigate the duplication being the first tentative to contribute to the kernel as
-newcomers.
+From the students enrolled in the course, 25 students opted for the first alternative, and one 
+student opted for the second alternative, forming 11 groups working on the first alternative 
+and 1 group working on the second alternative. It is worth highlighting that none of the students 
+who chose to mitigate duplications had contributed to the Linux kernel before, meaning that the 
+patch to mitigate the duplications was the first tentative to contribute to the kernel as newcomers.
 
-The groups have been request to document the experience and approaches to refactor the duplications and the
-experience of submiting a patch to the Linux kernel in blogs. We had analyzed these blogs to undertand 
-patterns of refactor used for mitigating the duplications, the experience on send the patches and the 
-opinions of the subsystem maintainers on the mitigations. 
+The groups have been requesting that we document the experience and approaches to refactoring the 
+duplications and the experience of submitting a patch to the Linux kernel in blogs. We analyzed 
+these blogs to understand the patterns of refactoring used for mitigating the duplications, the 
+experience of sending the patches, and the opinions of the subsystem maintainers on the mitigations.
 
-For the teaching assistant and the student that executed the ArKanjo tool to explore duplications, 
-we have asked them to answer some questions related to the experience of using the tool and what could be
-improved. The survey with the users's answers can be found in Appendix \ref{app:survey}.
+The teaching assistant and the student who executed the ArKanjo tool to explore duplications were 
+asked to answer some questions related to their experience using the tool and what could be improved. 
+The survey with the users' answers can be found in Appendix \ref{app:survey}.
 
-On a second stage of the Free Software Development course, we propose to students to contribute directly 
-with the ArKanjo tool development without help from the tool creator, to verify if the tool can be a 
-free software where multiple people can contribute. The tool's issue approached by the students where 
-of our knowledge our pointed to us in the survey feedback. A total of three students forming two groups 
-worked in direct contributions, a not a very expressive number compared with the initiate experiment.
+In the second stage of the Free Software Development course, we propose that students contribute 
+directly to the ArKanjo tool development without help from the tool creator to verify whether the 
+tool can be free software to which multiple people can contribute. The students approached the tool’s 
+issue, and to our knowledge, they pointed to us in the survey feedback. Three students forming two 
+groups worked in direct contributions, which was not a very expressive number compared with the 
+initial experiment.

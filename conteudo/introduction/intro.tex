@@ -65,15 +65,13 @@ is available in Appendix \ref{app:gray}.
 
 \label{sec:intresearch}
 
-Our studies and observations reveal that the code duplication problem described
-in the previous section cannot be fully addressed by existing tools in
-either the formal or grey literature. To fill this gap, we propose an approach
-to identify and mitigate code duplications specifically within the Linux
-kernel subsystems, focuding our study on the AMD Display Driver and the Industril IO subsytem. 
-Our approach includes the development of a tool capable of detecting
-duplicated functions and establishing strategies for
-addressing these duplications. We tested the approach in the context of two
-kernel components, the AMD Display Driver the the Industrial IO subsystem.
+Our studies and observations reveal that existing tools cannot fully address the code duplication 
+problem described in the previous section in the formal or grey literature. To fill this gap,
+we propose an approach to identify and mitigate code duplications, specifically within the
+Linux kernel subsystems, focusing our study on the AMD Display driver and the Industrial 
+IO subsystem. Our approach includes the development of a tool capable of detecting duplicated 
+functions and establishing strategies for addressing these duplications. We tested the approach 
+in the context of two kernel components, the AMD Display driver and the Industrial IO subsystem.
 
 \begin{figure}[h]
 \includegraphics[scale=0.46]{research_design}
@@ -85,32 +83,29 @@ This research aims to identify patterns of software engineering techniques,
 such as refactoring methods commonly used to address code duplications. 
 These patterns will serve as a guide for future contributors in mitigating 
 code duplication issues within this context. To investigate our approach, 
-we are developing a tool to identify duplicate code. We are then refactoring 
-portions of this code and submitting patches to maintainers, providing evidence 
-of the tool's accuracy in detecting duplicate functions. Our research design follows 
-a multi-method approach, structured into two phases, each employing different research methods.
+we are developing a tool to identify duplicate code. We then refactor portions 
+of this code and submit patches to maintainers, providing evidence of the tool’s 
+accuracy in detecting duplicate functions. Our research design follows a 
+multi-method approach, structured into two phases, each employing different research methods.
 
 In \textbf{Phase I}, we propose, develop, and validate a tool capable of
-identifying code duplications at the function level within C codebases. We
-expect this tool to effectively detect code duplications in the targeted subsytems of the Linux kernel,
-as preliminary investigations suggest that kernel code files often contain a
-mix of duplicated and unique functions. To validate the tool, we will use a
-triangulation method, comparing its results with established code duplication
-database referenced in the literature, and conducting an empirical analysis on
-a randomly selected set of files from the AMD Display driver, which our tool
-flags as containing duplications. A detailed explanation of our validation
-process is provided in Chapter \ref{cha:method}.
+identifying code duplications at the function level within C codebases.
+We expect this tool to effectively detect code duplications in the targeted subsystems 
+of the Linux kernel, as preliminary investigations suggest that kernel code files often 
+contain a mix of duplicated and unique functions. We will use a triangulation method to 
+validate the tool, comparing its results with an established code duplication database 
+referenced in the literature and conducting an empirical analysis on a randomly selected 
+set of files from the AMD Display driver, which our tool flags as containing duplications.
+A detailed explanation of our validation process is provided in Chapter \ref{cha:method}.
 
-Upon completing the first phase, we anticipate having a validated tool for
-identifying code duplications within the context of the Linux kernel subsytems studied. 
-We then
-proceed to the second phase, which focuses on mitigating these
-duplications. In \textbf{Phase II}, our objective is to verify if we can 
-practically mitigate the duplication finds by the developed tool. 
-To achieve this, we have designed an ethnographic approach that enables us to
-interact with the Linux development community and gather artifacts that either
-support or challenge our proposed mitigation strategies. Figure
-\ref{fig:reDesign} summarizes the research steps proposed in this study.
+Upon completing the first phase, we anticipate having a validated tool for identifying 
+code duplications within the context of the Linux kernel subsystems studied. We then 
+proceed to the second phase, which focuses on mitigating these duplications. 
+In \textbf{Phase II}, we aim to verify if we can mitigate the duplication found by 
+the developed tool. To achieve this, we have designed an ethnographic approach that 
+enables us to interact with the Linux development community and gather artifacts that 
+either support or challenge our proposed mitigation strategies. Figure \ref{fig:reDesign} 
+summarizes the research steps proposed in this study.
 
 \section**{Thesis Structure}
 
@@ -123,4 +118,4 @@ and a review of refactoring methods used throughout this research. Chapter
 describing all the main components.  Chapter \ref{cha:method}
 describes the research methods selected to guide our work. Chapter
 \ref{cha:results} shows the results we had through our work, from the research methods to 
-evaluate our tool and the ethnographic studies. Chapter \ref{cha:conclusion}udes this research.
+evaluate our tool and the ethnographic studies. Chapter \ref{cha:conclusion} concludes this research.
