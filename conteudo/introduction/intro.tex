@@ -69,7 +69,8 @@ Our studies and observations reveal that the code duplication problem described
 in the previous section cannot be fully addressed by existing tools in
 either the formal or grey literature. To fill this gap, we propose an approach
 to identify and mitigate code duplications specifically within the Linux
-kernel. Our approach includes the development of a tool capable of detecting
+kernel subsystems, focuding our study on the AMD Display Driver and the Industril IO subsytem. 
+Our approach includes the development of a tool capable of detecting
 duplicated functions and establishing strategies for
 addressing these duplications. We tested the approach in the context of two
 kernel components, the AMD Display Driver the the Industrial IO subsystem.
@@ -91,7 +92,7 @@ a multi-method approach, structured into two phases, each employing different re
 
 In \textbf{Phase I}, we propose, develop, and validate a tool capable of
 identifying code duplications at the function level within C codebases. We
-expect this tool to effectively detect code duplications in the Linux kernel,
+expect this tool to effectively detect code duplications in the targeted subsytems of the Linux kernel,
 as preliminary investigations suggest that kernel code files often contain a
 mix of duplicated and unique functions. To validate the tool, we will use a
 triangulation method, comparing its results with established code duplication
@@ -101,7 +102,8 @@ flags as containing duplications. A detailed explanation of our validation
 process is provided in Chapter \ref{cha:method}.
 
 Upon completing the first phase, we anticipate having a validated tool for
-identifying code duplications within the Linux kernel context. We will then
+identifying code duplications within the context of the Linux kernel subsytems studied. 
+We then
 proceed to the second phase, which focuses on mitigating these
 duplications. In \textbf{Phase II}, our objective is to verify if we can 
 practically mitigate the duplication finds by the developed tool. 
