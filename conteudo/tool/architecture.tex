@@ -152,13 +152,11 @@ As most function pairs are unlikely to be duplicated in large codebases, this fi
 
 \subsection{Query Responder}
 
-\todo[inline]{I NEED TO CHANGE HERE}
+The Query Responder step is the component the user executes multiple times to consult information 
+about duplicated functions in a codebase processed by the Preprocessor. 
+It utilizes the Temporary Codebase and the Code Duplication Database as inputs to answer user requests, 
+such as querying for duplicated functions above a certain similarity threshold or provide counts of such functions.
+This component was developed to be extensible, allowing other query functionalities to be easily added. 
+The specific functionalities provided to the user by the Query Responder, which include the 
+Duplication Explorer, Function Information, and Duplication Report, are described in Section \ref{subsec:func}.
 
-The Query Responder step is the component the user executes multiple times to consult information about duplicated functions in a codebase processed by the Preprocessor. The Query Responder step utilizes the temporary codebase and the Code Duplication Database as inputs to answer the user's request, such as querying the total number of duplicated functions in a specific input codebase or listing duplicated functions above a certain similarity threshold. This component was developed to be extensible, allowing other queries to be easily added. Currently, the Query Responder step supports the following queries:
-
-\begin{itemize}
-	\item Number of dupliddcated functions above a similarity threshold.
-	\item Number of duplicated functions equal or above a similarity threshold.
-	\item List of duplicated functions above a similarity threshold.
-	\item List of duplicated functions equal to or above a similarity threshold.
-\end{itemize}
