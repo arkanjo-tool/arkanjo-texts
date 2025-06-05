@@ -9,9 +9,9 @@ The second method is an empirical analysis of a subset of functions within the
 AMD Display driver that our tool identified as duplicates. After completing these two 
 methods, we triangulated the findings to analyze the results comprehensively. 
 We chose triangulation because relying solely on the literature-based method has 
-limitations and may may be unreliable \citep{bigfail, litreview}. 
+limitations and may be unreliable \citep{bigfail, litreview}. 
 As a reminder, all research approaches were done using the text similarity method 
-as the code duplication method of the tool.
+as the code duplication detection method of the tool.
 
 Given the validation of the tool’s capabilities, we proceed to understand the viability 
 of mitigating the code duplication found by the tool. We conducted an ethnographic study 
@@ -90,7 +90,7 @@ significant impacts. The two duplicated function pairs chosen are:
 \item \textbf{Duplicated function pair 1}
 \begin{itemize}
 \item Function named \textit{offset\_to\_id} in file \textit{dc/gpio/dcn32/hw\_translate\_dcn32.c}.
-\item Function \textit{offset\_to\_id} in file \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}.
+\item Function named \textit{offset\_to\_id} in file \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}.
 \end{itemize}
 \item \textbf{Duplicated function pair 2}
 %\begin{itemize}
@@ -119,7 +119,7 @@ duplication across the codebase.
 
 For each duplicated function pair, for each function in the pair, we used the \textit{function information} functionality 
 (described in Section \ref{subsec:functioncommand}) to locate all duplications of the function in the codebase, 
-as it may have been duplicated more times than the two occurrences of the duplicated function pair. 
+as it may have been duplicated more times than the two occurrences contained in the duplicated function pair. 
 This strategy resulted in a collection of duplicated functions and corresponding code files.
 
 To identify shared code more effectively, we extended this approach to search for other common 
@@ -144,13 +144,14 @@ such as updating documentation or code style fixes. In this context, we have pro
 for the students related to the tool.
 
 For the first alternative, one of the teaching assistants used the ArKanjo tool in the IIO subsystem 
-and listed interesting duplicated function pairs that the groups could mitigate this specific 
-duplication pair. It is up to the students to refactor the code to mitigate the duplications and 
-pass through the process of sending patches to the IIO maintainers for review. For the second 
-alternative, we propose a similar experience to the participant observation method, where the 
-students pass through the whole process of executing the ArKanjo tool in the AMD display driver, 
-analyze the duplications found, create a patch to mitigate a duplication, and send the patch to the 
-AMD display driver’s maintainers.
+and listed duplicated function pairs found using the text similarity duplication detection method with 
+a 90\% similarity threshold. It is then up to the students to refactor the code to mitigate these 
+duplications and go through the process of sending patches to the IIO maintainers for review.
+
+For the second alternative, we propose a similar experience to the participant observation method. 
+In this approach, students go through the entire process of executing the ArKanjo tool in the 
+AMD display driver, analyzing the duplications found, creating a patch to mitigate a duplication, 
+and sending the patch to the AMD display driver’s maintainers.
 
 From the students enrolled in the course, 25 students opted for the first alternative, and one 
 student opted for the second alternative, forming 11 groups working on the first alternative 

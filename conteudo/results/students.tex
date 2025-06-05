@@ -11,8 +11,8 @@ have the additional work to use the tool to find the duplications.
 
 Appendix \ref{app:stuart} has references to the artifacts discussed in this section, 
 including the duplication function pairs that students mitigate, the students’ reports, 
-the patch students sent to the Linux kernel, and the answers to the questionnaire asked 
-of the students who worked in the AMD Display driver and the teaching assistant that used 
+the patch students sent to the Linux kernel, and the answers to the survey asked 
+of the student who worked in the AMD Display driver and the teaching assistant that used 
 the tool to find duplications in the IIO subsystem.
 
 \input{conteudo/results/table_students}
@@ -21,8 +21,6 @@ Table \ref{tab:stu} summarizes students' groups' mitigation approaches regarding
 changed and refactor methods used. Seven groups applied the parameterized refactor method, 
 and two applied the extractor method to their approaches to mitigate the duplications. 
 The other three groups do not use any refactor methods presented in the literature. 
-We discuss the groups' approaches and the subsystem maintainers' opinions on the patches 
-that students sent.
 
 Groups one and four have worked in similar duplications, where two functions return a 
 boolean mirroring the results. That means when the first function returns true, the second 
@@ -39,7 +37,18 @@ approved it without significant comments. In contrast, the patch from group ten 
 the same maintainer who approved the patch from group three. The maintainer justification to reject 
 the patch is that group ten refactored code files that has simple context, threfore adding a layer 
 of abstraction to remove a duplication deacrease the code readability without clear gains on 
-the codebase quality.
+the codebase quality. Figure \ref{fig:group_10_reply} shows the maintainers's feedback for group ten.
+
+
+\begin{figure}
+\includegraphics[scale=0.8]{group_10_reply}
+\caption[Maintainers' Feedback on Group Ten's Patch]{
+Maintainers' Feedback on Group Ten's Patch
+\footnote{Image obtained from Linux Lore, which is publicly provided at:
+\url{https://lore.kernel.org/linux-iio/20250428034222.318898-1-gabrielgeraldinosouza@gmail.com/T/\#u}}
+}
+\label{fig:group_10_reply}
+\end{figure}
 
 Groups seven and eight used the extract method to approach the mitigations. Group eight sent the 
 mitigations to the maintainers, and the code changes were approved, with minor requested changes 
@@ -49,7 +58,18 @@ challenging to read. The maintainers proposed that group seven remove the duplic
 insert the duplicated code multiple times where the functions were being called. This suggestion 
 may be bad practice for code quality, as it adds more complexity and responsibility to a bigger 
 function; it is viewed as the best choice for removing layers of abstraction and making the 
-code easier to read.
+code easier to read. Figure \ref{fig:group_7_reply} shows the maintainers's feedback for group seven.
+
+
+\begin{figure}
+\includegraphics[scale=0.8]{group_7_reply}
+\caption[Maintainers' Feedback on Group Seven's Patch]{
+Maintainers' Feedback on Group Seven's Patch
+\footnote{Image obtained from Linux Lore, which is publicly provided at:
+\url{https://lore.kernel.org/linux-iio/20250428132551.176788-1-bellacaselli20@gmail.com/}}
+}
+\label{fig:group_7_reply}
+\end{figure}
 
 Groups nine and eleven faced similar issues to those in Mitigaiton 1 on our participant observation 
 experiment, where configuration files designed as macros complicated the approach to the mitigations. 
