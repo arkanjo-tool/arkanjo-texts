@@ -436,18 +436,18 @@ the kernel is an enormous undertaking, involving more than 28 million lines of c
 and contributions from over twenty thousand developers. Within this context, code 
 duplication persists as a significant challenge, a known harmful practice that 
 negatively affects code readability and increases the likelihood of introducing bugs 
-(Hordijk et al., 2009; Hotta et al., 2012). This issue is particularly acute in the 
-kernel's device drivers, which comprise over 66\% of the source code (Schmitt, 2022). 
+\cite{harmone,harmtwo}. This issue is particularly acute in the 
+kernel's device drivers, which comprise over 66\% of the source code \cite{marcelo}. 
 For instance, maintainers of the AMD Display driver have specifically highlighted code 
 duplication as a significant impediment to their work.
 
 The detection of code duplication, or code clones, has been a subject of research for 
 decades (Jankowitz, 1988). The literature provides a standard taxonomy, classifying 
 clones into four types based on their degree of similarity, from identical copies 
-(Type-1) to semantically equivalent but textually different fragments (Type-4) (Chen et al., 2022). 
+(Type-1) to semantically equivalent but textually different fragments (Type-4) \cite{litreview}. 
 Various detection methodologies have been developed, including textual, token-based, 
-tree-based, and graph-based approaches (Chen et al., 2022). These have culminated in 
-state-of-the-art techniques, such as the graph-based work by Liu et al. (2023). 
+tree-based, and graph-based approaches \cite{litreview}. These have culminated in 
+state-of-the-art techniques, such as the graph-based work by Liu et al \cite{tailor}. 
 However, the primary focus of such academic work remains on determining if a given 
 pair of code artifacts are duplicates, rather than providing a scalable method to scan 
 an entire codebase for actionable results. Conversely, existing free software tools explored 
@@ -523,15 +523,11 @@ done using the text similarity method.
 \subsubsection{Code Duplication Methods Used}
 
 For the text similarity method, we treat the source code files as text and apply the
-TF-IDF vector embedding method implemented by the Gensim library (ADD REF),
+TF-IDF vector embedding method implemented by the Gensim library \cite{gensim},
 then compute cosine similarity as the similarity metric. This method was chosen for 
 its claimed performance, programming language independence, and the fact that it does 
 not require compilable code, which is expected in the
 temporary codebase, as it does not contain complete code artifacts.
-(SHOULD I ADD THE FOLLOWING? THERE IS LITTLE SPACE:) 
-Plates implemented this code duplication detection method and released it under
-the MIT license(ADD REF). We adapted his implementation to fit our tool’s expected
-input and output formats. 
 
 For the difference method, 
 we implemented a method that considered the number of exactly equal lines between two functions.
@@ -539,7 +535,7 @@ For two functions \textit{function1} and \textit{function2}, we compute the simi
 ratio of duplicated lines between the two functions by the total number of lines in both functions.
 This code duplication method is considerably simpler and more explainable than the text similarity method, 
 as the metric is the ratio of common lines between the two functions. To compute the number of equal lines, we use
-the \textit{diff} command built-in in the Linux environment (ADD REF).
+the \textit{diff} command built-in in the Linux environment.
 
 \subsection{Functionalities}
 
@@ -595,15 +591,15 @@ comparing it against the BigCloneBench dataset (Svajlenko et al., 2014). The sec
 method is an empirical analysis of a subset of functions within the AMD Display driver
 that our tool identified as duplicates. 
 
-To validate the tool against the BigCloneBench dataset (Svajlenko et al., 2014), we followed
-the methodology presentedy by by (Liu et al., 2023), we sampled 20,000 pairs from each clone
+To validate the tool against the BigCloneBench dataset \cite{bigclonebench}, we followed
+the methodology presentedy by Liu et al. \cite{tailor}, we sampled 20,000 pairs from each clone
 type, adding 20,000 non-duplicate pairs as negative samples. We applied the same sampling
 approach to our tool to ensure a fair evaluation.
 Unlike state-of-art methods, our tool does not distinguish between clone types and
 identifies duplications at the function level rather than the file level, which is typical in
 state-of-the-art tools. Therefore, we adapted the metric calculation method for evaluation
 purposes. Specifically, we considered every pair of functions with a similarity metric
-equal to or greater than a threshold 𝑋 as duplicates and marked the corresponding file
+equal to or greater than a threshold X as duplicates and marked the corresponding file
 pairs. A correctly identified duplication pair counts as accurate for its clone type, while
 an incorrectly inferred pair is considered incorrect across all clone types.
 To understand the impact of varying the similarity threshold, we evaluated our tool using
@@ -696,7 +692,7 @@ samples inferred as duplications), while the empirical analysis revealed a highe
 of false positives. We propose two potential explanations for this discrepancy.
 
 The first reason may be the limitations and known issues with BigCloneBench, as
-highlighted by Krinke and Ragkhitwetsagul (Krinke and Ragkhitwetsagul, 2022). The
+highlighted by Krinke and Ragkhitwetsagul \cite{bigfail}. The
 second reason could relate to the nature of the AMD Display driver, where each code artifact
 shares semantic meaning. In contrast, BigCloneBench comprises self-contained code
 artifacts without shared semantics. Given that our tool relies on a text-based code clone
@@ -716,7 +712,7 @@ lengthy review process.
 The student efforts showed that newcomers could use the tool to make effective contributions. 
 Of the 12 student patches, three were accepted, three were refused, and six required follow-up 
 fixes based on maintainer feedback. To remove the duplicated code, seven student groups used the 
-Parameterize Method (ADD REF) and two used the Extract Method (ADD REF), which are simple refactoring methods. 
+Parameterize Method and two used the Extract Method \cite{refactorbook}, which are simple refactoring methods. 
 This result corroborates that ArKanjo finds actionable duplications and that newcomers can 
 successfully contribute patches to the kernel.
 
@@ -847,14 +843,6 @@ kernel maintenance and serves as a model for clone detection in other large-scal
 
 
 % use section* for acknowledgment
-\section*{Acknowledgment}
-
-
-The authors would like to thank...
-
-
-
-
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
@@ -871,20 +859,20 @@ The authors would like to thank...
 % http://mirror.ctan.org/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
+\bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bibliografia}
+\bibliography{IEEEabrv,referencias}
 %
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\begin{thebibliography}{1}
- 
- \bibitem{IEEEhowto:kopka}
- H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-   0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
- 
-\end{thebibliography}
+% \begin{thebibliography}{1}
+%  
+%  \bibitem{IEEEhowto:kopka}
+%  H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+%    0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+%  
+% \end{thebibliography}
 
 
 
