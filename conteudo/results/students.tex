@@ -1,10 +1,12 @@
 \section{Study with University Students}
 
-As presented in Chapter \ref{cha:method}, we propose that students mitigate duplications 
-found by the ArKanjo tool, send patches to the Linux subsystem maintainers, and document 
-their experiences and learnings.
+As presented in Chapter \ref{cha:method}. It was proposed to students, as one of the activities 
+of the Free Software course, that they make the first-time contribution to the Linux kernel to 
+mitigate duplication found by the ArKanjo tool while sending patches to the Linux subsystem 
+maintainers and documenting their experiences and learnings.
 
-For the students who worked in the IIO subsystem, we gave them duplicated function pairs 
+For the students who worked in the IIO subsystem, the teaching assistant gave them duplicated 
+function pairs 
 found by the tool, and their responsibility was to think of how to mitigate the duplication 
 and send the patch to the maintainers. The student that worked in the AMD Display driver 
 have the additional work to use the tool to find the duplications.
@@ -17,10 +19,14 @@ the tool to find duplications in the IIO subsystem.
 
 \input{conteudo/results/table_students}
 
-Table \ref{tab:stu} summarizes students' groups' mitigation approaches regarding lines 
-changed and refactor methods used. Seven groups applied the parameterized refactor method, 
+Table \ref{tab:stu} summarizes students' groups' mitigation approaches. Seven groups applied 
+the parameterized refactor method, 
 and two applied the extractor method to their approaches to mitigate the duplications. 
-The other three groups do not use any refactor methods presented in the literature. 
+The other three groups do not use any refactor methods presented in the literature.  
+Five groups got their patches accepted and merged in Linux; four groups got their patches rejected, 
+and one group is still working on the patch submission, being in the fifth version of the patch at 
+the time this document was written. Two groups decided not to continue sending the patches after 
+they made initial versions.
 
 Groups one and four have worked in similar duplications, where two functions return a 
 boolean mirroring the results. That means when the first function returns true, the second 

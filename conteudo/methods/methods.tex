@@ -68,7 +68,8 @@ identified  code duplications.
 This section outlines our approach to mitigating code duplication in the Linux kernel 
 and describes the ethnographic methodology for engaging with the Linux community. 
 Firstly, we present the participant observation research method explored by the author. 
-Then, we present the methodology of the experiment done with the students.
+Then, we present the methodology of the non-participant observation analyze of patches 
+sent by the students.
 
 \subsection{Participant observation method}
 \label{subsec:partmethod}
@@ -76,11 +77,11 @@ Then, we present the methodology of the experiment done with the students.
 Given the tool evaluations demonstrating the tool's capabilities of finding duplications, 
 we proceeded to understand if the duplications found can be mitigated and the kernel 
 subsystem's maintainers' opinions about the duplications and their respective mitigations. 
-To accomplish this objective, we initially proposed a participant-observation experiment, 
+To accomplish this objective, we proposed a participant-observation experiment, 
 where we, people who have never contributed to the Linux kernel, act as contributors to 
 the AMD Display driver and collect artifacts of our experience in the process.
 
-As a first step of this experiment, we executed the tool in the AMD Display driver codebase. 
+We executed the tool in the AMD Display driver codebase. 
 We manually analyzed the biggest duplications regarding the number of lines and raised them 
 to two duplicated function pairs that we judged interesting to try to mitigate. We have 
 chosen to approach the biggest duplications as proof of concept so that we can make 
@@ -127,7 +128,7 @@ functions across all collection files. We then applied specific refactoring meth
 function. If the functions were identical across files, we removed the duplicates and created a single 
 function in the library. If modifications existed, we applied case-specific refactoring.
 
-\subsection{Study with University Students}
+\subsection{Non-participant Observation Study with University Students}
 
 Based on our initial participant observation, we decided to expand the experiment by proposing 
 to students how to mitigate duplication found by the tool and send patches to the kernel community.
@@ -173,4 +174,4 @@ directly to the ArKanjo tool development without help from the tool creator to v
 tool can be free software to which multiple people can contribute. The students approached the tool’s 
 issue, and to our knowledge, they pointed to us in the survey feedback. Three students forming two 
 groups worked in direct contributions, which was not a very expressive number compared with the 
-initial experiment.
+initial stage of the course.
