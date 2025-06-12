@@ -130,37 +130,38 @@ function in the library. If modifications existed, we applied case-specific refa
 
 \subsection{Non-participant Observation Study with University Students}
 
-Based on our initial participant observation, we decided to expand the experiment by proposing 
-to students how to mitigate duplication found by the tool and send patches to the kernel community.
+A core dynamic of the Free Software Development course at the University of São Paulo is to 
+have students make a practical contribution to a free software project. In the first semester of 
+2025, the professor teaching the course, who is also the advisor of this work, identified an 
+opportunity to leverage the ArKanjo tool within this existing pedagogical structure. As a 
+contribution option, the professor proposed that students mitigate code duplications found in the 
+Linux kernel. This initiative was driven by the professor as a practical course activity, and 
+the author of this thesis was not involved in using the tool to find duplications nor in developing 
+the approaches to mitigate them. The tasks were carried out entirely by the course staff 
+and the students.
 
-In the Free Software Development course at the University of São Paulo, taught by the advisor of 
-this work in the first semester of 2025, we proposed to the students the possibility of mitigating 
-duplications in the IIO subsystem and the AMD display driver found with the ArKanjo tool. 
-The course had 26 students, of whom X were undergraduate students and Y were graduate students.
+The course had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of 
+one to three. To assist students in this task, the professor and teaching assistants prepare multiple 
+alternatives for contributing to free software projects, including simpler contributions such as 
+updating documentation or fixing code style issues. In this context, two new options related to the 
+ArKanjo tool were proposed alongside the others.
 
-In the course, the students are asked to form groups of one, two, or three students and contribute 
-to free software together. To assist the students in this task, the professor and teaching assistants 
-prepare multiple alternatives for contributing to free software projects, including simple contributions 
-such as updating documentation or code style fixes. In this context, we have proposed two options 
-for the students related to the tool.
+For the first ArKanjo-related alternative, a teaching assistant ran the tool on the IIO subsystem, 
+creating a list of duplicated function pairs found with a 90\% similarity threshold. The students' 
+task was to refactor the code to mitigate these specific duplications and then navigate the process 
+of submitting their patches to the IIO maintainers for review.
 
-For the first alternative, one of the teaching assistants used the ArKanjo tool in the IIO subsystem 
-and listed duplicated function pairs found using the text similarity duplication detection method with 
-a 90\% similarity threshold. It is then up to the students to refactor the code to mitigate these 
-duplications and go through the process of sending patches to the IIO maintainers for review.
+For the second alternative, students were offered an experience similar to our initial participant 
+observation. In this model, the students were responsible for the entire workflow: executing the 
+ArKanjo tool on the AMD display driver, independently analyzing the results to identify a duplication 
+to fix, creating a patch to mitigate it, and sending the patch to the driver's maintainers.
 
-For the second alternative, we propose a similar experience to the participant observation method. 
-In this approach, students go through the entire process of executing the ArKanjo tool in the 
-AMD display driver, analyzing the duplications found, creating a patch to mitigate a duplication, 
-and sending the patch to the AMD display driver’s maintainers.
+Of the students who chose to work on the ArKanjo-related tasks, 25 (20 undergraduate and 5 graduate) 
+formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative, 
+forming a single group. Notably, none of these students had prior experience contributing to the 
+Linux kernel, making this their first attempt to submit a patch as newcomers.
 
-From the students enrolled in the course, 25 students opted for the first alternative, and one 
-student opted for the second alternative, forming 11 groups working on the first alternative 
-and 1 group working on the second alternative. It is worth highlighting that none of the students 
-who chose to mitigate duplications had contributed to the Linux kernel before, meaning that the 
-patch to mitigate the duplications was the first tentative to contribute to the kernel as newcomers.
-
-The groups have been requesting that we document the experience and approaches to refactoring the 
+The groups were requested to document their experience and approaches to refactoring the 
 duplications and the experience of submitting a patch to the Linux kernel in blogs. We analyzed 
 these blogs to understand the patterns of refactoring used for mitigating the duplications, the 
 experience of sending the patches, and the opinions of the subsystem maintainers on the mitigations.
@@ -173,5 +174,4 @@ In the second stage of the Free Software Development course, we propose that stu
 directly to the ArKanjo tool development without help from the tool creator to verify whether the 
 tool can be free software to which multiple people can contribute. The students approached the tool’s 
 issue, and to our knowledge, they pointed to us in the survey feedback. Three students forming two 
-groups worked in direct contributions, which was not a very expressive number compared with the 
-initial stage of the course.
+groups worked in direct contributions.
