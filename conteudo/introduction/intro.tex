@@ -1,77 +1,52 @@
 \en
 
-The Linux kernel is a Free/Libre/Open-Source project providing value to
-billions of people daily, representing 96.3\% of the top one million web
-servers and 85\% of smartphones worldwide. The magnitude that the project has
-reached over the years makes the addition of features, as well as handling bugs
-and security vulnerabilities, potentially affect a significant number of
-people, demonstrating the importance of maintaining the kernel
-\citep{linuxdata}.
-
-Maintaining the Linux kernel is a complex task, as the project contains more
-than 28 million lines of code and has had over twenty thousand contributors
-throughout its lifespan
+The Linux kernel is a widely used Free/Libre/Open Source Software (FLOSS) project, 
+powering 96.3\% of the top one million web servers and 85\% of smartphones worldwide. 
+Maintaining the kernel is an enormous task, involving more than 28 million lines of 
+code and contributions from over twenty thousand developers
 \footnote{Data directly extracted from Linux github repository \citep{linuxrepo}.
 Counted  28783390 lines of code and 20699 number of contributors in May 29th, 2025.
 Number of contributors counted as number of unique full name listed as author of a patch.}.
-Given the magnitude of the Linux
-kernel project, it is unrealistic to expect that all contributors have
-consistently followed the best programming practices and principles in every
-contribution made to the project. Consequently, it is expected that a
-significant amount of low-quality code artifacts will be found in the source
-code, which could hinder or compromise the maintenance of the project and the
-addition of new features.
+Due to the scale of the project, not all contributions adhere to best practices, resulting 
+in poor-quality code artifacts that may complicate maintenance and future feature development.
 
-As stated by \citet{driverdef}, device drivers are a ``piece of software whose
-aim is to control and manage a particular hardware device, hence the name
-device driver.'' Device drivers are a major part of the Linux kernel,
-representing 66\% of the source code, and are responsible for managing
-essential elements such as keyboards, mice, and GPUs \citep{marcelo}. When the
-kernel opts to support new hardware, it necessitates alterations to existing
-device drivers or the creation of new ones, making maintaining device drivers a
-critical duty of the Linux community.
+One such artifact is code duplication, which is the focus of this research. The motivation for 
+this work began with a practical problem rooted in device drivers, which are a major part 
+of the kernel, representing 66\% of the source code\citep{marcelo}. We interacted with the 
+maintainers of the AMD Display driver, an essential component for the 19\% of personal GPUs 
+manufactured by AMD in 2023\citep{gpumarket}. They shared their challenges with a significant 
+amount of duplicated code that hampers the driver's maintenance. In searching for a solution, 
+we found that existing tools are not well-suited for identifying duplications in large-scale 
+codebases like the Linux kernel, nor do they offer guidance on how to resolve the duplications 
+they find. Despite searching both formal and grey literature, existing solutions fell short of 
+addressing these specific challenges. The list of related tools examined in this exploratory 
+research is available in Appendix \ref{app:gray}.
 
-The AMD Display driver in the Linux kernel is responsible for enabling AMD GPUs
-to operate correctly in desktop Linux environments, which is an essential task,
-given that AMD GPUs represented 19\% of the personal GPU market in 2023
-\citep{gpumarket}. When we interacted with the maintainers of the AMD Display
-driver, they shared with us their challenges regarding one of the
-characteristics of low-quality code artifacts: duplicated code, which hampers
-the maintenance of the driver.
+This research presents ArKanjo, a command-line tool designed to detect and analyze function-level 
+duplications in the Linux kernel. Released under the MIT license, ArKanjo uses a two-stage 
+architecture with a Preprocessor and a Query Responder. This design separates the heavy 
+computational analysis from the fast querying of duplication results, making it effective for 
+large codebases. We validated the tool by comparing its results with the BigCloneBench dataset
+\citep{bigclonebench} and by conducting an empirical analysis on a randomly selected set of 
+files from the AMD Display driver.
 
-In searching for solutions to the AMD Display driver problem related to
-duplicated code artifacts, we found tools capable of determining, given two
-code artifacts, whether they are duplications of each other. However, the
-literature on code duplication mainly focuses on optimizing the accuracy
-of these tools for this specific task. These solutions do not address our
-problem, as we cannot provide a complete codebase and have the tools return the
-code duplications within it. Moreover, they do not guide us on how to mitigate
-the code duplications after detection, necessitating the exploration of
-alternative solutions.
-
-Given the unsuccessful results of our search in the literature, we
-turned to explore related tools not present in literature for solutions, but were also met 
-with limited success.
-The best solutions we found were primitive, merely
-identifying every pair of code files that are duplications. The code files in
-the AMD Display driver containing duplicated code typically have specific code
-unique to each file. Therefore, a solution that identifies duplication in a
-deeper context is necessary to find accurate duplications within the Linux
-kernel context. 
-The list of related tools examined in this exploratory research 
-is available in Appendix \ref{app:gray}.
+Beyond detection, we also investigated if the duplications found by ArKanjo could be mitigated.
+This was achieved through an ethnographic approach, which included a participant observation 
+study where we attempted to mitigate duplications, and a non-participant observation study of 
+university students tasked with fixing duplications found by the tool. These studies showed that 
+ArKanjo can effectively lower the barrier for new contributors, as evidenced by its role in 
+guiding students to make their first code improvements to the kernel.
 
 \section**{Research Design}
 
 \label{sec:intresearch}
 
-Our studies and observations reveal that existing tools cannot fully address the code duplication 
-problem described in the previous section in the formal or grey literature. To fill this gap,
-we propose an approach to identify and mitigate code duplications, specifically within the
-Linux kernel subsystems, focusing our study on the AMD Display driver and the Industrial 
-IO subsystem. Our approach includes the development of a tool capable of detecting duplicated 
-functions and establishing strategies for addressing these duplications. We tested the approach 
-in the context of two kernel components, the AMD Display driver and the Industrial IO subsystem.
+To address the code duplication problem within the Linux kernel, this research employs a 
+multi-method approach designed to bridge the gap between detection and practical mitigation. 
+Our approach, illustrated in Figure \ref{fig:reDesign}, is structured into two interconnected phases that progress 
+from tool development to an in-depth study of its application within the kernel’s development community. 
+The overall objective is to produce not only a functional tool but also actionable insights into 
+the patterns and practices surrounding code duplication and its resolution.
 
 \begin{figure}[h]
 \includegraphics[scale=0.9]{research_design}
@@ -79,33 +54,26 @@ in the context of two kernel components, the AMD Display driver and the Industri
 \label{fig:reDesign}
 \end{figure}
 
-This research aims to identify patterns of software engineering techniques, 
-such as refactoring methods commonly used to address code duplications. 
-These patterns will serve as a guide for future contributors in mitigating 
-code duplication issues within this context. To investigate our approach, 
-we are developing a tool to identify duplicate code. We then refactor portions 
-of this code and submit patches to maintainers, providing evidence of the tool’s 
-accuracy in detecting duplicate functions. Our research design follows a 
-multi-method approach, structured into two phases, each employing different research methods.
+The initial phase of our research focused on the development and validation of ArKanjo, a 
+command-line tool capable of identifying code duplication at the function level.  The 
+tool's accuracy was rigorously validated by evaluating its performance against the 
+standard BigCloneBench dataset \citep{bigclonebench} and by conducting an empirical analysis 
+of its results within the AMD Display driver.  This foundational work ensured we had a 
+reliable instrument to proceed with the practical investigation of code duplication 
+in our target subsystems.
 
-In \textbf{Phase I}, we propose, develop, and validate a tool capable of
-identifying code duplications at the function level within C codebases.
-We expect this tool to effectively detect code duplications in the targeted subsystems 
-of the Linux kernel, as preliminary investigations suggest that kernel code files often 
-contain a mix of duplicated and unique functions. We will use a triangulation method to 
-validate the tool, comparing its results with an established code duplication database 
-referenced in the literature and conducting an empirical analysis on a randomly selected 
-set of files from the AMD Display driver, which our tool flags as containing duplications.
-A detailed explanation of our validation process is provided in Chapter \ref{cha:method}.
+With a validated tool, the research then moved from detection to practice, investigating 
+the real-world challenges of mitigating the identified duplications. This was accomplished 
+through an ethnographic study designed to engage with the kernel community and understand 
+their perspectives on code quality and refactoring.  This study had two components: a 
+participant-observation experiment where the author submitted refactoring patches to the 
+AMD Display driver, and a non-participant observation of university students using ArKanjo 
+to contribute fixes to both the AMD Display and Industrial I/O subsystems.  
 
-Upon completing the first phase, we anticipate having a validated tool for identifying 
-code duplications within the context of the Linux kernel subsystems studied. We then 
-proceed to the second phase, which focuses on mitigating these duplications. 
-In \textbf{Phase II}, we aim to verify if we can mitigate the duplication found by 
-the developed tool. To achieve this, we have designed an ethnographic approach that 
-enables us to interact with the Linux development community and gather artifacts that 
-either support or challenge our proposed mitigation strategies. Figure \ref{fig:reDesign} 
-summarizes the research steps proposed in this study.
+By combining tool 
+development with direct community interaction, this research design allows for a comprehensive 
+understanding of the technical and social factors that influence the mitigation of duplicated 
+code in a large-scale open-source project.
 
 \section**{Thesis Structure}
 
