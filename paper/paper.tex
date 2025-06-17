@@ -39,19 +39,19 @@
 \author{\IEEEauthorblockN{Luan Ícaro Pinto Arcanjo}
 \IEEEauthorblockA{
 Universidade de São Paulo\\
-São Paulo, SP Brazil 05508-220\\
+São Paulo, SP Brazil\\
 Email: luanicaro@usp.br}
 \and
 \IEEEauthorblockN{David Tadokoro}
 \IEEEauthorblockA{
 Universidade de São Paulo\\
-São Paulo, SP Brazil 05508-220\\
+São Paulo, SP Brazil\\
 Email: davidbtadokoro@usp.br}
 \and
 \IEEEauthorblockN{Paulo Meirelles}
 \IEEEauthorblockA{
 Universidade de São Paulo\\
-São Paulo, SP Brazil 05508-220\\
+São Paulo, SP Brazil\\
 Email: paulormm@ime.usp.br}
 
 }
@@ -62,14 +62,14 @@ Email: paulormm@ime.usp.br}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-The Linux kernel’s massive scale (+28 M LoC, +20 K contributors) presents unique 
+The Linux kernel massive scale (+28 M LoC, +20 K contributors) presents unique 
 maintenance challenges. Surprisingly, code duplication remains a persistent issue 
-in the kernel’s codebase, which can hinder its evolution and patching. Academic 
+in the kernel codebase, which can hinder its evolution and patching. Academic 
 approaches often focus on pairwise comparison of code artifacts, which are not directly applied 
 to comprehensive codebase analyses. Other existing free software tools explored in 
 practice frequently suffer from limited functionality, such as primitive textual 
 matching, prove too narrow in scope, or fail to deliver effective results on complex, 
-large-scale codebases. Existing solutions generally fail to address the Linux kernel’s 
+large-scale codebases. Existing solutions generally fail to address the Linux kernel 
 specific needs: (1) scalability to handle its size, (2) actionable results for 
 developers, and (3) integration with kernel development workflows.
 %
@@ -102,7 +102,7 @@ software projects.
 
 \section{Introduction}
 
-The Linux kernel is a foundational Free Software project 
+The Linux kernel is a foundational free software project 
 critical to a significant portion of the world digital infrastructure. Maintaining 
 the kernel is an enormous undertaking involving over 28 million lines of code 
 and contributions from over twenty thousand developers. Within this context, code 
@@ -137,89 +137,88 @@ methods and ethnographic studies.
 
 ArKanjo, our proposed tool, is a Command Line Interface (CLI) application designed to
 help developers identify code clone duplication at the function level. Released under the
-MIT license, ArKanjo is available at the url: \url{https://github.com/LipArcanjo/arkanjo}
+MIT license, ArKanjo is available at \textit{\url{github.com/LipArcanjo/arkanjo}}.
 
 \subsection{Architecture}
 
 \begin{figure}[!t]
 \centering
-\includegraphics[width=3in]{diagrama_mestrado}
+\includegraphics[width=3.5in]{diagrama_mestrado}
 \caption{Architecture diagram demonstrating the relationship between the tool components}
 \label{fig:diagram}
 \end{figure}
 
 The tool operates in two main parts: the \textbf{Preprocessor} and the \textbf{Query Responder}. 
-The \textbf{Preprocessor} is responsible for performing heavy computations to find the code 
-duplications across a codebase and produce artifacts to consult information related to the 
-duplications in a structured form. The \textbf{Query Responder} consumes the artifacts produced 
-by the Preprocessor to execute the tool functionalities as requested. This choice enables the 
-tool to concentrate on the heavy and slow parts that can be executed only once per codebase, 
-thus allowing a fast performance for multiple queries related to a single codebase.
+The \textbf{Preprocessor} performs heavy computations to find code 
+duplications across a codebase and produces artifacts to store duplication-related information 
+in a structured form. The \textbf{Query Responder} consumes the artifacts produced 
+by the Preprocessor to execute the tool functionalities as requested. This design allows the 
+tool to perform the heavy and time-consuming steps only once per codebase, enabling fast performance 
+for multiple queries on the same codebase.
 
-The Preprocessor contains two main components, the Function Breaker and the Code Duplication Finder. 
-The flow of how the Preprocessor works is as follow: Function Parser receives the codebase the user is interested in,
-extracts the functions of the codebase along with metadata, and creates a new temporary codebase where the functions extracted become new code files. 
-The Code Duplication Finder iterates over every pair of files in the Temporary Codebase, checks if they are code clones, and, 
-if so, saves them in the Code Duplication Database, which is a text file that stores every code duplication as a triple 
-\textbf{<function1,function2,similarity>}, where \textbf{function1} and \textbf{function2} are the functions that are duplicates 
-of each other, and \textbf{similarity} is the metric given by the code duplication detection method utilized in the Code Duplication Finder.
-Figure \ref{fig:diagram} illustrates the tool architecture.
+The Preprocessor contains two main components: the Function Breaker and the Code Duplication Finder. 
+The workflow of the Preprocessor is as follows: the Function Parser receives the input codebase,
+extracts the functions along with metadata, and creates a temporary codebase where each extracted 
+function becomes a new code file. The Code Duplication Finder then iterates over every pair of files 
+in the temporary codebase, checks whether they are code clones, and, if so, stores the result in 
+the Code Duplication Database. This database is a text file that records each code duplication as a triple 
+\textbf{<function1, function2, similarity>}, where \textbf{function1} and \textbf{function2} are the 
+duplicated functions, and \textbf{similarity} is the score returned by the duplication detection method 
+used in the Code Duplication Finder. Figure~\ref{fig:diagram} illustrates the tool architecture.
 
-The Query Responder consumes the Temporary Codebase and the Code Duplication Database to extract duplicated 
-functions-related information per user request. If the user executes the Query Responder without executing the 
-Preprocessor, the Query Responder calls the Preprocessor to create the required artifacts.
+The Query Responder uses the temporary codebase and the Code Duplication Database to extract 
+information about duplicated functions based on the user's request. If the user executes the 
+Query Responder without previously executing the Preprocessor, the Query Responder automatically 
+calls the Preprocessor to generate the required artifacts.
 
 The Function Parser receives the input codebase and transforms it into the temporary
-codebase. The Function Parser iterates through every source code file from the programming 
-language it supports and uses a specific programming language function extractor
-to extract every function in the file. For each function extracted, two new source code files
-and a metadata file are created in the temporary codebase, represented by the pair <file
-name, function name>, the source code file of the function, and the proper function.
-The first new source code file contains the function’s body from the function it represents,
-while the other new source code file contains the function’s signature. The metadata file
-contains additional relevant information about the function, such as the function name,
-the line where the function signature starts in the source code file, and the line where the
-function’s body ends in the source code file. The programming languages supported at
-the moment are C and Java, although Java has limited support.
+codebase. It iterates through every source code file written in a supported programming 
+language and uses a language-specific extractor to isolate each function. For each extracted 
+function, two new source code files and a metadata file are created in the temporary codebase, 
+represented by the pair \textbf{<file name, function name>}, the source code of the function, 
+and the function metadata. One of the new files contains the function body, and the other 
+contains the function signature. The metadata file includes additional relevant information,
+such as the function name, the line where the signature starts, and the line where the function 
+body ends. Currently, the supported programming languages are C and Java, although Java support is limited.
 
 The Code Duplication Finder iterates through every pair of source code files in the
-temporary codebase, representing functions from the input codebase. For each pair of
-files, we execute a code duplication detection method that computes a metric measuring
-how similar the pair of files is, which we refer to as similarity. If the similarity is greater
-than or equal to the minimum similarity threshold (a parameter provided by the user
-during the Preprocessor), we store this pair of functions along with its similarity in the
-Code Duplication Database. 
-We implemented two methods for code duplication detection in the tool, which the user
-can choose to use. The first method is based on text similarity, and the second is simpler
-and based on the number of equal lines. The experiments and tests in this research were
-done using the text similarity method.
+temporary codebase, each representing a function from the input codebase. For each pair,
+a code duplication detection method computes a similarity score. If the similarity is greater 
+than or equal to the minimum threshold (provided by the user during preprocessing), the pair 
+is stored in the Code Duplication Database along with the similarity score.
+
+We implemented two duplication detection methods in the tool, which users can choose 
+between. The first method is based on text similarity, and the second is a more straightforward approach 
+based on the number of identical lines. The experiments and tests in this research were 
+conducted using the text similarity method.
+
 
 \subsubsection{Code Duplication Methods Used}
 
-For the text similarity method, we treat the source code files as text and apply the
-TF-IDF vector embedding method implemented by the Gensim library \cite{gensim},
-then compute cosine similarity as the similarity metric. This method was chosen for 
-its claimed performance, programming language independence, and the fact that it does 
-not require compilable code, which is expected in the
-temporary codebase, as it does not contain complete code artifacts.
+For the text similarity method, we treat the source code files as plain text and apply the
+TF-IDF vector embedding method implemented by the Gensim library~\cite{gensim},
+then compute cosine similarity as the similarity metric. We chose this method for 
+its reported performance, programming language independence, and the fact that it does 
+not require compilable code, an important aspect given that the
+temporary codebase does not contain complete code artifacts.
 
-For the difference method, 
-we implemented a method that considered the number of exactly equal lines between two functions.
-For two functions \textit{function1} and \textit{function2}, we compute the similarity as the 
-ratio of duplicated lines between the two functions by the total number of lines in both functions.
-This code duplication method is considerably simpler and more explainable than the text similarity method, 
-as the metric is the ratio of common lines between the two functions. To compute the number of equal lines, we use
-the \textit{diff} command built-in in the Linux environment.
+We implemented a more straightforward approach for the difference method,
+considering the number of exactly equal lines between two functions.
+For two functions, \textit{function1} and \textit{function2}, we compute the similarity as the 
+ratio of duplicated lines to the total number of lines across both functions.
+This method is considerably simpler and more explainable than the text similarity method, 
+The metric is defined by the proportion of common lines between the two functions. 
+We use the \textit{diff} command built into the Linux environment to compute the number of equal lines.
 
 \subsection{Functionalities}
 
-We propose three main functionalities for the user in the tool, called the Duplication
+We propose three main functionalities for the user in the tool, called Duplication
 Explorer, Function Information, and Duplication Report. Each functionality accepts
 specific parameters to perform its operations.
 
 The Duplication Explorer is the primary functionality of our tool, designed to present
 the user with pairs of duplicated functions identified by the tool. We implement optional
-filters to facilitate more complex queries. Figure \ref{fig:explorer_ex} demonstrates an
+filters to support more complex queries. Figure~\ref{fig:explorer_ex} demonstrates an
 example of this functionality in use.
 
 \begin{figure}[!t]
@@ -243,18 +242,18 @@ example of this functionality in use.
 \label{fig:relatory_ex}
 \end{figure}
 
-
 The Function Information functionality provides detailed information about a specific function. 
-The functionality receives a target function from the user
+It receives a target function from the user
 and returns information such as the relative path, function name, and line numbers where
 the function is defined. Additionally, it provides similar information for every function
-that duplicates the given function. Figure \ref{fig:function_ex} demonstrates an
+that duplicates the given function. Figure~\ref{fig:function_ex} demonstrates an
 example of this functionality in use.
 
 The Duplication Report functionality provides an overview of
-duplicated code within the input codebase. This functionality calculates the number of
+duplicated code within the input codebase. It calculates the number of
 duplicated lines per folder in the codebase and presents the information to the user in
-a readable format. Figure \ref{fig:relatory_ex} demonstrates an example of this functionality in use.
+a readable format. Figure~\ref{fig:relatory_ex} demonstrates an example of this functionality in use.
+
 
 \section{Methods}
 
@@ -418,9 +417,8 @@ kernel maintenance and serves as a model for clone detection in other large-scal
 \section*{Acknowledgment}
 
 This study was financed, in part, by  the University of
-São Paulo - USP (Proc. 22.1.9345.1.2), the São Paulo Research Foundation -
-FAPESP (Proc. 19/26702-8) and the São Paulo State Data Analysis System
-Foundation - SEADE (Proc. 2023/18026-8), Brazil.
+São Paulo/USP (Proc. 22.1.9345.1.2), the São Paulo Research Foundation/FAPESP
+and the São Paulo State Data Analysis System Foundation/SEADE (Proc. 2023/18026-8), Brazil.
 
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
