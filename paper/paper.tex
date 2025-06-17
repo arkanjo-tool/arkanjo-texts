@@ -255,43 +255,46 @@ duplicated lines per folder in the codebase and presents the information to the 
 a readable format. Figure~\ref{fig:relatory_ex} demonstrates an example of this functionality in use.
 
 
+
 \section{Methods}
 
-To validate the ArKanjo tool capabilities to find code duplications within the 
-text similarity detection method used, we applied two independent
-methods. The first method evaluates the proposed tool using an approach from the literature,
+\todo[inline]{colocar no bibtex e usar cite para (Svajlenko et al., 2014)}
+To validate the capabilities of the ArKanjo tool in finding code duplications using the 
+text similarity detection method, we applied two independent
+evaluation approaches. The first method assesses the tool using a literature-based approach,
 comparing it against the BigCloneBench dataset (Svajlenko et al., 2014). The second
-method is an empirical analysis of a subset of functions within the AMD Display driver
+method consists of an empirical analysis of a subset of functions within the AMD Display driver
 that our tool identified as duplicates. 
 
 To validate the tool against the BigCloneBench dataset \cite{bigclonebench}, we followed
-the methodology presentedy by Liu et al. \cite{tailor}, we sampled 20,000 pairs from each clone
-type, adding 20,000 non-duplicate pairs as negative samples. We applied the same sampling
-approach to our tool to ensure a fair evaluation.
-Unlike state-of-art methods, our tool does not distinguish between clone types and
+the methodology presented by Liu et al.~\cite{tailor}. We sampled 20{,}000 pairs from each clone
+type and added 20{,}000 non-duplicate pairs as negative samples. We applied the same sampling
+strategy to our tool to ensure a fair comparison.
+Unlike state-of-the-art methods, our tool does not distinguish between clone types and
 identifies duplications at the function level rather than the file level, which is typical in
 state-of-the-art tools. Therefore, we adapted the metric calculation method for evaluation
 purposes. Specifically, we considered every pair of functions with a similarity metric
-equal to or greater than a threshold X as duplicates and marked the corresponding file
-pairs. A correctly identified duplication pair counts as accurate for its clone type, while
+equal to or greater than a threshold $X$ as duplicates and marked the corresponding file
+pairs. A correctly identified duplication pair is counted as accurate for its clone type, while
 an incorrectly inferred pair is considered incorrect across all clone types.
 To understand the impact of varying the similarity threshold, we evaluated our tool using
 different threshold values: 30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, and 100\%. We then analyzed
 and discussed the results.
 
 For the empirical analysis, we randomly sampled function pairs identified by the tool as
-duplicates. For each similarity threshold X (30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, and 100\%) 
-we randomly selected ten function pairs with a similarity close to X, allowing for a 1\%
+duplicates. For each similarity threshold $X$ (30\%, 40\%, 50\%, 60\%, 70\%, 80\%, 90\%, and 100\%), 
+we randomly selected ten function pairs with a similarity close to $X$, allowing for a 1\%
 deviation.
 
-To assess if the duplications found by the ArKanjo tool were actionable, the research conducted 
-a multi-part ethnographic study. In this study, the author and 12 student groups from the
-Free Software Development course at University of São Paulo acted as new contributors 
+To assess whether the duplications found by the ArKanjo tool were actionable, this research conducted 
+a multi-part ethnographic study. The author and 12 student groups from the
+Free Software Development course at the University of São Paulo acted as new contributors 
 to the Linux kernel. 
-They used the tool to identify duplications within the Industrial I/O (IIO) subsytem and AMD Display 
-driver subsystems, refactored the code to address the issues, and submitted their proposed 
-fixes as patches to the community maintainers. Throughout this process, the students documented 
-their refactoring approaches and their experiences interacting with the kernel community.
+They used the tool to identify duplications within the Industrial I/O (IIO) subsystem and the AMD Display 
+driver subsystem refactored the code to address the issues, and submitted their proposed 
+fixes as patches to the community maintainers. The students documented 
+their refactoring approaches and experiences interacting with the kernel community throughout this process.
+
 
 \section{Results}
 
