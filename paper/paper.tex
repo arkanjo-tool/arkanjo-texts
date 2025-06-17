@@ -62,16 +62,17 @@ Email: paulormm@ime.usp.br}
 % in the abstract
 \begin{abstract}
 The Linux kernel’s massive scale (+28 M LoC, +20 K contributors) presents unique 
-maintenance challenges. Surprisingly, Code duplication remains a persistent issue 
-in the kernel’s codebase, which could hinder its evolution and patching. Academic 
-approaches often focus on pairwise comparison of code artifacts, not directly applied 
-for comprehensive codebase analyses. Other existing free software tools explored in 
+maintenance challenges. Surprisingly, code duplication remains a persistent issue 
+in the kernel’s codebase, which can hinder its evolution and patching. Academic 
+approaches often focus on pairwise comparison of code artifacts, which are not directly applied 
+to comprehensive codebase analyses. Other existing free software tools explored in 
 practice frequently suffer from limited functionality, such as primitive textual 
 matching, prove too narrow in scope, or fail to deliver effective results on complex, 
 large-scale codebases. Existing solutions generally fail to address the Linux kernel’s 
 specific needs: (1) scalability to handle its size, (2) actionable results for 
-developers, and (3) integration with kernel development workflows. 
-This paper presents ArKanjo, a novel command-line tool for Linux kernel maintenance 
+developers, and (3) integration with kernel development workflows.
+%
+This paper presents \textit{ArKanjo}, a novel command-line tool for Linux kernel maintenance 
 designed to detect and analyze function-level duplications. Released under the MIT 
 license, ArKanjo employs a two-stage architecture consisting of a Preprocessor and 
 a Query Responder that separates computationally intensive analysis from efficient 
@@ -79,7 +80,9 @@ querying for duplications within large codebases. Pivotal advantages of ArKanjo 
 existing solutions include: (1) optimization for C codebases with kernel-specific 
 patterns; (2) preprocessing that enables rapid queries without redundant analysis; 
 and (3) prioritization of duplicates that impact maintainability, such as copied 
-buggy logic. We evaluate Arkanjo against real-world duplication cases in recent 
+buggy logic. 
+%
+We evaluate ArKanjo against real-world duplication cases in recent 
 kernel versions, demonstrating its effectiveness in identifying problematic clones 
 that generic tools often overlook. By identifying well-defined, manageable 
 duplication instances, ArKanjo effectively lowers the barrier for new contributors, 
@@ -87,6 +90,7 @@ a capability evidenced by its role in guiding students to make their first code
 improvements to the kernel. ArKanjo offers immediate value to kernel maintainers 
 and serves as a replicable model for clone detection in other large-scale free 
 software projects.
+
 \end{abstract}
 
 % no keywords
@@ -420,142 +424,10 @@ for new contributors to make meaningful improvements. The tool provides immediat
 kernel maintenance and serves as a model for clone detection in other large-scale projects.
 
 
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure}
-
-% Note that the IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
-
-
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command,
-% and the \label for the overall figure must come after \caption.
-% \hfil is used as a separator to get equal spacing.
-% Watch out that the combined width of all the subfigures on a 
-% line do not exceed the text width or a line break will occur.
-%
-%\begin{figure*}[!t]
-%\centering
-%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
-%\label{fig_second_case}}
-%\caption{Simulation results for the network.}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat[]), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
-% labels, the optional argument to \subfloat must be present. If a
-% subcaption is not desired, just leave its contents blank,
-% e.g., \subfloat[].
-
-
-% An example of a floating table. Note that, for IEEE style tables, the
-% \caption command should come BEFORE the table and, given that table
-% captions serve much like titles, are usually capitalized except for words
-% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
-% and up, which are usually not capitalized unless they are the first or
-% last word of the caption. Table text will default to \footnotesize as
-% the IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
-
-
-% Note that the IEEE does not put floats in the very first column
-% - or typically anywhere on the first page for that matter. Also,
-% in-text middle ("here") positioning is typically not used, but it
-% is allowed and encouraged for Computer Society conferences (but
-% not Computer Society journals). Most IEEE journals/conferences use
-% top floats exclusively. 
-% Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the
-% \fnbelowfloat command of the stfloats package.
-
-
-
-
-% conference papers do not normally have an appendix
-
-
-% use section* for acknowledgment
-
-% trigger a \newpage just before the given reference
-% number - used to balance the columns on the last page
-% adjust value as needed - may need to be readjusted if
-% the document is modified later
-%\IEEEtriggeratref{8}
-% The "triggered" command can be changed if desired:
-%\IEEEtriggercmd{\enlargethispage{-5in}}
-
-% references section
-
-% can use a bibliography generated by BibTeX as a .bbl file
-% BibTeX documentation can be easily obtained at:
-% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
-% The IEEEtran BibTeX style support page is at:
-% http://www.michaelshell.org/tex/ieeetran/bibtex/
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 \bibliography{IEEEabrv,referencias}
-%
-% <OR> manually copy in the resultant .bbl file
-% set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
-% \begin{thebibliography}{1}
-%  
-%  \bibitem{IEEEhowto:kopka}
-%  H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-%    0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-%  
-% \end{thebibliography}
 
-
-
-
-% that's all folks
 \end{document}
 
 
