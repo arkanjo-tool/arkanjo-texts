@@ -2,6 +2,7 @@
 \usepackage{cite}
 \usepackage{array}
 \usepackage{url}
+\usepackage{todonotes}
 
 \ifCLASSINFOpdf
    \usepackage[pdftex]{graphicx}
@@ -95,51 +96,42 @@ software projects.
 
 % no keywords
 
-
-
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
 \IEEEpeerreviewmaketitle
 
 
 
 \section{Introduction}
 
-The Linux kernel is a foundational Free/Libre/Open Source Software (FLOSS) project, 
-critical to a significant portion of the world's digital infrastructure. Maintaining 
-the kernel is an enormous undertaking, involving more than 28 million lines of code 
+The Linux kernel is a foundational Free Software project 
+critical to a significant portion of the world digital infrastructure. Maintaining 
+the kernel is an enormous undertaking involving over 28 million lines of code 
 and contributions from over twenty thousand developers. Within this context, code 
 duplication persists as a significant challenge, a known harmful practice that 
-negatively affects code readability and increases the likelihood of introducing bugs 
-\cite{harmone,harmtwo}. This issue is particularly acute in the 
-kernel's device drivers, which comprise over 66\% of the source code \cite{marcelo}. 
+negatively affects code readability and increases the likelihood of introducing
+bugs~\cite{harmone,harmtwo}. This issue is particularly acute in the 
+kernel device drivers, which comprise over 66\% of the source code~\cite{marcelo}. 
 For instance, maintainers of the AMD Display driver have specifically highlighted code 
 duplication as a significant impediment to their work.
 
-The detection of code duplication, or code clones, has been a subject of research for 
+\todo[inline]{colocar no bibtex e usar cite para (Jankowitz, 1988)}
+The detection of code duplication, or code clones, has been a research subject for 
 decades (Jankowitz, 1988). The literature provides a standard taxonomy, classifying 
 clones into four types based on their degree of similarity, from identical copies 
-(Type-1) to semantically equivalent but textually different fragments (Type-4) \cite{litreview}. 
+(Type-1) to semantically equivalent but textually different fragments (Type-4)~\cite{litreview}. 
 Various detection methodologies have been developed, including textual, token-based, 
-tree-based, and graph-based approaches \cite{litreview}. These have culminated in 
-state-of-the-art techniques, such as the graph-based work by Liu et al \cite{tailor}. 
-However, the primary focus of such academic work remains on determining if a given 
-pair of code artifacts are duplicates, rather than providing a scalable method to scan 
+tree-based, and graph-based approaches~\cite{litreview}. These have culminated in 
+state-of-the-art techniques, such as the graph-based work by Liu et al.~\cite{tailor}. 	
+However, the primary focus of such academic work remains on determining whether a given 
+pair of code artifacts are duplicates rather than providing a scalable method to scan 
 an entire codebase for actionable results. Conversely, existing free software tools explored 
-in practice often lack this sophistication, such as relying on primitive textual matching 
+in practice often lack this sophistication, relying instead on primitive textual matching 
 that is insufficient for the complexity and scale of the kernel.
 
-To fill this gap, this research proposes a new approach embodied in ArKanjo, a tool 
+To fill this gap, this research proposes a new approach embodied in \textit{ArKanjo}, a tool 
 designed specifically to identify and facilitate the mitigation of function-level code 
 duplications within the Linux kernel. To test the tool, we employ multiple analytical 
 methods and ethnographic studies.
+
 
 \section{ArKanjo Tool}
 
