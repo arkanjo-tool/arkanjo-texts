@@ -113,9 +113,8 @@ kernel device drivers, which comprise over 66\% of the source code~\cite{marcelo
 For instance, maintainers of the AMD Display driver have specifically highlighted code 
 duplication as a significant impediment to their work.
 
-\todo[inline]{colocar no bibtex e usar cite para (Jankowitz, 1988)}
 The detection of code duplication, or code clones, has been a research subject for 
-decades (Jankowitz, 1988). The literature provides a standard taxonomy, classifying 
+decades~\cite{firstman}. The literature provides a standard taxonomy, classifying 
 clones into four types based on their degree of similarity, from identical copies 
 (Type-1) to semantically equivalent but textually different fragments (Type-4)~\cite{litreview}. 
 Various detection methodologies have been developed, including textual, token-based, 
@@ -258,15 +257,14 @@ a readable format. Figure~\ref{fig:relatory_ex} demonstrates an example of this 
 
 \section{Methods}
 
-\todo[inline]{colocar no bibtex e usar cite para (Svajlenko et al., 2014)}
 To validate the capabilities of the ArKanjo tool in finding code duplications using the 
 text similarity detection method, we applied two independent
 evaluation approaches. The first method assesses the tool using a literature-based approach,
-comparing it against the BigCloneBench dataset (Svajlenko et al., 2014). The second
+comparing it against the BigCloneBench dataset~\cite{bigclonebench}. The second
 method consists of an empirical analysis of a subset of functions within the AMD Display driver
 that our tool identified as duplicates. 
 
-To validate the tool against the BigCloneBench dataset \cite{bigclonebench}, we followed
+To validate the tool against the BigCloneBench dataset~\cite{bigclonebench}, we followed
 the methodology presented by Liu et al.~\cite{tailor}. We sampled 20{,}000 pairs from each clone
 type and added 20{,}000 non-duplicate pairs as negative samples. We applied the same sampling
 strategy to our tool to ensure a fair comparison.
