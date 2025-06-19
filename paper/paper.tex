@@ -2,27 +2,8 @@
 \usepackage{cite}
 \usepackage{array}
 \usepackage{url}
+\usepackage{graphicx}
 \usepackage{todonotes}
-
-\ifCLASSINFOpdf
-   \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  %\graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  \usepackage{graphicx}
-  \graphicspath{{figuras/},{fig},{logos/},{img/},{images/},{imagens/}}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{./eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  \DeclareGraphicsExtensions{.eps, .png, .jpeg}
-\fi
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -118,11 +99,12 @@ clones into four types based on their degree of similarity, from identical copie
 (Type-1) to semantically equivalent but textually different fragments (Type-4)~\cite{litreview}. 
 Various detection methodologies have been developed, including textual, token-based, 
 tree-based, and graph-based approaches~\cite{litreview}. These have culminated in 
-state-of-the-art techniques, such as the graph-based work by Liu et al.~\cite{tailor}. 	
+state-of-the-art techniques, such as the graph-based work by Liu et al.~\cite{tailor}.
+
 However, the primary focus of such academic work remains on determining whether a given 
 pair of code artifacts are duplicates rather than providing a scalable method to scan 
 an entire codebase for actionable results. Conversely, existing free software tools explored 
-in practice often lack this sophistication, relying instead on primitive textual matching 
+in practice, often lack this sophistication, relying instead on primitive textual matching 
 that is insufficient for the complexity and scale of the kernel.
 
 To fill this gap, this research proposes a new approach embodied in \textit{ArKanjo}, a tool 
@@ -139,14 +121,14 @@ MIT license, ArKanjo is available at \textit{\url{github.com/LipArcanjo/arkanjo}
 
 \subsection{Architecture}
 
-\begin{figure}[!t]
+\begin{figure}[ht]
 \centering
-\includegraphics[width=3.5in]{diagrama_mestrado}
+\includegraphics[width=3.5in]{fig/diagrama_mestrado.png}
 \caption{Architecture diagram with the tool components}
 \label{fig:diagram}
 \end{figure}
 
-The tool operates in two main parts, as illustrates in Figure~\ref{fig:diagram}: the \textbf{Preprocessor} and the \textbf{Query Responder}. 
+The tool operates in two main parts, as illustrated in Figure~\ref{fig:diagram}: the \textbf{Preprocessor} and the \textbf{Query Responder}. 
 The \textbf{Preprocessor} performs heavy computations to find code 
 duplications across a codebase and produces artifacts to store duplication-related information 
 in a structured form. The \textbf{Query Responder} consumes the artifacts produced 
@@ -160,12 +142,12 @@ extracts the functions along with metadata, and creates a temporary codebase whe
 function becomes a new code file. The Code Duplication Finder then iterates over every pair of files 
 in the temporary codebase, checks whether they are code clones, and, if so, stores the result in 
 the Code Duplication Database. This database is a text file that records each code duplication as a triple 
-\textbf{<function1, function2, similarity>}, where \textbf{function1} and \textbf{function2} are the 
+\textbf{$<$function1, function2, similarity$>$}, where \textbf{function1} and \textbf{function2} are the 
 duplicated functions, and \textbf{similarity} is the score returned by the duplication detection method 
 used in the Code Duplication Finder.
 
 The Query Responder uses the temporary codebase and the Code Duplication Database to extract 
-information about duplicated functions based on the user's request. If the user executes it
+information about duplicated functions based on the user's request. If the user executes the Query Responder
 without previously executing the Preprocessor, the Query Responder automatically 
 calls the Preprocessor to generate the required artifacts.
 
@@ -173,7 +155,7 @@ The Function Parser receives the input codebase and transforms it into the tempo
 codebase. It iterates through every source code file written in a supported programming 
 language and uses a language-specific extractor to isolate each function. For each extracted 
 function, two new source code files and a metadata file are created in the temporary codebase, 
-represented by the pair \textbf{<file name, function name>}, the source code of the function, 
+represented by the pair \textbf{$<$file name, function name$>$}, the source code of the function, 
 and the function metadata. One of the new files contains the function body, and the other 
 contains the function signature. The metadata file includes additional relevant information,
 such as the function name, the line where the signature starts, and the line where the function 
@@ -214,31 +196,26 @@ We propose three main functionalities for the user in the tool, called Duplicati
 Explorer, Function Information, and Duplication Report. Each functionality accepts
 specific parameters to perform its operations.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=3.5in]{fig/explorer_example.png}
+\caption{Example of the \textit{Duplication Explorer} functionality.}
+\label{fig:explorer_ex}
+\end{figure}
+
 The Duplication Explorer is the primary functionality of our tool, designed to present
 the user with pairs of duplicated functions identified by the tool. We implement optional
 filters to support more complex queries. Figure~\ref{fig:explorer_ex}
 demonstrates an example of this functionality in use.
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=3.5in]{explorer_example}
-\caption{Example of the \textit{Duplication Explorer} functionality.}
-\label{fig:explorer_ex}
-\end{figure}
 
-\begin{figure}[!t]
+\begin{figure}[ht]
 \centering
-\includegraphics[width=3.5in]{function_example}
+\includegraphics[width=3.5in]{fig/function_example.png}
 \caption{Example of the \textit{Function Information} functionality.}
 \label{fig:function_ex}
 \end{figure}
 
-\begin{figure}[!t]
-\centering
-\includegraphics[width=3.5in]{relatory_example}
-\caption{Example of the \textit{Duplication Report} functionality.}
-\label{fig:relatory_ex}
-\end{figure}
 
 The Function Information functionality provides detailed information about a specific function. 
 It receives a target function from the user
@@ -247,18 +224,22 @@ the function is defined. Additionally, it provides similar information for every
 that duplicates the given function. Figure~\ref{fig:function_ex} demonstrates an
 example of this functionality in use.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4in]{fig/relatory_example.png}
+\caption{Example of the \textit{Duplication Report} functionality.}
+\label{fig:relatory_ex}
+\end{figure}
+
 The Duplication Report functionality provides an overview of
 duplicated code within the input codebase. It calculates the number of
 duplicated lines per folder in the codebase and presents the information to the user in
 a readable format, as demonstrated in Figure~\ref{fig:relatory_ex}.
 
 
-
 \section{Methods}
 
-To validate the capabilities of the ArKanjo tool in finding code duplications using the 
-text similarity detection method, we applied two independent
-evaluation approaches. The first method assesses the tool using a literature-based approach,
+We applied two independent evaluation approaches to validate the capabilities of the ArKanjo tool in finding code duplications using the text similarity detection method. The first method assesses the tool using a literature-based approach,
 comparing it against the BigCloneBench dataset~\cite{bigclonebench}. The second
 method consists of an empirical analysis of a subset of functions within the AMD Display driver
 that our tool identified as duplicates. 
@@ -267,6 +248,7 @@ To validate the tool against the BigCloneBench dataset~\cite{bigclonebench}, we 
 the methodology presented by Liu et al.~\cite{tailor}. We sampled 20{,}000 pairs from each clone
 type and added 20{,}000 non-duplicate pairs as negative samples. We applied the same sampling
 strategy to our tool to ensure a fair comparison.
+
 Unlike state-of-the-art methods, our tool does not distinguish between clone types and
 identifies duplications at the function level rather than the file level, which is typical in
 state-of-the-art tools. Therefore, we adapted the metric calculation method for evaluation
@@ -283,14 +265,7 @@ duplicates. For each similarity threshold $X$ (30\%, 40\%, 50\%, 60\%, 70\%, 80\
 we randomly selected ten function pairs with a similarity close to $X$, allowing for a 1\%
 deviation.
 
-To assess whether the duplications found by the ArKanjo tool were actionable, this research conducted 
-a multi-part ethnographic study. The author and 12 student groups from the
-Free Software Development course at the University of São Paulo acted as new contributors 
-to the Linux kernel. 
-They used the tool to identify duplications within the Industrial I/O (IIO) subsystem and the AMD Display 
-driver subsystem refactored the code to address the issues, and submitted their proposed 
-fixes as patches to the community maintainers. The students documented 
-their refactoring approaches and experiences interacting with the kernel community throughout this process.
+We conducted a multi-part ethnographic study to assess whether the duplications found by the ArKanjo tool were actionable. In the second semester of 2024 and the first semester of 2025, respectively, the main author, conducting a first validation, and 12 student groups (19 undergraduate and 6 graduate students) from the Free Software Development course at the University of São Paulo acted as new contributors to the Linux kernel in a broader experiment, used the tool to identify duplications within the Industrial I/O (IIO) subsystem and the AMD Display driver subsystem refactored the code to address the issues, and submitted their proposed fixes as patches to the community maintainers. The students documented their refactoring approaches and experiences interacting with the kernel community throughout this process.
 
 
 \section{Results}
@@ -299,7 +274,7 @@ In this section, we assess the ArKanjo tool effectiveness in detecting code dupl
 
 \subsection{Tool Evaluation}
 
-\begin{table}[!t]
+\begin{table}[ht]
 
 \centering
 \caption{Recall of the ArKanjo tool in the BigCloneBench dataset.}
@@ -326,7 +301,7 @@ In this section, we assess the ArKanjo tool effectiveness in detecting code dupl
 \label{tab:bigclone}
 \end{table}
 
-\begin{table}[!t]
+\begin{table}[ht]
 
 \centering
 \caption{Results of the ArKanjo tool analyzing the AMD Display driver.}
@@ -361,13 +336,13 @@ which are sufficient to reveal propagated issues like copied buggy logic.
 However, it struggles with more complex clone types. A similarity threshold between 80\% and 100\% 
 yields favorable results in both methods.
 
-A discrepancy emerges when detecting non-duplicate pairs between
+Nevertheless, a discrepancy emerges when detecting non-duplicate pairs between
 the two methods. In the BigCloneBench evaluation, we found no false positives (i.e., negative
 samples inferred as duplications), whereas the empirical analysis revealed a higher percentage
 of false positives. We propose two potential explanations for this discrepancy.
 
 The first explanation concerns the limitations and known issues with BigCloneBench, as
-highlighted by Krinke and Ragkhitwetsagul \cite{bigfail}. The
+highlighted by Krinke and Ragkhitwetsagul~\cite{bigfail}. The
 second explanation relates to the nature of the AMD Display driver, where code artifacts
 often share semantic meaning. In contrast, BigCloneBench comprises self-contained code
 artifacts with minimal or no shared semantics. Since our tool relies on a text-based code clone
@@ -376,13 +351,10 @@ BigCloneBench dataset.
 
 \subsection{Ethnographic Study}
 
-Using the ArKanjo tool, the main author and 12 student groups identified and refactored duplicated 
-code in the AMD Display driver and the Industrial I/O (IIO) subsystems, submitting their work 
+Using the ArKanjo tool, the main author and 26 students (divided into 12 groups) identified and refactored duplicated code in the AMD Display driver and the Industrial I/O (IIO) subsystems, submitting their work 
 as patches to the community maintainers. This effort resulted in 13 patch submissions: 
 One was from the main author to the AMD Display driver, and 12 were from the student groups, with 11 targeting 
-the IIO subsystem and one aimed at the AMD Display driver. The author's patch was successfully accepted and merged into the kernel after a 
-lengthy review process, removing over 
-500 lines of duplicated code.
+the IIO subsystem and one aimed at the AMD Display driver. After a lengthy review process, the main author's patch was successfully accepted and merged into the kernel, removing over 500 lines of duplicated code.
 
 The student efforts demonstrated that newcomers could use the tool to contribute effectively. 
 Of the 12 student patches, five were accepted, four were rejected, and three required follow-up 
@@ -421,6 +393,7 @@ kernel maintenance and serves as a model for clone detection in other large-scal
 
 This study was financed, in part, by CAPES (Finance Code 001), the University of São Paulo – USP (Proc. 22.1.9345.1.2), the São Paulo Research Foundation – FAPESP and the São Paulo State Data Analysis System Foundation – SEADE (Proc. 2023/18026-8), Brazil.
 
+\newpage
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 \bibliography{IEEEabrv,referencias}
