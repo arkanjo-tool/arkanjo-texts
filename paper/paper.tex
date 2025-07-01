@@ -58,9 +58,8 @@ designed to detect and analyze function-level duplications. Released under the M
 license, ArKanjo employs a two-stage architecture consisting of a Preprocessor and 
 a Query Responder that separates computationally intensive analysis from efficient 
 querying for duplications within large codebases. Pivotal advantages of ArKanjo over 
-existing solutions include: (1) optimization for C codebases with kernel-specific 
-patterns; (2) preprocessing that enables rapid queries without redundant analysis; 
-and (3) prioritization of duplicates that impact maintainability, such as copied 
+existing solutions include: (1) preprocessing that enables rapid queries without redundant analysis; 
+and (2) prioritization of duplicates that impact maintainability, such as copied 
 buggy logic. 
 %
 We evaluate ArKanjo against real-world duplication cases in recent 
@@ -156,7 +155,8 @@ codebase. It iterates through every source code file written in a supported prog
 language and uses a language-specific extractor to isolate each function. For each extracted 
 function, two new source code files and a metadata file are created in the temporary codebase, 
 represented by the pair \textbf{$<$file name, function name$>$}, the source code of the function, 
-and the function metadata. One of the new files contains the function body, and the other 
+and the function metadata (in practice, this is a duplication of the original codebase, 
+structured as a parsed representation). One of the new files contains the function body, and the other 
 contains the function signature. The metadata file includes additional relevant information,
 such as the function name, the line where the signature starts, and the line where the function 
 body ends. Currently, the supported programming languages are C and Java, although Java support is limited.
@@ -249,9 +249,10 @@ the methodology presented by Liu et al.~\cite{tailor}. We sampled 20{,}000 pairs
 type and added 20{,}000 non-duplicate pairs as negative samples. We applied the same sampling
 strategy to our tool to ensure a fair comparison.
 
-Unlike state-of-the-art methods, our tool does not distinguish between clone types and
-identifies duplications at the function level rather than the file level, which is typical in
-state-of-the-art tools. Therefore, we adapted the metric calculation method for evaluation
+Unlike state-of-the-art methods, our tool does not distinguish between clone types. 
+Additionally, it identifies duplications at the function level, whereas most existing 
+tools operate at the file level.
+Therefore, we adapted the metric calculation method for evaluation
 purposes. Specifically, we considered every pair of functions with a similarity metric
 equal to or greater than a threshold $X$ as duplicates and marked the corresponding file
 pairs. A correctly identified duplication pair is counted as accurate for its clone type, while
@@ -351,13 +352,15 @@ BigCloneBench dataset.
 
 \subsection{Ethnographic Study}
 
-Using the ArKanjo tool, the main author and 26 students (divided into 12 groups) identified and refactored duplicated code in the AMD Display driver and the Industrial I/O (IIO) subsystems, submitting their work 
-as patches to the community maintainers. This effort resulted in 13 patch submissions: 
-One was from the main author to the AMD Display driver, and 12 were from the student groups, with 11 targeting 
-the IIO subsystem and one aimed at the AMD Display driver. After a lengthy review process, the main author's patch was successfully accepted and merged into the kernel, removing over 500 lines of duplicated code.
+Using the ArKanjo tool, the main author and 23 students (divided into 11 groups) identified and refactored 
+duplicated code in the AMD Display driver and the Industrial I/O (IIO) subsystems, submitting their work 
+as patches to the community maintainers. This effort resulted in 12 patch submissions: 
+One was from the main author to the AMD Display driver, and 11 were from the student groups, with 10 targeting 
+the IIO subsystem and one aimed at the AMD Display driver. After a lengthy review process, the main author's patch 
+was successfully accepted and merged into the kernel, removing over 500 lines of duplicated code.
 
 The student efforts demonstrated that newcomers could use the tool to contribute effectively. 
-Of the 12 student patches, five were accepted, four were rejected, and three required follow-up 
+Of the 11 student patches, five were accepted, four were rejected, and three required follow-up 
 fixes based on maintainer feedback. To remove the duplicated code, seven student groups used the 
 \textit{Parameterize Method}, and two used the \textit{Extract Method} \cite{refactorbook}, both of which are 
 straightforward refactoring strategies. These results support the conclusion that ArKanjo identifies 
@@ -382,9 +385,9 @@ and facilitate the refactoring of function-level code duplication within the Lin
 Evaluations demonstrated that ArKanjo is highly effective at identifying Type-1 and Type-2 
 clones, which are often indicative of propagated issues such as copied buggy logic. We validated the practical 
 value of the tool through an ethnographic study in which the main author and student 
-groups used ArKanjo to identify actionable duplications. This effort led to 13 patch 
-submissions, including one from the main author that removed over 500 lines of code and merged 
-into the kernel, alongside five successful student contributions at this moment. While some refactoring 
+groups used ArKanjo to identify actionable duplications. This effort led to 13 patch submissions, 
+including one from the main author and five from student groups that were successfully merged into 
+the kernel, collectively removing 991 lines of duplicated code. While some refactoring 
 efforts were declined due to maintainer priorities, ArKanjo successfully lowered the barrier 
 for new contributors to make meaningful improvements. The tool provides immediate value for 
 kernel maintenance and serves as a model for clone detection in other large-scale projects.
