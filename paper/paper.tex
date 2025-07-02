@@ -4,6 +4,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \usepackage{todonotes}
+\usepackage{hyperref}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -116,7 +117,8 @@ methods and ethnographic studies to test it.
 
 ArKanjo, our proposed tool, is a Command Line Interface (CLI) application designed to
 help developers identify code clone duplication at the function level. Released under the
-MIT license, ArKanjo is available at \textit{\url{github.com/LipArcanjo/arkanjo}}.
+MIT license, ArKanjo is available at 
+\textit{\href{https://github.com/arkanjo-tool/arkanjo}{github.com/arkanjo-tool/arkanjo}}.
 
 \subsection{Architecture}
 
@@ -311,7 +313,7 @@ In this section, we assess the ArKanjo tool effectiveness in detecting code dupl
 \hline
 
 \textbf{Similarity range} & \textbf{T1} & \textbf{T2} & T3 & T4
-& \textbf{False} & \textbf{Success Percentage} \\ \hline
+& \textbf{False} & \textbf{Success Ratio} \\ \hline
 99\% - 100\% & 9 & 0 & 0 & 1 & 0 & \textbf{100\%} \\ \hline
 89\% - 91\% & 0 & 8 & 0 & 1 & 1 & \textbf{90\%} \\ \hline
 79\% - 81\% & 0 & 3 & 2 & 3 & 2 & \textbf{80\%} \\ \hline
@@ -350,6 +352,20 @@ artifacts with minimal or no shared semantics. Since our tool relies on a text-b
 detection approach, it may naturally perform worse on the AMD Display driver than on the
 BigCloneBench dataset.
 
+%Although a formal performance benchmark was not conducted, we recorded the tool's performance 
+%on a machine equipped with a Ryzen 5700x processor and 32GB of RAM. The Preprocessor's 
+%worst-case execution time across five runs was 8 minutes and 56 seconds on the AMD Display driver 
+%and 9 minutes and 41 seconds on the IIO subsystem. In contrast, the Query Responder processed 
+%requests in under two seconds, demonstrating the efficiency of the two-stage architecture 
+%described in this paper.
+
+While a formal performance benchmark was not conducted, we measured the Preprocessor's execution 
+time on a machine equipped with a Ryzen 5700X processor and 32GB of RAM. Across five runs on the 
+AMD Display driver, the worst-case execution time for the Preprocessor was 8 minutes and 56 seconds. 
+On the IIO subsystem, the worst-case time over five runs was 9 minutes and 41 seconds. 
+In contrast, the Query Responder processed requests in under two seconds in both cases, 
+demonstrating the efficiency of the two-stage architecture.
+
 \subsection{Ethnographic Study}
 
 Using the ArKanjo tool, the main author and 23 students (divided into 11 groups) identified and refactored 
@@ -357,12 +373,12 @@ duplicated code in the AMD Display driver and the Industrial I/O (IIO) subsystem
 as patches to the community maintainers. This effort resulted in 12 patch submissions: 
 One was from the main author to the AMD Display driver, and 11 were from the student groups, with 10 targeting 
 the IIO subsystem and one aimed at the AMD Display driver. After a lengthy review process, the main author's patch 
-was successfully accepted and merged into the kernel, removing over 500 lines of duplicated code.
+was successfully accepted and merged into the kernel.
 
 The student efforts demonstrated that newcomers could use the tool to contribute effectively. 
-Of the 11 student patches, five were accepted, four were rejected, and three required follow-up 
-fixes based on maintainer feedback. To remove the duplicated code, seven student groups used the 
-\textit{Parameterize Method}, and two used the \textit{Extract Method} \cite{refactorbook}, both of which are 
+Of the 11 student patches, 5 were accepted, 5 were rejected, and 1 required follow-up 
+fixes based on maintainer feedback. To remove the duplicated code, 7 student groups used the 
+\textit{Parameterize Method}, and 2 used the \textit{Extract Method} \cite{refactorbook}, both of which are 
 straightforward refactoring strategies. These results support the conclusion that ArKanjo identifies 
 actionable duplications and that newcomers can successfully contribute patches to the kernel.
 
@@ -371,9 +387,8 @@ a significant portion of the student contributions encountered notable challenge
 often stemmed from maintainer feedback indicating that, although the proposed changes reduced duplication, 
 they were rejected or required substantial revision due to concerns about code readability, increased abstraction, 
 or the specific context of the code. Additional challenges included technical complexities, such as C macros in 
-configuration files and extended patch review timelines. 
-
-These findings highlight that while ArKanjo effectively identifies code duplications, a successful 
+configuration files and extended patch review timelines. These findings highlight that while ArKanjo 
+effectively identifies code duplications, a successful 
 contribution also requires navigating trade-offs between deduplication and other factors, such as 
 contextual appropriateness and maintainer expectations.
 
@@ -387,7 +402,11 @@ clones, which are often indicative of propagated issues such as copied buggy log
 value of the tool through an ethnographic study in which the main author and student 
 groups used ArKanjo to identify actionable duplications. This effort led to 13 patch submissions, 
 including one from the main author and five from student groups that were successfully merged into 
-the kernel, collectively removing 991 lines of duplicated code. While some refactoring 
+the kernel
+\footnote{Reference for the accepted patches:  
+\textit{\href{https://github.com/arkanjo-tool/arkanjo/blob/main/PATCHES.md}{github.com/arkanjo-tool/arkanjo/blob/main/PATCHES.md}}.
+}, 
+collectively removing 991 lines of duplicated code. While some refactoring 
 efforts were declined due to maintainer priorities, ArKanjo successfully lowered the barrier 
 for new contributors to make meaningful improvements. The tool provides immediate value for 
 kernel maintenance and serves as a model for clone detection in other large-scale projects.
