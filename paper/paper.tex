@@ -50,8 +50,7 @@ software\footnote{In this paper, we use the term \textit{Free Software}
 interchangeably with \textit{Open Source Software}.} tools explored in 
 practice frequently suffer from limited functionality, such as primitive textual 
 matching, prove too narrow in scope, or fail to deliver effective results on complex, 
-large-scale codebases. Existing solutions generally fail to address the Linux kernel 
-specific needs: (1) scalability to handle its size, (2) actionable results for 
+large-scale codebases. Existing solutions generally fail to address the Linux kernel-specific needs: (1) scalability to handle its size, (2) actionable results for 
 developers, and (3) integration with kernel development workflows.
 %
 This paper presents \textit{ArKanjo}, a novel command-line tool for Linux kernel maintenance 
@@ -88,12 +87,10 @@ the kernel is an enormous undertaking involving over 28 million lines of code
 and contributions from over twenty thousand developers. Within this context, code 
 duplication persists as a significant challenge, a known harmful practice that 
 negatively affects code readability and increases the likelihood of introducing
-bugs~\cite{harmone,harmtwo}. This issue is particularly acute in the 
-kernel device drivers, which comprise over 66\% of the source code~\cite{marcelo}. 
-For instance, maintainers of the AMD Display driver have specifically highlighted code 
-duplication as a significant impediment to their work.
+bugs~\cite{harmone,harmtwo}. This issue is particularly acute in kernel device drivers, which comprise over 66\% of the source code~\cite{marcelo}. 
+For instance, maintainers of the AMD Display driver have specifically highlighted code duplication as a significant impediment to their work.
 
-The detection of code duplication, or code clones, has been a research subject for 
+Detecting code duplication, or code clones, has been a research subject for 
 decades~\cite{firstman}. The literature provides a standard taxonomy, classifying 
 clones into four types based on their degree of similarity, from identical copies 
 (Type-1) to semantically equivalent but textually different fragments (Type-4)~\cite{litreview}. 
@@ -101,8 +98,7 @@ Various detection methodologies have been developed, including textual, token-ba
 tree-based, and graph-based approaches~\cite{litreview}. These have culminated in 
 state-of-the-art techniques, such as the graph-based work by Liu et al.~\cite{tailor}.
 
-However, the primary focus of such academic work remains on determining whether a given 
-pair of code artifacts are duplicates rather than providing a scalable method to scan 
+However, the primary focus of such academic work remains on determining whether a given pair of code artifacts is a duplicate rather than providing a scalable method to scan 
 an entire codebase for actionable results. Conversely, existing free software tools explored 
 in practice, often lack this sophistication, relying instead on primitive textual matching 
 that is insufficient for the complexity and scale of the kernel.
@@ -138,9 +134,7 @@ tool to perform the heavy and time-consuming steps only once per codebase, enabl
 for multiple queries on the same codebase.
 
 The Preprocessor contains two main components: the Function Breaker and the Code Duplication Finder. 
-The workflow of the Preprocessor is as follows: the Function Parser receives the input codebase,
-extracts the functions along with metadata, and creates a temporary codebase where each extracted 
-function becomes a new code file. The Code Duplication Finder then iterates over every pair of files 
+The workflow of the Preprocessor is as follows: the Function Parser receives the input codebase, extracts the functions along with metadata, and creates a temporary codebase where each extracted function becomes a new code file. The Code Duplication Finder then iterates over every pair of files 
 in the temporary codebase, checks whether they are code clones, and, if so, stores the result in 
 the Code Duplication Database. This database is a text file that records each code duplication as a triple 
 \textbf{$<$function1, function2, similarity$>$}, where \textbf{function1} and \textbf{function2} are the 
@@ -178,24 +172,20 @@ conducted using the text similarity method.
 \subsubsection{Code Duplication Methods Used}
 
 For the text similarity method, we treat the source code files as plain text and apply the
-TF-IDF vector embedding method implemented by the Gensim library~\cite{gensim},
-then compute cosine similarity as the similarity metric. We chose this method for 
-its reported performance, programming language independence, and the fact that it does 
-not require compilable code, an important aspect given that the
-temporary codebase does not contain complete code artifacts.
+TF-IDF vector embedding method implemented by the Gensim library~\cite{gensim}, then compute cosine similarity as the similarity metric. We chose this method for its reported performance, programming language independence, and the fact that it does 
+not require compilable code, an important aspect given that the temporary codebase does not contain complete code artifacts.
 
 We implemented a more straightforward approach for the difference method,
 considering the number of exactly equal lines between two functions.
 For two functions, \textit{function1} and \textit{function2}, we compute the similarity as the 
 ratio of duplicated lines to the total number of lines across both functions.
-This method is considerably simpler and more explainable than the text similarity method, 
+This method is considerably simpler and more explainable than the text similarity method. 
 The metric is defined by the proportion of common lines between the two functions. 
 We use the \textit{diff} command built into the Linux environment to compute the number of equal lines.
 
 \subsection{Functionalities}
 
-We propose three main functionalities for the user in the tool, called Duplication
-Explorer, Function Information, and Duplication Report. Each functionality accepts
+We propose three main functionalities for the user in the tool: Duplication Explorer, Function Information, and Duplication Report. Each functionality accepts
 specific parameters to perform its operations.
 
 \begin{figure}[ht]
@@ -207,8 +197,7 @@ specific parameters to perform its operations.
 
 The Duplication Explorer is the primary functionality of our tool, designed to present
 the user with pairs of duplicated functions identified by the tool. We implement optional
-filters to support more complex queries. Figure~\ref{fig:explorer_ex}
-demonstrates an example of this functionality in use.
+filters to support more complex queries. Figure~\ref{fig:explorer_ex} demonstrates an example of this functionality in use.
 
 
 \begin{figure}[ht]
@@ -252,8 +241,7 @@ type and added 20{,}000 non-duplicate pairs as negative samples. We applied the 
 strategy to our tool to ensure a fair comparison.
 
 Unlike state-of-the-art methods, our tool does not distinguish between clone types. 
-Additionally, it identifies duplications at the function level, whereas most existing 
-tools operate at the file level.
+Additionally, it identifies duplications at the function level, whereas most existing tools operate at the file level.
 Therefore, we adapted the metric calculation method for evaluation
 purposes. Specifically, we considered every pair of functions with a similarity metric
 equal to or greater than a threshold $X$ as duplicates and marked the corresponding file
@@ -352,18 +340,11 @@ artifacts with minimal or no shared semantics. Since our tool relies on a text-b
 detection approach, it may naturally perform worse on the AMD Display driver than on the
 BigCloneBench dataset.
 
-%Although a formal performance benchmark was not conducted, we recorded the tool's performance 
-%on a machine equipped with a Ryzen 5700x processor and 32GB of RAM. The Preprocessor's 
-%worst-case execution time across five runs was 8 minutes and 56 seconds on the AMD Display driver 
-%and 9 minutes and 41 seconds on the IIO subsystem. In contrast, the Query Responder processed 
-%requests in under two seconds, demonstrating the efficiency of the two-stage architecture 
-%described in this paper.
-
-While a formal performance benchmark was not conducted, we measured the Preprocessor's execution 
-time on a machine equipped with a Ryzen 5700X processor and 32GB of RAM. Across five runs on the 
+While we did not conduct a formal performance benchmark, we measured the Preprocessor's execution 
+time on a machine equipped with a Ryzen 5700X processor and 32GB of RAM. Across 5 runs on the 
 AMD Display driver, the worst-case execution time for the Preprocessor was 8 minutes and 56 seconds. 
-On the IIO subsystem, the worst-case time over five runs was 9 minutes and 41 seconds. 
-In contrast, the Query Responder processed requests in under two seconds in both cases, 
+On the IIO subsystem, the worst-case time over 5 runs was 9 minutes and 41 seconds. 
+In contrast, the Query Responder processed requests in under 2 seconds in both cases, 
 demonstrating the efficiency of the two-stage architecture.
 
 \subsection{Ethnographic Study}
@@ -375,15 +356,15 @@ One was from the main author to the AMD Display driver, and 11 were from the stu
 the IIO subsystem and one aimed at the AMD Display driver. After a lengthy review process, the main author's patch 
 was successfully accepted and merged into the kernel.
 
-The student efforts demonstrated that newcomers could use the tool to contribute effectively. 
-Of the 11 student patches, 5 were accepted, 5 were rejected, and 1 required follow-up 
+The students' efforts demonstrated that newcomers could use the tool to contribute effectively. 
+Of the 11 students' patches, 5 were accepted, 5 were rejected, and 1 required follow-up 
 fixes based on maintainer feedback. To remove the duplicated code, 7 student groups used the 
 \textit{Parameterize Method}, and 2 used the \textit{Extract Method} \cite{refactorbook}, both of which are 
-straightforward refactoring strategies. These results support the conclusion that ArKanjo identifies 
+straightforward refactoring strategies. These results support that ArKanjo identifies 
 actionable duplications and that newcomers can successfully contribute patches to the kernel.
 
 While this research includes successfully merged patches by the main author and student groups,
-a significant portion of the student contributions encountered notable challenges. These difficulties 
+a significant portion of the students' contributions encountered notable challenges. These difficulties 
 often stemmed from maintainer feedback indicating that, although the proposed changes reduced duplication, 
 they were rejected or required substantial revision due to concerns about code readability, increased abstraction, 
 or the specific context of the code. Additional challenges included technical complexities, such as C macros in 
@@ -395,25 +376,19 @@ contextual appropriateness and maintainer expectations.
 
 \section{Conclusion}
 
-This paper presented ArKanjo, a novel tool designed to detect effectively 
-and facilitate the refactoring of function-level code duplication within the Linux kernel. 
+This paper presented ArKanjo, a novel tool designed to detect effectively and facilitate the refactoring of function-level code duplication within the Linux kernel. 
 Evaluations demonstrated that ArKanjo is highly effective at identifying Type-1 and Type-2 
 clones, which are often indicative of propagated issues such as copied buggy logic. We validated the practical 
-value of the tool through an ethnographic study in which the main author and student 
-groups used ArKanjo to identify actionable duplications. This effort led to 13 patch submissions, 
-including one from the main author and five from student groups that were successfully merged into 
-the kernel
+value of the tool through an ethnographic study in which the main author and student groups used ArKanjo to identify actionable duplications. This effort led to 13 patch submissions, including 1 from the main author and 5 from student groups that were successfully merged into the kernel
 \footnote{Reference for the accepted patches:  
 \textit{\href{https://github.com/arkanjo-tool/arkanjo/blob/main/PATCHES.md}{github.com/arkanjo-tool/arkanjo/blob/main/PATCHES.md}}.
-}, 
-collectively removing 991 lines of duplicated code. While some refactoring 
-efforts were declined due to maintainer priorities, ArKanjo successfully lowered the barrier 
+}, collectively removing 991 lines of duplicated code. While some refactoring efforts were declined due to maintainer priorities, ArKanjo successfully lowered the barrier 
 for new contributors to make meaningful improvements. The tool provides immediate value for 
 kernel maintenance and serves as a model for clone detection in other large-scale projects.
 
 \section*{Acknowledgment}
 
-This study was financed, in part, by CAPES (Finance Code 001), the University of São Paulo – USP (Proc. 22.1.9345.1.2), the São Paulo Research Foundation – FAPESP and the São Paulo State Data Analysis System Foundation – SEADE (Proc. 2023/18026-8), Brazil.
+This study was financed, in part, by CAPES (Finance Code 001), the University of São Paulo – USP (Proc. 22.1.9345.1.2) and the São Paulo Research Foundation – FAPESP with the São Paulo State Data Analysis System Foundation – SEADE (Proc. 2023/18026-8), Brazil.
 
 \newpage
 \bibliographystyle{IEEEtran}
