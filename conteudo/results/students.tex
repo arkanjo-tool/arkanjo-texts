@@ -5,12 +5,6 @@ of the Free Software course, that they make the first-time contribution to the L
 mitigate duplication found by the ArKanjo tool while sending patches to the Linux subsystem 
 maintainers and documenting their experiences and learnings.
 
-For the students who worked in the IIO subsystem, the teaching assistant gave them duplicated 
-function pairs 
-found by the tool, and their responsibility was to think of how to mitigate the duplication 
-and send the patch to the maintainers. The student that worked in the AMD Display driver 
-have the additional work to use the tool to find the duplications.
-
 Appendix \ref{app:stuart} has references to the artifacts discussed in this section, 
 including the duplication function pairs that students mitigate, the students’ reports, 
 the patch students sent to the Linux kernel, and the answers to the survey asked 
@@ -19,85 +13,64 @@ the tool to find duplications in the IIO subsystem.
 
 \input{conteudo/results/table_students}
 
-Table \ref{tab:stu} summarizes students' groups' mitigation approaches. Seven groups applied 
-the parameterized refactor method, 
-and two applied the extractor method to their approaches to mitigate the duplications. 
-The other three groups do not use any refactor methods presented in the literature.  
-Five groups got their patches accepted and merged in Linux; four groups got their patches rejected, 
-and one group is still working on the patch submission, being in the fifth version of the patch at 
-the time this document was written. Two groups decided not to continue sending the patches after 
-they made initial versions.
+Table \ref{tab:stu} summarizes the student groups' mitigation approaches. It contains 
+the information about the chosen subsystem and the similarity threshold for groups that 
+opted for the first approach. Each entry also has the patch status, refactoring method, 
+and code diff corresponding to the final patch versions before it was dropped or accepted 
+into the code base. The code diff for a patchset corresponds to the sum of added and removed 
+lines of each of its patches.
 
-Groups one and four have worked in similar duplications, where two functions return a 
-boolean mirroring the results. That means when the first function returns true, the second 
-function returns false, and when the first function returns false, the second function 
-returns false. Group one had a simple approach, and the maintainers approved the changes quickly. 
-Group four attempted to mitigate the duplication with macros, a method found in the code file 
-they were working on. The maintainers disagreed with the proposed approach, arguing that the 
-proposed changes decrease the code readability, and asked for an approach similar to group one. 
-Group four submitted the patch after coding the approach proposed by the maintainers.
+Seven groups applied the parameterized refactor method, two groups used the extractor method, and one group applied the inline method to their approaches to mitigate their duplications. Four patches do not contain a refactoring technique defined in the literature (undefined). Six groups had their patches accepted and fully merged into Linux; four groups had their patches dropped; one group has its patchset partially applied and is still working on patch submission, currently in the sixth version of the patch when this document was written, but we can also consider this case as accepted.
 
-Groups three, six, and ten created a struct to encapsulate the parameters and mitigate duplication 
-when applying the parameterized method. Group three sent the mitigation to the maintainers and 
-approved it without significant comments. In contrast, the patch from group ten was rejected by 
-the same maintainer who approved the patch from group three. The maintainer justification to reject 
-the patch is that group ten refactored code files that has simple context, therefore adding a layer 
-of abstraction to remove a duplication deacrease the code readability without clear gains on 
-the codebase quality. Figure \ref{fig:group_10_reply} shows the maintainers's feedback for group ten.
+Groups 1 and 4 have worked in similar duplications, where two functions are involved: one to determine if a register is volatile and the other to determine if it is writable. These are two functions that return opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Group 2 used macros. After feedback from maintainers, both solutions converged to keep one of the functions while changing the content of the other to return a negated query of the former function. However, by the end of the feedback cycle, maintainers considered the patch from Group 1 irrelevant, while the patch from Group 4 was accepted. The reason is that Group 1 has chosen to apply the refactoring to a device that contains a register that is both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
 
+Groups 3, 6, and 10 created a struct to encapsulate the parameters and mitigate duplication when applying the parameterized method. The patches from Groups 6 and 10 were rejected by the same maintainer who approved the patch from Group 3. The maintainer's justification for rejecting the patch from Group 6 is that it proposes to fix duplication while adding more lines than removing, and is not convincing enough in other aspects, such as readability. The reason for rejecting the patch from Group 10 is that they refactored code files with simple context; therefore, adding a layer of abstraction to remove duplication decreases code readability without clear gains in codebase quality. The maintainers' feedback for Group 10 was:
+\begin{quote}
 
-\begin{figure}
-\includegraphics[scale=0.8]{group_10_reply}
-\caption[Maintainers' Feedback on Group Ten's Patch]{
-Maintainers' Feedback on Group Ten's Patch
-\footnote{Image obtained from Linux Lore, which is publicly provided at:
-\url{https://lore.kernel.org/linux-iio/20250428034222.318898-1-gabrielgeraldinosouza@gmail.com/T/\#u}}
-}
-\label{fig:group_10_reply}
-\end{figure}
+\textit{``A few comments inline, but overall I'm not sure the code reduction is sufficient to cover the resulting loss of readability. Sometimes a switch is simply clearer than a partial look-up table.''}
 
-Groups seven and eight used the extract method to approach the mitigations. Group eight sent the 
-mitigations to the maintainers, and the code changes were approved, with minor requested changes 
-in code style and smaller errors fixed. For group seven mitigation, the maintainers reject their 
-patch because the code changes add layers of abstractions to the code, making it more complex and 
-challenging to read. The maintainers proposed that group seven remove the duplicated functions and 
-insert the duplicated code multiple times where the functions were being called. This suggestion 
-may be bad practice for code quality, as it adds more complexity and responsibility to a bigger 
-function; it is viewed as the best choice for removing layers of abstraction and making the 
-code easier to read. Figure \ref{fig:group_7_reply} shows the maintainers's feedback for group seven.
+\textit{``So nice idea, but I'm not seeing it as being a good move for this particular code. I'd be slightly interested to see the optimized output of the two approaches, but this is far from a high-performance path, so we care a lot more about readability here.''}
+\end{quote}
 
+Groups 7 and 8 used the extract method to approach the mitigations. Group 8 sent the mitigations to the maintainers, and the code changes were approved, with minor requested changes in code style and smaller errors fixed. For Group 7 mitigation, the maintainer initially rejected the proposed patch but suggested a new refactoring approach: applying the extraction method refactoring to the duplicated code to an existing helper function. After the feedback cycle, maintainers accepted the patch in version 3.
 
-\begin{figure}
-\includegraphics[scale=0.8]{group_7_reply}
-\caption[Maintainers' Feedback on Group Seven's Patch]{
-Maintainers' Feedback on Group Seven's Patch
-\footnote{Image obtained from Linux Lore, which is publicly provided at:
-\url{https://lore.kernel.org/linux-iio/20250428132551.176788-1-bellacaselli20@gmail.com/}}
-}
-\label{fig:group_7_reply}
-\end{figure}
+Group 9 initially approached the selected duplication with a parameterized method, but after entering the feedback cycle, it was revealed that the problem represented a much more complex technical debt. The patch is still under development, currently at version 6, and has been separated into a 4-patch patch set, where half of them have been applied, and the remaining entries are receiving suggestions. Fortunately, maintainers are receptive and provide constant feedback; the contribution is expected to be fully merged if the students do not abandon the current work.
 
-Groups nine and eleven faced similar issues to those in Mitigation 1 on our participant observation 
-experiment, where configuration files designed as macros complicated the approach to the mitigations. 
-Group nine applied the parameterized method to not need to know the configurations in the 
-generic function, which is reasonable as the duplication approach only depends on one configuration 
-value. Group eleven worked with multiple configuration values, and to refactor the duplication, 
-they proposed to create a bigger macro that encapsulates the other macros, which is a clever 
-solution but adds abstraction and complexity to macros, which makes the code harder to debug and read.
-We do not get the feedback of the maintainers on the group eleven approach to know their opinions.
+Group 11 is the student who executed the tool and completed the process of identifying duplications. The student identified a duplication in the driver that occurred across eighteen code files, creating a patch to remove approximately four hundred lines of duplicated code. The student sent the mitigations to the maintainers, and their feedback pointed to fixing the warning in the code without arguing about removing the duplications. After addressing the issue, the patch was applied. This student also contributed to IIO, tackling a code duplication with inline method refactoring. This one, however, was received with more skepticism by the maintainer, and the student dropped the contribution because he did not think the feedback instructions were clear enough.
 
-Group twelve is the student who executed the tool and passed through the process of finding 
-duplications. The student found a duplication in the driver that happened across eighteen code files, 
-creating a patch to remove four hundred lines of duplicated code. The student sent the mitigations 
-to the maintainers, and their feedback pointed to fixing the warning in the code without arguing 
-about removing the duplications.
+Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that people without previous experience in Linux kernel development could approach duplications found by the \texttt{anonymous-tool} and become contributors to the kernel. We observed that not all duplications
+are viewed as code of bad quality, with maintainers analyzing the trade-off between the purpose of the duplicated code, code readability, and the levels of abstraction added to address the duplications.
 
-Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that 
-people without previous experience in Linux kernel development could approach duplications found 
-by the ArKanjo tool and become contributors to the kernel. We observed that not all duplications 
-are viewed as code with bad quality, with the maintainers analyzing the trade-off between the 
-purpose of the duplicated code, code readability, and the levels of abstraction added to 
-address the duplications.
+\subsection{Statistics of the contributions}
+
+\todo[inline]{Is it ok to add it here in the text? It was Spessoto that writed this section entirely and I reviewed it}
+
+The eleven groups, which have submitted 11 contributions to the IIO subsystem, have collectively 
+requested the insertion of 379 lines and the deletion of 605 lines in the subsystem, 
+representing an average of 34.45 lines added and 55 lines removed per contribution.
+
+Considering the sum of fully merged contributions, we have a code diff value of +51/-143, 
+with an average of +12.75/-35.75. This ratio is better than dropped contributions, which 
+have a total of +179/-219 with an average of +29.83/-36.5.
+
+It is also possible to notice a difference based on the similarity threshold used to 
+detect duplications. The proposed patches to address 100\%-similarity duplications 
+summed up to +46/-90 (average of +9.2/-18). For a 90\% value, the result was a total 
+of +333/-515 with an average of +55.5/-85.83. The 90\% value enabled ArKanjo to identify 
+less strict duplication cases, and, therefore, code segments with a greater extension, 
+compared to the 100\% similarity entries, which were shorter segments, causing a 
+difference in the average number of modified lines.
+
+Finally, the AMD contribution from Group 11, which involves the complete use of the ArKanjo toolchain, 
+got a completely different outcome. With a total of 90 lines inserted and 489 lines 
+removed, there are some points to be considered for the success and high modification 
+extension of the contribution:
+
+\begin{itemize}
+    \item The AMD Display subsystem has some self-reported problems regarding overall technical debt;
+    \item The AMD Display subsystem has a more centralized code structure and maintainer hierarchy, enabling contributors to tackle code duplications across a broader scope and multiple files, which happened to Group 11's contribution;
+    \item The complete control over the process of finding code duplication gave Group 11 the opportunity to identify and reason better over the duplications found by \texttt{anonymous-tool}, enabling a more strategic approach to searching for promising patch possibilities.
+\end{itemize}
 
 \subsection{Survey Results Analysis}
 

@@ -1,3 +1,4 @@
+
 We employ a multi-method research approach, using different methodologies to achieve our 
 goals to approach code duplication in some of the Linux subsystems. To validate if the 
 ArKanjo tool can find code duplications, we applied two independent methods and performed 
@@ -74,54 +75,41 @@ sent by the students.
 \subsection{Participant observation method}
 \label{subsec:partmethod}
 
-Given the tool evaluations demonstrating the tool's capabilities of finding duplications, 
-we proceeded to understand if the duplications found can be mitigated and the kernel 
-subsystem's maintainers' opinions about the duplications and their respective mitigations. 
-To accomplish this objective, we proposed a participant-observation experiment, 
-where we, people who have never contributed to the Linux kernel, act as contributors to 
-the AMD Display driver and collect artifacts of our experience in the process.
+To investigate whether we can use the ArKanjo tool to find ways to contribute to the 
+Linux kernel, we conducted a participant observation experiment in the second semester 
+of 2024, where we acted as first-time contributors to the AMD Display driver, collecting 
+artifacts of our experience in the process.
 
-We executed the tool in the AMD Display driver codebase. 
-We manually analyzed the biggest duplications regarding the number of lines and raised them 
-to two duplicated function pairs that we judged interesting to try to mitigate. We have 
-chosen to approach the biggest duplications as proof of concept so that we can make 
-significant impacts. The two duplicated function pairs chosen are:
+In the AMD Display driver codebase, we executed the ArKanjo tool. 
+We manually analyzed the biggest duplications regarding the number of lines and found 
+two duplicated function pairs that we judged interesting to try to mitigate. We 
+have chosen to approach the biggest duplications as proof of concept so that we 
+can make significant impacts. 
 
-\todo[inline]{Remove comment to align the items and fix the line size if breaks}
-\begin{itemize}
-\item \textbf{Duplicated function pair 1}
-\begin{itemize}
-\item Function named \textit{offset\_to\_id} in file \textit{dc/gpio/dcn32/hw\_translate\_dcn32.c}.
-\item Function named \textit{offset\_to\_id} in file \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}.
-\end{itemize}
-\item \textbf{Duplicated function pair 2}
-%\begin{itemize}
-\item Function named \textit{phy\_id\_to\_atom} in file \textit{dc/bios/dce110/command\_table\_helper\_dce110.c}.
-\item Function named \textit{phy\_id\_to\_atom} in file \textit{dc/bios/dce60/command\_table\_helper\_dce60.c}.
-%\end{itemize}
-\end{itemize}
+The first duplicated function pair chosen is function \textit{offset\_to\_id} on files \textit{dc/gpio/dcn32/hw\_translate\_dcn32.c} and \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}. The second duplicated function pair is function \textit{phy\_id\_to\_atom} in file 
+\textit{ \seqsplit{dc/bios/dce110/command\_table\_helper\_dce110.c}} and \textit{\seqsplit{dc/bios/dce60/command\_table\_helper\_dce60.c}}.
+Hereafter, the mitigation on \textit{offset\_to\_id} will be referred to as mitigation 1, and the mitigation on 
+\textit{phy\_id\_to\_atom} will be referred to as mitigation 2.
 
 Given the two duplicated function pairs, we observed that the files in the functions 
 contain multiple other duplications. Thus, we proposed a simple systematic approach 
 to mitigate all the functions duplicated in the context, not just the duplicated 
 function pairs. 
-After we approached the duplications with the systematic approach, for the duplicated 
+After we approached the duplications with the systematic strategy, for the duplicated 
 function pairs that had successfully mitigated the duplication, we sent patches to the 
 AMD Display driver email list to validate the mitigations and see the maintainer's opinion 
 while documenting the process and our impressions.
-The systematic approach is defined below.
+The systematic approach is defined below. 
 
 \subsubsection{Systematic Approach to Mitigate Code Duplication}
 \label{subsubsec:systematic}
 
 In C programming, communication between source files is achieved by creating header files that specify 
-libraries \citep{Cbook}. Since the Linux kernel is primarily written in C, we eliminated code duplications 
+libraries~\cite{Cbook}. Since the Linux kernel is primarily written in C, we eliminated code duplications 
 by consolidating duplicated code into a single library, which would replace instances of 
 duplication across the codebase.
 
-For each duplicated function pair, for each function in the pair, we used the \textit{function information} functionality 
-(described in Section \ref{subsec:functioncommand}) to locate all duplications of the function in the codebase, 
-as it may have been duplicated more times than the two occurrences contained in the duplicated function pair. 
+For each duplicated function pair, for each function in the pair, we used the \texttt{anonymous-tool} to locate all duplications of the function in the codebase, as it may have been duplicated more times than the two occurrences contained in the duplicated function pair. 
 This strategy resulted in a collection of duplicated functions and corresponding code files.
 
 To identify shared code more effectively, we extended this approach to search for other common 
@@ -131,48 +119,47 @@ function in the library. If modifications existed, we applied case-specific refa
 
 \subsection{Non-participant Observation Study with University Students}
 
-A core dynamic of the Free Software Development course at the University of São Paulo is to 
+A core dynamic of the course (concurrently for undergraduate and postgraduate studies) is to 
 have students make a practical contribution to a free software project. In the first semester of 
 2025, the professor teaching the course, who is also the advisor of this work, identified an 
-opportunity to leverage the ArKanjo tool within this existing pedagogical structure. As a 
-contribution option, the professor proposed that students mitigate code duplications found in the 
-Linux kernel. This initiative was driven by the professor as a practical course activity, and 
-the author of this thesis was not involved in using the tool to find duplications nor in developing 
-the approaches to mitigate them. The tasks were carried out entirely by the course staff 
-and the students.
+opportunity to leverage the ArKanjo tool within this existing pedagogical structure. 
+As a contribution option, the professor proposed that students mitigate code duplications found 
+in the Linux kernel. The professor drove this initiative as a practical course activity, 
+and the author of this thesis was not involved in using the tool to identify duplications or 
+in developing approaches to mitigate them. The tasks were carried out entirely by the course 
+staff and the students.
 
-The course had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of 
-one to three. To assist students in this task, the professor and teaching assistants prepare multiple 
-alternatives for contributing to free software projects, including simpler contributions such as 
-updating documentation or fixing code style issues. In this context, two new options related to the 
-ArKanjo tool were proposed alongside the others.
+The course had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of
+two or three members. To assist students in this task, the professor and teaching assistants prepare multiple
+alternatives for contributing to free software projects, including simpler contributions such as
+updating documentation or fixing code style issues. In this context, two new options related to the
+\texttt{anonymous-tool} were proposed alongside the others.
 
-For the first ArKanjo-related alternative, a teaching assistant ran the tool on the IIO subsystem, 
-creating a list of duplicated function pairs found with a 90\% similarity threshold. The students' 
-task was to refactor the code to mitigate these specific duplications and then pass through the process 
-of submitting their patches to the IIO maintainers for review.
+For the first ArKanjo-related alternative, a teaching assistant ran the tool on the IIO subsystem twice, 
+creating two lists of duplicated function pairs, one with a 100\% similarity threshold and the other 
+with a 90\% similarity threshold. Then, the following process happened to both lists:
 
-For the second alternative, students were offered an experience similar to our initial participant 
-observation. In this model, the students were responsible for the entire workflow: executing the 
-ArKanjo tool on the AMD display driver, independently analyzing the results to identify a duplication 
+\begin{enumerate}
+    \item The teaching assistant filtered the lists to keep only duplicated pairs that happened in the same file, because the IIO subsystem is very decentralized, and a duplication between two different devices may involve the cooperation of different maintainers and/or the unification of totally different interfaces;
+    \item The teacher assistant removed duplications that were too short and would not represent a significant change for a patch application;
+    \item The teacher assistant manually ranked code duplications and marked some duplications with insights based on personal opinion and perceptions over the remaining entries. This was done to guide students so that they could approach the technical debt with a greater chance of having their contribution merged into the code.
+\end{enumerate}
+
+The students' task was to select a recommended entry from the list, refactor the code to eliminate 
+these specific duplications, and then submit their patches to the IIO maintainers for review.
+
+For the second alternative, students were offered an experience similar to our initial participant
+observation. In this model, the students were responsible for the entire workflow: executing the
+ArKanjo on the AMD display driver, independently analyzing the results to identify a duplication
 to fix, creating a patch to mitigate it, and sending the patch to the driver's maintainers.
 
-Of the students who chose to work on the ArKanjo-related tasks, 26 (19 undergraduate and 7 graduate) 
-formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative, 
-forming a single group. Notably, none of these students had prior experience contributing to the 
-Linux kernel, making this their first attempt to submit a patch as newcomers.
+Of the students who chose to work on the \texttt{anonymous-tool}-related tasks, 
+23 (16 undergraduate and 7 graduate)
+formed 11 groups to pursue the first alternative. One graduate student also opted for the second 
+alternative. Notably, none of these students had prior experience contributing to the Linux kernel, 
+making this their first attempt to submit a patch as newcomers to the project.
 
-The groups were requested to document their experience and approaches to refactoring the 
-duplications and the experience of submitting a patch to the Linux kernel in blogs. We analyzed 
-these blogs to understand the patterns of refactoring used for mitigating the duplications, the 
-experience of sending the patches, and the opinions of the subsystem maintainers on the mitigations.
-
-The teaching assistant and the student who executed the ArKanjo tool to explore duplications were 
-asked to answer some questions related to their experience using the tool and what could be improved. 
-The survey with the users' answers can be found in Appendix \ref{app:survey}.
-
-In the second stage of the Free Software Development course, we propose that students contribute 
-directly to the ArKanjo tool development without help from the tool creator to verify whether the 
-tool can be free software to which multiple people can contribute. The students approached the tool’s 
-issue, and to our knowledge, they pointed to us in the survey feedback. Three students forming two 
-groups worked in direct contributions.
+The groups were requested to document their experiences and approaches to refactoring the duplications,
+as well as their experiences submitting a patch to the Linux kernel, in blogs. We analyzed these 
+blogs to understand the refactoring patterns used to mitigate duplications, the experience of 
+sending patches, and the opinions of subsystem maintainers on the mitigations.

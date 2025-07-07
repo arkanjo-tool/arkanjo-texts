@@ -1,26 +1,27 @@
-\begin{table}
-\begin{tabular}{ | c | c | c | m{6em} | }
 
+\begin{table}[ht]
+\centering
+\caption{Refactor methods used and metrics of the students' mitigations.}
+\resizebox{1\linewidth}{!}{%
+\begin{NiceTabular}{ | c | m{20mm} | m{25mm} | m{30mm} | m{46mm} | m{28mm} | }[hvlines]
+\hline
+\textbf{Group} & \textbf{Subsystem} & \textbf{Similarity} & \textbf{Patch Status} & \textbf{Refactoring Method} & \textbf{Code Diff} \\
 \hline
 
-\textbf{Group} & \textbf{Subsystem} & \textbf{Patch Status} & \textbf{Refactoring methods used} 
-\\ \hline 
+1 & IIO & 100\% & Dropped (v2) & Undefined & +7/-14 \\ \hline
+2 & IIO & 100\% & Dropped (v1) & Parameterize method & +23/-27 \\ \hline
+3 & IIO & 100\% & Accepted (v1) & Parameterize method & +12/-30 \\ \hline
+4 & IIO & 100\% & Accepted (v3) & Undefined & +2/-7 \\ \hline
+5 & IIO & 90\% & Accepted (v1) & Parameterize method & +17/-70 \\ \hline
+6 & IIO & 90\% & Dropped (v1) & Parameterize method & +95/-92 \\ \hline
+7 & IIO & 90\% & Accepted (v3) & Extract method & +20/-36 \\ \hline
+8 & IIO & 90\% & Accepted (v4) & Extract method & +20/-16 \\ \hline
+9 & IIO & 90\% & Accepted (v6) -- Partially & Parameterize method & +149/-243 \\ \hline
+10 & IIO & 90\% & Dropped (v1) & Undefined & +32/-58 \\ \hline
+\Block{2-1}{11} & IIO & 100\% & Dropped (v1) & Inline method & +2/-12 \\ 
+& AMD & 90\% & Accepted (v2) & Undefined & +90/-489 \\ \hline
 
-1 & IIO & Rejected & None \\ \hline
-2 & IIO & Rejected & Parameterize method \\ \hline
-3 & IIO & Accepted & Parameterize method \\ \hline
-4 & IIO & Accepted & None \\ \hline
-5 & IIO & Accepted  & Parameterize method \\ \hline
-6 & IIO & Students stopped working on it & Parameterize method \\ \hline
-7 & IIO & Accepted  & Extract method \\ \hline
-8 & IIO & Rejected & Extract method \\ \hline
-9 & IIO & Work in progress & Parameterize method \\ \hline
-10 & IIO & Rejected & Parameterize method \\ \hline
-11 & IIO & Students stopped working on it & Parameterize method \\ \hline
-12 & AMD & Accepted & None \\ \hline
-
-\hline
-\end{tabular}
-\caption{Refactor methods used and metrics of the students's mitigations.}
+\end{NiceTabular}%
+}
 \label{tab:stu}
 \end{table}
