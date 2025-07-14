@@ -181,7 +181,55 @@
 % Para gerar a ficha catalográfica, acesse https://fc.ime.usp.br/,
 % preencha o formulário e escolha a opção "Gerar Código LaTeX".
 % Basta copiar e colar o resultado aqui.
-\fichacatalografica{}
+\fichacatalografica{
+% Este codigo depende das packages calc, setspace e ragged2e
+% (ja incluidas no modelo LaTeX do IME-USP)
+\begingroup\centering\singlespacing\small
+\hyphenrules{nohyphenation}\hbadness=10000
+Ficha catalográfica elaborada com dados inseridos pelo(a) autor(a)\\
+Biblioteca Carlos Benjamin de Lyra\\
+Instituto de Matemática e Estatística\\
+Universidade de São Paulo\par
+\vspace{2\baselineskip}\hrule\vspace{.8\baselineskip}
+\RaggedRightRightskip 0pt plus 30pt minus 0pt\relax
+\RaggedRightParfillskip 20pt plus 40pt minus 10pt\relax
+\ttfamily\hspace{2em}\begin{minipage}[t]{125mm}
+\RaggedRight\sloppy\setlength{\parindent}{\widthof{123}}
+
+\noindent Arcanjo, Luan Ícaro Pinto
+
+An approach for detecting and mitigating code duplication in the Linux Kernel / Luan Ícaro Pinto Arcanjo; orientador, Paulo Meirelles. - São Paulo, 2025.
+
+100 p.: il.
+
+\vspace{1\baselineskip}
+
+
+\vspace{1\baselineskip}
+
+
+Dissertação (Mestrado) - Programa de Pós-Graduação em Ciência da Computação / Instituto de Matemática e Estatística / Universidade de São Paulo.
+
+Bibliografia
+
+Versão original
+
+\vspace{1\baselineskip}
+
+
+\vspace{1\baselineskip}
+
+
+1. LINUX. 2. ENGENHARIA DE SOFTWARE. 3. SOFTWARE LIVRE. I. Meirelles, Paulo. II. Título.
+
+\end{minipage}\par
+\vspace{1\baselineskip}\hrule\vspace{.5\baselineskip}\rmfamily
+Bibliotecárias do Serviço de Informação e Biblioteca\\
+Carlos Benjamin de Lyra do IME-USP, responsáveis pela\\
+estrutura de catalogação da publicação de acordo com a AACR2:\\
+Maria Lúcia Ribeiro CRB-8/2766; Stela do Nascimento Madruga CRB 8/7534.
+\par\endgroup
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
