@@ -5,7 +5,7 @@
 
 The standard methodology for text similarity detection is based on building
 vector embeddings of texts and applying a distance function to these embeddings
-to measure the similarity between them. The literature proposes multiple vector
+to measure their similarity. The literature proposes multiple vector
 embedding methods, such as bag-of-words, TF-IDF, LSI, and Word2Vec
 \citep{gensimlivro}. Recent works related to vector embedding construction
 utilize Large Language Models (LLMs), as exemplified by Ethayarajh's work,
@@ -15,7 +15,7 @@ function used in the literature is cosine similarity, defined by the formula
 
 $$\text{cosine similarity} = SC(A,B) = \frac{ A \cdot B}{ \lVert A \rVert \lVert B \rVert }$$
 
-where $A$ and $B$ are the vector embeddings of the two texts. An advantage of
+Where $A$ and $B$ are the vector embeddings of the two texts. An advantage of
 cosine similarity is that $SC(A,B)$ produces a number between $0$ and $1$,
 where values closer to $1$ indicate higher similarity. It is common to
 interpret cosine similarity as an approximation of probability, transforming
@@ -25,7 +25,7 @@ Throughout our research, we will use this percentage form.
 It is well-known that LLMs have a high computational cost. For instance, an
 analysis by Reimers and Gurevych found that finding the most similar pair in a
 collection of 10,000 sentences required about 65 hours with BERT
-\citep{bertsimilar}. Since we aim to compare a similar magnitude of pairs in
+\citep{bertsimilar}. Since we aim to compare pairs of similar magnitude in
 our work, we decided not to use LLMs for our vector embedding method, even
 though they may be suitable for smaller codebases.
 

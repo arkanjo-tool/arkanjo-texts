@@ -1,6 +1,6 @@
 
 We employ a multi-method research approach, using different methodologies to achieve our 
-goals to approach code duplication in some of the Linux subsystems. To validate if the 
+goals of approaching code duplication in some of the Linux subsystems. To validate if the 
 ArKanjo tool can find code duplications, we applied two independent methods and performed 
 triangulation on the results.
 
@@ -11,7 +11,7 @@ AMD Display driver that our tool identified as duplicates. After completing thes
 methods, we triangulated the findings to analyze the results comprehensively. 
 We chose triangulation because relying solely on the literature-based method has 
 limitations and may be unreliable \citep{bigfail, litreview}. 
-As a reminder, all research approaches were done using the text similarity method 
+As a reminder, we have done all research approaches using the text similarity method 
 as the code duplication detection method of the tool.
 
 Given the validation of the tool’s capabilities, we proceed to understand the viability 
@@ -25,7 +25,7 @@ of mitigating a code duplication found in the AMD Display driver and sent it as 
 interact with the Linux community and get their feedback. In the second phase, we proposed 
 to students in the course Free Software Development at the University of São Paulo to mitigate 
 the code duplications found by the tool in the IIO subsystem and the AMD Display driver and 
-pass the process of sending the mitigations as PATCH.
+pass the process of sending the mitigations as a PATCH.
 
 \section{Evaluation of the Tool by the BigCloneBench dataset}
 
@@ -45,7 +45,7 @@ To understand the impact of varying the similarity threshold, we evaluated our t
 
 Due to the limitations of the BigCloneBench dataset, as noted by \cite{bigfail}, and its lack of suitability 
 for our context (Java dataset vs. C-based Linux kernel), we complemented the BigCloneBench evaluation with 
-an empirical study of the tool inferred duplications.
+an empirical study of the tool's inferred duplications.
 
 Given the vast number of lines and components in the Linux kernel, analyzing every duplication is impractical. We focused our scope on the AMD Display driver, which, as shown in Figure \ref{fig:relatory_ex}, contains over 20,000 lines of duplicated code at a similarity metric of 100\%.
 
@@ -69,7 +69,7 @@ identified  code duplications.
 This section outlines our approach to mitigating code duplication in the Linux kernel 
 and describes the ethnographic methodology for engaging with the Linux community. 
 Firstly, we present the participant observation research method explored by the author. 
-Then, we present the methodology of the non-participant observation analyze of patches 
+Then, we present the methodology of the non-participant observation analysis of patches 
 sent by the students.
 
 \subsection{Participant observation method}

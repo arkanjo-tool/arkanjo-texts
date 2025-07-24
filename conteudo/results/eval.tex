@@ -14,7 +14,11 @@ as mentioned in \ref{subsec:code_finder}.
 
 \input{conteudo/results/table_bigclone}
 
-As described in Section \ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset \citep{bigclonebench}, we define that every pair of functions with a similarity metric equal to or greater than a threshold \( X \) is considered a duplication. The pair of code files containing these functions are then labeled as duplications. If our tool correctly identifies a code duplication pair, it is counted as correct for the respective code duplication type. If it infers a duplication pair incorrectly, it is counted as incorrect for all code duplication types. Table \ref{tab:bigclone} shows the results obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}.
+As described in Section \ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset \citep{bigclonebench}, we define 
+that every pair of functions with a similarity metric equal to or greater than a threshold \( X \) is considered a duplication. 
+The pair of code files containing these functions is then labeled as duplications. If our tool correctly 
+identifies a code duplication pair, it is counted as correct for the respective code duplication type. If it infers a 
+duplication pair incorrectly, it is counted as incorrect for all code duplication types. Table \ref{tab:bigclone} shows the results obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}.
 
 The results in Table \ref{tab:bigclone} indicate that our tool is conservative in its predictions. No negative sample was inferred as a duplication, even with a minimum similarity threshold of 30\%. However, it performs poorly identifying complex duplication types, such as Medium Type-3 and Weak Type-3/Type-4. As discussed in Chapter \ref{cha:tool}, if improved performance on these complex types is needed, our tool allows replacing the current duplication detection method due to its modular design.
 
@@ -26,7 +30,7 @@ As outlined in Section \ref{sec:metemp}, for the empirical evaluation of our too
 
 The results in Table \ref{tab:emp} show that as the similarity metric decreases, 
 there is a notable increase in function pairs that are not duplications within 
-the within the context of the AMD Display driver (the Linux kernel component studied here). 
+the context of the AMD Display driver (the Linux kernel component studied here). 
 For similarity ranges of 79\%-81\% or higher, there is a high 
 percentage of code duplications. At 69\%-71\% similarity, the duplication rate 
 drops to 50\%. At 59\%-61\%, it further decreases to 20\%, and below 49\%-51\%, 

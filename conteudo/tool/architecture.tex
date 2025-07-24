@@ -4,7 +4,7 @@
 \label{subsec:architecture}
 
 The Preprocessor contains two main components, the Function Breaker and the Code Duplication Finder. 
-The flow of how the Preprocessor works is as follow: Function Parser receives the codebase the user is interested in,
+The flow of how the Preprocessor works is as follows: Function Parser receives the codebase the user is interested in,
 extracts the functions of the codebase along with metadata, and creates a new temporary codebase where the functions extracted become new code files. 
 The Code Duplication Finder iterates over every pair of files in the Temporary Codebase, checks if they are code clones, and, 
 if so, saves them in the Code Duplication Database, which is a text file that stores every code duplication as a triple 
@@ -46,20 +46,28 @@ body ends. Currently, the supported programming languages are C and Java, althou
 \label{fig:transform}
 \end{figure}
 
-Regarding the programming language's function extractor, we approached this problem so that anyone comfortable with a language can adapt our approach to their specific programming language. Usually, code blocks can be easily extracted from source code files, independently if the code blocks are defined by curly brackets or by indentation, and it is possible to infer if they represent a function's body given their depth in the code context and a few lines before the start of the code block. We followed this approach to implement the function extractor for the supported languages. As an alternative approach, we can build the syntax tree \citep{compiler} of the programming language and use it to extract the functions, which is a more complex task than our approach. For the programming languages that we support, we implemented them as follows:
+Regarding the programming language's function extractor, we approached this problem so that anyone 
+comfortable with a language can adapt our approach to their specific programming language. 
+Usually, code blocks can be easily extracted from source code files, independently of whether the 
+code blocks are defined by curly brackets or by indentation, and it is possible to infer if 
+they represent a function's body given their depth in the code context and a few lines before the 
+start of the code block. We followed this approach to implement the function extractor for the 
+supported languages. As an alternative approach, we can build the syntax tree \citep{compiler} 
+of the programming language and use it to extract the functions, which is a more complex task than 
+our approach. For the programming languages that we support, we implemented them as follows:
 
 \subsubsection{C Programming Language}
 
-For a source file in the C programming language, we extract the code blocks with depth 0; 
-as per the programming language’s grammar, functions are defined in a global context at depth 0. 
+For a source file in the C programming language, we extract the code blocks with depth 0. 
+As per the programming language’s grammar, functions are defined in a global context at depth 0. 
 To extract the code blocks, we first need to identify the portions of code that are comments or 
 \textit{\#define} directives and mark them as irrelevant. After that, it is simple work to find 
-the curly brackets in depth 0, and with that, we find the body of the functions.
+the curly brackets in depth 0; with that, we find the body of the functions.
 
 To extract the header of the functions, we start at the open curly brackets and go back in the 
-source file considering the programming language grammar and the portions of code that have been 
+source file, considering the programming language grammar and the portions of code 
 marked as irrelevant because of comments and \textit{\#define} directives.
-There are other elements in depth zero that are not functions. We analyze whether the code blocks 
+Other elements in depth zero are not functions; we analyze whether the code blocks 
 are functions at the same time that we extract the header of the code block.
 
 \subsubsection{Java Programming Language}
@@ -69,7 +77,7 @@ that does not support the programming language completely, as the only Java code
 this work is the BigCloneBench \citep{bigclonebench}, and the approach implemented covers the 
 needs of this codebase.
 
-For a source file in Java, we extract the code blocks with depth one and some code lines before 
+We extract the code blocks with depth one and some code lines for a source file in Java before 
 defining them. Then, we check if the code blocks are functions by analyzing whether the first 
 non-empty character before the curly brackets of the code block is a closing parenthesis.
 
@@ -97,11 +105,11 @@ The Code Duplication Finder iterates through every pair of source code files in 
 functions from the input codebase. For each pair of files, we execute a code duplication detection method that computes 
 a metric measuring how similar the pair of files is, which we refer to as similarity. 
 If the similarity is greater than or equal to the minimum similarity threshold 
-(a parameter provided by the user during the Preprocessor), we store this pair of functions along with its 
+(a parameter provided by the user during the Preprocessor). We store this pair of functions and its 
 similarity in the Code Duplication Database.
 
 We implemented two methods for code duplication detection in the tool, which the user can 
-choose to use. The first method is based on text similarity, and the second is simpler and 
+use. The first method is based on text similarity, and the second is simpler and 
 based on the number of equal lines. The experiments and tests in this research were done 
 using the text similarity method. The purpose of the second method is to demonstrate that 
 the tool can have multiple duplication detection methods.
@@ -113,13 +121,13 @@ as text and apply the TF-IDF vector embedding method implemented by the
 Gensim library \citep{gensim}, then compute cosine similarity as the 
 similarity metric.
 
-This method was chosen for its claimed performance, 
+We chose this method for its claimed performance, 
 programming language independence, and the fact that it does not require 
 compilable code, which is expected in the temporary codebase, as it does 
 not contain complete code artifacts. We expect our method to yield good 
 results for Type-1 and Type-2 code duplication types while performing 
-poorly for the other types. It is possible to change the code duplication 
-detection method to one of the state-of-the-art methods if needed.
+poorly for others. Changing the code duplication
+detection method to one of the state-of-the-art methods is possible if needed.
 
 \cite{platistool} implemented this code duplication detection method and 
 released it under the MIT license \citep{mitlicense}. We adapted his 
@@ -138,8 +146,9 @@ $NL_2$ be the number of lines in \textit{function2}, and $EQ$ be the number of e
 $$\frac{2 \cdot EQ}{NL_1 + NL_2}$$
 
 This code duplication method is considerably simpler and more explainable than the text similarity method, 
-as the metric is the ratio of common lines between the two functions. To compute the number of equal lines, we use
-the \textit{diff} command built-in in the Linux environment \citep{diffcommand}.
+as the metric is the ratio of common lines between the two functions. 
+We use the \textit{diff} command built-in the Linux environment \citep{diffcommand}
+to compute the number of equal lines.
 
 We did not test the Diff method during the tool evaluation and other phases of this research. 
 We implemented the technique to show that a tool can have multiple duplication detection methods.
@@ -161,10 +170,10 @@ As most function pairs are unlikely to be duplicated in large codebases, this fi
 
 \subsection{Query Responder}
 
-The Query Responder step is the component the user executes multiple times to consult information 
+The Query Responder step is the component that the user executes multiple times to consult information 
 about duplicated functions in a codebase processed by the Preprocessor. 
 It utilizes the Temporary Codebase and the Code Duplication Database as inputs to answer user requests, 
-such as querying for duplicated functions above a certain similarity threshold or provide counts of such functions.
+such as querying for duplicated functions above a certain similarity threshold or providing counts of such functions.
 This component was developed to be extensible, allowing other query functionalities to be easily added. 
 The specific functionalities provided to the user by the Query Responder, which include the 
 Duplication Explorer, Function Information, and Duplication Report, are described in Section \ref{subsec:func}.

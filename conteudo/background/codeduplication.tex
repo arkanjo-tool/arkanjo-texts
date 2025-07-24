@@ -3,11 +3,11 @@
 \section{Code Duplication Detection}
 
 Code Duplication Detection is a field in computer science that has attracted
-researchers' attention since 1988 \citep{firstman}. The presence of code
+researchers' attention since 1988 \citep{firstman}. Code
 duplication is considered a harmful artifact in software, as it negatively
 affects tasks such as code readability and increases the likelihood of
 introducing bugs \citep{harmone}. In most cases, code duplication tends to make
-software more unstable compared to its non-duplicated counterpart
+software more unstable than its non-duplicated counterpart
 \citep{harmtwo}.
 
 Over the years, research on Code Duplication Detection has branched into two
@@ -20,7 +20,7 @@ Code Clone Detection branch due to the nature of our study.
 
 \label{subsec:types}
 
-The classification of two code artifacts as duplicates raises the question of
+Classifying two code artifacts as duplicates raises the question of
 what constitutes duplication. To address this, the literature categorizes code
 duplication based on the extent of differences between code artifacts,
 resulting in four types of code clone duplications \citep{litreview}. When
@@ -171,7 +171,7 @@ outcomes for each prediction:
 
 Using the counts of TP, FP, TN, and FN, standard metrics such as Precision,
 Recall, and F-Score can be calculated \citep{recall}. In this work, we focus on
-the Recall metric, as it is commonly reported in literature for comparing code
+the Recall metric, which is commonly reported in literature for comparing code
 clone detection approaches. Recall is defined as follows \citep{recall}:
 
 $$Recall = \frac{\sum TP}{\sum TP + \sum FN }$$

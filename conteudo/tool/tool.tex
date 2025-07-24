@@ -2,11 +2,11 @@
 
 ArKanjo, our proposed tool, is a Command Line Interface (CLI) application designed to
 help developers identify code clone duplication at the function level.
-Specifically, it enables the detection of pairs of functions within a codebase
-that are clones of each other.
+Specifically, it enables the detection of pairs of functions that are clones of 
+each other within a codebase.
 
 The tool operates in two main parts: the \textbf{Preprocessor} and the \textbf{Query Responder}. 
-The \textbf{Preprocessor} is responsible for performing heavy computations to find the code 
+The \textbf{Preprocessor} performs heavy computations to find the code 
 duplications across a codebase and produce artifacts to consult information related to the 
 duplications in a structured form. The \textbf{Query Responder} consumes the artifacts produced 
 by the Preprocessor to execute the tool functionalities as requested. This choice enables the 

@@ -2,7 +2,7 @@
 
 This chapter presents an overview of fundamental topics needed to understand 
 the research, such as the Linux Kernel, refactoring, types of code duplication, 
-code duplication detection methods presented in the literature and ways to 
+code duplication detection methods presented in the literature, and ways to 
 evaluate these methods. This foundation will make it easier to grasp the 
 concepts discussed in the research.
 
@@ -10,10 +10,10 @@ concepts discussed in the research.
 
 The Linux kernel, a Unix-like operating system kernel, was published by Linus
 Torvalds in 1992 as free software. It began gaining popularity in the late
-1990s \citep{linuxbook}. Contrary to popular belief, Linux itself is not a
+1990s \citep{linuxbook}. Contrary to popular belief, Linux is not a
 complete operating system, as it lacks components like filesystem utilities and
-windowing systems. The so-called ``Linux distributions'' that are commonly
-recognized by the public are actually GNU/Linux operating systems, which
+windowing systems. The so-called ``Linux distributions'' commonly
+recognized by the public are GNU/Linux operating systems, which
 include various essential applications alongside the Linux kernel,
 such as system
 \citep{gnuref}. Examples of Linux distributions are Ubuntu \citep{ubuntu} 
@@ -32,7 +32,7 @@ These patches are then submitted and reviewed via the Linux mailing lists
 \citep{melissa}.
 
 Mailing lists are the primary means of communication within the Linux
-community. Members of the community use them to submit and review patches,
+community. Community members use them to submit and review patches,
 discuss Linux-related topics, and debate potential new features. Given the
 kernel's extensive modularity, each subsystem has its mailing list, allowing
 discussions to be organized around specific areas of development
@@ -47,8 +47,8 @@ reported a practical issue: a significant amount of duplicated code, which
 complicates the maintenance of this subsystem. This problem serves as the
 starting point for our research, with the AMD Display driver as our primary
 object of study as we aim to understand and mitigate code duplication in the
-Linux kernel. The AMD Display driver subsystem contains more then 391000 lines 
-of code and more then 1089 code files
+Linux kernel. The AMD Display driver subsystem contains more than 391000 lines 
+of code and more than 1089 code files
 \footnote{ 
 Data extracted directly from the Linux repository with the help of the cloc tool.
 \citep{cloc}
@@ -70,7 +70,7 @@ Data extracted directly from the Linux repository with the help of the clol tool
 We opted to include the IIO subsystem in our experiments to ensure our findings 
 are not limited to one subsystem. Additionally, we have an established point of
 contact within the IIO subsystem to facilitate this work.
-Like other subsystems, discussions about the IIO subsytem are conducted on its 
+Like other subsystems, discussions about the IIO subsystem are conducted on its 
 designated mailing list, which can be found here: 
 \url{https://subspace.kernel.org/vger.kernel.org.html}.
 
@@ -100,4 +100,4 @@ both files without any modifications.
 
 We use the \textit{diff} command as the base of one of the code duplication detection 
 methods on the tool proposed in this work, although it is not explored as the text 
-similarity method for code duplication detection.
+similarity method chosen for code duplication detection.

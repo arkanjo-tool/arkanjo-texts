@@ -1,61 +1,52 @@
 The Linux Kernel's massive scale, with over 28 million lines of code 
 and more than twenty thousand contributors, presents significant maintenance 
 challenges; code duplication persists as a notable issue within its codebase, 
-potentially hindering its evolution and patching processes. 
-Prevailing academic and existing free software approaches to duplication 
-detection often lack the scalability for comprehensive codebase analysis or 
-offer limited functionality unsuitable for the kernel's complexity, 
-generally failing to deliver actionable results or guidance for mitigation 
-within its specific context.
+potentially hindering its evolution and patching processes. Prevailing academic 
+and existing free software approaches to duplication detection often lack the 
+scalability for comprehensive codebase analysis or offer limited functionality 
+unsuitable for the kernel's complexity, generally failing to deliver actionable 
+results or guidance for mitigation within its specific context.
 
-In response to these limitations, this research addressed the challenge of 
-code duplication within the Linux Kernel through the development of ArKanjo, 
-command-line tool for Linux kernel maintenance designed to detect and 
-analyze function-level duplications. Released under the MIT license, 
-the architectural design of ArKanjo, incorporating a Preprocessor and a 
-Query Responder, separates computationally intensive analysis from efficient 
-querying for duplications within large codebases. 
-Validation procedures, employing both the BigCloneBench dataset and empirical 
-analysis conducted on the AMD Display driver, indicated ArKanjo's proficient 
-performance in identifying Type-1 and Type-2 duplications, notably when 
-similarity thresholds are configured between 80\% and 100\%.
+In response to these limitations, this research addressed the challenge of code 
+duplication within the Linux Kernel by developing ArKanjo, a command-line tool 
+for Linux kernel maintenance designed to detect and analyze function-level duplications. 
+Released under the MIT license, the architectural design of ArKanjo, incorporating a 
+Preprocessor and a Query Responder, separates computationally intensive analysis from 
+efficient querying for duplications within large codebases. Validation procedures, 
+employing both the BigCloneBench dataset and empirical analysis conducted on the AMD 
+Display driver, indicated ArKanjo's proficient performance in identifying Type-1 and 
+Type-2 duplications, notably when similarity thresholds are configured between 80\% and 100\%.
 
-The ethnographic studies, which involved participant observation and a project 
-with university students, provided a realistic view of both the opportunities 
-and the considerable challenges in mitigating code duplications found by ArKanjo. 
-The tool was effectively used by first-time contributors to the Linux kernel to 
-identify duplications and prepare patches. While this research included a
-successfully merged patch by the author, and successful submissions from many 
-student groups, a notable portion of student efforts 
-encountered significant hurdles. These difficulties often stemmed from maintainer 
-feedback where proposed changes, though reducing duplication, were rejected or 
-required substantial rework due to concerns about code readability, added abstraction, 
-or the specific context of the code. Technical complexities, such as C macros in 
-configuration files, and lengthy patch review times also contributed to the challenges. 
-Furthermore, the studies confirmed that maintainers do not always view code duplication 
-as inherently negative, especially when it may improve clarity or facilitate 
-independent hardware support.
+The ethnographic studies, which involved participant observation and a project with university 
+students, provided a realistic view of the opportunities and the considerable challenges in 
+mitigating code duplications found by ArKanjo. The tool was effectively used by first-time 
+contributors to the Linux kernel to 
+identify duplications and prepare patches. While this research included a successfully merged 
+patch by the author, and successful submissions from many student groups, a notable portion of 
+student efforts encountered significant hurdles. These difficulties often stemmed from maintainer 
+feedback where proposed changes, though reducing duplication, were rejected or required 
+substantial rework due to concerns about code readability, added abstraction, or the specific 
+context of the code. Technical complexities, such as C macros in configuration files, and lengthy 
+patch review times also contributed to the challenges. Furthermore, the studies confirmed that 
+maintainers do not always view code duplication as inherently harmful, especially when it may 
+improve clarity or facilitate independent hardware support.
 
-In its entirety, this research contributes the ArKanjo tool as an operational 
-method for detecting code duplication, and importantly, provides insights into 
-the process of managing such duplications within the Linux kernel subsystems 
-studied. The results show that while ArKanjo can effectively identify 
-duplicated functions, the path from detection to an accepted mitigation within 
-the kernel involves careful consideration of the specific code, established 
-community practices, and the maintainers' perspectives on code quality and readability.
+This research contributes to the ArKanjo tool as an operational method for detecting code 
+duplication and, importantly, provides insights into the process of managing such duplications 
+within the Linux kernel subsystems studied. The results show that while ArKanjo can effectively 
+identify duplicated functions, the path from detection to an accepted mitigation within the kernel 
+involves careful consideration of the specific code, established community practices, and the 
+maintainers' perspectives on code quality and readability.
 
 \section{Future Work}
 
-The work presented in this thesis suggests several directions for future investigation. 
-Enhancements to the ArKanjo tool could be pursued, such as investigating a multi-stage 
-detection strategy. This strategy might employ a computationally lighter method for an 
-initial, broad pass to identify candidate duplications, followed by more 
-resource-intensive, state-of-the-art techniques for refined analysis and improved 
-detection of complex clone types. Such an approach could complement efforts for 
-improved resource management during its preprocessing phase for very large codebases.
-The tool's language support could also be broadened by
-developing parsers for additional programming languages, building upon its adaptable
-architecture. Beyond the tool itself, future research could extend the empirical
-analysis of code duplication and mitigation strategies to a broader range of Linux kernel 
-subsystems or other large-scale C projects, to determine the wider 
-applicability of the observations made.
+The work presented in this thesis suggests several directions for future investigation. Enhancements 
+to the ArKanjo tool could be pursued, such as investigating a multi-stage detection strategy. 
+This strategy might employ a computationally lighter method for an initial, broad pass to identify 
+candidate duplications, followed by more resource-intensive, state-of-the-art techniques for refined 
+analysis and improved detection of complex clone types. Such an approach could complement efforts for 
+improved resource management during its preprocessing phase for large codebases. The tool's language 
+support could be broadened by developing parsers for additional programming languages, building upon 
+its adaptable architecture. Beyond the tool itself, future research could extend the empirical analysis 
+of code duplication and mitigation strategies to a broader range of Linux kernel subsystems or other 
+large-scale C projects, to determine the broader applicability of the observations made.
