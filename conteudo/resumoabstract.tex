@@ -4,41 +4,44 @@
 
 % As palavras-chave são obrigatórias, em português e em inglês, e devem ser
 % definidas antes do resumo/abstract. Acrescente quantas forem necessárias.
-\palavraschave{Software livre, kernel Linux, duplicação de código, refatoração, manutenção de software}
+\palavraschave{Software Livre, Kernel Linux, Duplicação de Código, Refatoração, Manutenção de Software}
 
-\keywords{Free software,Linux kernel, Code duplication, Refactoring, code maintenance}
+\keywords{Free Software,Linux Kernel, Code Duplication, Refactoring, Code Maintenance}
 
 % O resumo é obrigatório, em português e inglês. Estes comandos também
 % geram automaticamente a referência para o próprio documento, conforme
 % as normas sugeridas da USP.
 \resumo{
 
-O kernel Linux é um projeto de software livre amplamente utilizado, alimentando 96,3\% 
-dos um milhão maiores servidores web e 85\% dos smartphones em todo o mundo. Dada a sua extensa 
+O kernel Linux é um projeto de software livre amplamente utilizado, alimentando a
+maioria dos servidores web e smartphones em todo o mundo.
+Dada a sua extensa 
 base de usuários, qualquer adição de recursos, correção de bugs ou tratamento de 
 vulnerabilidades de segurança pode impactar milhões de pessoas. Manter o kernel é 
-uma tarefa enorme, envolvendo mais de 19 milhões de linhas de código e contribuições 
-de mais de mil desenvolvedores. Devido à escala do projeto, nem todas as contribuições 
-seguem as melhores práticas, resultando em artefatos de código de baixa qualidade que 
-podem complicar a manutenção e o desenvolvimento de novos recursos. Um desses artefatos 
-é a duplicação de código, que é o foco desta pesquisa. As ferramentas existentes 
+uma tarefa enorme, envolvendo mais de 28 milhões de linhas de código e contribuições 
+de mais de vinte mil desenvolvedores. Devido à escala do projeto, nem todas as contribuições 
+seguem as melhores práticas, resultando em um código de qualidade inferior que pode complicar 
+a manutenção e o desenvolvimento de funcionalidades.
+Um dos cenários que pode levar à baixa qualidade de código é a duplicação de código,
+que é o foco deste trabalho As ferramentas existentes 
 para detectar duplicação de código normalmente comparam dois artefatos de código para 
 determinar se são duplicatas. No entanto, essas ferramentas não são adequadas para 
 identificar duplicações em bases de código em grande escala, como o kernel Linux, nem 
 oferecem orientações sobre como resolver as duplicações detectadas. Apesar das 
 pesquisas tanto na literatura formal quanto na cinza, as soluções existentes não 
 conseguem resolver os desafios específicos do kernel Linux. 
-Esta pesquisa apresenta o ArKanjo, uma ferramenta de linha de comando para a manutenção 
-do kernel Linux, projetada para detectar e analisar duplicações em nível de função. 
+Este trabalho apresenta uma abordagem para tratar o problema da duplicação de código no contexto do 
+kernel Linux; para apoiar essa abordagem, desenvolvemos o ArKanjo, uma ferramenta de 
+linha de comando projetada para detectar e analisar duplicações em nível de função.
 Lançado sob a licença MIT, o ArKanjo emprega uma arquitetura de dois estágios que consiste 
 em um Preprocessor e um Query Responder, que separa a análise computacionalmente intensiva 
 da consulta eficiente por duplicações em grandes bases de código. Em segundo lugar, ele 
 analisa as duplicações identificadas para extrair padrões e métodos de refatoração, oferecendo 
 orientação a futuros contribuidores. Avaliamos o ArKanjo em casos de duplicação do mundo 
-real em versões recentes do kernel, demonstrando sua eficácia na identificação de clones 
+real em versões recentes do kernel, demonstrando sua capacidade de identificação de clones 
 problemáticos que ferramentas genéricas frequentemente ignoram. Ao identificar instâncias 
 de duplicação bem definidas e gerenciáveis, o ArKanjo reduz efetivamente a barreira para 
-novos contribuidores, uma capacidade evidenciada por seu papel em orientar estudantes a 
+novos contribuidores, um aspecto evidenciado por seu papel em orientar estudantes a 
 fazerem suas primeiras melhorias de código no kernel.
 
 }
@@ -46,30 +49,32 @@ fazerem suas primeiras melhorias de código no kernel.
 \abstract{
 
 The Linux kernel is a widely used Free/Libre/Open Source Software (FLOSS) project, powering
-96.3\% of the top one million web servers 
-and 85\% of smartphones worldwide. Given its extensive user base, any addition of features, 
+the majority of webservers and smartphones worldwide.
+Given its extensive user base, any addition of features, 
 bug fixes, or handling of security vulnerabilities can impact millions. Maintaining the kernel 
 is an enormous task involving over 28 million lines of code and contributions from over 
 twenty thousand developers. Due to the scale of the project, not all contributions adhere to best 
-practices, resulting in poor-quality code artifacts that may complicate maintenance and feature 
-development. One such artifact is code duplication, which is the focus of this research. 
+practices, resulting in code of lower quality that may complicate maintenance and feature development.
+One of the scenarios that can lead to low code quality is code duplication, 
+which is the focus of this work. 
 Existing tools for detecting code duplication typically compare two code artifacts to determine 
 if they are duplicates. However, these tools are not well-suited for identifying duplications 
 in large-scale codebases like the Linux kernel, nor do they guide on resolving detected 
 duplications. Despite searches in both formal and grey literature, existing solutions fall 
 short of addressing the specific challenges of the Linux kernel.
-This research presents ArKanjo  , a command-line tool for Linux kernel maintenance designed to detect and
-analyze function-level duplications. Released under the MIT
-license, ArKanjo employs a two-stage architecture consisting
+This work presents an approach to address the code duplication issue in the Linux kernel context; 
+to support this approach, we developed ArKanjo, a command-line tool designed 
+to detect and analyze function-level duplications.
+Released under the MIT license, ArKanjo employs a two-stage architecture consisting
 of a Preprocessor and a Query Responder that separates
 computationally intensive analysis from efficient querying for duplications within large codebases.
 Second, it analyzes the identified duplications to extract patterns 
 and refactoring methods, offering guidance to future contributors. We evaluate ArKanjo 
 against real-world duplication cases in recent kernel versions, demonstrating
-its effectiveness in identifying problematic clones that generic
+its capability on identifying problematic clones that generic
 tools often overlook. By identifying well-defined, manageable
 duplication instances, ArKanjo effectively lowers the barrier
-for new contributors, a capability evidenced by its role in guiding students to make their first 
+for new contributors, a aspect evidenced by its role in guiding students to make their first 
 code improvements to the kernel.
 
 }
