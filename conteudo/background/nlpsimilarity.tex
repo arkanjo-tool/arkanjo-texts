@@ -6,12 +6,11 @@
 The standard methodology for text similarity detection is based on building
 vector embeddings of texts and applying a distance function to these embeddings
 to measure their similarity. The literature proposes multiple vector
-embedding methods, such as bag-of-words, TF-IDF, LSI, and Word2Vec
-\citep{gensimlivro}. Recent works related to vector embedding construction
+embedding methods, such as bag-of-words, TF-IDF, LSI, and
+Word2Vec~\citep{gensimlivro}. Recent works related to vector embedding construction
 utilize Large Language Models (LLMs), as exemplified by Ethayarajh's work,
-which employs BERT, ELMo, and GPT \citep{llmsimilar}. The most popular distance
-function used in the literature is cosine similarity, defined by the formula
-\citep{cosineref}:
+which employs BERT, ELMo, and GPT~\citep{llmsimilar}. The most popular distance
+function used in the literature is cosine similarity, defined by the formula~\citep{cosineref}:
 
 $$\text{cosine similarity} = SC(A,B) = \frac{ A \cdot B}{ \lVert A \rVert \lVert B \rVert }$$
 
@@ -24,17 +23,17 @@ Throughout our research, we will use this percentage form.
 
 It is well-known that LLMs have a high computational cost. For instance, an
 analysis by Reimers and Gurevych found that finding the most similar pair in a
-collection of 10,000 sentences required about 65 hours with BERT
-\citep{bertsimilar}. Since we aim to compare pairs of similar magnitude in
+collection of 10,000 sentences required about 65 hours with
+BERT~\citep{bertsimilar}. Since we aim to compare pairs of similar magnitude in
 our work, we decided not to use LLMs for our vector embedding method, even
 though they may be suitable for smaller codebases.
 
 \subsection{Gensim}
 
-Gensim is an FLOSS Python library \citep{gensim}, which its creators
-describe as "The fastest library for training of vector embeddings - Python or
+Gensim is a FLOSS Python library \citep{gensim}, which its creators
+describe as ``The fastest library for training of vector embeddings -- Python or
 otherwise. The core algorithms in Gensim use battle-hardened, highly optimized,
-and parallelized C routines." \citep{gensimsite}. Due to Gensim's speed, we
+and parallelized C routines''~\citep{gensimsite}. Due to Gensim speed, we
 chose this library for our vector embedding method.
 
 In this work, we do not explore further alternatives for vector embeddings, as
