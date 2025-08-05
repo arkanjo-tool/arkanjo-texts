@@ -46,20 +46,20 @@ body ends. Currently, the supported programming languages are C and Java, althou
 \label{fig:transform}
 \end{figure}
 
-Regarding the programming language's function extractor, we approached this problem so that anyone 
+Regarding the programming language function extractor, we approached this problem so that anyone 
 comfortable with a language can adapt our approach to their specific programming language. 
 Usually, code blocks can be easily extracted from source code files, independently of whether the 
 code blocks are defined by curly brackets or by indentation, and it is possible to infer if 
-they represent a function's body given their depth in the code context and a few lines before the 
+they represent a function body given their depth in the code context and a few lines before the 
 start of the code block. We followed this approach to implement the function extractor for the 
-supported languages. As an alternative approach, we can build the syntax tree \citep{compiler} 
+supported languages. As an alternative approach, we can build the syntax tree~\citep{compiler} 
 of the programming language and use it to extract the functions, which is a more complex task than 
 our approach. For the programming languages that we support, we implemented them as follows:
 
 \subsubsection{C Programming Language}
 
 For a source file in the C programming language, we extract the code blocks with depth 0. 
-As per the programming language’s grammar, functions are defined in a global context at depth 0. 
+As per the programming language grammar, functions are defined in a global context at depth 0. 
 To extract the code blocks, we first need to identify the portions of code that are comments or 
 \textit{\#define} directives and mark them as irrelevant. After that, it is simple work to find 
 the curly brackets in depth 0; with that, we find the body of the functions.
@@ -74,36 +74,33 @@ are functions at the same time that we extract the header of the code block.
 
 For the Java programming language, we have decided to implement a more straightforward approach 
 that does not support the programming language completely, as the only Java codebase explored in 
-this work is the BigCloneBench \citep{bigclonebench}, and the approach implemented covers the 
+this work is the BigCloneBench~\citep{bigclonebench}, and the approach implemented covers the 
 needs of this codebase.
 
 We extract the code blocks with depth one and some code lines for a source file in Java before 
 defining them. Then, we check if the code blocks are functions by analyzing whether the first 
 non-empty character before the curly brackets of the code block is a closing parenthesis.
 
-As per Java’s grammar, functions are defined inside classes and can exist at different depths. 
+As per Java grammar, functions are defined inside classes and can exist at different depths. 
 As Java accepts inner classes, this approach does not work with inner classes. The challenge 
 to implementing a more generic approach is that other elements of depth two or deeper, such 
 as for-loops, can follow the closing parenthesis pattern, necessitating a better analysis of 
-these elements. The BigCloneBench \citep{bigclonebench} does not contain inner classes.
+these elements. The BigCloneBench~\citep{bigclonebench} does not contain inner classes.
 
 \subsection{Temporary codebase}
 
-The temporary codebase is a transformation of the input codebase performed by the Function Parser. Each function in the input codebase is represented in the temporary codebase as three files. Descriptions of these files are provided below, with examples shown in Figure \ref{fig:transform}.
+The temporary codebase is a transformation of the input codebase performed by the Function Parser. Each function in the input codebase is represented in the temporary codebase as three files. Descriptions of these files are provided below, with examples shown in Figure~\ref{fig:transform}.
 
 \begin{itemize}
 	\item \textbf{Header file}: This file contains the signature of the function it represents.
 	\item \textbf{Source file}: This file contains the body of the function it represents.
-	\item \textbf{Info file}: This file contains metadata about the function, including the function name, the file that contains the function, the file's relative path to the input codebase, the line where the function's signature starts, the line where the function body begins, the line where the function's body ends, and whether there is a line break between the end of the function's signature and the start of the function's body.
+	\item \textbf{Info file}: This file contains metadata about the function, including the function name, the file that contains the function, the file relative path to the input codebase, the line where the function signature starts, the line where the function body begins, the line where the function body ends, and whether there is a line break between the end of the function signature and the start of the function body.
 \end{itemize}
 
 \subsection{Code Duplication Finder}
-
 \label{subsec:code_finder}
 
-The Code Duplication Finder iterates through every pair of source code files in the temporary codebase, representing 
-functions from the input codebase. For each pair of files, we execute a code duplication detection method that computes 
-a metric measuring how similar the pair of files is, which we refer to as similarity. 
+The Code Duplication Finder iterates through every pair of source code files in the temporary codebase, representing functions from the input codebase. For each pair of files, we execute a code duplication detection method that computes a metric measuring how similar the pair of files is, which we refer to as similarity. 
 If the similarity is greater than or equal to the minimum similarity threshold 
 (a parameter provided by the user during the Preprocessor). We store this pair of functions and its 
 similarity in the Code Duplication Database.
@@ -118,7 +115,7 @@ the tool can have multiple duplication detection methods.
 
 For the text similarity method, we treat the source code files 
 as text and apply the TF-IDF vector embedding method implemented by the 
-Gensim library \citep{gensim}, then compute cosine similarity as the 
+Gensim library~\citep{gensim}, then compute cosine similarity as the 
 similarity metric.
 
 We chose this method for its claimed performance, 
@@ -130,8 +127,8 @@ poorly for others. Changing the code duplication
 detection method to one of the state-of-the-art methods is possible if needed.
 
 \cite{platistool} implemented this code duplication detection method and 
-released it under the MIT license \citep{mitlicense}. We adapted his 
-implementation to fit our tool's expected input and output formats. 
+released it under the MIT license. We adapted his 
+implementation to fit our tool expected input and output formats. 
 Switching the duplication detection method is feasible, similar to how 
 we adapted Plates' implementation.
 
@@ -164,8 +161,8 @@ The Preprocessor is a procedure executed by the user once per codebase.
 The Preprocessor takes the input codebase and a minimum similarity metric value for function pairs considered duplicates. 
 It then runs the Function Parser and the Code Duplication Finder to create a temporary codebase and the Code Duplication Database. 
 Setting a minimum similarity metric reduces the Code Duplication Database size, optimizing memory usage and the computational 
-cost of the Query Responder step. For example, if this parameter does not exist and we work with a codebase of $10000$ functions, 
-each with a 50-character relative path and function name, the Code Duplication Database would reach approximately $5000^2 \times 50 ~= 5$ gigabytes. 
+cost of the Query Responder step. For example, if this parameter does not exist and we work with a codebase of $10,000$ functions, 
+each with a 50-character relative path and function name, the Code Duplication Database would reach approximately $5,000^2 \times 50 ~= 5$ gigabytes. 
 As most function pairs are unlikely to be duplicated in large codebases, this file size can be significantly reduced.
 
 \subsection{Query Responder}
@@ -176,5 +173,5 @@ It utilizes the Temporary Codebase and the Code Duplication Database as inputs t
 such as querying for duplicated functions above a certain similarity threshold or providing counts of such functions.
 This component was developed to be extensible, allowing other query functionalities to be easily added. 
 The specific functionalities provided to the user by the Query Responder, which include the 
-Duplication Explorer, Function Information, and Duplication Report, are described in Section \ref{subsec:func}.
+Duplication Explorer, Function Information, and Duplication Report, are described in Section~\ref{subsec:func}.
 
