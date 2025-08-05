@@ -1,10 +1,10 @@
-The Linux Kernel's massive scale, with over 28 million lines of code 
+The Linux Kernel massive scale, with over 28 million lines of code 
 and more than twenty thousand contributors, presents significant maintenance 
 challenges; code duplication persists as a notable issue within its codebase, 
 potentially hindering its evolution and patching processes. Prevailing academic 
-and existing free software approaches to duplication detection often lack the 
+and existing FLOSS approaches to duplication detection often lack the 
 scalability for comprehensive codebase analysis or offer limited functionality 
-unsuitable for the kernel's complexity, generally failing to deliver actionable 
+unsuitable for the kernel complexity, generally failing to deliver actionable 
 results or guidance for mitigation within its specific context.
 
 In response to these limitations, this research addressed the challenge of code 
@@ -17,7 +17,7 @@ employing both the BigCloneBench dataset and empirical analysis conducted on the
 Display driver, indicated ArKanjo's proficient performance in identifying Type-1 and 
 Type-2 duplications, notably when similarity thresholds are configured between 80\% and 100\%.
 
-The ethnographic studies, which involved participant observation and a project with university 
+The ethnographic studies, which involved participant observation and an experiment with university 
 students, provided a realistic view of the opportunities and the considerable challenges in 
 mitigating code duplications found by ArKanjo. The tool was effectively used by first-time 
 contributors to the Linux kernel to 
@@ -45,7 +45,7 @@ to the ArKanjo tool could be pursued, such as investigating a multi-stage detect
 This strategy might employ a computationally lighter method for an initial, broad pass to identify 
 candidate duplications, followed by more resource-intensive, state-of-the-art techniques for refined 
 analysis and improved detection of complex clone types. Such an approach could complement efforts for 
-improved resource management during its preprocessing phase for large codebases. The tool's language 
+improved resource management during its preprocessing phase for large codebases. The tool language 
 support could be broadened by developing parsers for additional programming languages, building upon 
 its adaptable architecture. Beyond the tool itself, future research could extend the empirical analysis 
 of code duplication and mitigation strategies to a broader range of Linux kernel subsystems or other 
