@@ -1,7 +1,7 @@
 \section{Tool Evaluation}
 \label{sec:eval}
 
-In this section, we present the test results of our tool performance, following the 
+In this section, we present the test results of our tool usage, following the 
 methodology described in Chapter \ref{cha:method}. First, we provide the results 
 obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}, which 
 serves as a standard reference in the literature \citep{litreview}. Second, we 
@@ -14,7 +14,7 @@ as mentioned in \ref{subsec:code_finder}.
 
 \input{conteudo/results/table_bigclone}
 
-As described in Section \ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset \citep{bigclonebench}, we define 
+As described in Section~\ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset \citep{bigclonebench}, we define 
 that every pair of functions with a similarity metric equal to or greater than a threshold \( X \) is considered a duplication. 
 The pair of code files containing these functions is then labeled as duplications. If our tool correctly 
 identifies a code duplication pair, it is counted as correct for the respective code duplication type. If it infers a 
@@ -24,7 +24,7 @@ The results in Table \ref{tab:bigclone} indicate that our tool is conservative i
 
 \subsection{Tool Results on Empirical Analysis}
 
-As outlined in Section \ref{sec:metemp}, for the empirical evaluation of our tool, we randomly selected ten function pairs across various similarity metric ranges computed by our tool. We then examined each pair to determine whether they were duplications and, if so, categorized the duplication type. Table \ref{tab:emp} presents the results from our empirical analysis.
+As outlined in Section~\ref{sec:metemp}, for the empirical evaluation of our tool, we randomly selected ten function pairs across various similarity metric ranges computed by our tool. We then examined each pair to determine whether they were duplications and, if so, categorized the duplication type. Table \ref{tab:emp} presents the results from our empirical analysis.
 
 \input{conteudo/results/table_empirical}
 

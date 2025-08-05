@@ -1,11 +1,8 @@
 \section{Study with University Students}
 
-As presented in Chapter \ref{cha:method}. It was proposed to students, as one of the activities 
-of the Free Software course, they make their first contribution to the Linux kernel to 
-mitigate duplication found by the ArKanjo tool while sending patches to the Linux subsystem 
-maintainers and documenting their experiences and learnings.
+As presented in Chapter~\ref{cha:method}, we proposed an experiment to students, as one of the activities of the Free Software course at the University of São Paulo, they make their first contribution to the Linux kernel to mitigate duplication found by the ArKanjo tool while sending patches to the Linux subsystem maintainers and documenting their experiences and learnings.
 
-Appendix \ref{app:stuart} has references to the artifacts discussed in this section, 
+Appendix~\ref{app:stuart} has references to the artifacts discussed in this section, 
 including the duplication function pairs that students mitigate, the students’ reports, 
 the patch students sent to the Linux kernel, and the answers to the survey asked 
 of the student who worked in the AMD Display driver and the teaching assistant that used 
@@ -13,7 +10,7 @@ the tool to find duplications in the IIO subsystem.
 
 \input{conteudo/results/table_students}
 
-Table \ref{tab:stu} summarizes the student groups' mitigation approaches. It contains 
+Table~\ref{tab:stu} summarizes the student groups' mitigation approaches. It contains 
 the information about the chosen subsystem and the similarity threshold for groups that 
 opted for the first approach. Each entry also has the patch status, refactoring method, 
 and code diff corresponding to the final patch versions before it was dropped or accepted 
@@ -38,8 +35,7 @@ Group 9 initially approached the selected duplication with a parameterized metho
 
 Group 11 is the student who executed the tool and completed the process of identifying duplications. The student identified a duplication in the driver that occurred across eighteen code files, creating a patch to remove approximately four hundred lines of duplicated code. The student sent the mitigations to the maintainers, and their feedback pointed to fixing the warning in the code without arguing about removing the duplications. After addressing the issue, the patch was applied. This student also contributed to IIO, tackling a code duplication with inline method refactoring. This one, however, was received with more skepticism by the maintainer, and the student dropped the contribution because he did not think the feedback instructions were clear enough.
 
-Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that people without previous experience in Linux kernel development could approach duplications found by the \texttt{anonymous-tool} and become contributors to the kernel. We observed that not all duplications
-are viewed as code of bad quality, with maintainers analyzing the trade-off between the purpose of the duplicated code, code readability, and the levels of abstraction added to address the duplications.
+Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that people without previous experience in Linux kernel development could approach duplications found by the ArKanjo tool and become contributors to the kernel. We observed that not all duplications are viewed as code of bad quality, with maintainers analyzing the trade-off between the purpose of the duplicated code, code readability, and the levels of abstraction added to address the duplications.
 
 \subsection{Statistics of the contributions}
 
@@ -67,7 +63,7 @@ extension of the contribution:
 \begin{itemize}
     \item The AMD Display subsystem has some self-reported problems regarding overall technical debt;
     \item The AMD Display subsystem has a more centralized code structure and maintainer hierarchy, enabling contributors to tackle code duplications across a broader scope and multiple files, which happened to Group 11's contribution;
-    \item The complete control over the process of finding code duplication gave Group 11 the opportunity to identify and reason better over the duplications found by \texttt{anonymous-tool}, enabling a more strategic approach to searching for promising patch possibilities.
+    \item The complete control over the process of finding code duplication gave Group 11 the opportunity to identify and reason better over the duplications found by ArKanjo, enabling a more strategic approach to searching for promising patch possibilities.
 \end{itemize}
 
 \subsection{Survey Results Analysis}
@@ -80,7 +76,7 @@ with the answers.
 Related to the tool installation, neither the teaching assistant nor the students faced issues 
 installing on the Debian distributions. However, the teaching assistant attempted to install it 
 in the Arch Linux distribution and failed to install it on this Linux distribution. 
-Regarding the tool's documentation, the teaching assistant pointed out errors that worsened his 
+Regarding the tool documentation, the teaching assistant pointed out errors that worsened his 
 experience. The student asked for more examples and tutorials on using the tool in text or 
 video formats.
 
@@ -94,9 +90,9 @@ initially looked more complex; in contrast, the \textit{diff} method is a simple
 with an operation system default command. The teaching assistant report corroborates the 
 gensim efficiency \citep{gensim}.
 
-Related to the tool's functionalities, both the student assistant and the student reported 
+Related to the tool functionalities, both the student assistant and the student reported 
 a missing mechanism to save the tool results in a separate file instead of the terminal output. 
-The tool, by default, outputs with colors, as shown in section \ref{subsec:func}, which complicates 
+The tool, by default, outputs with colors, as shown in Section~\ref{subsec:func}, which complicates 
 redirecting the terminal output to a file.
 
 We asked for the overall impression of the tool and if it met their expectations. We also asked 
@@ -132,7 +128,7 @@ can be addressed in future work.
 \subsection{Students Contribution to the Tool}
 
 We listed multiple issues in the tool for the two groups that opted to contribute directly 
-to developing the ArKanjo tool. The first group opted to work on expanding the tool's support 
+to developing the ArKanjo tool. The first group opted to work on expanding the tool support 
 for multiple operating systems. Some libraries used in the tool development only supported the 
 Ubuntu distribution, and the first group was responsible for migrating these libraries to 
 libraries with support for multiple operating systems. This issue was of our knowledge and 
@@ -140,9 +136,9 @@ was pointed out by the teaching assistant in the survey, as he reported the prob
 using the tool.
 
 The second group opted to work on a webpage for the tool documentation and support for 
-light and dark modes. The colored output presented in the figures in Chapter \ref{cha:tool} was 
+light and dark modes. The colored output presented in the figures in Chapter~\ref{cha:tool} was 
 hard-coded at first, not considering the user terminal colors, thus giving a bad user experience. 
-The website helps facilitate people's contribution or use of the tool. We did not know how to 
+The website helps facilitate people's contribution or use of the tool: \url{https://arkanjo-tool.github.io}. We did not know how to 
 approach the light and dark modes at first and did not need to look at how to fix the issue as 
 the group searched and found a solution.
 

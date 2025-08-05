@@ -4,8 +4,8 @@
 
 For our participant observation, we attempted to mitigate two code 
 duplications found by the ArKanjo tool in the AMD Display driver by applying 
-our systematic approach presented in \ref{subsubsec:systematic}. 
-As presented in section \ref{sec:meteth},
+our systematic approach presented in Section~\ref{subsubsec:systematic}. 
+As presented in Section~\ref{sec:meteth},
 we opted to apply the systematic approach in the mitigations.
 
 Table \ref{tab:patch} summarizes the impact of the mitigations in terms of 
@@ -27,9 +27,9 @@ We reached a point where we had a scratch on how to mitigate the duplications fo
 but we could not complete the refactoring to a state capable of submitting as a 
 patch to the driver. We found that the configuration files on the AMD Display 
 driver are designed to be imported at compilation time using \textit{\#define} macros. 
-The configuration files' design choice makes refactoring duplications on generic 
+The configuration files design choice makes refactoring duplications on generic 
 approaches trickier, as refactoring code that depends on these files requires 
-significant refactoring of the configuration files' design and deep knowledge 
+significant refactoring of the configuration files design and deep knowledge 
 of the codebase, which we, as first-time contributors, do not have. Thus, we opted 
 not to continue investigating this mitigation.
 
@@ -88,8 +88,7 @@ Regarding the patch changes requested for the second version, the maintainers
 only asked for minor changes to align with code style, correct license use, 
 and best practices that were initially unknown. For the change requested on 
 the third version, the maintainers asked us to move the functions created in 
-the generic library to an existing file instead of creating a new one.
-\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
+the generic library to an existing file instead of creating a new one\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
 
 The initial plan of this research was to approach and send many mitigations to collect 
 many artifacts from the driver community. Still, the slow process of sending a patch 
