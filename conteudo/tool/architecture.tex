@@ -9,13 +9,13 @@ extracts the functions of the codebase along with metadata, and creates a new te
 The Code Duplication Finder iterates over every pair of files in the Temporary Codebase, checks if they are code clones, and, 
 if so, saves them in the Code Duplication Database, which is a text file that stores every code duplication as a triple 
 \textbf{<function1,function2,similarity>}, where \textbf{function1} and \textbf{function2} are the functions that are duplicates 
-of each other, and \textbf{similarity} is the metric given by the code duplication detection method utilized in the Code Duplication Finder. ,
+of each other, and \textbf{similarity} is the metric given by the code duplication detection method utilized in the Code Duplication Finder.
 
 The Query Responder consumes the Temporary Codebase and the Code Duplication Database to extract duplicated 
 functions-related information per user request. If the user executes the Query Responder without executing the 
 Preprocessor, the Query Responder calls the Preprocessor to create the required artifacts.
 
-Figure \ref{fig:diagram} illustrates the tool architecture. An explanation of how each component works is provided in this section.
+Figure~\ref{fig:diagram} illustrates the tool architecture. An explanation of how each component works is provided in this section.
 
 \begin{figure}
 \includegraphics[scale=0.4]{diagrama_mestrado}
