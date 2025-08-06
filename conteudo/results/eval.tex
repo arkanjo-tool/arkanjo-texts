@@ -2,33 +2,33 @@
 \label{sec:eval}
 
 In this section, we present the test results of our tool usage, following the 
-methodology described in Chapter \ref{cha:method}. First, we provide the results 
-obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}, which 
-serves as a standard reference in the literature \citep{litreview}. Second, we 
+methodology described in Chapter~\ref{cha:method}. First, we provide the results 
+obtained by our tool on the BigCloneBench dataset~\citep{bigclonebench}, which 
+serves as a standard reference in the literature~\citep{litreview}. Second, we 
 discuss the results from our empirical analysis. Finally, we triangulate the data, 
 analyzing our findings regarding the tool performance. 
 As a reminder, we only expect our tool to yield good results for Type-1 and Type-2,
-as mentioned in \ref{subsec:code_finder}.
+as mentioned in~\ref{subsec:code_finder}.
 
 \section{Tool Results on BigCloneBench}
 
 \input{conteudo/results/table_bigclone}
 
-As described in Section~\ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset \citep{bigclonebench}, we define 
+As described in Section~\ref{sec:metbig}, for evaluating our tool on the BigCloneBench dataset~\citep{bigclonebench}, we define 
 that every pair of functions with a similarity metric equal to or greater than a threshold \( X \) is considered a duplication. 
 The pair of code files containing these functions is then labeled as duplications. If our tool correctly 
 identifies a code duplication pair, it is counted as correct for the respective code duplication type. If it infers a 
-duplication pair incorrectly, it is counted as incorrect for all code duplication types. Table \ref{tab:bigclone} shows the results obtained by our tool on the BigCloneBench dataset \citep{bigclonebench}.
+duplication pair incorrectly, it is counted as incorrect for all code duplication types. Table~\ref{tab:bigclone} shows the results obtained by our tool on the BigCloneBench dataset~\citep{bigclonebench}.
 
-The results in Table \ref{tab:bigclone} indicate that our tool is conservative in its predictions. No negative sample was inferred as a duplication, even with a minimum similarity threshold of 30\%. However, it performs poorly identifying complex duplication types, such as Medium Type-3 and Weak Type-3/Type-4. As discussed in Chapter \ref{cha:tool}, if improved performance on these complex types is needed, our tool allows replacing the current duplication detection method due to its modular design.
+The results in Table~\ref{tab:bigclone} indicate that our tool is conservative in its predictions. No negative sample was inferred as a duplication, even with a minimum similarity threshold of 30\%. However, it performs poorly identifying complex duplication types, such as Medium Type-3 and Weak Type-3/Type-4. As discussed in Chapter~\ref{cha:tool}, if improved performance on these complex types is needed, our tool allows replacing the current duplication detection method due to its modular design.
 
 \subsection{Tool Results on Empirical Analysis}
 
-As outlined in Section~\ref{sec:metemp}, for the empirical evaluation of our tool, we randomly selected ten function pairs across various similarity metric ranges computed by our tool. We then examined each pair to determine whether they were duplications and, if so, categorized the duplication type. Table \ref{tab:emp} presents the results from our empirical analysis.
+As outlined in Section~\ref{sec:metemp}, for the empirical evaluation of our tool, we randomly selected ten function pairs across various similarity metric ranges computed by our tool. We then examined each pair to determine whether they were duplications and, if so, categorized the duplication type. Table~\ref{tab:emp} presents the results from our empirical analysis.
 
 \input{conteudo/results/table_empirical}
 
-The results in Table \ref{tab:emp} show that as the similarity metric decreases, 
+The results in Table~\ref{tab:emp} show that as the similarity metric decreases, 
 there is a notable increase in function pairs that are not duplications within 
 the context of the AMD Display driver (the Linux kernel component studied here). 
 For similarity ranges of 79\%-81\% or higher, there is a high 
