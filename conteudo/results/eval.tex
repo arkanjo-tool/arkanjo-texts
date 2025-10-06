@@ -46,11 +46,8 @@ The first reason may be the limitations and known issues with BigCloneBench, as 
 
 \subsection{Performance Evaluation of the Tool}
 
-Our performance evaluation, conducted on a machine equipped with a Ryzen 5700X processor 
-and 32GB of RAM, highlights the efficiency of the tool's two-stage architecture. 
-The offline Preprocessor step recorded a worst-case execution time of 8 minutes and 56 
-seconds for the AMD Display driver and 9 minutes and 41 seconds for the IIO subsystem 
-across five runs. ⏱️ In sharp contrast, the online Query Responder demonstrated real-time 
-capabilities, processing user requests in under 2 seconds in all test cases. This significant 
-performance difference underscores the effectiveness of separating the time-intensive 
-analysis from the interactive querying phase.
+Our performance evaluation on a Ryzen 5700X machine with 32GB of RAM shows the tool's efficiency. 
+During testing, the offline Preprocessor's longest run was 8 minutes and 56 seconds for the AMD Display driver 
+and 9 minutes and 41 seconds for the IIO subsystem. By contrast, the online Query Responder handled all user
+requests in less than 2 seconds. This result confirms the value of separating the time-consuming analysis 
+from the real-time query phase.
