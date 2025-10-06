@@ -3,10 +3,12 @@
 The Linux kernel is a widely used Free/Libre/Open Source Software (FLOSS) project,
 powering the majority of webservers and smartphones worldwide.
 Maintaining the kernel is an enormous task, involving more than 28 million lines of 
-code and contributions from over twenty thousand developers
+code
 \footnote{Data directly extracted from Linux github repository~\citep{linuxrepo}.
 Counted  28783390 lines of code and 20699 contributors on May 29th, 2025.
-Number of contributors counted as unique full names listed as a patch author.}.
+Number of contributors counted as unique full names listed as a patch author.}
+and over 2,000 developers are actively contributing to the kernel
+\footnote{Data from \url{https://lwn.net/Articles/1022414/}}.
 Due to the scale of the project, not all contributions adhere to best practices, resulting 
 in poor-quality code artifacts that may complicate maintenance and future feature development.
 
@@ -19,7 +21,7 @@ amount of duplicated code that hampers the driver maintenance. In searching for 
 we found that existing tools are not well-suited for identifying duplications in large-scale 
 codebases like the Linux kernel, nor do they offer guidance on resolving the duplications 
 they find. Despite searching formal and grey literature, existing solutions failed to address
-addressing these specific challenges. The list of related tools examined in this exploratory 
+these specific challenges. The list of related tools examined in this exploratory 
 research is available in Appendix~\ref{app:gray}.
 
 This work presents an approach to address the code duplication issue in the Linux kernel; to 

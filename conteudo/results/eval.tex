@@ -10,7 +10,7 @@ analyzing our findings regarding the tool performance.
 As a reminder, we only expect our tool to yield good results for Type-1 and Type-2,
 as mentioned in~\ref{subsec:code_finder}.
 
-\section{Tool Results on BigCloneBench}
+\subsection{Tool Results on BigCloneBench}
 
 \input{conteudo/results/table_bigclone}
 
@@ -43,3 +43,14 @@ The BigCloneBench results and our empirical methods indicate that our tool perfo
 However, there is a discrepancy in the detection of non-duplication pairs between the two methods. In the BigCloneBench evaluation, we found no false positives (negative samples inferred as duplications), while the empirical analysis revealed a higher percentage of false positives. We propose two potential explanations for this discrepancy.
 
 The first reason may be the limitations and known issues with BigCloneBench, as highlighted by Krinke and Ragkhitwetsagul \citep{bigfail}. The second reason could relate to the nature of the AMD Display driver, where each code artifact shares semantic meaning. In contrast, BigCloneBench comprises self-contained code artifacts without shared semantics. Given that our tool relies on a text-based code clone detection approach, it may naturally perform worse on the AMD Display driver than on the BigCloneBench dataset. We cannot determine if state-of-the-art code duplication detection tools face similar issues obscured by evaluations limited to the BigCloneBench dataset.
+
+\subsection{Performance Evaluation of the Tool}
+
+Our performance evaluation, conducted on a machine equipped with a Ryzen 5700X processor 
+and 32GB of RAM, highlights the efficiency of the tool's two-stage architecture. 
+The offline Preprocessor step recorded a worst-case execution time of 8 minutes and 56 
+seconds for the AMD Display driver and 9 minutes and 41 seconds for the IIO subsystem 
+across five runs. ⏱️ In sharp contrast, the online Query Responder demonstrated real-time 
+capabilities, processing user requests in under 2 seconds in all test cases. This significant 
+performance difference underscores the effectiveness of separating the time-intensive 
+analysis from the interactive querying phase.
