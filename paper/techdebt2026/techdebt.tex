@@ -12,7 +12,7 @@
 
 \begin{document}
 
-\title{Mitigating Code Duplication in the Linux Kernel}
+\title{Repeat Yourself? When Linux kernel maintainers balance Code Duplication and Readability}
 
 
 % author names and affiliations
@@ -165,21 +165,25 @@ patch to contribute to the AMD Display driver code quality. Thus, we moved to se
 the refactoring to the driver maintainers as a patch, documenting our findings and experiences 
 on the process.
 
-\begin{figure}[ht]
-\centering
-\includegraphics[scale=0.325]{timeline_patch}
-\caption{Timeline of the PATCH submission process}
-\label{fig:timeline}
-\end{figure}
+%\begin{figure}[ht]
+%\centering
+%\includegraphics[scale=0.325]{timeline_patch}
+%\caption{Timeline of the PATCH submission process}
+%\label{fig:timeline}
+%\end{figure}
 
-The experience of submitting a patch was not as we expected. The process took 7 months and 16 days, significantly slower than expected. We initially submitted the patch on August 9, 2024, but we did not receive replies. Thus, we had to resend it on October 9, 2024. We received an initial response on November 3, 2024, requesting minimal changes. We submitted a second version with the requested changes on November 16, 2024. We did not receive replies initially and will need to resend the patch on February 7, 2025. We received a reply on February 11, 2025, asking for additional changes. We sent a third version on February 24, 2025, and the patch was accepted and integrated into the kernel codebase on February 25, 2025. Figure \ref{fig:timeline} illustrates the timeline of the patch submission.
+%The experience of submitting a patch was not as we expected. The process took 7 months and 16 days, significantly slower than expected. We initially submitted the patch on August 9, 2024, but we did not receive replies. Thus, we had to resend it on October 9, 2024. We received an initial response on November 3, 2024, requesting minimal changes. We submitted a second version with the requested changes on November 16, 2024. We did not receive replies initially and will need to resend the patch on February 7, 2025. We received a reply on February 11, 2025, asking for additional changes. We sent a third version on February 24, 2025, and the patch was accepted and integrated into the kernel codebase on February 25, 2025.
+%Figure \ref{fig:timeline} illustrates the timeline of the patch submission.
 
-After the initial reply from the maintainers, we observed that the review process became more responsive. We hypothesize that once a patch receives initial attention, it is more closely tracked by maintainers. Another contributing factor to the initial delay could be the maintainers' workload at the time of the first submission.
+%After the initial reply from the maintainers, we observed that the review process became more responsive. We hypothesize that once a patch receives initial attention, it is more closely tracked by maintainers. Another contributing factor to the initial delay could be the maintainers' workload at the time of the first submission.
 
-We discussed the Display driver with our point of contact at AMD to understand the reason for the slow patch submission process. We learned that some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
+%We discussed the Display driver with our point of contact at AMD to understand the reason for the slow patch submission process. We learned that
 
-Regarding the patch changes requested for the second version, the maintainers only asked for minor changes to align with code style, correct license use, and best practices that were initially unknown. For the change requested on the third version, the maintainers asked us to move the functions created in the generic library to an existing file instead of creating a new one.
+We submitted the initial patch: the maintainers only asked for minor changes to align with code style, correct license use, and best practices that were initially unknown. We submitted a second version: the maintainers asked us to move the functions created in the generic library to an existing file instead of creating a new one. We sent a third version, and the patch was accepted and integrated into the kernel codebase on February 25, 2025.
 %\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
+
+During this contribution process, we learned that some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
+
 
 \section{Non-participant Observation Study}
 
@@ -216,31 +220,31 @@ The groups were requested to document their experiences and approaches to refact
 
 Table \ref{tab:stu} summarizes the student groups' mitigation approaches. It contains the information about the chosen subsystem and the similarity threshold for groups that opted for the first approach. Each entry also has the patch status, refactoring method, and code diff corresponding to the final patch versions before it was dropped or accepted into the code base. The code diff for a patchset corresponds to the sum of added and removed lines of each of its patches.
 
-\begin{table*}
+\begin{table}
 \centering
 \caption{Refactor methods used and metrics of the students' mitigations.}
-\begin{tabular}{ | c | m{15mm} | m{20mm} | m{30mm} | m{30mm} | m{20mm} | }
+\begin{tabular}{ |c |c |c |c |c | c| }
 \hline
-\textbf{Group} & \textbf{Subsystem} & \textbf{Similarity} & \textbf{Patch Status} & \textbf{Refactoring Method} & \textbf{Code Diff} \\
+\textbf{G} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Method} & \textbf{Diff} \\
 \hline
 
 1 & IIO & 100\% & Dropped (v2) & Undefined & +7/-14 \\ \hline
-2 & IIO & 100\% & Dropped (v1) & Parameterize method & +23/-27 \\ \hline
-3 & IIO & 100\% & Accepted (v1) & Parameterize method & +12/-30 \\ \hline
+2 & IIO & 100\% & Dropped (v1) & Parameterize & +23/-27 \\ \hline
+3 & IIO & 100\% & Accepted (v1) & Parameterize & +12/-30 \\ \hline
 4 & IIO & 100\% & Accepted (v3) & Undefined & +2/-7 \\ \hline
-5 & IIO & 90\% & Accepted (v1) & Parameterize method & +17/-70 \\ \hline
-6 & IIO & 90\% & Dropped (v1) & Parameterize method & +95/-92 \\ \hline
-7 & IIO & 90\% & Accepted (v3) & Extract method & +20/-36 \\ \hline
-8 & IIO & 90\% & Accepted (v4) & Extract method & +20/-16 \\ \hline
-9 & IIO & 90\% & Accepted (v6) -- Partially & Parameterize method & +149/-243 \\ \hline
+5 & IIO & 90\% & Accepted (v1) & Parameterize & +17/-70 \\ \hline
+6 & IIO & 90\% & Dropped (v1) & Parameterize & +95/-92 \\ \hline
+7 & IIO & 90\% & Accepted (v3) & Extract & +20/-36 \\ \hline
+8 & IIO & 90\% & Accepted (v4) & Extract & +20/-16 \\ \hline
+9 & IIO & 90\% & Accepted* (v6) & Parameterize & +149/-243 \\ \hline
 10 & IIO & 90\% & Dropped (v1) & Undefined & +32/-58 \\ \hline
-11 & IIO & 100\% & Dropped (v1) & Inline method & +2/-12 \\ 
+11 & IIO & 100\% & Dropped (v1) & Inline & +2/-12 \\ 
    & AMD & 90\% & Accepted (v2) & Undefined & +90/-489 \\ \hline
 
 \end{tabular}%
 
 \label{tab:stu}
-\end{table*}
+\end{table}
 
 Seven groups applied the parameterized refactor method, two groups used the extractor method, and one group applied the inline method to their approaches to mitigate their duplications. Four patches do not contain a refactoring technique defined in the literature (undefined). Six groups had their patches accepted and fully merged into Linux; four groups had their patches dropped; one group has its patchset partially applied and is still working on patch submission, currently in the sixth version of the patch when this document was written, but we can also consider this case as accepted.
 
@@ -294,7 +298,8 @@ Finally, the AMD contribution from Group 11, which involves the complete use of 
 
 \section{Concluding Remarks}
 
-The ethnographic studies, which included participant observation and experimentation with students, offered a realistic perspective on the opportunities and significant challenges in mitigating code duplications found by the \texttt{anonymous-tool} tool. The tool was effectively used by first-time contributors to the Linux kernel to identify duplications and submit patches~\footnote{To avoid violating the double-anonymized review process, we will add the tool repository, patches, and artifact links in the final camera-ready version of the paper, if it is accepted for publication.}.
+The ethnographic studies, which included participant observation and experimentation with students, offered a realistic perspective on the opportunities and significant challenges in mitigating code duplications found by the \texttt{anonymous-tool} tool. The tool was effectively used by first-time contributors to the Linux kernel to identify duplications and submit patches.
+%TODO: disponibilizar artefato da mesma forma que mandamos para a ICSE Education Track~\footnote{To avoid violating the double-anonymized review process, we will add the tool repository, patches, and artifact links in the final camera-ready version of the paper, if it is accepted for publication.}
 
 While this research included 1 successfully merged patch by the main author, and 7 out of 11 student groups had their patches accepted and merged into Linux, a portion of the students' efforts encountered hurdles: 4 student groups had their patches rejected.
 %TODO: avaliar se não estamos sendo muito negativos ao destacar aqui as 4 rejeições.
