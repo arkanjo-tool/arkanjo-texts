@@ -1,0 +1,916 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% INSERINDO COMENTÁRIOS EM ARQUIVOS .bib %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% 1. Como em outros arquivos LaTeX, comentários são iniciados por "%" e,
+%    portanto, é preciso usar "\%" para imprimir o caractere "%". Esquecer
+%    disso pode gerar erros difíceis de encontrar!
+%
+% 2. Não é possível inserir comentários dentro de uma entrada, apenas fora.
+%
+% 3. Não é possível incluir o caractere arroba em um comentário.
+%
+% 4. Se quiser desabilitar temporariamente um campo ("comentar" o campo),
+%    troque seu nome para algum nome inválido, como "author-disable".
+%    Se quiser fazer alguma observação permanente dentro de uma entrada,
+%    você também pode usar algum nome de campo inválido, como "lembrete",
+%    ou usar o campo "annotation", que normalmente é ignorado.
+%
+% 5. Se quiser desabilitar temporariamente uma entrada inteira ("comentar" a
+%    entrada), não basta colocar "%" nas linhas correspondentes por causa do
+%    caractere arroba; também é preciso remover a arroba.
+%
+% 6. Na verdade, as regras não são bem essas, mas segui-las é uma boa ideia:
+%    https://tex.stackexchange.com/a/262282
+
+
+% Esta entrada está comentada, ou seja, não tem efeito: se houvesse uma
+% referência a ela no texto, a referência ficaria inválida. Observe que,
+% para isso, o caractere arroba foi apagado!
+%Book{JW82,
+% author    = {Richard A. Johnson and Dean W. Wichern},
+% title     = {Applied Multivariate Statistical Analysis},
+% publisher = {Prentice-Hall},
+% year      = {1983}
+%}
+
+% Esta entrada não está em uso em tese.tex, apenas em
+% apresentacao.tex, mas isso não é um problema: você pode
+% ter um banco de dados com todos os papers que são de seu
+% interesse e, em um dado texto, citar apenas alguns deles.
+
+@book{engsoftmoderna,
+  title     = "Engenharia de Software Moderna: Princípios e Práticas para Desenvolvimento de Software com Produtividade",
+  author    = "Marco Tulio Valente",
+  year      = 2020,
+  publisher = "Editora: Independente"
+}
+
+@misc{Stallman2019,
+	title        = {Why Open Source misses the point of Free Software},
+	url          = {https://www.gnu.org/philosophy/open-source-misses-the-point.html},
+	journal      = {GNU Operating System},
+	publisher    = {Free Software Foundation},
+	author       = {Stallman, Richard},
+	year         = {2019},
+	month        = {4}
+}
+
+@inproceedings{Ferreira2019,
+	title        = {A Longitudinal Study on the Maintainers' Sentiment of a Large Scale Open Source Ecosystem},
+	author       = {Ferreira, Isabella and Stewart, Kate and German, Daniel and Adams, Bram},
+	year         = 2019,
+	booktitle    = {2019 IEEE/ACM 4th International Workshop on Emotion Awareness in Software Engineering (SEmotion)},
+	volume       = {},
+	number       = {},
+	pages        = {17--22},
+	doi          = {10.1109/SEmotion.2019.00011}
+}
+@inproceedings{Alomari2014,
+	title        = {A Slice-Based Estimation Approach for Maintenance Effort},
+	author       = {Alomari, Hakam W. and Collard, Michael L. and Maletic, Jonathan I.},
+	year         = 2014,
+	booktitle    = {2014 IEEE International Conference on Software Maintenance and Evolution},
+	volume       = {},
+	number       = {},
+	pages        = {81--90},
+	doi          = {10.1109/ICSME.2014.30}
+}
+@inproceedings{Bettenburg2009,
+	title        = {An empirical study on the risks of using off-the-shelf techniques for processing mailing list data},
+	author       = {Bettenburg, Nicolas and Shihab, Emad and Hassan, Ahmed E.},
+	year         = 2009,
+	booktitle    = {2009 IEEE International Conference on Software Maintenance},
+	volume       = {},
+	number       = {},
+	pages        = {539--542},
+	doi          = {10.1109/ICSM.2009.5306383}
+}
+@article{Bettenburg2012,
+	title        = {Studying the impact of social interactions on software quality},
+	author       = {Nicolas Bettenburg and Ahmed E. Hassan},
+	year         = 2012,
+	month        = apr,
+	journal      = {Empirical Software Engineering},
+	publisher    = {Springer Science and Business Media {LLC}},
+	volume       = 18,
+	number       = 2,
+	pages        = {375--431},
+	doi          = {10.1007/s10664-012-9205-0},
+	url          = {https://doi.org/10.1007/s10664-012-9205-0}
+}
+@inproceedings{Rasinen2006,
+	title        = {Analysis of Linux Evolution Using Aligned Source Code Segments},
+	author       = {Rasinen, Antti and Hollm\'{e}n, Jaakko and Mannila, Heikki},
+	year         = 2006,
+	booktitle    = {Proceedings of the 9th International Conference on Discovery Science},
+	location     = {Barcelona, Spain},
+	publisher    = {Springer-Verlag},
+	address      = {Berlin, Heidelberg},
+	series       = {DS'06},
+	pages        = {209–218},
+	doi          = {10.1007/11893318_22},
+	isbn         = 3540464913,
+	url          = {https://doi.org/10.1007/11893318_22},
+	abstract     = {The Linux operating system embodies a development history of 15 years and community effort of hundreds of voluntary developers. We examine the structure and evolution of the Linux kernel by considering the source code of the kernel as ordinary text without any regard to its semantics. After selecting three functionally central modules to study, we identified code segments using local alignments of source code from a reduced set of file comparisons. The further stages of the analyses take advantage of these identified alignments. We build module-specific visualizations, or descendant graphs, to visualize the overall code migration between versions and files. More detailed view can be achieved with chain graphs which show the time evolution of alignments between selected files. The methods used here may also prove useful in studying large collections of legacy code, whose original maintainers are not available.},
+	numpages     = 10
+}
+@inproceedings{Bird2007,
+	title        = {Detecting Patch Submission and Acceptance in OSS Projects},
+	author       = {Bird, Christian and Gourley, Alex and Devanbu, Prem},
+	year         = 2007,
+	booktitle    = {Fourth International Workshop on Mining Software Repositories (MSR'07:ICSE Workshops 2007)},
+	volume       = {},
+	number       = {},
+	pages        = {26--26},
+	doi          = {10.1109/MSR.2007.6}
+}
+@article{Avelino2017,
+	title        = {Assessing Code Authorship: The Case of the Linux Kernel},
+	author       = {Avelino, Guilherme and Passos, Leonardo and Hora, Andre and Valente, Marco Tulio},
+	year         = 2017,
+	journal      = {IFIP Advances in Information and Communication Technology},
+	publisher    = {Springer International Publishing},
+	pages        = {151–163},
+	doi          = {10.1007/978-3-319-57735-7_15},
+	isbn         = 9783319577357,
+	issn         = {1868-422X},
+	url          = {http://dx.doi.org/10.1007/978-3-319-57735-7_15}
+}
+@inproceedings{Schneider2016,
+	title        = {Differentiating Communication Styles of Leaders on the Linux Kernel Mailing List},
+	author       = {Schneider, Daniel and Spurlock, Scott and Squire, Megan},
+	year         = 2016,
+	booktitle    = {Proceedings of the 12th International Symposium on Open Collaboration},
+	location     = {Berlin, Germany},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {OpenSym '16},
+	doi          = {10.1145/2957792.2957801},
+	isbn         = 9781450344517,
+	url          = {https://doi.org/10.1145/2957792.2957801},
+	abstract     = {Much communication between developers of free, libre, and open source software (FLOSS) projects happens on email mailing lists. Geographically and temporally dispersed development teams use email as an asynchronous, centralized, persistently stored institutional memory for sharing code samples, discussing bugs, and making decisions. Email is especially important to large, mature projects, such as the Linux kernel, which has thousands of developers and a multi-layered leadership structure. In this paper, we collect and analyze data to understand the communication patterns in such a community. How do the leaders of the Linux Kernel project write in email? What are the salient features of their writing, and can we discern one leader from another? We find that there are clear written markers for two leaders who have been particularly important to recent discussions of leadership style on the Linux Kernel Mailing List (LKML): Linux Torvalds and Greg Kroah-Hartman. Furthermore, we show that it is straightforward to use a machine learning strategy to automatically differentiate these two leaders based on their writing. Our findings will help researchers understand how this community works, and why there is occasional controversy regarding differences in communication styles on the LKML.},
+	articleno    = 2,
+	numpages     = 10,
+	keywords     = {machine learning, natural language processing, text mining, Linux, Open source software, email, data mining}
+}
+@inproceedings{Godfrey2001,
+	title        = {Growth, Evolution, and Structural Change in Open Source Software},
+	author       = {Godfrey, Michael and Tu, Qiang},
+	year         = 2001,
+	booktitle    = {Proceedings of the 4th International Workshop on Principles of Software Evolution},
+	location     = {Vienna, Austria},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {IWPSE '01},
+	pages        = {103–106},
+	doi          = {10.1145/602461.602482},
+	isbn         = 1581135084,
+	url          = {https://doi.org/10.1145/602461.602482},
+	abstract     = {Our recent work has addressed how and why software systems evolve over time, with a particular emphasis on software architecture and open source software systems [2, 3, 6]. In this position paper, we present a short summary of two recent projects.First, we have performed a case study on the evolution of the Linux kernel [3], as well as some other open source software (OSS) systems. We have found that several OSS systems appear not to obey some of "Lehman's laws" of software evolution [5, 7], and that Linux in particular is continuing to grow at a geometric rate. Currently, we are working on a detailed study of the evolution of one of the subsystems of the Linux kernel: the SCSI drivers subsystem. We have found that cloning, which is usually considered to be an indicator of lazy development and poor process, is quite common and is even considered to be a useful practice.Second, we are developing a tool called Beagle to aid software maintainers in understanding how large systems have changed over time. Beagle integrates data from various static analysis and metrics tools and provides a query engine as well as navigable visualizations. Of particular note, Beagle aims to provide help in modelling long term evolution of systems that have undergone architectural and structural change.},
+	numpages     = 4,
+	keywords     = {supporting environments, software evolution, Linux, open source software, GCC, structural change, software architecture}
+}
+@article{Hsiu-Fang2005,
+	title        = {Three Approaches to Qualitative Content Analysis},
+	author       = {Hsiu-Fang Hsieh and Sarah E. Shannon},
+	year         = 2005,
+	journal      = {Qualitative Health Research},
+	volume       = 15,
+	number       = 9,
+	pages        = {1277--1288},
+	doi          = {10.1177/1049732305276687},
+	url          = {https://doi.org/10.1177/1049732305276687},
+	note         = {PMID: 16204405},
+	eprint       = {https://doi.org/10.1177/1049732305276687},
+	abstract     = {Content analysis is a widely used qualitative research technique. Rather than being a single method, current applications of content analysis show three distinct approaches: conventional, directed, or summative. All three approaches are used to interpret meaning from the content of text data and, hence, adhere to the naturalistic paradigm. The major differences among the approaches are coding schemes, origins of codes, and threats to trustworthiness. In conventional content analysis, coding categories are derived directly from the text data. With a directed approach, analysis starts with a theory or relevant research findings as guidance for initial codes. A summative content analysis involves counting and comparisons, usually of keywords or content, followed by the interpretation of the underlying context. The authors delineate analytic procedures specific to each approach and techniques addressing trustworthiness with hypothetical examples drawn from the area of end-of-life care.}
+}
+@inproceedings{Tian2012,
+	title        = {Identifying Linux bug fixing patches},
+	author       = {Tian, Yuan and Lawall, Julia and Lo, David},
+	year         = 2012,
+	booktitle    = {2012 34th International Conference on Software Engineering (ICSE)},
+	volume       = {},
+	number       = {},
+	pages        = {386--396},
+	doi          = {10.1109/ICSE.2012.6227176}
+}
+@inproceedings{Davis2011,
+	title        = {Learning in the GNU/Linux Community},
+	author       = {Davis, Donald and Jabeen, Iffat},
+	year         = 2011,
+	booktitle    = {Proceedings of the 2011 Conference on Information Technology Education},
+	location     = {West Point, New York, USA},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {SIGITE '11},
+	pages        = {21–26},
+	doi          = {10.1145/2047594.2047600},
+	isbn         = 9781450310178,
+	url          = {https://doi.org/10.1145/2047594.2047600},
+	abstract     = {The GNU/Linux operating system is one of most familiar examples of Free and Open Source Software (FOSS). The Free and Open Source Software paradigm encourages a sense of community and participation, building upon shared knowledge. The same tenets of collaboration and shared knowledge are espoused by academia and the educational system [8]. However, there is little discussion of the GNU/Linux community and the FOSS framework in much of the K-16 education system. If identified as a participatory learning community, the GNU/Linux community and its utilization of the FOSS framework would represent a stark contrast to the proprietary, black box software and software practices currently adopted in much of K-16 education. Therefore, researchers conducted an online survey to determine if the GNU/Linux community exhibited significant elements of the legitimate peripheral participation (LPP) learning process. This research does not focus on specific units of learning using GNU/Linux but rather is a more general investigation of a possible GNU/Linux community to determine whether more specific research evaluating the educational efficacy of FOSS and the FOSS framework is warranted. This paper presents an analysis of survey data provided by 4603 respondents reflecting on learning within the context of GNU/Linux and other FOSS communities. The intent of the paper is to facilitate an evaluation of GNU/Linux and its properties as a participatory learning community by educational technologists, educators, education administrators, and other education stakeholders. In this paper, researchers analyze data to determine whether the GNU/Linux community exhibits significant characteristics of a community engaged in the process of legitimate peripheral participation. Researchers then identify some of the more significant correlations identified among participatory activities within the GNU/Linux community and learning. Lastly, researchers present community members' perceptions of learning within the GNU/Linux community and their beliefs regarding the possible role(s) of GNU/Linux and the FOSS framework within the K-16 educational paradigm.},
+	numpages     = 6,
+	keywords     = {GNU/Linux, legitimate peripheral participation, FOSS}
+}
+@article{Bettenburg2015,
+	title        = {Management of Community Contributions: A Case Study on the Android and Linux Software Ecosystems},
+	author       = {Bettenburg, Nicolas and Hassan, Ahmed E. and Adams, Bram and German, Daniel M.},
+	year         = 2015,
+	month        = 2,
+	journal      = {Empirical Softw. Engg.},
+	publisher    = {Kluwer Academic Publishers},
+	address      = {USA},
+	volume       = 20,
+	number       = 1,
+	pages        = {252–289},
+	doi          = {10.1007/s10664-013-9284-6},
+	issn         = {1382-3256},
+	url          = {https://doi.org/10.1007/s10664-013-9284-6},
+	issue_date   = {Feb 2015},
+	abstract     = {In recent years, many companies have realized that collaboration with a thriving user or developer community is a major factor in creating innovative technology driven by market demand. As a result, businesses have sought ways to stimulate contributions from developers outside their corporate walls, and integrate external developers into their development process. To support software companies in this process, this paper presents an empirical study on the contribution management processes of two major, successful, open source software ecosystems. We contrast a for-profit (ANDROID) system having a hybrid contribution style, with a not-for-profit (LINUX kernel) system having an open contribution style. To guide our comparisons, we base our analysis on a conceptual model of contribution management that we derived from a total of seven major open-source software systems. A quantitative comparison based on data mined from the ANDROID code review system and the LINUX kernel code review mailing lists shows that both projects have significantly different contribution management styles, suited to their respective market goals, but with individual advantages and disadvantages that are important for practitioners. Contribution management is a real-world problem that has received very little attention from the research community so far. Both studied systems (LINUX and ANDROID) employ different strategies and techniques for managing contributions, and both approaches are valuable examples for practitioners. Each approach has specific advantages and disadvantages that need to be carefully evaluated by practitioners when adopting a contribution management process in practice.},
+	numpages     = 38,
+	keywords     = {Software management, Best practices, Open source software, Measurement, Contribution management, Software process}
+}
+@inproceedings{Wilde2016,
+	title        = {Merge-Tree: Visualizing the Integration of Commits into Linux},
+	author       = {Wilde, Evan and German, Daniel},
+	year         = 2016,
+	booktitle    = {2016 IEEE Working Conference on Software Visualization (VISSOFT)},
+	volume       = {},
+	number       = {},
+	pages        = {1--10},
+	doi          = {10.1109/VISSOFT.2016.18}
+}
+@inproceedings{Zhou2017,
+	title        = {On the Scalability of Linux Kernel Maintainers' Work},
+	author       = {Zhou, Minghui and Chen, Qingying and Mockus, Audris and Wu, Fengguang},
+	year         = 2017,
+	booktitle    = {Proceedings of the 2017 11th Joint Meeting on Foundations of Software Engineering},
+	location     = {Paderborn, Germany},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {ESEC/FSE 2017},
+	pages        = {27–37},
+	doi          = {10.1145/3106237.3106287},
+	isbn         = 9781450351058,
+	url          = {https://doi.org/10.1145/3106237.3106287},
+	abstract     = {Open source software ecosystems evolve ways to balance the workload among groups of participants ranging from core groups to peripheral groups. As ecosystems grow, it is not clear whether the mechanisms that previously made them work will continue to be relevant or whether new mechanisms will need to evolve. The impact of failure for critical ecosystems such as Linux is enormous, yet the understanding of why they function and are effective is limited. We, therefore, aim to understand how the Linux kernel sustains its growth, how to characterize the workload of maintainers, and whether or not the existing mechanisms are scalable. We quantify maintainers' work through the files that are maintained, and the change activity and the numbers of contributors in those files. We find systematic differences among modules; these differences are stable over time, which suggests that certain architectural features, commercial interests, or module-specific practices lead to distinct sustainable equilibria. We find that most of the modules have not grown appreciably over the last decade; most growth has been absorbed by a few modules. We also find that the effort per maintainer does not increase, even though the community has hypothesized that required effort might increase. However, the distribution of work among maintainers is highly unbalanced, suggesting that a few maintainers may experience increasing workload. We find that the practice of assigning multiple maintainers to a file yields only a power of 1/2 increase in productivity. We expect that our proposed framework to quantify maintainer practices will help clarify the factors that allow rapidly growing ecosystems to be sustainable.},
+	numpages     = 11,
+	keywords     = {software evolution, maintainer scalability, open source ecosystem, work distribution, Maintainer's workload, Linux kernel}
+}
+@inproceedings{Tan2019MCM,
+	title        = {Reducing the Workload of the Linux Kernel Maintainers: Multiple-Committer Model},
+	author       = {Tan, Xin},
+	year         = 2019,
+	booktitle    = {Proceedings of the 2019 27th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+	location     = {Tallinn, Estonia},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {ESEC/FSE 2019},
+	pages        = {1205–1207},
+	doi          = {10.1145/3338906.3342490},
+	isbn         = 9781450355728,
+	url          = {https://doi.org/10.1145/3338906.3342490},
+	abstract     = {With the increasing scale and complexity of software, the traditional development workflow may be inapplicable, which is harmful to the sustainable development of projects. In this study, we explored a new workflow — multiple-committer model that was applied by a subsystem of the Linux kernel to confront the heavy workload of the maintainers. We designed four dimensions of metrics toevaluate the model effect and found that this model conspicuouslyreduces the workload of the maintainers. We also obtained thecrucial factors for implementing this model.},
+	numpages     = 3,
+	keywords     = {Linux kernel, maintainer, multiple-committer model, workload}
+}
+@inproceedings{Tan2020,
+	title        = {Scaling Open Source Communities: An Empirical Study of the Linux Kernel},
+	author       = {Tan, Xin and Zhou, Minghui and Fitzgerald, Brian},
+	year         = 2020,
+	booktitle    = {Proceedings of the ACM/IEEE 42nd International Conference on Software Engineering},
+	location     = {Seoul, South Korea},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {ICSE '20},
+	pages        = {1222–1234},
+	doi          = {10.1145/3377811.3380920},
+	isbn         = 9781450371216,
+	url          = {https://doi.org/10.1145/3377811.3380920},
+	abstract     = {Large-scale open source communities, such as the Linux kernel, have gone through decades of development, substantially growing in scale and complexity. In the traditional workflow, maintainers serve as "gatekeepers" for the subsystems that they maintain. As the number of patches and authors significantly increases, maintainers come under considerable pressure, which may hinder the operation and even the sustainability of the community. A few subsystems have begun to use new workflows to address these issues. However, it is unclear to what extent these new workflows are successful, or how to apply them. Therefore, we conduct an empirical study on the multiple-committer model (MCM) that has provoked extensive discussion in the Linux kernel community. We explore the effect of the model on the i915 subsystem with respect to four dimensions: pressure, latency, complexity, and quality assurance. We find that after this model was adopted, the burden of the i915 maintainers was significantly reduced. Also, the model scales well to allow more committers. After analyzing the online documents and interviewing the maintainers of i915, we propose that overloaded subsystems which have trustworthy candidate committers are suitable for adopting the model. We further suggest that the success of the model is closely related to a series of measures for risk mitigation---sufficient precommit testing, strict review process, and the use of tools to simplify work and reduce errors. We employ a network analysis approach to locate candidate committers for the target subsystems and validate this approach and contextual success factors through email interviews with their maintainers. To the best of our knowledge, this is the first study focusing on how to scale open source communities. We expect that our study will help the rapidly growing Linux kernel and other similar communities to adapt to changes and remain sustainable.},
+	numpages     = 13,
+	keywords     = {workload, sustainability, open source communities, maintainer, scalability, multiple committers, Linux kernel}
+}
+@article{Fitzgerald2006,
+	author       = {Fitzgerald, Brian},
+	issn         = {02767783},
+	journal      = {MIS Quarterly},
+	number       = {3},
+	pages        = {587--598},
+	publisher    = {Management Information Systems Research Center, University of Minnesota},
+	title        = {The Transformation of Open Source Software},
+	volume       = {30},
+	year         = {2006}
+}
+@article{Tan2022Decentralization,
+	title        = {Scaling Open Source Software Communities: Challenges and Practices of Decentralization},
+	author       = {Tan, Xin and Zhou, Minghui},
+	year         = 2022,
+	journal      = {IEEE Software},
+	volume       = 39,
+	number       = 1,
+	pages        = {70--75},
+	doi          = {10.1109/MS.2020.3025959}
+}
+@inproceedings{Volanschi2020,
+	title        = {The Impact of Generic Data Structures: Decoding the Role of Lists in the Linux Kernel},
+	author       = {Volanschi, Nic and Lawall, Julia},
+	year         = 2020,
+	booktitle    = {Proceedings of the 35th IEEE/ACM International Conference on Automated Software Engineering},
+	location     = {Virtual Event, Australia},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {ASE '20},
+	pages        = {103–114},
+	doi          = {10.1145/3324884.3416635},
+	isbn         = 9781450367684,
+	url          = {https://doi.org/10.1145/3324884.3416635},
+	numpages     = 12,
+	keywords     = {genericity, data types, linux kernel}
+}
+@inproceedings{Jiang2014,
+	title        = {Tracing Back the History of Commits in Low-Tech Reviewing Environments: A Case Study of the Linux Kernel},
+	author       = {Jiang, Yujuan and Adams, Bram and Khomh, Foutse and German, Daniel M.},
+	year         = 2014,
+	booktitle    = {Proceedings of the 8th ACM/IEEE International Symposium on Empirical Software Engineering and Measurement},
+	location     = {Torino, Italy},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {ESEM '14},
+	doi          = {10.1145/2652524.2652542},
+	isbn         = 9781450327749,
+	url          = {https://doi.org/10.1145/2652524.2652542},
+	articleno    = 51,
+	numpages     = 10,
+	keywords     = {open source, software engineering, linux kernel, traceability, clone detection, low-tech reviewing environment, mailing list, review}
+}
+@inproceedings{Capiluppi2003,
+	title        = {Models for the evolution of OS projects},
+	author       = {Capiluppi, Andrea},
+	year         = 2003,
+	month        = 10,
+	pages        = {65--74},
+	doi          = {10.1109/ICSM.2003.1235407},
+	isbn         = {0-7695-1905-9}
+}
+@Article{Raymond1999,
+	author       = {Raymond, Eric},
+	title        = {The cathedral and the bazaar},
+	journal      = {Knowledge, Technology {\&} Policy},
+	year         = 1999,
+	month        = 9,
+	day          = 1,
+	volume       = 12,
+	number       = 3,
+	pages        = {23-49},
+	abstract     = {I anatomize a successful open-source project, fetchmail, that was run as a deliberate test of some theories about software engineering suggested by the history of Linux. I discuss these theories in terms of two fundamentally different development styles, the "cathedral" model, representing most of the commercial world, versus the "bazaar" model of the Linux world. I show that these models derive from opposing assumptions about the nature of the software-debugging task. I then make a sustained argument from the Linux experience for the proposition that "Given enough eyeballs, all bugs are shallow," suggest productive analogies with other self-correcting systems of selfish agents, and conclude with some exploration of the implications of this insight for the future of software.},
+	issn         = {1874-6314},
+	doi          = {10.1007/s12130-999-1026-0},
+	url          = {https://doi.org/10.1007/s12130-999-1026-0}
+}
+@article{Rigby2014,
+	title        = {Peer Review on Open-Source Software Projects: Parameters, Statistical Models, and Theory},
+	author       = {Rigby, Peter C. and German, Daniel M. and Cowen, Laura and Storey, Margaret-Anne},
+	year         = 2014,
+	month        = 9,
+	journal      = {ACM Trans. Softw. Eng. Methodol.},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	volume       = 23,
+	number       = 4,
+	doi          = {10.1145/2594458},
+	issn         = {1049-331X},
+	url          = {https://doi.org/10.1145/2594458},
+	issue_date   = {August 2014},
+	abstract     = {Peer review is seen as an important quality-assurance mechanism in both industrial development and the open-source software (OSS) community. The techniques for performing inspections have been well studied in industry; in OSS development, software peer reviews are not as well understood.To develop an empirical understanding of OSS peer review, we examine the review policies of 25 OSS projects and study the archival records of six large, mature, successful OSS projects. We extract a series of measures based on those used in traditional inspection experiments. We measure the frequency of review, the size of the contribution under review, the level of participation during review, the experience and expertise of the individuals involved in the review, the review interval, and the number of issues discussed during review. We create statistical models of the review efficiency, review interval, and effectiveness, the issues discussed during review, to determine which measures have the largest impact on review efficacy.We find that OSS peer reviews are conducted asynchronously by empowered experts who focus on changes that are in their area of expertise. Reviewers provide timely, regular feedback on small changes. The descriptive statistics clearly show that OSS review is drastically different from traditional inspection.},
+	articleno    = 35,
+	numpages     = 33,
+	keywords     = {open-source software, Peer review, inspection, mining software repositories}
+}
+@article{Mockus2003,
+	title        = {An empirical study of speed and communication in globally distributed software development},
+	author       = {Herbsleb, James and Mockus, Audris},
+	year         = 2003,
+	month        = 7,
+	journal      = {Software Engineering, IEEE Transactions on},
+	volume       = 29,
+	pages        = {481--494},
+	doi          = {10.1109/TSE.2003.1205177}
+}
+@phdthesis{Wen2021,
+	title        = {What happens when the bazaar grows: a comprehensive study on the contemporary Linux kernel development model},
+	author       = {Melissa Shihfan Ribeiro Wen},
+	year         = 2021,
+	publisher    = {Universidade de Sao Paulo,  Agencia {USP} de Gestao da Informacao Academica ({AGUIA})},
+	doi          = {10.11606/d.45.2021.tde-07092021-041136},
+	url          = {https://doi.org/10.11606/d.45.2021.tde-07092021-041136}
+}
+@article{Lee2003,
+	title        = {From a Firm-Based to a Community-Based Model of Knowledge Creation: The Case of the Linux Kernel Development},
+	author       = {Gwendolyn K. Lee and Robert E. Cole},
+	year         = 2003,
+	month        = 12,
+	journal      = {Organization Science},
+	publisher    = {Institute for Operations Research and the Management Sciences ({INFORMS})},
+	volume       = 14,
+	number       = 6,
+	pages        = {633--649},
+	doi          = {10.1287/orsc.14.6.633.24866},
+	url          = {https://doi.org/10.1287/orsc.14.6.633.24866}
+}
+@inproceedings{Mockus2000,
+	title        = {A Case Study of Open Source Software Development: The Apache Server},
+	author       = {Mockus, Audris and Fielding, Roy T. and Herbsleb, James},
+	year         = 2000,
+	booktitle    = {Proceedings of the 22nd International Conference on Software Engineering},
+	location     = {Limerick, Ireland},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	series       = {ICSE '00},
+	pages        = {263–272},
+	doi          = {10.1145/337180.337209},
+	isbn         = 1581132069,
+	url          = {https://doi.org/10.1145/337180.337209},
+	abstract     = {According to its proponents, open source style software development has the capacity to compete successfully, and perhaps in many cases displace, traditional commercial development methods. In order to begin investigating such claims, we examine the development process of a major open source application, the Apache web server. By using email archives of source code change history and problem reports we quantify aspects of developer participation, core team size, code ownership, productivity, defect density, and problem resolution interval for this OSS project. This analysis reveals a unique process, which performs well on important measures. We conclude that hybrid forms of development that borrow the most effective techniques from both the OSS and commercial worlds may lead to high performance software processes.},
+	numpages     = 10,
+	keywords     = {defect density, open source, repair interval, code ownership, software process}
+}
+@article{Mockus2002,
+	author       = {Mockus, Audris and Fielding, Roy T and Herbsleb, James D},
+	issn         = {1049-331X},
+	journal      = {ACM Trans. Softw. Eng. Methodol.},
+	month        = {7},
+	number       = {3},
+	pages        = {309--346},
+	publisher    = {ACM},
+	title        = {Two case studies of open source software development: Apache and Mozilla},
+	volume       = {11},
+	year         = {2002}
+}
+@inproceedings{Scacchi2003,
+	title        = {Understanding Open Source Software Evolution: Applying, Breaking, and Rethinking the Laws of Software Evolution},
+	author       = {Walt Scacchi},
+	year         = 2003
+}
+@article{Scacchi2006,
+	author       = {Scacchi, Walt and Feller, Joseph and Fitzgerald, Brian and Hissam, Scott and Lakhani, Karim},
+	issn         = {1077-4866},
+	journal      = {Software Process: Improvement and Practice},
+	month        = {3},
+	number       = {2},
+	pages        = {95--105},
+	publisher    = {John Wiley and Sons, Ltd},
+	title        = {Understanding Free/Open Source Software Development Processes},
+	volume       = {11},
+	year         = {2006}
+}
+@inproceedings{Osterlie2007,
+	author       = {Osterlie, Thomas and Jaccheri, Letizia},
+	booktitle    = {Proceeding of the 2nd AIS SIGSAND European Symposium on Systems Analysis and Design, Gdansk, Poland},
+	title        = {A critical review of software engineering research on open source software development},
+	year         = {2007}
+}
+@inproceedings{Kon2011,
+  author={Kon, Fabio and Meirelles, Paulo and Lago, Nelson and Terceiro, Antonio and Chavez, Christina and Mendonca, Manoel},
+  booktitle={2011 25th Brazilian Symposium on Software Engineering},
+  title={Free and Open Source Software Development and Research: Opportunities for Software Engineering},
+  year={2011},
+  volume={},
+  number={},
+  pages={82-91},
+  keywords={Software engineering;Programming;Internet;Open source software;Educational institutions},
+  doi={10.1109/SBES.2011.19}
+  }
+
+@article{Crowston2012,
+	author       = {Crowston, Kevin and Wei, Kangning and Howison, James and Wiggins, Andrea},
+	journal      = {ACM Computing Surveys},
+	month        = {2},
+	number       = {2},
+	pages        = {1--35},
+	publisher    = {ACM},
+	title        = {Free/Libre open-source software development},
+	volume       = {44},
+	year         = {2012}
+}
+@article{Steinmacher2015,
+	author       = {Steinmacher, Igor and {Graciotto Silva}, Marco Aurelio and Gerosa, Marco Aurelio and Redmiles, David F.},
+	journal      = {Information and Software Technology},
+	pages        = {67--85},
+	title        = {A systematic literature review on the barriers faced by newcomers to open source software projects},
+	volume       = {59},
+	year         = {2015}
+}
+@book{Tanenbaum2014,
+author = {Tanenbaum, Andrew S.},
+isbn = {013359162X},
+pages = {1101},
+title = {Modern operating systems.},
+year = {2014}
+}
+@article{Tan2019,
+	title        = {How to Communicate When Submitting Patches: An Empirical Study of the Linux Kernel},
+	author       = {Tan, Xin and Zhou, Minghui},
+	year         = 2019,
+	month        = 11,
+	journal      = {Proc. ACM Hum.-Comput. Interact.},
+	publisher    = {Association for Computing Machinery},
+	address      = {New York, NY, USA},
+	volume       = 3,
+	number       = {CSCW},
+	doi          = {10.1145/3359210},
+	url          = {https://doi.org/10.1145/3359210},
+	issue_date   = {November 2019},
+	abstract     = {Communication when submitting patches (CSP) is critical in software development, because ineffective communication wastes the time of developers and reviewers, and is even harmful to future product release and maintenance. In distributed software development, CSP is usually in the form of computer-mediated communication (CMC), which is a crucial topic concerned by the CSCW community. However, what to say and how to say in communication including CSP has been rarely studied. To bridge this knowledge gap and provide relevant guidance for developers to conduct CSP, in this study, we conducted an empirical study on the Linux kernel. We found four themes involving 17 expression elements that characterize what to express when submitting patches and three themes of contextual factors that determine how these elements are applied. Considering both expression elements and context, combined with an online survey, we obtained 17 practices for communication. Among them, four practices, such as "provide sufficient reasons" and "provide a trade-off" are the most important but difficult practices, for which we provide specific instructions. We also found that the "individual factors" plays a special role in communication, which may lead to potential problems even in accepted patches. Based on these findings, we discuss the recommendations for different practitioners, including patch submitters, reviewers, and tool designers, and the implications for open source software (OSS) communities and the CSCW researchers.},
+	articleno    = 108,
+	numpages     = 26,
+	keywords     = {cmc, communication content, patch submission, linux kernel}
+}
+@article{Naderifar2017,
+	title        = {Snowball Sampling: A Purposeful Method of Sampling in Qualitative Research},
+	author       = {Naderifar, Mahin and Goli, Hamideh and Ghaljaie, Fereshteh},
+	year         = 2017,
+	journal      = {Strides in Development of Medical Education},
+	publisher    = {Kerman University of Medical Sciences},
+	volume       = 14,
+	number       = 3,
+	pages        = {-},
+	doi          = {10.5812/sdme.67670},
+	issn         = {2645-3525},
+	url          = {http://sdme.kmu.ac.ir/article_90598.html},
+	eissn        = {2645-3452},
+	abstract     = {Background and Objectives Snowball sampling is applied when samples with the target characteristics are not easily accessible. This research describes snowball sampling as a purposeful method of data collection in qualitative research. Methods This paper is a descriptive review of previous research papers. Data were gathered using English keywords, including “review,” “declaration,” “snowball,” and “chain referral,” as well as Persian keywords that are equivalents of the following: “purposeful sampling,” “snowball,” “qualitative research,” and “descriptive review.” The databases included Google Scholar, Scopus, Irandoc, ProQuest, Science Direct, SID, MagIran, Medline, and Cochrane. The search was limited to Persian and English articles written between 2005 and 2013. Results The preliminary search yielded 433 articles from PubMed, 88 articles from Scopus, 1 article from SID, and 18 articles from MagIran. Among 125 articles, methodological and non-research articles were omitted. Finally, 11 relevant articles, which met the criteria, were selected for review. Conclusions Different methods of snowball sampling can be applied to facilitate scientific research, provide community-based data, and hold health educational programs. Snowball sampling can be effectively used to analyze vulnerable groups or individuals under special care. In fact, it allows researchers to access susceptible populations. Thus, it is suggested to consider snowball sampling strategies while working with the attendees of educational programs or samples of research studies.},
+	keywords     = {Purposeful Sampling,Snowball,qualitative research,Descriptive Review},
+	eprint       = {http://sdme.kmu.ac.ir/article_90598_3632edfb2e97c38d73c0bdea8753195c.pdf}
+}
+
+@article{Shaikh2017,
+	author = {Shaikh, Maha and Henfridsson, Ola},
+	title = {Governing Open Source Software through Coordination Processes},
+	year = {2017},
+	issue_date = {June 2017},
+	publisher = {Pergamon Press, Inc.},
+	address = {USA},
+	volume = {27},
+	number = {2},
+	issn = {1471-7727},
+	url = {https://doi.org/10.1016/j.infoandorg.2017.04.001},
+	doi = {10.1016/j.infoandorg.2017.04.001},
+	abstract = {Governance provides the authoritative framework for coordinating activities in open source development. Prior studies of open source governance have largely focused on its changing nature over time. In this work, we argue that the nature of governance varies across open source communities, and, in its evolution, multiple traces of authority may co-exist. We propose that such multiplicity can be understood by close examination of the authoritative structures embedded in coordination processes. We collected eight years of data on the coordination related to version control of the Linux kernel. Drawing on in-depth qualitative analysis, we investigate how coordination processes with different authoritative structures come together in the governance of open source software. We trace four coordination processes (autocratic clearing, oligarchic recursion, federated self-governance, and meritocratic idea-testing), each grounded in different authoritative structures (autocracy, oligarchy, federation, meritocracy) with their own form of legitimation. We offer a two-fold contribution in this paper. First, we enhance the open source governance literature by advancing a new theoretical perspective in which governance is seen as a configuration of coordination processes. Configurations give complementary support and are a source of tension and renewal. Second, we articulate a view on the conceptual relationship between governance and coordination where these concepts are understood as a duality, both working together to give rise to efficient and dynamic organizing in open source. Recognition and understanding of how authoritative structures are embedded within coordination processesEstablishing four distinct coordination processes at play in LinuxClarifying conceptually how governance is a manifestation of multiple authoritative structures in open sourceTheorizing the configurations of these four coordination processes and their shifts over timeEstablishing a theoretical relationship between coordination and governance in open source as a duality},
+journal = {Inf. Organ.},
+month = {jun},
+pages = {116–135},
+numpages = {20}
+}
+
+@misc{MaintainersTruth,
+	title        = {Maintainers truth and fiction},
+	author       = {Jonathan Corbet},
+	year         = 2021,
+	month        = 1,
+	journal      = {[LWN.net]},
+	url          = {https://lwn.net/Articles/842415/}
+}
+@misc{movingOnMaintainer,
+	title        = {On moving on from being a maintainer},
+	author       = {Jake Edge},
+	year         = 2016,
+	month        = 1,
+	journal      = {[LWN.net]},
+	url          = {https://lwn.net/Articles/670087/}
+}
+@misc{tooManyLords,
+	title        = {Too many lords, not enough stewards},
+	author       = {Jake Edge},
+	year         = 2018,
+	month        = 1,
+	journal      = {[LWN.net]},
+	url          = {https://lwn.net/Articles/745817/}
+}
+@misc{sayingNo,
+	title        = {On saying "no"},
+	author       = {Jonathan Corbet},
+	year         = 2013,
+	month        = 10,
+	journal      = {[LWN.net]},
+	url          = {https://lwn.net/Articles/571995/}
+}
+
+@misc{groupMaintainership,
+	title        = {Group maintainership models},
+	author       = {Jonathan Corbet},
+	year         = 2016,
+	month        = 11,
+	url          = {https://lwn.net/Articles/705228/},
+	journal      = {[LWN.net]}
+}
+
+@misc{twoPerspectives,
+	title        = {Two perspectives on the maintainer relationship},
+	author       = {Jonathan Corbet},
+	year         = 2018,
+	month        = 3,
+	url          = {https://lwn.net/Articles/749676/},
+	journal      = {[LWN.net]}
+}
+
+@misc{kernelEmailUsage,
+	title        = {Why kernel development still uses email},
+	author       = {Jonathan Corbet},
+	year         = 2016,
+	month        = 10,
+	url          = {https://lwn.net/Articles/702177/},
+	journal      = {[LWN.net]}
+}
+
+@misc{codeOfConduct,
+	title        = {The code of conduct at the Maintainers Summit},
+	author       = {Jonathan Corbet},
+	year         = 2018,
+	month        = 10,
+	url          = {https://lwn.net/Articles/769117/},
+	journal      = {[LWN.net]}
+}
+
+@misc{linuxKernelStatistics,
+	title        = {Linux kernel maintainer statistics},
+	url          = {https://blog.ffwll.ch/2018/04/maintainer-statistics.html},
+	year         = 2018,
+	month        = 4,
+	author       = {Daniel Vetter},
+}
+
+@misc{maintainersScale,
+	title        = {Maintainers Don't Scale},
+	url          = {https://blog.ffwll.ch/2017/01/maintainers-dont-scale.html},
+	year         = 2017,
+	month        = 1,
+	author       = {Daniel Vetter},
+}
+
+@misc{maintainersGap,
+	title        = {The kernel maintainer gap},
+	url          = {https://lwn.net/Articles/572003/},
+	year         = 2013,
+	month        = 10,
+	author       = {Jake Edge},
+}
+
+@misc{maintainersParadox,
+	title        = {The maintainer's paradox: Balancing project and community},
+	url          = {https://www.linuxfoundation.org/blog/the-maintainers-paradox-balancing-project-and-community/},
+	journal      = {Linux Foundation},
+	publisher    = {Sam Dean https://live-linux-foundation.pantheonsite.io/wp-content/uploads/lf_logo.svg},
+	author       = {Dean, Sam},
+	year         = 2020,
+	month        = 12
+}
+
+@misc{maintainersGrumpy,
+	title        = {LinuxCon Japan: Making kernel developers less grumpy},
+	url          = {https://lwn.net/Articles/500443/},
+	author       = {Jake Edge},
+	year         = 2012,
+	month        = 6
+}
+
+@book{Fogel2005,
+	author       = {Fogel, Karl},
+	title        = {Producing Open Source Software: How to Run a Successful Free Software Project},
+	year         = 2005,
+	isbn         = {0596007590},
+	publisher    = {O'Reilly Media, Inc.},
+	abstract     = {The corporate market is now embracing free, "open source" software like never before, as evidenced by the recent success of the technologies underlying LAMP (Linux, Apache, MySQL, and PHP). Each is the result of a publicly collaborative process among numerous developers who volunteer their time and energy to create better software. The truth is, however, that the overwhelming majority of free software projects fail. To help you beat the odds, O'Reilly has put together Producing Open Source Software, a guide that recommends tried and true steps to help free software developers work together toward a common goal. Not just for developers who are considering starting their own free software project, this book will also help those who want to participate in the process at any level. The book tackles this very complex topic by distilling it down into easily understandable parts. Starting with the basics of project management, it details specific tools used in free software projects, including version control, IRC, bug tracking, and Wikis. Author Karl Fogel, known for his work on CVS and Subversion, offers practical advice on how to set up and use a range of tools in combination with open mailing lists and archives. He also provides several chapters on the essentials of recruiting and motivating developers, as well as how to gain much-needed publicity for your project. While managing a team of enthusiastic developers -- most of whom you've never even met -- can be challenging, it can also be fun. Producing Open Source Software takes this into account, too, as it speaks of the sheer pleasure to be had from working with a motivated team of free software developers.}
+}
+
+@INPROCEEDINGS{Lindberg2014,
+	author       = {Lindberg, A. and Xiao, Xuan and Lyytinen, Kalle},
+	booktitle    = {2014 47th Hawaii International Conference on System Sciences},
+	title        = {Theorizing Modes of Open Source Software Development},
+	year         = 2014,
+	volume       = {},
+	number       = {},
+	pages        = {4568-4577},
+	doi          = {10.1109/HICSS.2014.560}
+}
+
+@misc{linuxNewbiesSubsystems,
+	title        = {Subsystems},
+	url          = {https://kernelnewbies.org/Documentation/Subsystems},
+	journal      = {Documentation/Subsystems - Linux Kernel Newbies},
+	year         = 2017
+}
+
+@misc{Torvalds1992,
+	url          = {http://www.cs.cmu.edu/~awb/linux.history.html},
+	journal      = {LINUX's History by Linus Torvalds},
+	author       = {Torvalds, Linus},
+	year         = {1992},
+	month        = {7}
+}
+
+@misc{Torvalds2007,
+	title        = {Re: Dual-Licensing Linux Kernel with {GPL} V2 and {GPL} V3},
+	url          = {https://marc.info/?l=linux-kernel&m=118236278730043&w=4},
+	journal      = {MARC},
+	author       = {Torvalds, Linus},
+	year         = {2007},
+	month        = {6}
+}
+
+@misc{Torvalds2018,
+	title        = {Linux 4.19-rc4 released, an apology, and a maintainership note},
+	url          = {https://lkml.org/lkml/2018/9/16/167},
+	journal      = {lkml.org},
+	author       = {Torvalds, Linus},
+	year         = {2018},
+	month        = {9}
+}
+
+@misc{Linus2018,
+	title        = {Linus Torvalds returns to Linux development with new code of conduct in place},
+	publisher    = {The Verge},
+	url          = {https://www.theverge.com/2018/10/22/18011854/linus-torvalds-linux-kernel-development-return-code-of-conduct},
+	author       = {Statt, Nick},
+	year         = {2018},
+	month        = {10},
+}
+
+@misc{Ted2016,
+	title        = {The quotable {Linus} {Torvalds}, live onstage at {TED}},
+	url          = {https://blog.ted.com/the-quotable-linus-torvalds-live-onstage-at-ted/},
+	author       = {McManus, Emily},
+	journal      = {TED Blog},
+	year         = {2016},
+	month        = {2}
+}
+
+@misc{Ibm2007,
+	title        = {Anatomia do Kernel Linux},
+	url          = {https://www.ibm.com/developerworks/br/library/l-linux-kernel/index.html},
+	journal      = {IBM},
+	author       = {Jones, Tim},
+	year         = {2007},
+	month        = {7}
+}
+
+@book{Bovet2003,
+ 	place        = {Beijing},
+	title        = {Understanding the linux kernel: From I/O ports to process management},
+	publisher    = {O'Reilly},
+	author       = {Bovet, Daniel P. and Cesati, Marco},
+	year         = 2003
+}
+
+@book{Cobert2005,
+  place        = {Beijing etc.},
+	title        = {Linux device drivers},
+	publisher    = {O'Reilly},
+	author       = {Corbet, Jonathan and Kroah-Hartman, Greg and Rubini, Alessandro},
+	year         = 2005
+}
+
+@book{chacon2014,
+  abstract     = { The entire Pro Git book, written by Scott Chacon and Ben Straub and published by Apress, is available here. All content is licensed under the Creative Commons Attribution Non Commercial Share Alike 3.0 license. Print versions of the book are available on Amazon.com. },
+  added-at     = {2017-12-18T07:19:45.000+0100},
+  author       = {Chacon, Scott and Straub, Ben},
+  biburl       = {https://www.bibsonomy.org/bibtex/2e21c84800843f4fbc9e4385cc8e24b16/searocraeft},
+  edition      = {Second},
+  interhash    = {84ad20a61f1d0419732abd9eaba555a1},
+  intrahash    = {e21c84800843f4fbc9e4385cc8e24b16},
+  keywords     = {git},
+  language     = {English},
+  publisher    = {Apress},
+  timestamp    = {2017-12-18T07:26:52.000+0100},
+  title        = {Pro git: Everything you need to know about Git},
+  url          = {https://git-scm.com/book/en/v2},
+  year         = 2014
+}
+
+@article{garousi2019,
+	title        = {Guidelines for including grey literature and conducting multivocal literature reviews in software engineering},
+	journal      = {Information and Software Technology},
+	volume       = {106},
+	pages        = {101-121},
+	year         = {2019},
+	issn         = {0950-5849},
+	doi          = {https://doi.org/10.1016/j.infsof.2018.09.006},
+	url          = {https://www.sciencedirect.com/science/article/pii/S0950584918301939},
+	author       = {Vahid Garousi and Michael Felderer and Mika V. Mäntylä},
+	keywords     = {Multivocal literature review, Grey literature, Guidelines, Systematic literature review, Systematic mapping study, Literature study, Evidence-based software engineering}
+}
+
+@inproceedings{Wen2020,
+author = {Wen, Melissa and Leite, Leonardo and Kon, Fabio and Meirelles, Paulo},
+title = {Understanding FLOSS through community publications: strategies for grey literature review},
+year = {2020},
+isbn = {9781450371261},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3377816.3381729},
+doi = {10.1145/3377816.3381729},
+booktitle = {Proceedings of the ACM/IEEE 42nd International Conference on Software Engineering: New Ideas and Emerging Results},
+pages = {89–92},
+numpages = {4},
+keywords = {FLOSS, grey literature, linux, literature review, methodology},
+location = {Seoul, South Korea},
+series = {ICSE-NIER '20}
+}
+
+@INPROCEEDINGS{tailor,
+  author={Liu, Jiahao and Zeng, Jun and Wang, Xiang and Liang, Zhenkai},
+  booktitle={2023 IEEE/ACM 45th International Conference on Software Engineering (ICSE)},
+  title={Learning Graph-based Code Representations for Source-level Functional Similarity Detection},
+  year={2023},
+  volume={},
+  number={},
+  pages={345-357},
+  keywords={Representation learning;Codes;Source coding;Semantics;Cloning;Syntactics;Graph neural networks},
+  doi={10.1109/ICSE48619.2023.00040}}
+
+@inproceedings{harmone,
+  title={Harmfulness of code duplication-a structured review of the evidence},
+  author={Hordijk, Wiebe and Ponisio, Mar{\'\i}a Laura and Wieringa, Roel},
+  booktitle={13th International Conference on Evaluation and Assessment in Software Engineering (EASE)},
+  year={2009},
+  organization={BCS Learning \& Development}
+}
+
+@article{harmtwo,
+author = {Hotta, Keisuke and Sasaki, Yui and Sano, Yukiko and Higo, Yoshiki and Kusumoto, Shinji},
+title = {An empirical study on the impact of duplicate code},
+year = {2012},
+publisher = {Hindawi Limited},
+address = {London, GBR},
+volume = {2012},
+issn = {1687-8655},
+url = {https://doi.org/10.1155/2012/938296},
+doi = {10.1155/2012/938296},
+abstract = {It is said that the presence of duplicate code is one of the factors that make software maintenance more difficult. Many research efforts have been performed on detecting, removing, or managing duplicate code on this basis. However, some researchers doubt this basis in recent years and have conducted empirical studies to investigate the influence of the presence of duplicate code. In this study, we conduct an empirical study to investigate this matter from a different standpoint from previous studies. In this study, we define a new indicator "modification frequency" tomeasure the impact of duplicate code and compare the values between duplicate code and nonduplicate code. The features of this study are as follows the indicator used in this study is based on modification places instead of the ratio of modified lines; we use multiple duplicate code detection tools to reduce biases of detection tools; and we compare the result of the proposed method with other two investigation methods. The result shows that duplicate code tends to be less frequently modified than nonduplicate code, and we found some instances that the proposed method can evaluate the influence of duplicate code more accurately than the existing investigation methods.},
+journal = {Adv. Soft. Eng.},
+month = {1},
+}
+
+@article{firstman,
+  title={Detecting plagiarism in student pascale programs},
+  author={Jankowitz, Hugo T.},
+  journal={The computer journal},
+  volume={31},
+  number={1},
+  pages={1--8},
+  year={1988},
+  publisher={Oxford University Press}
+}
+
+@article{litreview,
+ author = {Chen, Chang-Feng and Zain, Azlan and Zhou, Kai-Qing},
+ year = {2022},
+ month = {08},
+ pages = {1-31},
+ title = {Definition, approaches, and analysis of code duplication detection (2006–2020): a critical review},
+ volume = {34},
+ journal = {Neural Computing and Applications},
+ doi = {10.1007/s00521-022-07707-2}
+}
+
+@book{Cbook,
+  title={The C programming language},
+  author={Kernighan, Brian W and Ritchie, Dennis M},
+  year={1988},
+  publisher={prentice-Hall}
+}
+
+@book{bookethno,
+  title={An applied guide to research designs: Quantitative, qualitative, and mixed methods},
+  author={Edmonds, W Alex and Kennedy, Thomas D},
+  year={2016},
+  publisher={Sage Publications}
+}
+
+@article{ethnosoft,
+  title={The role of ethnographic studies in empirical software engineering},
+  author={Sharp, Helen and Dittrich, Yvonne and De Souza, Cleidson RB},
+  journal={IEEE Transactions on Software Engineering},
+  volume={42},
+  number={8},
+  pages={786--804},
+  year={2016},
+  publisher={IEEE}
+}
+
+@misc{iiodoc,
+	title        = {The Linux driver implementer’s API guide - Industrial I/O - Introduction},
+	author       = {TOFIX},
+	year         = 2015,
+	url          = {https://www.kernel.org/doc/html/v4.14/driver-api/iio/intro.html},
+	journal      = {The Linux Kernel documentation}
+}
+
+@article{gensim,
+  title={Gensim—statistical semantics in python},
+  author={{\v{R}}eh\r{u}{\v{r}}ek, Radim and Sojka, Petr and others},
+  journal={Retrieved from genism. org},
+  year={2011},
+  publisher={Citeseer}
+}
