@@ -5,6 +5,7 @@
 \usepackage{array}
 \usepackage[utf8]{inputenc}  
 \usepackage{seqsplit}
+\usepackage{todonotes}
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -71,7 +72,10 @@ Given the validation of the tool capabilities, we proceed to understand the viab
 of mitigating the code duplication found by the tool. We conducted an ethnographic study 
 using a participant-observation methodology to understand its viability.
 %
-In the first phase, the main author explored the process of mitigating a code duplication found in the AMD Display driver and sent it as a PATCH to interact with the Linux kernel community and get their feedback. In the second phase, we proposed to newcomers to mitigate the code duplications found by the tool in the IIO subsystem and the AMD Display driver and pass the process of sending the mitigations as a PATCH.
+In the first phase, we explored the process of mitigating a code duplication found in the AMD Display driver and sent it as a PATCH to interact with the Linux kernel community and get their feedback (\textit{complete participant observation})[REF].
+%TODO: aqui já podemos falar da disciplinas bem brevemente
+In the second phase, we proposed to students to mitigate the code duplications found by the tool in the IIO subsystem and the AMD Display driver and pass the process of sending the mitigations as a PATCH (\textit{participant-as-observer}).
+%TODO: Aqui vamos precisa cita que rapidamente a metoria para poder falar de Participant-as-Observer
 
 %Uniformizar este entendimento no texto:
 
@@ -85,6 +89,7 @@ In the first phase, the main author explored the process of mitigating a code du
 %A participação ainda é alta (selecionar, direcionar, revisar), o que influencia ativamente o cenário. No entanto, a identidade principal perante os participantes (os estudantes) é a de pesquisador/mentor, e o objetivo é observar o processo deles.
 
 \subsection{Tool}
+\todo[inline]{Luan: revisar e colocar a justificativa sobre a necessidade de desenvolver a ArKanjo para o Kernel; se der, colocar uma ou duas linhas sobre a validacao.}
 We developed \texttt{anonymous-tool}, a command-line tool designed to detect and analyze function-level code duplication within the Linux kernel to support our investigation. Released under the LGPL license, it employs a two-stage architecture that separates the computationally intensive task of finding duplicates from the process of querying the results. The first stage, the Preprocessor, analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage, the Query Responder, uses this database to retrieve information about the identified duplications quickly.
 %The tool is available at \textit{\href{https://github.com/arkanjo-tool/arkanjo}{github.com/arkanjo-tool/arkanjo}}.
 
@@ -151,14 +156,15 @@ formed 11 groups to pursue the first alternative. One graduate student also opte
 
 The groups were requested to document their experiences and approaches to refactoring the duplications, as well as their experiences submitting a patch to the Linux kernel, in blogs. We analyzed these blogs to understand the refactoring patterns used to mitigate duplications, the experience of sending patches, and the opinions of subsystem maintainers on the mitigations.
 
-\section{Results from Participant Observation}
+\section{Results}
+%TODO: ver como inicar melhor aqui ...
 
-%Results part 1 - AMD/Luan
-%Ver como melhor iniciar.
-The first duplicated function pair chosen is function \textit{offset\_to\_id} on files \textit{dc/gpio/dcn32/hw\_translate\_dcn32.c} and \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}. The second duplicated function pair is function \textit{phy\_id\_to\_atom} in file 
+In the \textbf{complete participant observation} phase, the first duplicated function pair chosen was function \textit{offset\_to\_id} on files \textit{dc/gpio/dcn32/hw\_translate\_dcn32.c} and \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}. The second duplicated function pair was function \textit{phy\_id\_to\_atom} in file 
 \textit{ \seqsplit{dc/bios/dce110/command\_table\_helper\_dce110.c}} and \textit{\seqsplit{dc/bios/dce60/command\_table\_helper\_dce60.c}}.
 Hereafter, the mitigation on \textit{offset\_to\_id} will be referred to as mitigation 1, and the mitigation on 
 \textit{phy\_id\_to\_atom} will be referred to as mitigation 2.
+
+%TODO: ver se realmente queremos usar mitigation (ou contribution é melhor)
 
 Table \ref{tab:patch} summarizes the impact of the mitigations in terms of 
 files and lines changed and the refactoring method used. The following sections present our experience and learning for each mitigation.
@@ -205,13 +211,14 @@ on the process.
 We submitted the initial patch: the maintainers only asked for minor changes to align with code style, correct license use, and best practices that were initially unknown. We submitted a second version: the maintainers asked us to move the functions created in the generic library to an existing file instead of creating a new one. We sent a third version, and the patch was accepted and integrated into the kernel codebase on February 25, 2025.
 %\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
 
-During this contribution process, we learned that some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
+%TODO: deve ficar claro que isto aqui, mesmo que não dito explicitamente pelo mantenedores, é o resultado da Complete Participant Observation
+\noindent\textbf{Takeaway 1:} Some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, \textbf{we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering}. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
+\todo[inline]{Luan, temos alguma evidência nas suas trocas com os mantenedores sobre isso? ou foi algo que veio mais das conversas com o Siqueira?}
 
-\section{Results from Non-Participant Observation}
+%TODO: ver se transicao estah boa; ou se eh melhor ter subsecoes
+Regarding our analysis from the \textbf{participant-as-Observer} phase, Table~\ref{tab:stu} summarizes the student groups' mitigation approaches. It contains the information about the chosen subsystem and the similarity threshold for groups that opted for the first approach. Each entry also has the patch status, refactoring method, and code diff corresponding to the final patch versions before it was dropped or accepted into the code base. The code diff for a patchset corresponds to the sum of added and removed lines of each of its patches.
 
-Table \ref{tab:stu} summarizes the student groups' mitigation approaches. It contains the information about the chosen subsystem and the similarity threshold for groups that opted for the first approach. Each entry also has the patch status, refactoring method, and code diff corresponding to the final patch versions before it was dropped or accepted into the code base. The code diff for a patchset corresponds to the sum of added and removed lines of each of its patches.
-
-\begin{table}
+\begin{table}[ht]
 \centering
 \caption{Refactor methods used and metrics of the students' mitigations.}
 \begin{tabular}{ |c |c |c |c |c | c| }
