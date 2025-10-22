@@ -55,7 +55,7 @@ The detection of code duplication, or \textit{code clones}, has been a research 
 To address the code duplication issue, we developed \texttt{anonymous-tool}, a command-line tool designed to support Linux kernel maintenance by detecting and analyzing function-level duplications. This paper presents a multimethod ethnographic study to validate the tool capabilities in identifying duplications and supporting contributions to the Linux kernel by mitigating redundant code. Therefore, the study investigates how the Linux kernel community perceives the code quality related to code clones. Our findings indicate that maintainers consider not only duplication but also factors such as readability and appropriate levels of abstraction regarding code maintainability.
 
 Ethnography is a well-established qualitative research method used to understand people, their cultures, and their work practices~\cite{bookethno}. It enables researchers to gain insights into values, beliefs, and practices from the perspective of community members~\cite{ethnosoft}.  
-In this study, we first adopted a participant observation approach, where the main author actively engaged in mitigating code duplications while documenting the process and outcomes. Later, we followed a non-participant observation involving students tasked with resolving duplications identified by the tool. These combined studies showed that \texttt{anonymous-tool} can collaborate to reduce the entry barrier for new contributors. The student groups and the main author used the tool to guide their initial contributions to the Linux kernel.
+In this study, we first adopted a complete participant observation approach, where the main author actively engaged in mitigating code duplications while documenting the process and outcomes. Later, we conducted a partipant-as-observer study involving students tasked with resolving duplications identified by the tool. These combined studies showed that \texttt{anonymous-tool} can collaborate to reduce the entry barrier for new contributors. The student groups and the main author used the tool to guide their initial contributions to the Linux kernel.
 
 
 \section{The Linux Kernel}
@@ -66,7 +66,8 @@ This study focuses on two of these subsystems, selected to represent different c
 
 \section{Methods and Tool}
 
-We employ a multi-method research approach. We developed and evaluated a proposed tool using an approach from the literature, comparing it against the BigCloneBench dataset~\cite{bigclonebench}.
+We employ a multi-method research approach. We developed and evaluated a proposed tool using an approach from the literature, 
+comparing it against the BigCloneBench dataset~\cite{bigclonebench}.
 %
 Given the validation of the tool capabilities, we proceed to understand the viability 
 of mitigating the code duplication found by the tool. We conducted an ethnographic study 
@@ -74,7 +75,7 @@ using a participant-observation methodology to understand its viability.
 %
 In the first phase, we explored the process of mitigating a code duplication found in the AMD Display driver and sent it as a PATCH to interact with the Linux kernel community and get their feedback (\textit{complete participant observation})[REF].
 %TODO: aqui já podemos falar da disciplinas bem brevemente
-In the second phase, we proposed to students to mitigate the code duplications found by the tool in the IIO subsystem and the AMD Display driver and pass the process of sending the mitigations as a PATCH (\textit{participant-as-observer}).
+In the second phase, during an university course, we proposed to students to mitigate the code duplications found by the tool in the IIO subsystem and the AMD Display driver and pass the process of sending the mitigations as a PATCH (\textit{participant-as-observer}) as a course activity while we guided them through the process.
 %TODO: Aqui vamos precisa cita que rapidamente a metoria para poder falar de Participant-as-Observer
 
 %Uniformizar este entendimento no texto:
@@ -89,11 +90,22 @@ In the second phase, we proposed to students to mitigate the code duplications f
 %A participação ainda é alta (selecionar, direcionar, revisar), o que influencia ativamente o cenário. No entanto, a identidade principal perante os participantes (os estudantes) é a de pesquisador/mentor, e o objetivo é observar o processo deles.
 
 \subsection{Tool}
+
 \todo[inline]{Luan: revisar e colocar a justificativa sobre a necessidade de desenvolver a ArKanjo para o Kernel; se der, colocar uma ou duas linhas sobre a validacao.}
-We developed \texttt{anonymous-tool}, a command-line tool designed to detect and analyze function-level code duplication within the Linux kernel to support our investigation. Released under the LGPL license, it employs a two-stage architecture that separates the computationally intensive task of finding duplicates from the process of querying the results. The first stage, the Preprocessor, analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage, the Query Responder, uses this database to retrieve information about the identified duplications quickly.
+
+Academic research on code duplication often focuses on pairwise comparison of code artifacts, which is not directly applicable to comprehensive codebase analyses. Other existing free software tools we explored in practice suffered from limited functionality.
+Thus, we developed \texttt{anonymous-tool}, a command-line tool designed to detect and analyze function-level code duplication within the Linux kernel to support our investigation. 
+Released under the LGPL license, it employs a two-stage architecture that separates the computationally intensive task of 
+finding duplicates from the process of querying the results. The first stage that analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage, uses this database to retrieve information about the identified duplications quickly.
 %The tool is available at \textit{\href{https://github.com/arkanjo-tool/arkanjo}{github.com/arkanjo-tool/arkanjo}}.
 
-\texttt{Anonymous-tool} is designed for the specific challenges of the kernel, with a focus on scalability to handle its size and prioritizing duplications that impact maintainability. The tool's primary role in this study was to provide a concrete entry point for new contributors by identifying function-level duplications to address. The tool uses a text similarity method that applies TF-IDF vector embedding, implemented with the Gensim library~\cite{gensim}, and computes cosine similarity to detect clones.
+\texttt{Anonymous-tool} is designed for the specific challenges of the kernel, with a focus on scalability to handle its size and prioritizing duplications that impact maintainability. 
+The tool's primary role in this study was to provide a concrete entry point for new contributors by identifying 
+function-level duplications to address. The tool uses a text similarity method that applies TF-IDF vector embedding, 
+implemented with the Gensim library~\cite{gensim}, and computes cosine distance similarity to detect clones. 
+
+Validation of the tool on the BigCloneBench dataset~\cite{bigclonebench} showed that it is capable of detecting the majority of Type-1 and Type-2 duplications (100\% of Type-1 and 85\% of Type-2 with a cosine similarity threshold of 0.9), 
+which is sufficient for conducting our ethnographic studies.
 
 \subsection{Complete Participant Observation Study}
 \label{sec:participant}
@@ -127,20 +139,20 @@ function in the library. If modifications existed, we applied case-specific refa
 
 \subsection{Participant-as-Observer Study}
 
-A core dynamic of the course (concurrently for undergraduate and postgraduate studies) is to have students make a practical contribution to a free software project. In the first semester of 2025, the professor teaching the course, who is also the advisor of this work, identified an opportunity to leverage the \texttt{anonymous-tool} tool within this existing pedagogical structure. As a contribution option, the professor proposed that students mitigate code duplications found in the Linux kernel. The professor drove this initiative as a practical course activity, and the author of this thesis was not involved in using the tool to identify duplications or in developing approaches to mitigate them. The tasks were carried out entirely by the course staff and the students.
+A core dynamic of the university course where we conducted the participant-as-observer study is to have students make a practical contribution to a free software project. In the first semester of 2025, we identified an opportunity to leverage the anonymous-tool within this existing pedagogical structure. As a contribution option, we proposed that students mitigate code duplications found in the Linux kernel as one possible way to contribute to a free software project.
 
 The course had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of 
-two or three members. To assist students in this task, the professor and teaching assistants prepare multiple 
+two or three members. To assist students in this task, we prepare multiple 
 alternatives for contributing to free software projects, including simpler contributions such as 
-updating documentation or fixing code style issues. In this context, two new options related to the 
-\texttt{anonymous-tool} were proposed alongside the others.
+updating documentation or fixing code style issues. In this context, two new options related to migitating
+duplications in the Linux kernel were proposed alongside the others.
 
-For the first anonymous-tool-related alternative, a teaching assistant ran the tool on the IIO subsystem twice, creating two lists of duplicated function pairs, one with a 100\% similarity threshold and the other with a 90\% similarity threshold. Then, the following process happened to both lists:
+For the first anonymous-tool-related alternative, we ran the tool on the IIO subsystem, creating a list of duplicated function pair. Then, the following process happened to the list to prepare more actionable duplications to the students:
 
 \begin{enumerate}
-    \item The teaching assistant filtered the lists to keep only duplicated pairs that happened in the same file, because the IIO subsystem is very decentralized, and a duplication between two different devices may involve the cooperation of different maintainers and/or the unification of totally different interfaces;
-    \item The teacher assistant removed duplications that were too short and would not represent a significant change for a patch application;
-    \item The teacher assistant manually ranked code duplications and marked some duplications with insights based on personal opinion and perceptions over the remaining entries. This was done to guide students so that they could approach the technical debt with a greater chance of having their contribution merged into the code.
+    \item We filtered the list to keep only duplicated pairs that happened in the same file, because the IIO subsystem is very decentralized, and a duplication between two different devices may involve the cooperation of different maintainers and/or the unification of totally different interfaces;
+    \item We removed duplications that were too short and would not represent a significant change for a patch application;
+    \item We manually ranked code duplications and marked some duplications with insights based on personal opinion and perceptions over the remaining entries. This was done to guide students so that they could approach the technical debt with a greater chance of having their contribution merged into the code.
 \end{enumerate}
 
 The students' task was to select a recommended entry from the list, refactor the code to eliminate these specific duplications, and then submit their patches to the IIO maintainers for review.
@@ -159,10 +171,8 @@ The groups were requested to document their experiences and approaches to refact
 \section{Results}
 %TODO: ver como inicar melhor aqui ...
 
-In the \textbf{complete participant observation} phase, the first duplicated function pair chosen was function \textit{offset\_to\_id} on files \textit{dc/gpio/dcn32/hw\_translate\_dcn32.c} and \textit{dc/gpio/dcn315/hw\_translate\_dcn315.c}. The second duplicated function pair was function \textit{phy\_id\_to\_atom} in file 
-\textit{ \seqsplit{dc/bios/dce110/command\_table\_helper\_dce110.c}} and \textit{\seqsplit{dc/bios/dce60/command\_table\_helper\_dce60.c}}.
-Hereafter, the mitigation on \textit{offset\_to\_id} will be referred to as mitigation 1, and the mitigation on 
-\textit{phy\_id\_to\_atom} will be referred to as mitigation 2.
+In the \textbf{complete participant observation} study, we chose two function pair found on AMD Display Driver to approach and apply the systematic approach, 
+which we will denote as mitigation 1 and mitigation 2.
 
 %TODO: ver se realmente queremos usar mitigation (ou contribution é melhor)
 
@@ -188,7 +198,7 @@ files and lines changed and the refactoring method used. The following sections 
 \label{tab:patch}
 \end{table}
 
-Firt, we found that the \textit{offset\_to\_id} function 
+Firt, we found that the duplicated function from mitigation 1
 exists in 10 code files, enclosing multiple GPU architectures. The duplicated 
 functions are not exactly equal, as some minimal specific logic is applied to each GPU architecture. To address this issue, we used the extract method to 
 break the function into smaller parts and the parameterized method to address 
@@ -196,8 +206,8 @@ the specific logic for the GPUs.
 
 We reached a point where we had a scratch on how to mitigate the duplications found, but we could not complete the refactoring to a state capable of submitting as a patch to the driver. We found that the configuration files on the AMD Display driver are designed to be imported at compilation time using \textit{\#define} macros. The configuration files' design choice makes refactoring duplications on generic approaches trickier, as refactoring code that depends on these files requires significant refactoring of the configuration files' design and deep knowledge of the codebase, which we, as first-time contributors, do not have. Thus, we opted not to continue investigating this mitigation.
 
-Second, we found that the \textit{phy\_id\_to\_atom} function exists in five code files, and two other functions are duplicated 
-in those five code files. All functions across the files were exactly equal, 
+Second, we found that the duplicated function from mitigation 2 exists in five code files, 
+and two other functions are duplicated in those five code files. All functions across the files were exactly equal, 
 so there was no need to apply the refactoring methods presented in the literature. 
 The refactoring was resumed to create a generic library and fix the compilation targets.
 
@@ -213,7 +223,7 @@ We submitted the initial patch: the maintainers only asked for minor changes to 
 
 %TODO: deve ficar claro que isto aqui, mesmo que não dito explicitamente pelo mantenedores, é o resultado da Complete Participant Observation
 \noindent\textbf{Takeaway 1:} Some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, \textbf{we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering}. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
-\todo[inline]{Luan, temos alguma evidência nas suas trocas com os mantenedores sobre isso? ou foi algo que veio mais das conversas com o Siqueira?}
+\todo[inline]{Luan, temos alguma evidência nas suas trocas com os mantenedores sobre isso? ou foi algo que veio mais das conversas com o Siqueira? Resposta: Não, foi tirado apenas das conversas com o Siqueira, podemos remover ou tem o paper que o Gregório citou que podemos mencionar? Que menciona que duplicações podem ser bem vistas em drivers.}
 
 %TODO: ver se transicao estah boa; ou se eh melhor ter subsecoes
 Regarding our analysis from the \textbf{participant-as-Observer} phase, Table~\ref{tab:stu} summarizes the student groups' mitigation approaches. It contains the information about the chosen subsystem and the similarity threshold for groups that opted for the first approach. Each entry also has the patch status, refactoring method, and code diff corresponding to the final patch versions before it was dropped or accepted into the code base. The code diff for a patchset corresponds to the sum of added and removed lines of each of its patches.
