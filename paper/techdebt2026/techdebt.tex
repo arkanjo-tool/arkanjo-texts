@@ -50,6 +50,8 @@ Coordinating hundreds or thousands of developers working on a software product i
 
 The Linux kernel is a foundational Free/Libre and Open Source Software (FLOSS) project, a vital component of the world's digital infrastructure. Its maintenance is a massive undertaking, encompassing over 28 million lines of code and involving contributions from over twenty thousand developers. Within this context, code duplication remains a significant challenge,  reducing the code readability and increasing the risk of introducing bugs~\cite{harmone,harmtwo}. This issue is particularly prominent in kernel device drivers, which account for over 66\% of the Linux kernel source code.
 
+%TODO: temos que citar o conceito de DRY aqui ... (Book: Pragmatic Programmer, The: From Journeyman to Master)
+% We feel that the only way to develop software reliably, and to make our developments easier to understand and maintain, is to follow what we call the DRY principle: Every piece of knowledge must have a single, unambiguous, authoritative representation within a system.
 The detection of code duplication, or \textit{code clones}, has been a research topic for decades~\cite{firstman}. The literature offers a widely accepted taxonomy that classifies clones into four types based on their similarity, from exact copies (Type-1) to semantically equivalent but syntactically different fragments (Type-4)~\cite{litreview}. Several detection techniques have emerged, including textual, token-based, tree-based, and graph-based approaches~\cite{litreview}. These efforts have culminated in state-of-the-art techniques, such as the graph-based approach proposed by Liu et al.~\cite{tailor}.
 
 To address the code duplication issue, we developed a command-line tool designed to support Linux kernel maintenance by detecting and analyzing function-level duplications. This paper presents a multimethod ethnographic study to validate the tool capabilities in identifying duplications and supporting contributions to the Linux kernel by mitigating redundant code. Therefore, the study investigates how the Linux kernel community perceives the code quality related to code clones. Our findings indicate that maintainers consider not only duplication but also factors such as readability and appropriate levels of abstraction regarding code maintainability.
@@ -162,32 +164,9 @@ The groups were requested to document their experiences and approaches to refact
 \section{Results}
 %TODO: ver como inicar melhor aqui ...
 
-In the \textbf{complete participant observation} study, we chose two function pair found on AMD Display Driver to approach and apply the systematic approach, 
-which we will denote as mitigation 1 and mitigation 2.
+In the \textbf{complete participant observation} study, we chose two function pair found on AMD Display Driver to approach and apply the systematic approach ...
 
-%TODO: ver se realmente queremos usar mitigation (ou contribution é melhor)
-
-Table \ref{tab:patch} summarizes the impact of the mitigations in terms of 
-files and lines changed and the refactoring method used. The following sections present our experience and learning for each mitigation.
-
-\begin{table}[ht]
-\centering
-\caption{Refactor methods used and mitigation metrics in the participant-observation experiment.}
-\begin{tabular}{ | m{12mm} | m{10mm} | m{10mm} | m{14mm} | m{20mm} | }
-
-\hline
-
-\textbf{Mitigation} & \textbf{Files changed} & \textbf{Lines added} & \textbf{Lines removed} & \textbf{Refactoring methods used}
-\\ \hline 
-
-1 & 13 & +224 & -753 & Parameterize Method, Extract Method  \\ \hline
-2 & 8 & +114 & -520 & None \\ \hline
-
-\hline
-\end{tabular}
-
-\label{tab:patch}
-\end{table}
+%TODO (Luan): nao terah mitigation 1 e 2, apenas a contribuicao enviada mesmo.
 
 Firt, we found that the duplicated function from mitigation 1
 exists in 10 code files, enclosing multiple GPU architectures. The duplicated 
@@ -213,38 +192,41 @@ We submitted the initial patch: the maintainers only asked for minor changes to 
 %\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
 
 %TODO: deve ficar claro que isto aqui, mesmo que não dito explicitamente pelo mantenedores, é o resultado da Complete Participant Observation
-\noindent\textbf{Takeaway 1:} Some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, \textbf{we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering}. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
+\noindent\textbf{Takeaway T1:} Some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, \textbf{we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering}. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
 \todo[inline]{...Foi tirado apenas das conversas com o Siqueira; tem o paper que o Gregório citou que menciona que duplicações podem ser bem vistas em drivers; isto um resultado/conclusão da Complete Participant Observation; e vamos citar que confirmamos o que está no paper Cloning Considered Harmful (Luan, acha que consegue fechar essa parte assim?)}
 
 %TODO: ver se transicao estah boa; ou se eh melhor ter subsecoes
-Regarding our analysis from the \textbf{participant-as-Observer} phase, Table~\ref{tab:stu} summarizes the student groups' mitigation approaches. It contains the information about the chosen subsystem and the similarity threshold for groups that opted for the first approach. Each entry also has the patch status, refactoring method, and code diff corresponding to the final patch versions before it was dropped or accepted into the code base. The code diff for a patchset corresponds to the sum of added and removed lines of each of its patches.
+Regarding our analysis from the \textbf{participant-as-Observer} phase, Table~\ref{tab:stu} summarizes the student groups' mitigation approaches. It contains the information about the chosen subsystem (SS) and the similarity threshold for groups (SML) that opted for the first approach. Each entry also has the patch status, and code diff corresponding to the final patch versions before it was dropped or accepted into the code base. The code diff for a patchset corresponds to the sum of added and removed lines of each of its patches.
 
 \begin{table}[ht]
 \centering
 \caption{Refactor methods used and metrics of the students' mitigations.}
 \begin{tabular}{ |c |c |c |c |c | c| }
 \hline
-\textbf{G} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Method} & \textbf{Diff} \\
+\textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Takeaway} & \textbf{Diff} \\
 \hline
-
-1 & IIO & 100\% & Dropped (v2) & Undefined & +7/-14 \\ \hline
-2 & IIO & 100\% & Dropped (v1) & Parameterize & +23/-27 \\ \hline
-3 & IIO & 100\% & Accepted (v1) & Parameterize & +12/-30 \\ \hline
-4 & IIO & 100\% & Accepted (v3) & Undefined & +2/-7 \\ \hline
-5 & IIO & 90\% & Accepted (v1) & Parameterize & +17/-70 \\ \hline
-6 & IIO & 90\% & Dropped (v1) & Parameterize & +95/-92 \\ \hline
-7 & IIO & 90\% & Accepted (v3) & Extract & +20/-36 \\ \hline
-8 & IIO & 90\% & Accepted (v4) & Extract & +20/-16 \\ \hline
-9 & IIO & 90\% & Accepted* (v6) & Parameterize & +149/-243 \\ \hline
-10 & IIO & 90\% & Dropped (v1) & Undefined & +32/-58 \\ \hline
-11 & IIO & 100\% & Dropped (v1) & Inline & +2/-12 \\ 
-   & AMD & 90\% & Accepted (v2) & Undefined & +90/-489 \\ \hline
+0 & AMD & ???\% & Accepted (v3) & T1 & +114/-520 \\ \hline
+1 & IIO & 100\% & Dropped (v2) & ? & +7/-14 \\ \hline
+2 & IIO & 100\% & Dropped (v1) & ? & +23/-27 \\ \hline
+3 & IIO & 100\% & Accepted (v1) & ? & +12/-30 \\ \hline
+4 & IIO & 100\% & Accepted (v3) & ? & +2/-7 \\ \hline
+5 & IIO & 90\% & Accepted (v1) & ? & +17/-70 \\ \hline
+6 & IIO & 90\% & Dropped (v1) & ? & +95/-92 \\ \hline
+7 & IIO & 90\% & Accepted (v3) & ? & +20/-36 \\ \hline
+8 & IIO & 90\% & Accepted (v4) & ? & +20/-16 \\ \hline
+9 & IIO & 90\% & Accepted (v6) & ? & +149/-243 \\ \hline
+10 & IIO & 90\% & Dropped (v1) & ? & +32/-58 \\ \hline
+11 & IIO & 100\% & Dropped (v1) & ? & +2/-12 \\ 
+   & AMD & 90\% & Accepted (v2) & ? & +90/-489 \\ \hline
 
 \end{tabular}%
 
 \label{tab:stu}
 \end{table}
 
+Regarding to refactor methods ....
+
+%TODO: nao descrever e discutir mais as estrategias de refatoracao por patch ...
 Seven groups applied the parameterized refactor method, two groups used the extractor method, and one group applied the inline method to their approaches to mitigate their duplications. Four patches do not contain a refactoring technique defined in the literature (undefined). Six groups had their patches accepted and fully merged into Linux; four groups had their patches dropped; one group has its patchset partially applied and is still working on patch submission, currently in the sixth version of the patch when this document was written, but we can also consider this case as accepted.
 
 Groups 1 and 4 have worked in similar duplications, where two functions are involved: one to determine if a register is volatile and the other to determine if it is writable. These are two functions that return opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Group 2 used macros. After feedback from maintainers, both solutions converged to keep one of the functions while changing the content of the other to return a negated query of the former function. However, by the end of the feedback cycle, maintainers considered the patch from Group 1 irrelevant, while the patch from Group 4 was accepted. The reason is that Group 1 has chosen to apply the refactoring to a device that contains a register that is both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
