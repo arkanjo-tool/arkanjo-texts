@@ -1,0 +1,180 @@
+[Pad da disciplina: https://pad.riseup.net/p/DSL-USP-2025-keep]
+[pad de sugestão de patches: https://pad.riseup.net/p/MAC0470-iio-patch-keep]
+
+IIO [https://flusp.ime.usp.br/kernel_iio/]
+IIO [https://www.linux.ime.usp.br/~marcelosc/mac0499.html]
+
+
+Contribuições envolvendo duplicações no IIO/AMD
+
+1) Bianca Costa e Júlia Calixto - magnetometer/mmc35240.c::mmc35240_is_volatile_reg AND magnetometer/mmc35240.c::mmc35240_is_writeable_reg
+* https://linux.ime.usp.br/~juliacalixto/software-livre.html
+* https://linux.ime.usp.br/~soueuabianca
+* PATCH: https://lore.kernel.org/linux-iio/20250426194135.244774-1-biancalvao@gmail.com/
+* Result: Feedback was given. It appears that the maintainers started to change their minds during the feedback cycle and started to disagree with the patch's initial proposal, lowering the likelihood of approving the patch. The final result, if it will be merged or not, is yet to be announced. This patch is very similar to patch (4), but the latter was applied with no resistance from maintainers.
+* Update: Not Applied
+
+
+2) Mikhael e Augusto - proximity/sx9500.c::sx9500_buffer_postenable AND proximity/sx9500.c::sx9500_buffer_predisable
+* https://mikhael-abdallah.github.io/software-livre/
+* https://augustomb02.github.io/
+* PATCH: https://lore.kernel.org/all/20250429093923.347370-1-mikhael_abdallah@usp.br/
+* Rejected - Maintainer said the patch was not significant enough and student said he would not continue with it
+
+3) Beatriz Viana e Gabriela Victor - light/zopt2201.c::zopt2201_write_scale_als_by_idx AND light/zopt2201.c::zopt2201_write_scale_uvb_by_idx
+* https://beavct.github.io/
+* https://gabriela-victor-github-io.vercel.app/blog/
+* PATCH: https://lore.kernel.org/linux-iio/20250424002144.23260-1-beatrizvianacosta16@gmail.com/
+* Applied v1 - Maintainer also suggested new ideas for contributions, but students didn't want to continue with the project (https://lore.kernel.org/linux-iio/20250424002144.23260-1-beatrizvianacosta16@gmail.com/)
+
+4) André, Bruno e Arthur - adc/ad7091r-base.c::ad7091r_volatile_reg AND adc/ad7091r-base.c::ad7091r_writeable_reg
+* https://linux.ime.usp.br/~aschwarz
+* https://whip-foxtrot-b57.notion.site/MAC0470-Desenvolvimento-de-Software-Livre-2025-1dcde8837d39800599b2edc72cf662bb
+* https://www.linux.ime.usp.br/~artpilone/sl_blog.html
+* PATCH: https://lore.kernel.org/linux-iio/20250421145534.91146-1-arthurpilone@usp.br/ 
+* Applied v3 (https://lore.kernel.org/linux-iio/20250426163311.546500bc@jic23-huawei/)
+
+5) Francisco Henriques e Gustavo Vaz - accel/kxcjk-1013.c::kxcjk1013_setup_any_motion_interrupt AND accel/kxcjk-1013.c::kxcjk1013_setup_new_data_interrupt
+* https://gust-vaz.github.io/
+* https://xivor.github.io/
+* PATCH: https://lore.kernel.org/linux-iio/20250426153307.59689da0@jic23-huawei/T/#t
+* Applied v1 (https://lore.kernel.org/linux-iio/20250426153307.59689da0@jic23-huawei/T/#t)
+
+6) Gabriel Lima, Gabriel José, Vitor Marques - light/veml6030.c::veml6030_hw_init AND light/veml6030.c::veml6035_hw_init; imu/inv_icm42600/inv_icm42600_core.c::inv_icm42600_set_accel_conf AND imu/inv_icm42600/inv_icm42600_core.c::inv_icm42600_set_gyro_conf
+* https://gabriellimmaa.github.io/
+* https://vitormarquesr.github.io/blog/
+* PATCH: https://lore.kernel.org/all/20250625101857.00004dbf@huawei.com/
+* Feedback was given to improve patch, but a new patch version addressing issues was is yet to be sent. (Errata: feedback dado pelos monitores da disciplina, e não pelos mantenedores)
+* Update: Not Applied. Maintainer said patch was not convincing enough and suggesting dropping it
+
+7) Isabella Caselli e Rodrigo Michelassi - imu/inv_mpu6050/inv_mpu_aux.c::inv_mpu_aux_read AND imu/inv_mpu6050/inv_mpu_aux.c::inv_mpu_aux_write 
+* https://isacaselli.github.io/
+* https://rodrigocmichelassi.github.io/
+* PATCH: https://lore.kernel.org/linux-iio/20250428132551.176788-1-bellacaselli20@gmail.com/
+* Applied v3 (https://rodrigocmichelassi.github.io/posts/updates-on-kernel-patch/)
+(https://lore.kernel.org/linux-iio/20250531160807.39e54096@jic23-huawei/)
+
+8) Nattan e LUcas  light/apds9306.c::apds9306_event_thresh_get AND light/apds9306.c::apds9306_event_thresh_set
+* https://linux.ime.usp.br/~nattan/mac470/mac470.html
+* PATCH: https://lore.kernel.org/all/20250526235906.6598-1-nattanferreira58@gmail.com/
+* Applied v4 (https://lore.kernel.org/all/20250614124401.32b17eda@jic23-huawei/)
+
+9) Sebastian Aguilea Novo - pressure/hp03.c::hp03_is_volatile_reg AND pressure/hp03.c::hp03_is_writeable_reg (IIO);
+ hpd_ack (AMD Display)
+* https://saguileran.github.io/blog/2025/free-software-development/
+* PATCH (IIO):
+https://lore.kernel.org/all/20250429184129.7aff4461@jic23-huawei/
+* Not Applied - Maintainer gave feedback about removing warnings that contributors could not reproduce
+* PATCH (AMD): https://lore.kernel.org/amd-gfx/f78f68ba-80e0-47ca-97a2-37a15d076e68@amd.com/T/#t
+* Applied v2 (https://lore.kernel.org/amd-gfx/CADAW+GDN-4Lwd87h793csWF6r5cgqpgrpEPzRyDV9+rfkNPmTA@mail.gmail.com/)
+
+10) Andrew Ijano e Gustavo Bastos - accel/sca3000.c::sca3000_read_data AND accel/sca3000.c::sca3000_read_data_short
+* https://andrewijano.github.io/mac5856/
+* PATCH: https://lore.kernel.org/linux-iio/20250423170526.15143-1-andrew.lopes@alumni.usp.br/
+* Partially applied v6 - Only the first patch from the patchset was accepted (didn't find a repply at the kernel lore confirming, but the code is indeed merged: https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?h=testing&id=a3c7d84832f5bb455368125cbc745ef32befb62f). The rest of the code is expected to be merged eventually, though. Maintainers are giving constant feedback (The decision of splitting the patch in a patchset was a suggestion from the maintainers by the way).
+* UPDATE: Another patch from the patchset applied.
+
+11) Gabriel Geraldino e Nicolas Borsari - adc/sc27xx_adc.c::sc2720_adc_scale_init AND adc/sc27xx_adc.c::sc2730_adc_scale_init AND adc/sc27xx_adc.c::sc2731_adc_scale_init
+* https://linux.ime.usp.br/~apolo/mac0470/ 
+* https://ncbor.github.io/
+* PATCH: https://lore.kernel.org/linux-iio/20250428034222.318898-1-gabrielgeraldinosouza@gmail.com/T/#uaa
+* Rejected - Maintainer said the patch was not significant enough and students decided to drop the patch
+
+12) Fernando Lima, Octavio Carneiro e Lucas Eiji - pressure/dps310.c::dps310_read_pressure AND pressure/dps310.c::dps310_read_temp
+* https://o-carneiro.github.io/
+* https://fernandoglima.github.io/
+* https://eijiuchiyama.github.io/softwarelivre/
+* PATCH: https://lore.kernel.org/all/20250702233107.93975-1-lucaseiji54@gmail.com/
+* Situation is unknown, patch was told by the group to be sent privately to maintainers. Couldn't contact the responsible student to find out what happened. The dps310 code has not been changed on the tree since 2024 (https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/log/?h=testing), so we can at least assume it wasn't applied.
+* Update: patch was not submitted. To be sent soon
+
+
+===== Conclusão sobre os grupos =====
+Comentários sobre cada grupo e suas contribuições. Referências para patches e threads de feedback podem ser encontradas no rascunho acima.
+
+-> Grupo 1 - Bianca Costa e Júlia Calixto - magnetometer/mmc35240.c::mmc35240_is_volatile_reg AND magnetometer/mmc35240.c::mmc35240_is_writeable_reg (100%) (+7/-14)
+
+O grupo se deparou com uma duplicação que consistia em duas funções diferentes usando um switch muito semelhante, cuja única diferença era que a saída de cada switch era o valor oposto da saída de outro switch.
+
+As participantes do grupo criaram um novo método booleano para substituir os switches. O mantenedor Jonathan Cameron comentou que o patch estava OK, mas sugeriu apenas uma mudança no nome da função para melhorar a legibilidade.
+
+A mudança foi feita e enviada para uma v2. Entretanto, o mantenedor Marcelo Schmitt se envolveu na thread e questionou que o patch era muito pouco significante para justificar sua mescla ao código. Ele também deu feedback relacionado à estrutura do commit em si (Tamanho do título de commit longo, mudanças da v1 para v2 ausentes na mensagem). 
+
+Por fim, uma segunda v2, com a mensagem de commit melhor estruturada, foi enviado. O Jonathan deu um novo feedback sobre identação de código, mas sem se pronunciar sobre os comentários do Marcelo sobre se valia a pena a mescla. O Marcelo, fez novos comentários sobre a estrutura da mensagem de commit (changelog da v1 para v2 adicionado no lugar errado) e reiterou que a proposta do patch não fazia muito sentido.
+
+-> Grupo 2 - Mikhael e Augusto - proximity/sx9500.c::sx9500_buffer_postenable AND proximity/sx9500.c::sx9500_buffer_predisable (100%) (+23/-27)
+
+A duplicação consistia em duas funções com tamanho considerável e lógica muito semelhante, que se diferiam em tipos de operações realizadas em pontos específicos de for loops.
+
+A dupla concentrou essa lógica comum em uma função auxiliar que recebia um parâmetro booleano para determinar qual operações seriam realizadas nos poucos trechos diferentes da lógica. 
+
+O mantenedor comentou que a mudança não valia apena, considerando a complexidade adicional como um fator limitante e o tamanho da duplicação sendo pequeno não justificando a mudança. O grupo não insistiu e o patch não foi continuado.
+
+-> Grupo 3 - Beatriz Viana e Gabriela Victor - light/zopt2201.c::zopt2201_write_scale_als_by_idx AND light/zopt2201.c::zopt2201_write_scale_uvb_by_idx (100%) (+12/-30)
+
+A duplicação consistia em duas funções que percorriam arrays de structs. Os fluxos das funções para percorrer as arrays eram idênticos e as arrays continham structs genéricos, mas em ambas as funções os campos eram os mesmos.
+
+O patch consistia em definir um novo tipo de struct para representar esse tipo genérico e criar uma função auxiliar que continha toda essa lógica e recebia um único parâmetro extra que era a array a ser percorrida.
+
+Importante destacar que, além da duplicação em si, esse segmento de código apresentava um bug, pois ambas as funções percorriam a mesma array (als), quando o título de uma das funções indicavam que era para percorrer a outra array (uvb). Então, a ferramenta ArKanjo, encontrou um trecho de código que, além de duplicado, possuia uma implementação problemática.
+
+-> Grupo 4 - André, Bruno e Arthur - adc/ad7091r-base.c::ad7091r_volatile_reg AND adc/ad7091r-base.c::ad7091r_writeable_reg (100%) (+2/-7)
+
+A duplicação é do mesmo tipo da abordada pelo Grupo 1, mas a recepção pelos mantenedores foi diferente.
+
+O grupo começou abordando a duplicação usando macros. De início, houve discussão entre o David Lechner e o Marcelo Schmitt sobre a nomenclatura usada. Na v2, com o nome da macro modificada, o Jonathan Cameron sugeriu a troca da macro por uma função. Por fim, o patch foi mesclado na v3.
+
+Nota-se que o Marcelo não fez oposição a esse patch, diferente do que ocorreu com o patch do Grupo 1.
+
+-> Grupo 5 - Francisco Henriques e Gustavo Vaz - accel/kxcjk-1013.c::kxcjk1013_setup_any_motion_interrupt AND accel/kxcjk-1013.c::kxcjk1013_setup_new_data_interrupt (90%) (+17/-70)
+
+A duplicação consistia em duas funções contendo grandes segmentos de código com alta similaridade. O patch consistiu em agrupar o código semelhante à uma nova funçõa auxiliar com parâmetro extra para diferenciar os pontos divergentes no fluxo.
+
+Patch aprovada pelo Jonathan já na v1.
+
+-> Grupo 6 - Gabriel Lima, Gabriel José, Vitor Marques - light/veml6030.c::veml6030_hw_init AND light/veml6030.c::veml6035_hw_init (90%) (+95/-92); 
+imu/inv_icm42600/inv_icm42600_core.c::inv_icm42600_set_accel_conf AND imu/inv_icm42600/inv_icm42600_core.c::inv_icm42600_set_gyro_conf (90%)
+
+Duplicação em que as funções de inicialização apresentavam muitos segmentos semelhantes. Uma função de inicialização comum foi criada.
+
+O mantenedor Jonathan comentou que não via um argumento convincente para fazer a unificação e sugeriu que o patch fosse descontinuado. Também ressaltou que a refatoração adicionava mais linhas do que removia, o que tornava a proposta do patch menos atrativa.
+
+O grupo também trabalhou em outra duplicação, mas que ficou restrito apenas a testes locais. Como sobrou apenas um membro no grupo até o término da disciplina, imagina-se que o patch foi descontinuado durante o desenvolvimento.
+
+-> Grupo 7 - Isabella Caselli e Rodrigo Michelassi - imu/inv_mpu6050/inv_mpu_aux.c::inv_mpu_aux_read AND imu/inv_mpu6050/inv_mpu_aux.c::inv_mpu_aux_write (90%) (+20/-36)
+
+A duplicação consistia em duas funções que possuiam trechos de código idênticos. A solução do grupo foi implementar função auxiliar.
+
+O Jean Baptiste comentou que não via motivações fortes para aceitar a mescla, mas, felizmente, propôs, de forma clara, novos caminhos e modificações para tornar o patch viável. No caso, a sugestão foi fazer a extração de método em uma função já existente para gerenciamento de i2c.
+
+Após seguir as recomendações propostas, Marcelo Schmitt e Jonathan comentaram favoravelmente e o Jonathan fez a mescla, pois o Baptiste ficou indisponível e não pôde dar o veredito final.
+
+-> Grupo 8 - Nattan e LUcas  light/apds9306.c::apds9306_event_thresh_get AND light/apds9306.c::apds9306_event_thresh_set (90%) (+20/-16)
+
+Nessa duplicação, duas funções pegavam um valor de registrador de forma semelhante, mas os valores eram diferentes para cada função. A proposta do grupo foi utilizar uma função auxiliar para fazer essa coleta.
+
+Não houve muita resistência em ajustar o patch. O patch foi aceito na v4, mas os feedbacks foram majoritariamente direcionados a estrutura de mensagem de commit e linting.
+
+-> Grupo 9 - Andrew Ijano e Gustavo Bastos - accel/sca3000.c::sca3000_read_data AND accel/sca3000.c::sca3000_read_data_short (90%) (+149/-243)
+
+A duplicação consistia em duas funções muito semelhantes em implementação e propósito (sca3000_read_data e sca3000_read_data_short). O grupo optou inicialmente por centralizar as funcionalidades na sca3000_read_data.
+
+O ciclo de feedback está bem longo e o patch foi parcialmente aceito no momento (no decorrer do processo, foi dividido em um patchset). Dois patches do patchset foram aplicados e outros dois estão ainda recebendo feedback. No entanto, tudo indica que o patch será integralmente mesclado no futuro, caso os participantes do grupo desejem continuar. Os mantenedores vêm sendo bem atenciosos.
+
+-> Grupo 10 - Gabriel Geraldino e Nicolas Borsari - adc/sc27xx_adc.c::sc2720_adc_scale_init AND adc/sc27xx_adc.c::sc2730_adc_scale_init AND adc/sc27xx_adc.c::sc2731_adc_scale_init (90%) (+32/-58)
+
+O grupo agrupou uma funcionalidade comum de dois métodos de inicialização em uma função auxiliar. Não foi aplicado, pois o Jonathan comentou que o patch tornou o código menos legível e a redução de código era pequena demais para justificar essa troca.
+
+-> Grupo 11 - Fernando Lima, Octavio Carneiro e Lucas Eiji - pressure/dps310.c::dps310_read_pressure AND pressure/dps310.c::dps310_read_temp (90%)
+
+A ser enviado
+
+-> Grupo 12 - Sebastian Aguilea Novo - pressure/hp03.c::hp03_is_volatile_reg AND pressure/hp03.c::hp03_is_writeable_reg (IIO) (100%) (+2/-12);
+ hpd_ack (AMD Display) (+90/-489)
+ 
+O participante começou com a duplicação do IIO. O mantenedor Jonathan deu feedback pouco claro, além de insinuar sobre possíveis warnings que o participante e monitores não conseguiram reproduzir. O patch foi descontinuado.
+
+Em seguida, o participante optou, por usar, de forma autônoma, a ferramenta ArKanjo sobre o código do AMD Display, e encontrou uma grande duplicação. Diversos devices apresentavam cópias idênticas da função hpd_ack. O aluno criou um arquivo irq_service.c (juntamente com um header irq_service.h) contendo as variantes do hpd_ack e substituiu suas ocorrências repetidas por invocações dessa definição única.
+
+O mantenedor Alex Hung apontou warnings de estilo, mas agradeceu o patch e disse que, sendo enviada uma v2, testaria e aplicaria as mudanças. Com a v2 efetivamente enviada, as mudanças foram aplicadas.
+
