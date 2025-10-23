@@ -1,0 +1,469 @@
+Subject: [PATCH v3] iio: imu: inv_mpu6050: refactor aux read/write to use shared xfer logic
+
+Refactors inv_mpu_aux_read() and inv_mpu_aux_write() to extract the common
+I2C transfer sequence into inv_mpu_i2c_master_xfer(), which now handles
+starting and stopping the I2C master, waiting for completion, disabling
+SLV0, and checking for NACK errors.
+
+This refactoring removes code duplication and improves maintainability.
+No functional changes are intended.
+
+Signed-off-by: ################ <########################>
+Co-developed-by: ################## <#########################>
+Signed-off-by: ################## <#########################>
+---
+Sorry about the diff in v2 capturing the changes proposed in v1.
+Just to remember the actual changes made after v1:
+As requested after sending v1, we removed the newly created refactoring function — which
+would have only been used inside inv_mpu_aux.c — and moved the duplicated code directly
+into inv_mpu_i2c_master_xfer(), since the status check was always performed immediately
+after its execution in both inv_mpu_aux_read() and inv_mpu_aux_write().
+---
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c | 56 ++++++++---------------
+ 1 file changed, 20 insertions(+), 36 deletions(-)
+
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+index 8a7f29119..970cf5c47 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+@@ -14,6 +14,8 @@
+ /*
+  * i2c master auxiliary bus transfer function.
+  * Requires the i2c operations to be correctly setup before.
++ * Disables SLV0 and checks for NACK status internally.
++ * Assumes that only SLV0 is used for transfers.
+  */
+ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+ {
+@@ -23,6 +25,7 @@ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+ 	uint8_t d;
+ 	unsigned int user_ctrl;
+ 	int ret;
++	unsigned int status;
+ 
+ 	/* set sample rate */
+ 	d = INV_MPU6050_FIFO_RATE_TO_DIVIDER(freq);
+@@ -51,12 +54,27 @@ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+ 	if (ret)
+ 		goto error_restore_rate;
+ 
++	/* disable i2c slave */
++	ret = regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
++	if (ret)
++		goto error_disable_i2c;
++
++	/* check i2c status */
++	ret = regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);
++	if (ret)
++		return ret;
++
++	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
++		return -EIO;
++
+ 	return 0;
+ 
+ error_stop_i2c:
+ 	regmap_write(st->map, st->reg->user_ctrl, st->chip_config.user_ctrl);
+ error_restore_rate:
+ 	regmap_write(st->map, st->reg->sample_rate_div, st->chip_config.divider);
++error_disable_i2c:
++	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+ 	return ret;
+ }
+ 
+@@ -117,7 +135,6 @@ int inv_mpu_aux_init(const struct inv_mpu6050_state *st)
+ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		     uint8_t reg, uint8_t *val, size_t size)
+ {
+-	unsigned int status;
+ 	int ret;
+ 
+ 	if (size > 0x0F)
+@@ -136,30 +153,14 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* do i2c xfer */
++	/* do i2c xfer, disable i2c slave and check status*/
+ 	ret = inv_mpu_i2c_master_xfer(st);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* disable i2c slave */
+-	ret = regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* check i2c status */
+-	ret = regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);
+ 	if (ret)
+ 		return ret;
+-	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
+-		return -EIO;
+ 
+ 	/* read data in registers */
+ 	return regmap_bulk_read(st->map, INV_MPU6050_REG_EXT_SENS_DATA,
+ 				val, size);
+-
+-error_disable_i2c:
+-	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	return ret;
+ }
+ 
+ /**
+@@ -174,7 +175,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		      uint8_t reg, uint8_t val)
+ {
+-	unsigned int status;
+ 	int ret;
+ 
+ 	/* setup i2c SLV0 control: i2c addr, register, value, enable + size */
+@@ -192,26 +192,10 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* do i2c xfer */
++	/* do i2c xfer, disable i2c slave and check status*/
+ 	ret = inv_mpu_i2c_master_xfer(st);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* disable i2c slave */
+-	ret = regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* check i2c status */
+-	ret = regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);
+ 	if (ret)
+ 		return ret;
+-	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
+-		return -EIO;
+ 
+ 	return 0;
+-
+-error_disable_i2c:
+-	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	return ret;
+ }
+-- 
+2.43.0
+
+
+Subject: Re: [PATCH v3] iio: imu: inv_mpu6050: refactor aux read/write to use
+ shared xfer logic
+
+Hi ########, #######,
+
+This patch looks okay to me. Though, I think ############# made a valid point in
+v1 about inv_mpu_i2c_master_xfer() not implying any specific slave slot
+previously. I'd suggest to add a slv parameter to inv_mpu_i2c_master_xfer(), but
+that wouldn't make much difference since inv_mpu_aux_read/write() are still
+hardcoded for SLV 0.
+Besides that, I have one minor comment that's probably not a reason for a v4 if
+this is deemed to be good.
+
+Regards,
+#######
+
+On 05/07, ################ wrote:
+> Refactors inv_mpu_aux_read() and inv_mpu_aux_write() to extract the common
+> I2C transfer sequence into inv_mpu_i2c_master_xfer(), which now handles
+> starting and stopping the I2C master, waiting for completion, disabling
+> SLV0, and checking for NACK errors.
+> 
+> This refactoring removes code duplication and improves maintainability.
+> No functional changes are intended.
+> 
+> Signed-off-by: ################ <########################>
+> Co-developed-by: ################## <#########################>
+> Signed-off-by: ################## <#########################>
+> ---
+...
+>  static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+>  {
+> @@ -23,6 +25,7 @@ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+>  	uint8_t d;
+>  	unsigned int user_ctrl;
+>  	int ret;
+> +	unsigned int status;
+I'd declare status above ret, or together with user_ctrl.
+Just minor code style thing.
+
+Subject: Re: [PATCH v3] iio: imu: inv_mpu6050: refactor aux read/write to
+ use shared xfer logic
+
+On Sat, 10 May 2025 15:39:33 -0300
+############### <##########################> wrote:
+
+> Hi ########, #######,
+> 
+> This patch looks okay to me. Though, I think ############# made a valid point in
+> v1 about inv_mpu_i2c_master_xfer() not implying any specific slave slot
+> previously. I'd suggest to add a slv parameter to inv_mpu_i2c_master_xfer(), but
+> that wouldn't make much difference since inv_mpu_aux_read/write() are still
+> hardcoded for SLV 0.
+> Besides that, I have one minor comment that's probably not a reason for a v4 if
+> this is deemed to be good.
+
+I'm looking for a tag from ############# on this.
+
+########
+
+> 
+> Regards,
+> #######
+> 
+> On 05/07, ################ wrote:
+> > Refactors inv_mpu_aux_read() and inv_mpu_aux_write() to extract the common
+> > I2C transfer sequence into inv_mpu_i2c_master_xfer(), which now handles
+> > starting and stopping the I2C master, waiting for completion, disabling
+> > SLV0, and checking for NACK errors.
+> > 
+> > This refactoring removes code duplication and improves maintainability.
+> > No functional changes are intended.
+> > 
+> > Signed-off-by: ################ <########################>
+> > Co-developed-by: ################## <#########################>
+> > Signed-off-by: ################## <#########################>
+> > ---  
+> ...
+> >  static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+> >  {
+> > @@ -23,6 +25,7 @@ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+> >  	uint8_t d;
+> >  	unsigned int user_ctrl;
+> >  	int ret;
+> > +	unsigned int status;  
+> I'd declare status above ret, or together with user_ctrl.
+> Just minor code style thing.
+
+
+Subject: Re: [PATCH v3] iio: imu: inv_mpu6050: refactor aux read/write to
+ use shared xfer logic
+
+############ <################> wrote:
+
+> On Sat, 10 May 2025 15:39:33 -0300
+> ############### <##########################> wrote:
+> 
+> > Hi ########, #######,
+> > 
+> > This patch looks okay to me. Though, I think ############# made a valid point in
+> > v1 about inv_mpu_i2c_master_xfer() not implying any specific slave slot
+> > previously. I'd suggest to add a slv parameter to inv_mpu_i2c_master_xfer(), but
+> > that wouldn't make much difference since inv_mpu_aux_read/write() are still
+> > hardcoded for SLV 0.
+> > Besides that, I have one minor comment that's probably not a reason for a v4 if
+> > this is deemed to be good.  
+> 
+> I'm looking for a tag from ############# on this.
+
+#############. If you have time to look at this version that would be great.
+
+> 
+> ########
+> 
+> > 
+> > Regards,
+> > #######
+> > 
+> > On 05/07, ################ wrote:  
+> > > Refactors inv_mpu_aux_read() and inv_mpu_aux_write() to extract the common
+> > > I2C transfer sequence into inv_mpu_i2c_master_xfer(), which now handles
+> > > starting and stopping the I2C master, waiting for completion, disabling
+> > > SLV0, and checking for NACK errors.
+> > > 
+> > > This refactoring removes code duplication and improves maintainability.
+> > > No functional changes are intended.
+> > > 
+> > > Signed-off-by: ################ <########################>
+> > > Co-developed-by: ################## <#########################>
+> > > Signed-off-by: ################## <#########################>
+> > > ---    
+> > ...  
+> > >  static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+> > >  {
+> > > @@ -23,6 +25,7 @@ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+> > >  	uint8_t d;
+> > >  	unsigned int user_ctrl;
+> > >  	int ret;
+> > > +	unsigned int status;    
+> > I'd declare status above ret, or together with user_ctrl.
+> > Just minor code style thing.  
+> 
+> 
+
+
+Subject: Re: [PATCH v3] iio: imu: inv_mpu6050: refactor aux read/write to use
+ shared xfer logic
+
+Hello ########,=0A=
+=0A=
+sorry for the delay.=0A=
+=0A=
+It looks good like that. It is OK for me.=0A=
+=0A=
+Acked-by: ###################### <##############################>=0A=
+=0A=
+Thanks,=0A=
+##=0A=
+=0A=
+
+Subject:=A0Re: [PATCH v3] iio: imu: inv_mpu6050: refactor aux read/write to=
+ use shared xfer logic=0A=
+=A0=0A=
+############ <################> wrote:=0A=
+=0A=
+> On Sat, 10 May 2025 15:39:33 -0300=0A=
+> ############### <##########################> wrote:=0A=
+> =0A=
+> > Hi ########, #######,=0A=
+> > =0A=
+> > This patch looks okay to me. Though, I think ############# made a valid=
+ point in=0A=
+> > v1 about inv_mpu_i2c_master_xfer() not implying any specific slave slot=
+=0A=
+> > previously. I'd suggest to add a slv parameter to inv_mpu_i2c_master_xf=
+er(), but=0A=
+> > that wouldn't make much difference since inv_mpu_aux_read/write() are s=
+till=0A=
+> > hardcoded for SLV 0.=0A=
+> > Besides that, I have one minor comment that's probably not a reason for=
+ a v4 if=0A=
+> > this is deemed to be good.  =0A=
+> =0A=
+> I'm looking for a tag from ############# on this.=0A=
+=0A=
+#############. If you have time to look at this version that would be great=
+.=0A=
+=0A=
+> =0A=
+> ########=0A=
+> =0A=
+> > =0A=
+> > Regards,=0A=
+> > #######=0A=
+> > =0A=
+> > On 05/07, ################ wrote:  =0A=
+> > > Refactors inv_mpu_aux_read() and inv_mpu_aux_write() to extract the c=
+ommon=0A=
+> > > I2C transfer sequence into inv_mpu_i2c_master_xfer(), which now handl=
+es=0A=
+> > > starting and stopping the I2C master, waiting for completion, disabli=
+ng=0A=
+> > > SLV0, and checking for NACK errors.=0A=
+> > > =0A=
+> > > This refactoring removes code duplication and improves maintainabilit=
+y.=0A=
+> > > No functional changes are intended.=0A=
+> > > =0A=
+> > > Signed-off-by: ################ <########################>=0A=
+> > > Co-developed-by: ################## <#########################>=0A=
+> > > Signed-off-by: ################## <#########################>=0A=
+> > > ---    =0A=
+> > ...  =0A=
+> > >  static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *s=
+t)=0A=
+> > >  {=0A=
+> > > @@ -23,6 +25,7 @@ static int inv_mpu_i2c_master_xfer(const struct inv=
+_mpu6050_state *st)=0A=
+> > >  	uint8_t d;=0A=
+> > >  	unsigned int user_ctrl;=0A=
+> > >  	int ret;=0A=
+> > > +	unsigned int status;    =0A=
+> > I'd declare status above ret, or together with user_ctrl.=0A=
+> > Just minor code style thing.  =0A=
+> =0A=
+> =0A=
+=0A=
+
+Subject: Re: [PATCH v3] iio: imu: inv_mpu6050: refactor aux read/write to
+ use shared xfer logic
+
+###################### <##############################> wrote:
+
+> Hello ########,
+>=20
+> sorry for the delay.
+>=20
+> It looks good like that. It is OK for me.
+>=20
+> Acked-by: ###################### <##############################>
+Applied to the testing branch of iio.git.  I'll be rebasing that on rc1
+once available and pushing out for linux-next to pick up at that time.
+
+hanks
+
+########
+>=20
+> Thanks,
+> ##
+>=20
+> ############ <################> wrote:
+>=20
+> > On Sat, 10 May 2025 15:39:33 -0300
+> > ############### <##########################> wrote:
+> >  =20
+> > > Hi ########, #######,
+> > >=20
+> > > This patch looks okay to me. Though, I think ############# made a val=
+id point in
+> > > v1 about inv_mpu_i2c_master_xfer() not implying any specific slave sl=
+ot
+> > > previously. I'd suggest to add a slv parameter to inv_mpu_i2c_master_=
+xfer(), but
+> > > that wouldn't make much difference since inv_mpu_aux_read/write() are=
+ still
+> > > hardcoded for SLV 0.
+> > > Besides that, I have one minor comment that's probably not a reason f=
+or a v4 if
+> > > this is deemed to be good.   =20
+> >=20
+> > I'm looking for a tag from ############# on this. =20
+>=20
+> #############. If you have time to look at this version that would be gre=
+at.
+>=20
+> >=20
+> > ########
+> >  =20
+> > >=20
+> > > Regards,
+> > > #######
+> > >=20
+> > > On 05/07, ################ wrote:   =20
+> > > > Refactors inv_mpu_aux_read() and inv_mpu_aux_write() to extract the=
+ common
+> > > > I2C transfer sequence into inv_mpu_i2c_master_xfer(), which now han=
+dles
+> > > > starting and stopping the I2C master, waiting for completion, disab=
+ling
+> > > > SLV0, and checking for NACK errors.
+> > > >=20
+> > > > This refactoring removes code duplication and improves maintainabil=
+ity.
+> > > > No functional changes are intended.
+> > > >=20
+> > > > Signed-off-by: ################ <########################>
+> > > > Co-developed-by: ################## <#########################>
+> > > > Signed-off-by: ################## <#########################>
+> > > > ---     =20
+> > > ...   =20
+> > > >  static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state =
+*st)
+> > > >  {
+> > > > @@ -23,6 +25,7 @@ static int inv_mpu_i2c_master_xfer(const struct i=
+nv_mpu6050_state *st)
+> > > >  	uint8_t d;
+> > > >  	unsigned int user_ctrl;
+> > > >  	int ret;
+> > > > +	unsigned int status;     =20
+> > > I'd declare status above ret, or together with user_ctrl.
+> > > Just minor code style thing.   =20
+> >=20
+> >  =20
+>=20
+
+

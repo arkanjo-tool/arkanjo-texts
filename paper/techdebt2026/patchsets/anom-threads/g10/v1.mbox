@@ -1,0 +1,484 @@
+Subject: [PATCH] iio: adc: sc27xx: Refactor sc27xx_adc_scale_init to reduce duplication
+
+Simplify the sc27xx_adc_scale_init() function by refactoring scale ratio
+initialization logic for SC2720, SC2730, and SC2731 PMICs. This removes
+code duplication by using a data structure to represent channel/scale
+mapping.
+
+This change improves readability and maintainability without changing
+functional behavior.
+
+Signed-off-by: ################# <###############################>
+Co-developed-by: ############### <#################>
+Signed-off-by: ############### <#################>
+---
+ drivers/iio/adc/sc27xx_adc.c | 90 +++++++++++++-----------------------
+ 1 file changed, 32 insertions(+), 58 deletions(-)
+
+diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+index 2535c2c3e..a8312859d 100644
+--- a/drivers/iio/adc/sc27xx_adc.c
++++ b/drivers/iio/adc/sc27xx_adc.c
+@@ -407,78 +407,52 @@ static int sc2731_adc_get_ratio(int channel, int scale)
+ /*
+  * According to the datasheet set specific value on some channel.
+  */
++struct adc_channel_scale {
++	int channel;
++	int scale;
++};
++
++static void sc27xx_adc_scale_init(struct sc27xx_adc_data *data,
++	const struct adc_channel_scale *table,
++	int table_len,
++	int default_scale)
++{
++	int j;
++
++	for (j = 0; j < sizeof(data->channel_scale); j++)
++		data->channel_scale[j] = default_scale;
++
++	for (j = 0; j < table_len; j++)
++		data->channel_scale[table[j].channel] = table[j].scale;
++}
++
+ static void sc2720_adc_scale_init(struct sc27xx_adc_data *data)
+ {
+-	int i;
+-
+-	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+-		switch (i) {
+-		case 5:
+-			data->channel_scale[i] = 3;
+-			break;
+-		case 7:
+-		case 9:
+-			data->channel_scale[i] = 2;
+-			break;
+-		case 13:
+-			data->channel_scale[i] = 1;
+-			break;
+-		case 19:
+-		case 30:
+-		case 31:
+-			data->channel_scale[i] = 3;
+-			break;
+-		default:
+-			data->channel_scale[i] = 0;
+-			break;
+-		}
+-	}
++	static const struct adc_channel_scale sc2720_table[] = {
++		{5, 3}, {7, 2}, {9, 2}, {13, 1}, {19, 3}, {30, 3}, {31, 3}
++	};
++	sc27xx_adc_scale_init(data, sc2720_table, ARRAY_SIZE(sc2720_table), 0);
+ }
+ 
+ static void sc2730_adc_scale_init(struct sc27xx_adc_data *data)
+ {
+-	int i;
+-
+-	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+-		switch (i) {
+-		case 5:
+-		case 10:
+-		case 19:
+-		case 30:
+-		case 31:
+-			data->channel_scale[i] = 3;
+-			break;
+-		case 7:
+-		case 9:
+-			data->channel_scale[i] = 2;
+-			break;
+-		case 13:
+-			data->channel_scale[i] = 1;
+-			break;
+-		default:
+-			data->channel_scale[i] = 0;
+-			break;
+-		}
+-	}
++	static const struct adc_channel_scale sc2730_table[] = {
++		{5, 3}, {10, 3}, {19, 3}, {30, 3}, {31, 3},
++		{7, 2}, {9, 2}, {13, 1}
++	};
++	sc27xx_adc_scale_init(data, sc2730_table, ARRAY_SIZE(sc2730_table), 0);
+ }
+ 
+ static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
+ {
+-	int i;
+ 	/*
+ 	 * In the current software design, SC2731 support 2 scales,
+ 	 * channels 5 uses big scale, others use smale.
+ 	 */
+-	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+-		switch (i) {
+-		case 5:
+-			data->channel_scale[i] = 1;
+-			break;
+-		default:
+-			data->channel_scale[i] = 0;
+-			break;
+-		}
+-	}
++	static const struct adc_channel_scale sc2731_table[] = {
++		{5, 1}
++	};
++	sc27xx_adc_scale_init(data, sc2731_table, ARRAY_SIZE(sc2731_table), 0);
+ }
+ 
+ static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
+-- 
+2.39.5
+
+
+Subject: Re: [PATCH] iio: adc: sc27xx: Refactor sc27xx_adc_scale_init to
+ reduce duplication
+
+################# <###############################> wrote:
+
+> Simplify the sc27xx_adc_scale_init() function by refactoring scale ratio
+> initialization logic for SC2720, SC2730, and SC2731 PMICs. This removes
+> code duplication by using a data structure to represent channel/scale
+> mapping.
+> 
+> This change improves readability and maintainability without changing
+> functional behavior.
+> 
+> Signed-off-by: ################# <###############################>
+> Co-developed-by: ############### <#################>
+> Signed-off-by: ############### <#################>
+Hi #######, #######,
+
+A few comments inline, but overall I'm not sure the code reduction
+is sufficiently to cover the resulting loss of readability.
+Sometimes a switch is simply clear than a partial look up table.
+
+So nice idea, but I'm not seeing it as being a good move for this particular code.
+I'd be slightly interested to see the optimized output of the two approaches, but
+this is far from a high performance path so we care a lot more about readability here.
+
+
+Thanks,
+
+########
+
+
+> ---
+>  drivers/iio/adc/sc27xx_adc.c | 90 +++++++++++++-----------------------
+>  1 file changed, 32 insertions(+), 58 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+> index 2535c2c3e..a8312859d 100644
+> --- a/drivers/iio/adc/sc27xx_adc.c
+> +++ b/drivers/iio/adc/sc27xx_adc.c
+> @@ -407,78 +407,52 @@ static int sc2731_adc_get_ratio(int channel, int scale)
+>  /*
+>   * According to the datasheet set specific value on some channel.
+>   */
+> +struct adc_channel_scale {
+> +	int channel;
+> +	int scale;
+> +};
+> +
+> +static void sc27xx_adc_scale_init(struct sc27xx_adc_data *data,
+> +	const struct adc_channel_scale *table,
+> +	int table_len,
+> +	int default_scale)
+
+Style wise, I'd prefer these aligned after the (
+I don't think this will even go over 80 chars but if it did that would
+be fine if it doesn't go over by much.
+
+> +{
+> +	int j;
+> +
+> +	for (j = 0; j < sizeof(data->channel_scale); j++)
+> +		data->channel_scale[j] = default_scale;
+> +
+> +	for (j = 0; j < table_len; j++)
+> +		data->channel_scale[table[j].channel] = table[j].scale;
+> +}
+> +
+>  static void sc2720_adc_scale_init(struct sc27xx_adc_data *data)
+>  {
+> -	int i;
+> -
+> -	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> -		switch (i) {
+> -		case 5:
+> -			data->channel_scale[i] = 3;
+> -			break;
+> -		case 7:
+> -		case 9:
+> -			data->channel_scale[i] = 2;
+> -			break;
+> -		case 13:
+> -			data->channel_scale[i] = 1;
+> -			break;
+> -		case 19:
+> -		case 30:
+> -		case 31:
+> -			data->channel_scale[i] = 3;
+> -			break;
+> -		default:
+> -			data->channel_scale[i] = 0;
+> -			break;
+> -		}
+> -	}
+> +	static const struct adc_channel_scale sc2720_table[] = {
+> +		{5, 3}, {7, 2}, {9, 2}, {13, 1}, {19, 3}, {30, 3}, {31, 3}
+
+Spaces after { and before }
+
+> +	};
+> +	sc27xx_adc_scale_init(data, sc2720_table, ARRAY_SIZE(sc2720_table), 0);
+>  }
+>  
+>  static void sc2730_adc_scale_init(struct sc27xx_adc_data *data)
+>  {
+> -	int i;
+> -
+> -	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> -		switch (i) {
+> -		case 5:
+> -		case 10:
+> -		case 19:
+> -		case 30:
+> -		case 31:
+> -			data->channel_scale[i] = 3;
+> -			break;
+> -		case 7:
+> -		case 9:
+> -			data->channel_scale[i] = 2;
+> -			break;
+> -		case 13:
+> -			data->channel_scale[i] = 1;
+> -			break;
+> -		default:
+> -			data->channel_scale[i] = 0;
+> -			break;
+> -		}
+> -	}
+> +	static const struct adc_channel_scale sc2730_table[] = {
+> +		{5, 3}, {10, 3}, {19, 3}, {30, 3}, {31, 3},
+> +		{7, 2}, {9, 2}, {13, 1}
+> +	};
+> +	sc27xx_adc_scale_init(data, sc2730_table, ARRAY_SIZE(sc2730_table), 0);
+>  }
+>  
+>  static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
+>  {
+> -	int i;
+>  	/*
+>  	 * In the current software design, SC2731 support 2 scales,
+>  	 * channels 5 uses big scale, others use smale.
+>  	 */
+> -	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> -		switch (i) {
+> -		case 5:
+> -			data->channel_scale[i] = 1;
+> -			break;
+> -		default:
+> -			data->channel_scale[i] = 0;
+> -			break;
+> -		}
+> -	}
+> +	static const struct adc_channel_scale sc2731_table[] = {
+> +		{5, 1}
+> +	};
+> +	sc27xx_adc_scale_init(data, sc2731_table, ARRAY_SIZE(sc2731_table), 0);
+>  }
+>  
+>  static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
+
+
+Subject: Re: [PATCH] iio: adc: sc27xx: Refactor sc27xx_adc_scale_init to
+ reduce duplication
+
+Hi ########,
+
+Apologies for the late reply, and thanks for your thoughtful feedback.
+We understand your concerns, and we agree that in this case,
+readability should take precedence.
+We'll drop this idea and focus our efforts elsewhere.
+Sorry for resending =E2=80=94 the previous email was rejected due to HTML f=
+ormatting.
+
+Best regards,
+####### & #######
+
+
+On ################################### ################ <################> =
+wrote:
+>
+> ################# <###############################> wrote:
+>
+> > Simplify the sc27xx_adc_scale_init() function by refactoring scale rati=
+o
+> > initialization logic for SC2720, SC2730, and SC2731 PMICs. This removes
+> > code duplication by using a data structure to represent channel/scale
+> > mapping.
+> >
+> > This change improves readability and maintainability without changing
+> > functional behavior.
+> >
+> > Signed-off-by: ################# <###############################>
+> > Co-developed-by: ############### <#################>
+> > Signed-off-by: ############### <#################>
+> Hi #######, #######,
+>
+> A few comments inline, but overall I'm not sure the code reduction
+> is sufficiently to cover the resulting loss of readability.
+> Sometimes a switch is simply clear than a partial look up table.
+>
+> So nice idea, but I'm not seeing it as being a good move for this particu=
+lar code.
+> I'd be slightly interested to see the optimized output of the two approac=
+hes, but
+> this is far from a high performance path so we care a lot more about read=
+ability here.
+>
+>
+> Thanks,
+>
+> ########
+>
+>
+> > ---
+> >  drivers/iio/adc/sc27xx_adc.c | 90 +++++++++++++-----------------------
+> >  1 file changed, 32 insertions(+), 58 deletions(-)
+> >
+> > diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.=
+c
+> > index 2535c2c3e..a8312859d 100644
+> > --- a/drivers/iio/adc/sc27xx_adc.c
+> > +++ b/drivers/iio/adc/sc27xx_adc.c
+> > @@ -407,78 +407,52 @@ static int sc2731_adc_get_ratio(int channel, int =
+scale)
+> >  /*
+> >   * According to the datasheet set specific value on some channel.
+> >   */
+> > +struct adc_channel_scale {
+> > +     int channel;
+> > +     int scale;
+> > +};
+> > +
+> > +static void sc27xx_adc_scale_init(struct sc27xx_adc_data *data,
+> > +     const struct adc_channel_scale *table,
+> > +     int table_len,
+> > +     int default_scale)
+>
+> Style wise, I'd prefer these aligned after the (
+> I don't think this will even go over 80 chars but if it did that would
+> be fine if it doesn't go over by much.
+>
+> > +{
+> > +     int j;
+> > +
+> > +     for (j =3D 0; j < sizeof(data->channel_scale); j++)
+> > +             data->channel_scale[j] =3D default_scale;
+> > +
+> > +     for (j =3D 0; j < table_len; j++)
+> > +             data->channel_scale[table[j].channel] =3D table[j].scale;
+> > +}
+> > +
+> >  static void sc2720_adc_scale_init(struct sc27xx_adc_data *data)
+> >  {
+> > -     int i;
+> > -
+> > -     for (i =3D 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> > -             switch (i) {
+> > -             case 5:
+> > -                     data->channel_scale[i] =3D 3;
+> > -                     break;
+> > -             case 7:
+> > -             case 9:
+> > -                     data->channel_scale[i] =3D 2;
+> > -                     break;
+> > -             case 13:
+> > -                     data->channel_scale[i] =3D 1;
+> > -                     break;
+> > -             case 19:
+> > -             case 30:
+> > -             case 31:
+> > -                     data->channel_scale[i] =3D 3;
+> > -                     break;
+> > -             default:
+> > -                     data->channel_scale[i] =3D 0;
+> > -                     break;
+> > -             }
+> > -     }
+> > +     static const struct adc_channel_scale sc2720_table[] =3D {
+> > +             {5, 3}, {7, 2}, {9, 2}, {13, 1}, {19, 3}, {30, 3}, {31, 3=
+}
+>
+> Spaces after { and before }
+>
+> > +     };
+> > +     sc27xx_adc_scale_init(data, sc2720_table, ARRAY_SIZE(sc2720_table=
+), 0);
+> >  }
+> >
+> >  static void sc2730_adc_scale_init(struct sc27xx_adc_data *data)
+> >  {
+> > -     int i;
+> > -
+> > -     for (i =3D 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> > -             switch (i) {
+> > -             case 5:
+> > -             case 10:
+> > -             case 19:
+> > -             case 30:
+> > -             case 31:
+> > -                     data->channel_scale[i] =3D 3;
+> > -                     break;
+> > -             case 7:
+> > -             case 9:
+> > -                     data->channel_scale[i] =3D 2;
+> > -                     break;
+> > -             case 13:
+> > -                     data->channel_scale[i] =3D 1;
+> > -                     break;
+> > -             default:
+> > -                     data->channel_scale[i] =3D 0;
+> > -                     break;
+> > -             }
+> > -     }
+> > +     static const struct adc_channel_scale sc2730_table[] =3D {
+> > +             {5, 3}, {10, 3}, {19, 3}, {30, 3}, {31, 3},
+> > +             {7, 2}, {9, 2}, {13, 1}
+> > +     };
+> > +     sc27xx_adc_scale_init(data, sc2730_table, ARRAY_SIZE(sc2730_table=
+), 0);
+> >  }
+> >
+> >  static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
+> >  {
+> > -     int i;
+> >       /*
+> >        * In the current software design, SC2731 support 2 scales,
+> >        * channels 5 uses big scale, others use smale.
+> >        */
+> > -     for (i =3D 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> > -             switch (i) {
+> > -             case 5:
+> > -                     data->channel_scale[i] =3D 1;
+> > -                     break;
+> > -             default:
+> > -                     data->channel_scale[i] =3D 0;
+> > -                     break;
+> > -             }
+> > -     }
+> > +     static const struct adc_channel_scale sc2731_table[] =3D {
+> > +             {5, 1}
+> > +     };
+> > +     sc27xx_adc_scale_init(data, sc2731_table, ARRAY_SIZE(sc2731_table=
+), 0);
+> >  }
+> >
+> >  static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
+>
+

@@ -1,0 +1,268 @@
+Subject: [PATCH] iio: imu: inv_mpu6050: refactor aux read/write to use shared xfer logic
+
+Extract common transfer logic from inv_mpu_aux_read() and
+inv_mpu_aux_write() into a new helper function,
+inv_mpu_aux_exec_xfer(), which performs the I2C transfer.
+
+This refactoring removes code duplication and improves maintainability.
+No functional changes are intended.
+
+Signed-off-by: ################ <########################>
+Co-developed-by: ################## <#########################>
+Signed-off-by: ################## <#########################>
+---
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c | 41 +++++++++++------------
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h |  2 ++
+ 2 files changed, 21 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+index 8a7f29119..de013e034 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+@@ -117,7 +117,6 @@ int inv_mpu_aux_init(const struct inv_mpu6050_state *st)
+ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		     uint8_t reg, uint8_t *val, size_t size)
+ {
+-	unsigned int status;
+ 	int ret;
+ 
+ 	if (size > 0x0F)
+@@ -136,30 +135,13 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (ret)
+ 		return ret;
+ 
+-	/* do i2c xfer */
+-	ret = inv_mpu_i2c_master_xfer(st);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* disable i2c slave */
+-	ret = regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* check i2c status */
+-	ret = regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);
++	ret = inv_mpu_aux_exec_xfer(st);
+ 	if (ret)
+ 		return ret;
+-	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
+-		return -EIO;
+ 
+ 	/* read data in registers */
+ 	return regmap_bulk_read(st->map, INV_MPU6050_REG_EXT_SENS_DATA,
+ 				val, size);
+-
+-error_disable_i2c:
+-	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	return ret;
+ }
+ 
+ /**
+@@ -174,7 +156,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		      uint8_t reg, uint8_t val)
+ {
+-	unsigned int status;
+ 	int ret;
+ 
+ 	/* setup i2c SLV0 control: i2c addr, register, value, enable + size */
+@@ -192,6 +173,24 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (ret)
+ 		return ret;
+ 
++	ret = inv_mpu_aux_exec_xfer(st);
++	if (ret)
++	return ret;
++
++	return 0;
++}
++
++/**
++ * inv_mpu_aux_exec_xfer() - executes i2c auxiliary transfer and checks status
++ * @st: driver internal state.
++ *
++ *  Returns 0 on success, a negative error code otherwise.
++ */
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st)
++{
++	int ret;
++	unsigned int status;
++
+ 	/* do i2c xfer */
+ 	ret = inv_mpu_i2c_master_xfer(st);
+ 	if (ret)
+@@ -209,8 +208,6 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
+ 		return -EIO;
+ 
+-	return 0;
+-
+ error_disable_i2c:
+ 	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+ 	return ret;
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h
+index b66997545..0353103aa 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h
+@@ -16,4 +16,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		      uint8_t reg, uint8_t val);
+ 
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st);
++
+ #endif		/* INV_MPU_AUX_H_ */
+-- 
+2.43.0
+
+
+Subject: Re: [PATCH] iio: imu: inv_mpu6050: refactor aux read/write to use
+ shared xfer logic
+
+Hello,=0A=
+=0A=
+I don't really see the point in this patch.=0A=
+=0A=
+We already have a common function inv_mpu_i2c_master_xfer() for handling ma=
+ster I2C transfer, and there is no need to create a new external function i=
+nv_mpu_aux_exec_xfer() that is never called outside the inv_mpu_aux.c file.=
+=0A=
+=0A=
+If you want to factorize the I2C transfer status check, better add it to th=
+e inv_mpu_i2c_master_xfer function. This way it would make sense. But you n=
+eed to warn that only SLV0 slot has to be used for transfer if we are enfor=
+cing SLV0 transfer check.=0A=
+=0A=
+In the actual implementation we're free to use the slave slot we want, sinc=
+e all SLV(x) calls are done in the same function. It is easier to understan=
+d like this, I think.=0A=
+=0A=
+Thanks,=0A=
+##=0A=
+=0A=
+
+Extract common transfer logic from inv_mpu_aux_read() and=0A=
+inv_mpu_aux_write() into a new helper function,=0A=
+inv_mpu_aux_exec_xfer(), which performs the I2C transfer.=0A=
+=0A=
+This refactoring removes code duplication and improves maintainability.=0A=
+No functional changes are intended.=0A=
+=0A=
+Signed-off-by: ################ <########################>=0A=
+Co-developed-by: ################## <#########################>=0A=
+Signed-off-by: ################## <#########################>=0A=
+---=0A=
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c | 41 +++++++++++------------=0A=
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h |  2 ++=0A=
+ 2 files changed, 21 insertions(+), 22 deletions(-)=0A=
+=0A=
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c b/drivers/iio/imu/in=
+v_mpu6050/inv_mpu_aux.c=0A=
+index 8a7f29119..de013e034 100644=0A=
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c=0A=
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c=0A=
+@@ -117,7 +117,6 @@ int inv_mpu_aux_init(const struct inv_mpu6050_state *st=
+)=0A=
+ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,=0A=
+ 		     uint8_t reg, uint8_t *val, size_t size)=0A=
+ {=0A=
+-	unsigned int status;=0A=
+ 	int ret;=0A=
+ =0A=
+ 	if (size > 0x0F)=0A=
+@@ -136,30 +135,13 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *=
+st, uint8_t addr,=0A=
+ 	if (ret)=0A=
+ 		return ret;=0A=
+ =0A=
+-	/* do i2c xfer */=0A=
+-	ret =3D inv_mpu_i2c_master_xfer(st);=0A=
+-	if (ret)=0A=
+-		goto error_disable_i2c;=0A=
+-=0A=
+-	/* disable i2c slave */=0A=
+-	ret =3D regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);=0A=
+-	if (ret)=0A=
+-		goto error_disable_i2c;=0A=
+-=0A=
+-	/* check i2c status */=0A=
+-	ret =3D regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);=0A=
++	ret =3D inv_mpu_aux_exec_xfer(st);=0A=
+ 	if (ret)=0A=
+ 		return ret;=0A=
+-	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)=0A=
+-		return -EIO;=0A=
+ =0A=
+ 	/* read data in registers */=0A=
+ 	return regmap_bulk_read(st->map, INV_MPU6050_REG_EXT_SENS_DATA,=0A=
+ 				val, size);=0A=
+-=0A=
+-error_disable_i2c:=0A=
+-	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);=0A=
+-	return ret;=0A=
+ }=0A=
+ =0A=
+ /**=0A=
+@@ -174,7 +156,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st=
+, uint8_t addr,=0A=
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,=0A=
+ 		      uint8_t reg, uint8_t val)=0A=
+ {=0A=
+-	unsigned int status;=0A=
+ 	int ret;=0A=
+ =0A=
+ 	/* setup i2c SLV0 control: i2c addr, register, value, enable + size */=0A=
+@@ -192,6 +173,24 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *=
+st, uint8_t addr,=0A=
+ 	if (ret)=0A=
+ 		return ret;=0A=
+ =0A=
++	ret =3D inv_mpu_aux_exec_xfer(st);=0A=
++	if (ret)=0A=
++	return ret;=0A=
++=0A=
++	return 0;=0A=
++}=0A=
++=0A=
++/**=0A=
++ * inv_mpu_aux_exec_xfer() - executes i2c auxiliary transfer and checks st=
+atus=0A=
++ * @st: driver internal state.=0A=
++ *=0A=
++ *  Returns 0 on success, a negative error code otherwise.=0A=
++ */=0A=
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st)=0A=
++{=0A=
++	int ret;=0A=
++	unsigned int status;=0A=
++=0A=
+ 	/* do i2c xfer */=0A=
+ 	ret =3D inv_mpu_i2c_master_xfer(st);=0A=
+ 	if (ret)=0A=
+@@ -209,8 +208,6 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *s=
+t, uint8_t addr,=0A=
+ 	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)=0A=
+ 		return -EIO;=0A=
+ =0A=
+-	return 0;=0A=
+-=0A=
+ error_disable_i2c:=0A=
+ 	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);=0A=
+ 	return ret;=0A=
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h b/drivers/iio/imu/in=
+v_mpu6050/inv_mpu_aux.h=0A=
+index b66997545..0353103aa 100644=0A=
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h=0A=
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h=0A=
+@@ -16,4 +16,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, =
+uint8_t addr,=0A=
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,=0A=
+ 		      uint8_t reg, uint8_t val);=0A=
+ =0A=
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st);=0A=
++=0A=
+ #endif		/* INV_MPU_AUX_H_ */=0A=
+-- =0A=
+2.43.0=0A=
+=0A=
+

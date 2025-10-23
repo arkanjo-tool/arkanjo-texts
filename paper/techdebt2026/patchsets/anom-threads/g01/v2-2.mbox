@@ -1,0 +1,243 @@
+Subject: [PATCH v2] iio: magnetometer: mmc35240: unify reg-access predicates
+
+Refactor the two complementary helper functions
+`mmc35240_is_volatile_reg()` and
+`mmc35240_is_writeable_reg()` by implementing the volatile predicate
+as the logical negation of the writeable predicate. This removes the
+duplicate bit-mask checks and makes the intent clearer.
+
+Changes since v1:
+- Removed the obsolete mmc35240_reg_check() helper.
+- Wrapped commit message and body to 75 columns.
+- Fixed indentation in mmc35240_is_writeable_reg() to use tabs.
+
+Signed-off-by: #################### <###################>
+Co-developed-by: ################### <#######################>
+Signed-off-by: ################### <#######################>
+---
+ drivers/iio/magnetometer/mmc35240.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetometer/mmc35240.c
+index 07f58567e521..6cfb89295802 100644
+--- a/drivers/iio/magnetometer/mmc35240.c
++++ b/drivers/iio/magnetometer/mmc35240.c
+@@ -418,14 +418,16 @@ static const struct iio_info mmc35240_info = {
+ 	.attrs		= &mmc35240_attribute_group,
+ };
+ 
+-static bool mmc35240_reg_check(unsigned int reg)
+-{
+-	return reg == MMC35240_REG_CTRL0 || reg == MMC35240_REG_CTRL1;
+-}
+ 
+ static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int reg)
+ {
+-	return mmc35240_reg_check(reg);
++	switch (reg) {
++	case MMC35240_REG_CTRL0:
++	case MMC35240_REG_CTRL1:
++		return true;
++	default:
++    	return false;
++	}
+ }
+ 
+ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+@@ -447,7 +449,7 @@ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+ 
+ static bool mmc35240_is_volatile_reg(struct device *dev, unsigned int reg)
+ {
+-	return !mmc35240_reg_check(reg);
++	return !mmc35240_is_writeable_reg(dev, reg);
+ }
+ 
+ static const struct reg_default mmc35240_reg_defaults[] = {
+-- 
+2.43.0
+
+
+Subject: Re: [PATCH v2] iio: magnetometer: mmc35240: unify reg-access
+ predicates
+
+###### <####################> wrote:
+
+> Refactor the two complementary helper functions
+> `mmc35240_is_volatile_reg()` and
+> `mmc35240_is_writeable_reg()` by implementing the volatile predicate
+> as the logical negation of the writeable predicate. This removes the
+> duplicate bit-mask checks and makes the intent clearer.
+>=20
+> Changes since v1:
+> - Removed the obsolete mmc35240_reg_check() helper.
+> - Wrapped commit message and body to 75 columns.
+> - Fixed indentation in mmc35240_is_writeable_reg() to use tabs.
+>=20
+> Signed-off-by: ######################## <###################>
+> Co-developed-by: ####################### <#######################>
+> Signed-off-by: ####################### <#######################>
+> ---
+>  drivers/iio/magnetometer/mmc35240.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetomet=
+er/mmc35240.c
+> index 07f58567e521..6cfb89295802 100644
+> --- a/drivers/iio/magnetometer/mmc35240.c
+> +++ b/drivers/iio/magnetometer/mmc35240.c
+> @@ -418,14 +418,16 @@ static const struct iio_info mmc35240_info =3D {
+>  	.attrs		=3D &mmc35240_attribute_group,
+>  };
+> =20
+> -static bool mmc35240_reg_check(unsigned int reg)
+> -{
+> -	return reg =3D=3D MMC35240_REG_CTRL0 || reg =3D=3D MMC35240_REG_CTRL1;
+> -}
+> =20
+>  static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int r=
+eg)
+>  {
+> -	return mmc35240_reg_check(reg);
+> +	switch (reg) {
+> +	case MMC35240_REG_CTRL0:
+> +	case MMC35240_REG_CTRL1:
+> +		return true;
+> +	default:
+> +    	return false;
+
+Indent is incorrect.  This should be two tabs in but it is in spaces.
+Please run scripts/checkpatch.pl over your patches before sending.
+
+
+> +	}
+>  }
+> =20
+>  static bool mmc35240_is_readable_reg(struct device *dev, unsigned int re=
+g)
+> @@ -447,7 +449,7 @@ static bool mmc35240_is_readable_reg(struct device *d=
+ev, unsigned int reg)
+> =20
+>  static bool mmc35240_is_volatile_reg(struct device *dev, unsigned int re=
+g)
+>  {
+> -	return !mmc35240_reg_check(reg);
+> +	return !mmc35240_is_writeable_reg(dev, reg);
+>  }
+> =20
+>  static const struct reg_default mmc35240_reg_defaults[] =3D {
+
+
+Subject: Re: [PATCH v2] iio: magnetometer: mmc35240: unify reg-access
+ predicates
+
+Hello ######, #####,
+
+Some comments in addition to what ######## mentioned.
+Though, unless I'm missing anything, I'd say there may be no reason for a v3.
+Please, see comments below.
+
+On 05/26, ###### wrote:
+> Refactor the two complementary helper functions
+> `mmc35240_is_volatile_reg()` and
+> `mmc35240_is_writeable_reg()` by implementing the volatile predicate
+> as the logical negation of the writeable predicate. This removes the
+> duplicate bit-mask checks and makes the intent clearer.
+> 
+> Changes since v1:
+> - Removed the obsolete mmc35240_reg_check() helper.
+> - Wrapped commit message and body to 75 columns.
+> - Fixed indentation in mmc35240_is_writeable_reg() to use tabs.
+The change log looks good, but it should come after the "---".
+As it is, the change log would appear in the commit logs if the patch is
+applied, and we don't want change logs in commit descriptions.
+
+> 
+> Signed-off-by: ################### <###################>
+checkpacth also points a sender/sign-off mismatch. There should be a way
+to fix that with some git format-patch or git send-email flag.
+
+> Co-developed-by: ################## <#######################>
+> Signed-off-by: ################## <#######################>
+> ---
+This is the place where the change log is expected to be.
+
+>  drivers/iio/magnetometer/mmc35240.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetometer/mmc35240.c
+> index 07f58567e521..6cfb89295802 100644
+> --- a/drivers/iio/magnetometer/mmc35240.c
+> +++ b/drivers/iio/magnetometer/mmc35240.c
+> @@ -418,14 +418,16 @@ static const struct iio_info mmc35240_info = {
+>  	.attrs		= &mmc35240_attribute_group,
+>  };
+>  
+> -static bool mmc35240_reg_check(unsigned int reg)
+Couldn't find any mmc35240_reg_check() in current IIO testing branch.
+Was that leftover from out of tree commit? Am I missing anything?
+Please, avoid such things. This patch just fails to apply to IIO testing.
+
+> -{
+> -	return reg == MMC35240_REG_CTRL0 || reg == MMC35240_REG_CTRL1;
+> -}
+>  
+>  static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int reg)
+>  {
+> -	return mmc35240_reg_check(reg);
+> +	switch (reg) {
+> +	case MMC35240_REG_CTRL0:
+> +	case MMC35240_REG_CTRL1:
+> +		return true;
+> +	default:
+> +    	return false;
+> +	}
+>  }
+>  
+>  static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+> @@ -447,7 +449,7 @@ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+>  
+>  static bool mmc35240_is_volatile_reg(struct device *dev, unsigned int reg)
+>  {
+> -	return !mmc35240_reg_check(reg);
+> +	return !mmc35240_is_writeable_reg(dev, reg);
+I think this logic doesn't really apply to this sensor.
+There is a product ID register (MMC35240_REG_ID) that seems to be read-only and
+not volatile. I think this patch doesn't make much sense.
+
+With best regards,
+#######
+
+Subject: Re: [PATCH v2] iio: magnetometer: mmc35240: unify reg-access
+ predicates
+
+>     *4. Volatile vs. writeable logic*
+>     Rather than inverting is_writeable, would you recommend instead
+> enumerating explicitly only the registers that truly change—for example,
+> status and data registers—while leaving everything else non‑volatile?
+
+Looks like that's already done at mmc35240_is_volatile_reg(). Since there are
+fewer non-volatile registers, it's more concise to enumerate those.
+
+> Do you think it’s worthwhile to implement that explicit approach here? If
+> these adjustments look good, I will incorporate them and send PATCH v3
+> later today. Please let me know if you have any further suggestions or
+> questions.
+
+Maybe you could do
+static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int reg)
+{
+	return !mmc35240_is_volatile_reg(...);
+}
+or the other way around. Although, such patches might not worth it since the
+proposed improvement is very small (and questionable) while the upstreaming
+process still requires some effort.
+
+Otherwise, I don't have any improvement suggestion for this driver.
+
+As general (not necessarily good) tip, I'd suggest to look at possible uses of
+FIELD_PREP and FIELD_GET (see include/linux/bitfield.h). Those tend to improve
+code robustness and readability. I don't have any specific suggestion, though.
+
+Best regards,
+#######
+

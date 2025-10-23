@@ -1,0 +1,96 @@
+Subject: [PATCH v3] iio: adc: ad7091r-base: Remove duplicate code on volatile reg check
+
+Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
+same test, checking whether a given 'reg' code is
+AD7091R_REG_RESULT or AD7091R_REG_ALERT. As the volatile ad7091r
+registers happen to be the only read-only ones, the volatile_reg()
+function now returns the negated output of writeable_reg().
+
+Co-developed-by: ############# <####################>
+Signed-off-by: ############# <####################>
+Co-developed-by: ############# <###############>
+Signed-off-by: ############# <###############>
+Signed-off-by: ############# <####################>
+---
+V2 -> V3: Ditched macro for simply calling existing function
+V1 -> V2: Renamed macro and added clarifying comment
+
+ drivers/iio/adc/ad7091r-base.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/iio/adc/ad7091r-base.c b/drivers/iio/adc/ad7091r-base.c
+index 931ff71b2888..647a7852dd8d 100644
+--- a/drivers/iio/adc/ad7091r-base.c
++++ b/drivers/iio/adc/ad7091r-base.c
+@@ -387,13 +387,8 @@ EXPORT_SYMBOL_NS_GPL(ad7091r_writeable_reg, "IIO_AD7091R");
+ 
+ bool ad7091r_volatile_reg(struct device *dev, unsigned int reg)
+ {
+-	switch (reg) {
+-	case AD7091R_REG_RESULT:
+-	case AD7091R_REG_ALERT:
+-		return true;
+-	default:
+-		return false;
+-	}
++	/* The volatile ad7091r registers are also the only RO ones. */
++	return !ad7091r_writeable_reg(dev, reg);
+ }
+ EXPORT_SYMBOL_NS_GPL(ad7091r_volatile_reg, "IIO_AD7091R");
+ 
+-- 
+2.25.1
+
+
+Subject: Re: [PATCH v3] iio: adc: ad7091r-base: Remove duplicate code on
+ volatile reg check
+
+Hello ###### et. al.
+
+This version looks good to me.
+
+Reviewed-by: ############### <##########################>
+
+On #####, ############# wrote:
+> From: ############# <####################>
+> 
+> Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
+> same test, checking whether a given 'reg' code is
+> AD7091R_REG_RESULT or AD7091R_REG_ALERT. As the volatile ad7091r
+> registers happen to be the only read-only ones, the volatile_reg()
+> function now returns the negated output of writeable_reg().
+> 
+> Co-developed-by: ############# <####################>
+> Signed-off-by: ############# <####################>
+> Co-developed-by: ############# <###############>
+> Signed-off-by: ############# <###############>
+> Signed-off-by: ############# <####################>
+
+Subject: Re: [PATCH v3] iio: adc: ad7091r-base: Remove duplicate code on
+ volatile reg check
+
+############### <##########################> wrote:
+
+> Hello ###### et. al.
+> 
+> This version looks good to me.
+> 
+> Reviewed-by: ############### <##########################>
+> 
+> On 04/21, ############# wrote:
+> > From: ############# <####################>
+> > 
+> > Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
+> > same test, checking whether a given 'reg' code is
+> > AD7091R_REG_RESULT or AD7091R_REG_ALERT. As the volatile ad7091r
+> > registers happen to be the only read-only ones, the volatile_reg()
+> > function now returns the negated output of writeable_reg().
+> > 
+> > Co-developed-by: ############# <####################>
+> > Signed-off-by: ############# <####################>
+> > Co-developed-by: ############# <###############>
+> > Signed-off-by: ############# <###############>
+> > Signed-off-by: ############# <####################>  
+
+Applied.
+

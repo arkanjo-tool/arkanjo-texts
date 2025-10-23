@@ -1,0 +1,491 @@
+Subject: [PATCH] iio: light: apds9306: Refactor threshold get/set functions to
+
+Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set functions
+to use a helper function (get_thresh_reg) for obtaining the correct register
+based on the direction of the event. This improves code readability,
+minimize the number of lines  and maintains consistency in accessing
+threshold registers.
+
+Signed-off-by: ############### <##########################>
+Co-developed-by: ############# <##########################>
+Signed-off-by: ############# <##########################>
+---
+ drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
+ 1 file changed, 21 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
+index 69a0d609c..8e1cdaeb0 100644
+--- a/drivers/iio/light/apds9306.c
++++ b/drivers/iio/light/apds9306.c
+@@ -6,7 +6,6 @@
+  *
+  * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+  */
+-
+ #include <linux/bits.h>
+ #include <linux/cleanup.h>
+ #include <linux/delay.h>
+@@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
+ 	return regmap_field_write(rf->int_persist_val, val);
+ }
+ 
+-static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+-				     int *val)
++static int get_thresh_reg(int dir)
+ {
+-	int var, ret;
+-	u8 buff[3];
+-
+ 	if (dir == IIO_EV_DIR_RISING)
+-		var = APDS9306_ALS_THRES_UP_0_REG;
++		return  APDS9306_ALS_THRES_UP_0_REG;
+ 	else if (dir == IIO_EV_DIR_FALLING)
+-		var = APDS9306_ALS_THRES_LOW_0_REG;
++		return APDS9306_ALS_THRES_LOW_0_REG;
+ 	else
+ 		return -EINVAL;
++}
++
++static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
++				     int *val)
++{
++	int reg, ret;
++	u8 buff[3];
++
++	reg = get_thresh_reg(dir);
+ 
+-	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
++	if (reg == -EINVAL)
++		return reg;
++
++	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+ static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
+ 				     int val)
+ {
+-	int var;
++	int reg;
+ 	u8 buff[3];
++	reg = get_thresh_reg(dir);
+ 
+-	if (dir == IIO_EV_DIR_RISING)
+-		var = APDS9306_ALS_THRES_UP_0_REG;
+-	else if (dir == IIO_EV_DIR_FALLING)
+-		var = APDS9306_ALS_THRES_LOW_0_REG;
+-	else
+-		return -EINVAL;
++	if (reg == -EINVAL)
++		return reg;
+ 
+ 	if (!in_range(val, 0, APDS9306_ALS_THRES_VAL_MAX))
+ 		return -EINVAL;
+ 
+ 	put_unaligned_le24(val, buff);
+ 
+-	return regmap_bulk_write(data->regmap, var, buff, sizeof(buff));
++	return regmap_bulk_write(data->regmap, reg, buff, sizeof(buff));
+ }
+ 
+ static int apds9306_event_thresh_adaptive_get(struct apds9306_data *data, int *val)
+-- 
+2.34.1
+
+
+Subject: Re: [PATCH] iio: light: apds9306: Refactor threshold get/set
+ functions to
+
+Hello ######, #####,
+
+Not sure it's worth extrancting the event direction comparison into that
+separate function. Even though there is less code repetition, we now have an
+extra comparison to handle get_thresh_reg() return. Despite of that, see
+comments below.
+
+On #####, ###### wrote:
+> From: ############### <##########################>
+> 
+> Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set functions
+> to use a helper function (get_thresh_reg) for obtaining the correct register
+Wrap commit description to 75 columns.
+
+> based on the direction of the event. This improves code readability,
+> minimize the number of lines  and maintains consistency in accessing
+> threshold registers.
+> 
+> Signed-off-by: ############### <##########################>
+> Co-developed-by: ############# <##########################>
+> Signed-off-by: ############# <##########################>
+> ---
+>  drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
+>  1 file changed, 21 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
+> index 69a0d609c..8e1cdaeb0 100644
+> --- a/drivers/iio/light/apds9306.c
+> +++ b/drivers/iio/light/apds9306.c
+> @@ -6,7 +6,6 @@
+>   *
+>   * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+>   */
+> -
+This doesn't seem to have any relation with the intent of the patch.
+Drop this unrelated change.
+
+>  #include <linux/bits.h>
+>  #include <linux/cleanup.h>
+>  #include <linux/delay.h>
+> @@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
+>  	return regmap_field_write(rf->int_persist_val, val);
+>  }
+>  
+> -static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+> -				     int *val)
+> +static int get_thresh_reg(int dir)
+Even though these functions are declared static, it's common patter in IIO
+that driver functions start with the name of the driver. So, it would be more
+conventional to call it apds9306_get_thresh_reg().
+
+>  {
+> -	int var, ret;
+> -	u8 buff[3];
+> -
+>  	if (dir == IIO_EV_DIR_RISING)
+> -		var = APDS9306_ALS_THRES_UP_0_REG;
+> +		return  APDS9306_ALS_THRES_UP_0_REG;
+>  	else if (dir == IIO_EV_DIR_FALLING)
+> -		var = APDS9306_ALS_THRES_LOW_0_REG;
+> +		return APDS9306_ALS_THRES_LOW_0_REG;
+>  	else
+>  		return -EINVAL;
+> +}
+> +
+> +static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+> +				     int *val)
+> +{
+> +	int reg, ret;
+> +	u8 buff[3];
+> +
+> +	reg = get_thresh_reg(dir);
+>  
+> -	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
+There is now a blank line between function call (apds9306_get_thresh_reg()) and
+the return check, which is unusual in IIO. Drop the blank line between those
+	reg = get_thresh_reg(dir);
+	if (reg == -EINVAL)
+...
+
+> +	if (reg == -EINVAL)
+> +		return reg;
+> +
+> +	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+>  static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
+>  				     int val)
+>  {
+> -	int var;
+> +	int reg;
+>  	u8 buff[3];
+Add a blank line between local variable declarations and rest of function code.
+> +	reg = get_thresh_reg(dir);
+>  
+Another blank line between function call and return check to be dropped here.
+
+> -	if (dir == IIO_EV_DIR_RISING)
+> -		var = APDS9306_ALS_THRES_UP_0_REG;
+> -	else if (dir == IIO_EV_DIR_FALLING)
+> -		var = APDS9306_ALS_THRES_LOW_0_REG;
+> -	else
+> -		return -EINVAL;
+> +	if (reg == -EINVAL)
+> +		return reg;
+>  
+
+Regards,
+#######
+
+Subject: Re: [PATCH] iio: light: apds9306: Refactor threshold get/set
+ functions to
+
+############### <##########################> wrote:
+
+> Hello ######, #####,
+> 
+> Not sure it's worth extrancting the event direction comparison into that
+> separate function. Even though there is less code repetition, we now have an
+> extra comparison to handle get_thresh_reg() return. Despite of that, see
+> comments below.
+> 
+> On #####, ###### wrote:
+> > From: ############### <##########################>
+> > 
+> > Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set functions
+> > to use a helper function (get_thresh_reg) for obtaining the correct register  
+> Wrap commit description to 75 columns.
+> 
+> > based on the direction of the event. This improves code readability,
+> > minimize the number of lines  and maintains consistency in accessing
+> > threshold registers.
+> > 
+> > Signed-off-by: ############### <##########################>
+> > Co-developed-by: ############# <##########################>
+> > Signed-off-by: ############# <##########################>
+> > ---
+> >  drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
+> >  1 file changed, 21 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
+> > index 69a0d609c..8e1cdaeb0 100644
+> > --- a/drivers/iio/light/apds9306.c
+> > +++ b/drivers/iio/light/apds9306.c
+> > @@ -6,7 +6,6 @@
+> >   *
+> >   * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+> >   */
+> > -  
+> This doesn't seem to have any relation with the intent of the patch.
+> Drop this unrelated change.
+> 
+> >  #include <linux/bits.h>
+> >  #include <linux/cleanup.h>
+> >  #include <linux/delay.h>
+> > @@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
+> >  	return regmap_field_write(rf->int_persist_val, val);
+> >  }
+> >  
+> > -static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+> > -				     int *val)
+> > +static int get_thresh_reg(int dir)  
+> Even though these functions are declared static, it's common patter in IIO
+> that driver functions start with the name of the driver. So, it would be more
+> conventional to call it apds9306_get_thresh_reg().
+> 
+> >  {
+> > -	int var, ret;
+> > -	u8 buff[3];
+> > -
+> >  	if (dir == IIO_EV_DIR_RISING)
+> > -		var = APDS9306_ALS_THRES_UP_0_REG;
+> > +		return  APDS9306_ALS_THRES_UP_0_REG;
+
+Just one space after return
+
+> >  	else if (dir == IIO_EV_DIR_FALLING)
+> > -		var = APDS9306_ALS_THRES_LOW_0_REG;
+> > +		return APDS9306_ALS_THRES_LOW_0_REG;
+> >  	else
+> >  		return -EINVAL;
+> > +}
+> > +
+> > +static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+> > +				     int *val)
+> > +{
+> > +	int reg, ret;
+> > +	u8 buff[3];
+> > +
+> > +	reg = get_thresh_reg(dir);
+> >  
+> > -	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));  
+> There is now a blank line between function call (apds9306_get_thresh_reg()) and
+> the return check, which is unusual in IIO. Drop the blank line between those
+> 	reg = get_thresh_reg(dir);
+> 	if (reg == -EINVAL)
+> ...
+> 
+> > +	if (reg == -EINVAL)
+> > +		return reg;
+> > +
+> > +	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+> >  static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
+> >  				     int val)
+> >  {
+> > -	int var;
+> > +	int reg;
+> >  	u8 buff[3];  
+> Add a blank line between local variable declarations and rest of function code.
+> > +	reg = get_thresh_reg(dir);
+> >    
+> Another blank line between function call and return check to be dropped here.
+> 
+> > -	if (dir == IIO_EV_DIR_RISING)
+> > -		var = APDS9306_ALS_THRES_UP_0_REG;
+> > -	else if (dir == IIO_EV_DIR_FALLING)
+> > -		var = APDS9306_ALS_THRES_LOW_0_REG;
+> > -	else
+> > -		return -EINVAL;
+> > +	if (reg == -EINVAL)
+> > +		return reg;
+> >    
+> 
+> Regards,
+> #######
+
+
+Subject: Re: [PATCH] iio: light: apds9306: Refactor threshold get/set
+ functions to
+
+Hello #######,
+thank you for the feedback.
+
+>  Not sure it's worth extracting the event direction comparison into that =
+separate function. Even though there is less code repetition, we now have a=
+n extra comparison to handle get_thresh_reg() return.
+I understand your point. The main goal was to reduce code duplication
+and perhaps improve readability and maintainability, but I agree that
+it introduces a small trade-off with the additional return check.
+
+>  Even though these functions are declared static, it's common pattern in =
+IIO that driver functions start with the name of the driver. So, it would b=
+e more conventional to call it apds9306_get_thresh_reg().
+Got it. I=E2=80=99ll rename the helper function to follow the IIO driver
+naming convention.
+
+I understand the blank line problems and I'll correct them.
+
+I=E2=80=99ll send a v2 soon with all these adjustments.
+
+Thanks again for your feedback!
+
+Best regards,
+######
+
+
+On Sun, Apr 20, 2025 at 3:25=E2=80=AFPM ###############
+<##########################> wrote:
+>
+> Hello ######, #####,
+>
+> Not sure it's worth extrancting the event direction comparison into that
+> separate function. Even though there is less code repetition, we now have=
+ an
+> extra comparison to handle get_thresh_reg() return. Despite of that, see
+> comments below.
+>
+> On #####, ###### wrote:
+> > From: ############### <##########################>
+> >
+> > Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set fu=
+nctions
+> > to use a helper function (get_thresh_reg) for obtaining the correct reg=
+ister
+> Wrap commit description to 75 columns.
+>
+> > based on the direction of the event. This improves code readability,
+> > minimize the number of lines  and maintains consistency in accessing
+> > threshold registers.
+> >
+> > Signed-off-by: ############### <##########################>
+> > Co-developed-by: ############# <##########################>
+> > Signed-off-by: ############# <##########################>
+> > ---
+> >  drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
+> >  1 file changed, 21 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.=
+c
+> > index 69a0d609c..8e1cdaeb0 100644
+> > --- a/drivers/iio/light/apds9306.c
+> > +++ b/drivers/iio/light/apds9306.c
+> > @@ -6,7 +6,6 @@
+> >   *
+> >   * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+> >   */
+> > -
+> This doesn't seem to have any relation with the intent of the patch.
+> Drop this unrelated change.
+>
+> >  #include <linux/bits.h>
+> >  #include <linux/cleanup.h>
+> >  #include <linux/delay.h>
+> > @@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9=
+306_data *data, int val)
+> >       return regmap_field_write(rf->int_persist_val, val);
+> >  }
+> >
+> > -static int apds9306_event_thresh_get(struct apds9306_data *data, int d=
+ir,
+> > -                                  int *val)
+> > +static int get_thresh_reg(int dir)
+> Even though these functions are declared static, it's common patter in II=
+O
+> that driver functions start with the name of the driver. So, it would be =
+more
+> conventional to call it apds9306_get_thresh_reg().
+>
+> >  {
+> > -     int var, ret;
+> > -     u8 buff[3];
+> > -
+> >       if (dir =3D=3D IIO_EV_DIR_RISING)
+> > -             var =3D APDS9306_ALS_THRES_UP_0_REG;
+> > +             return  APDS9306_ALS_THRES_UP_0_REG;
+> >       else if (dir =3D=3D IIO_EV_DIR_FALLING)
+> > -             var =3D APDS9306_ALS_THRES_LOW_0_REG;
+> > +             return APDS9306_ALS_THRES_LOW_0_REG;
+> >       else
+> >               return -EINVAL;
+> > +}
+> > +
+> > +static int apds9306_event_thresh_get(struct apds9306_data *data, int d=
+ir,
+> > +                                  int *val)
+> > +{
+> > +     int reg, ret;
+> > +     u8 buff[3];
+> > +
+> > +     reg =3D get_thresh_reg(dir);
+> >
+> > -     ret =3D regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
+> There is now a blank line between function call (apds9306_get_thresh_reg(=
+)) and
+> the return check, which is unusual in IIO. Drop the blank line between th=
+ose
+>         reg =3D get_thresh_reg(dir);
+>         if (reg =3D=3D -EINVAL)
+> ...
+>
+> > +     if (reg =3D=3D -EINVAL)
+> > +             return reg;
+> > +
+> > +     ret =3D regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+> >       if (ret)
+> >               return ret;
+> >
+> > @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9=
+306_data *data, int dir,
+> >  static int apds9306_event_thresh_set(struct apds9306_data *data, int d=
+ir,
+> >                                    int val)
+> >  {
+> > -     int var;
+> > +     int reg;
+> >       u8 buff[3];
+> Add a blank line between local variable declarations and rest of function=
+ code.
+> > +     reg =3D get_thresh_reg(dir);
+> >
+> Another blank line between function call and return check to be dropped h=
+ere.
+>
+> > -     if (dir =3D=3D IIO_EV_DIR_RISING)
+> > -             var =3D APDS9306_ALS_THRES_UP_0_REG;
+> > -     else if (dir =3D=3D IIO_EV_DIR_FALLING)
+> > -             var =3D APDS9306_ALS_THRES_LOW_0_REG;
+> > -     else
+> > -             return -EINVAL;
+> > +     if (reg =3D=3D -EINVAL)
+> > +             return reg;
+> >
+>
+> Regards,
+> #######
+

@@ -1,0 +1,116 @@
+Subject: [PATCH] iio: pressure: hp03: Drop explicit hp03_is_writeable_reg and hp03_is_volatile_reg functions
+
+Drop functions hp03_is_writeable_reg and hp03_is_volatile_reg. Both
+functions always return false, regardless of the register number or
+device. They are used in a single place within the hp03_regmap_config
+and can be replaced directly.
+
+The HP03 Series of calibrated sensor module datasheet (1) document
+does not contain any information about the register values to define
+states for the functions.
+
+(1): https://www.sensorica.ru/pdf/HP03.pdf
+
+Signed-off-by: ######################## <#####################>
+
+
+---
+ drivers/iio/pressure/hp03.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/iio/pressure/hp03.c b/drivers/iio/pressure/hp03.c
+index 6f7a16787143..a69f6f5ce248 100644
+--- a/drivers/iio/pressure/hp03.c
++++ b/drivers/iio/pressure/hp03.c
+@@ -57,16 +57,6 @@ static const struct iio_chan_spec hp03_channels[] = {
+ 	},
+ };
+ 
+-static bool hp03_is_writeable_reg(struct device *dev, unsigned int reg)
+-{
+-	return false;
+-}
+-
+-static bool hp03_is_volatile_reg(struct device *dev, unsigned int reg)
+-{
+-	return false;
+-}
+-
+ static const struct regmap_config hp03_regmap_config = {
+ 	.reg_bits	= 8,
+ 	.val_bits	= 8,
+@@ -74,8 +64,8 @@ static const struct regmap_config hp03_regmap_config = {
+ 	.max_register	= HP03_EEPROM_CD_OFFSET + 1,
+ 	.cache_type	= REGCACHE_RBTREE,
+ 
+-	.writeable_reg	= hp03_is_writeable_reg,
+-	.volatile_reg	= hp03_is_volatile_reg,
++	.writeable_reg	= false,
++	.volatile_reg	= false,
+ };
+ 
+ static int hp03_get_temp_pressure(struct hp03_priv *priv, const u8 reg)
+-- 
+2.43.0
+
+
+Subject: Re: [PATCH] iio: pressure: hp03: Drop explicit
+ hp03_is_writeable_reg and hp03_is_volatile_reg functions
+
+######################## <######################> wrote:
+
+> Drop functions hp03_is_writeable_reg and hp03_is_volatile_reg. Both
+> functions always return false, regardless of the register number or
+> device. They are used in a single place within the hp03_regmap_config
+> and can be replaced directly.
+> 
+> The HP03 Series of calibrated sensor module datasheet (1) document
+> does not contain any information about the register values to define
+> states for the functions.
+> 
+> (1): https://www.sensorica.ru/pdf/HP03.pdf
+> 
+> Signed-off-by: ######################## <#####################>
+
+Take another look at what you are doing here.
+
++ the warnings it gives...
+
+> ---
+>  drivers/iio/pressure/hp03.c | 14 ++------------
+>  1 file changed, 2 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/iio/pressure/hp03.c b/drivers/iio/pressure/hp03.c
+> index 6f7a16787143..a69f6f5ce248 100644
+> --- a/drivers/iio/pressure/hp03.c
+> +++ b/drivers/iio/pressure/hp03.c
+> @@ -57,16 +57,6 @@ static const struct iio_chan_spec hp03_channels[] = {
+>  	},
+>  };
+>  
+> -static bool hp03_is_writeable_reg(struct device *dev, unsigned int reg)
+> -{
+> -	return false;
+> -}
+> -
+> -static bool hp03_is_volatile_reg(struct device *dev, unsigned int reg)
+> -{
+> -	return false;
+> -}
+> -
+>  static const struct regmap_config hp03_regmap_config = {
+>  	.reg_bits	= 8,
+>  	.val_bits	= 8,
+> @@ -74,8 +64,8 @@ static const struct regmap_config hp03_regmap_config = {
+>  	.max_register	= HP03_EEPROM_CD_OFFSET + 1,
+>  	.cache_type	= REGCACHE_RBTREE,
+>  
+> -	.writeable_reg	= hp03_is_writeable_reg,
+> -	.volatile_reg	= hp03_is_volatile_reg,
+> +	.writeable_reg	= false,
+> +	.volatile_reg	= false,
+>  };
+>  
+>  static int hp03_get_temp_pressure(struct hp03_priv *priv, const u8 reg)
+
+

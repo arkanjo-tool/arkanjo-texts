@@ -1,0 +1,130 @@
+Subject: [PATCH v2] iio: imu: inv_mpu6050: refactor aux read/write to use shared transfer logic
+
+Refactors inv_mpu_aux_read() and inv_mpu_aux_write() to extract the common
+I2C transfer sequence into inv_mpu_i2c_master_xfer(), which now handles
+starting and stopping the I2C master, waiting for completion, disabling
+SLV0, and checking for NACK errors.
+
+This refactoring removes code duplication and improves maintainability.
+No functional changes are intended.
+
+Signed-off-by: ################ <########################>
+Co-developed-by: ################## <#########################>
+Signed-off-by: ################## <#########################>
+---
+As requested after sending v1, we removed the newly created refactoring function — which
+would have only been used inside inv_mpu_aux.c — and moved the duplicated code directly 
+into inv_mpu_i2c_master_xfer(), since the status check was always performed immediately 
+after its execution in both inv_mpu_aux_read() and inv_mpu_aux_write().
+---
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c | 57 +++++++++--------------
+ 1 file changed, 22 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+index de013e034..970cf5c47 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+@@ -14,6 +14,8 @@
+ /*
+  * i2c master auxiliary bus transfer function.
+  * Requires the i2c operations to be correctly setup before.
++ * Disables SLV0 and checks for NACK status internally.
++ * Assumes that only SLV0 is used for transfers.
+  */
+ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+ {
+@@ -23,6 +25,7 @@ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+ 	uint8_t d;
+ 	unsigned int user_ctrl;
+ 	int ret;
++	unsigned int status;
+ 
+ 	/* set sample rate */
+ 	d = INV_MPU6050_FIFO_RATE_TO_DIVIDER(freq);
+@@ -51,12 +54,27 @@ static int inv_mpu_i2c_master_xfer(const struct inv_mpu6050_state *st)
+ 	if (ret)
+ 		goto error_restore_rate;
+ 
++	/* disable i2c slave */
++	ret = regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
++	if (ret)
++		goto error_disable_i2c;
++
++	/* check i2c status */
++	ret = regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);
++	if (ret)
++		return ret;
++
++	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
++		return -EIO;
++
+ 	return 0;
+ 
+ error_stop_i2c:
+ 	regmap_write(st->map, st->reg->user_ctrl, st->chip_config.user_ctrl);
+ error_restore_rate:
+ 	regmap_write(st->map, st->reg->sample_rate_div, st->chip_config.divider);
++error_disable_i2c:
++	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+ 	return ret;
+ }
+ 
+@@ -135,7 +153,8 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = inv_mpu_aux_exec_xfer(st);
++	/* do i2c xfer, disable i2c slave and check status*/
++	ret = inv_mpu_i2c_master_xfer(st);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -173,42 +192,10 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = inv_mpu_aux_exec_xfer(st);
+-	if (ret)
+-	return ret;
+-
+-	return 0;
+-}
+-
+-/**
+- * inv_mpu_aux_exec_xfer() - executes i2c auxiliary transfer and checks status
+- * @st: driver internal state.
+- *
+- *  Returns 0 on success, a negative error code otherwise.
+- */
+-int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st)
+-{
+-	int ret;
+-	unsigned int status;
+-
+-	/* do i2c xfer */
++	/* do i2c xfer, disable i2c slave and check status*/
+ 	ret = inv_mpu_i2c_master_xfer(st);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* disable i2c slave */
+-	ret = regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* check i2c status */
+-	ret = regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);
+ 	if (ret)
+ 		return ret;
+-	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
+-		return -EIO;
+ 
+-error_disable_i2c:
+-	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	return ret;
++	return 0;
+ }
+-- 
+2.43.0
+
+

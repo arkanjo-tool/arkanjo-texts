@@ -1,0 +1,680 @@
+Subject: [PATCH v6 1/4] iio: accel: sca3000: replace usages of internal read data helpers by spi helpers
+
+Remove sca3000_read_data_short() function, replacing it by spi_w8r8()
+and spi_w8r16be() helpers.
+
+This is an old driver that was not making full use of the newer
+infrastructure.
+
+Signed-off-by: ############ <##########################>
+Co-developed-by: ############## <####################>
+Signed-off-by: ############## <####################>
+Suggested-by: ################ <################>
+---
+ drivers/iio/accel/sca3000.c | 152 +++++++++++++++---------------------
+ 1 file changed, 63 insertions(+), 89 deletions(-)
+
+diff --git a/drivers/iio/accel/sca3000.c b/drivers/iio/accel/sca3000.c
+index bfa8a3f5a92f..c85a06cbea37 100644
+--- a/drivers/iio/accel/sca3000.c
++++ b/drivers/iio/accel/sca3000.c
+@@ -281,24 +281,6 @@ static int sca3000_write_reg(struct sca3000_state *st, u8 address, u8 val)
+ 	return spi_write(st->us, st->tx, 2);
+ }
+ 
+-static int sca3000_read_data_short(struct sca3000_state *st,
+-				   u8 reg_address_high,
+-				   int len)
+-{
+-	struct spi_transfer xfer[2] = {
+-		{
+-			.len = 1,
+-			.tx_buf = st->tx,
+-		}, {
+-			.len = len,
+-			.rx_buf = st->rx,
+-		}
+-	};
+-	st->tx[0] = SCA3000_READ_REG(reg_address_high);
+-
+-	return spi_sync_transfer(st->us, xfer, ARRAY_SIZE(xfer));
+-}
+-
+ /**
+  * sca3000_reg_lock_on() - test if the ctrl register lock is on
+  * @st: Driver specific device instance data.
+@@ -309,11 +291,11 @@ static int sca3000_reg_lock_on(struct sca3000_state *st)
+ {
+ 	int ret;
+ 
+-	ret = sca3000_read_data_short(st, SCA3000_REG_STATUS_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_STATUS_ADDR));
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	return !(st->rx[0] & SCA3000_LOCKED);
++	return !(ret & SCA3000_LOCKED);
+ }
+ 
+ /**
+@@ -409,10 +391,7 @@ static int sca3000_read_ctrl_reg(struct sca3000_state *st,
+ 	ret = sca3000_write_reg(st, SCA3000_REG_CTRL_SEL_ADDR, ctrl_reg);
+ 	if (ret)
+ 		return ret;
+-	ret = sca3000_read_data_short(st, SCA3000_REG_CTRL_DATA_ADDR, 1);
+-	if (ret)
+-		return ret;
+-	return st->rx[0];
++	return spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_CTRL_DATA_ADDR));
+ }
+ 
+ /**
+@@ -427,13 +406,13 @@ static int sca3000_print_rev(struct iio_dev *indio_dev)
+ 	struct sca3000_state *st = iio_priv(indio_dev);
+ 
+ 	mutex_lock(&st->lock);
+-	ret = sca3000_read_data_short(st, SCA3000_REG_REVID_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_REVID_ADDR));
+ 	if (ret < 0)
+ 		goto error_ret;
+ 	dev_info(&indio_dev->dev,
+ 		 "sca3000 revision major=%lu, minor=%lu\n",
+-		 st->rx[0] & SCA3000_REG_REVID_MAJOR_MASK,
+-		 st->rx[0] & SCA3000_REG_REVID_MINOR_MASK);
++		 ret & SCA3000_REG_REVID_MAJOR_MASK,
++		 ret & SCA3000_REG_REVID_MINOR_MASK);
+ error_ret:
+ 	mutex_unlock(&st->lock);
+ 
+@@ -570,7 +549,7 @@ static inline int __sca3000_get_base_freq(struct sca3000_state *st,
+ {
+ 	int ret;
+ 
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -660,13 +639,13 @@ static int sca3000_read_3db_freq(struct sca3000_state *st, int *val)
+ {
+ 	int ret;
+ 
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* mask bottom 2 bits - only ones that are relevant */
+-	st->rx[0] &= SCA3000_REG_MODE_MODE_MASK;
+-	switch (st->rx[0]) {
++	ret &= SCA3000_REG_MODE_MODE_MASK;
++	switch (ret) {
+ 	case SCA3000_REG_MODE_MEAS_MODE_NORMAL:
+ 		*val = st->info->measurement_mode_3db_freq;
+ 		return IIO_VAL_INT;
+@@ -698,14 +677,14 @@ static int sca3000_write_3db_freq(struct sca3000_state *st, int val)
+ 		mode = SCA3000_REG_MODE_MEAS_MODE_OP_2;
+ 	else
+ 		return -EINVAL;
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		return ret;
+ 
+-	st->rx[0] &= ~SCA3000_REG_MODE_MODE_MASK;
+-	st->rx[0] |= (mode & SCA3000_REG_MODE_MODE_MASK);
++	ret &= ~SCA3000_REG_MODE_MODE_MASK;
++	ret |= mode & SCA3000_REG_MODE_MODE_MASK;
+ 
+-	return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR, st->rx[0]);
++	return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR, ret);
+ }
+ 
+ static int sca3000_read_raw(struct iio_dev *indio_dev,
+@@ -727,25 +706,21 @@ static int sca3000_read_raw(struct iio_dev *indio_dev,
+ 				return -EBUSY;
+ 			}
+ 			address = sca3000_addresses[chan->address][0];
+-			ret = sca3000_read_data_short(st, address, 2);
++			ret = spi_w8r16be(st->us, SCA3000_READ_REG(address));
+ 			if (ret < 0) {
+ 				mutex_unlock(&st->lock);
+ 				return ret;
+ 			}
+-			*val = sign_extend32(be16_to_cpup((__be16 *)st->rx) >>
+-					     chan->scan_type.shift,
++			*val = sign_extend32(ret >> chan->scan_type.shift,
+ 					     chan->scan_type.realbits - 1);
+ 		} else {
+ 			/* get the temperature when available */
+-			ret = sca3000_read_data_short(st,
+-						      SCA3000_REG_TEMP_MSB_ADDR,
+-						      2);
++			ret = spi_w8r16be(st->us, SCA3000_READ_REG(SCA3000_REG_TEMP_MSB_ADDR));
+ 			if (ret < 0) {
+ 				mutex_unlock(&st->lock);
+ 				return ret;
+ 			}
+-			*val = (be16_to_cpup((__be16 *)st->rx) >>
+-				chan->scan_type.shift) &
++			*val = (ret >> chan->scan_type.shift) &
+ 				GENMASK(chan->scan_type.realbits - 1, 0);
+ 		}
+ 		mutex_unlock(&st->lock);
+@@ -822,16 +797,16 @@ static ssize_t sca3000_read_av_freq(struct device *dev,
+ {
+ 	struct iio_dev *indio_dev = dev_to_iio_dev(dev);
+ 	struct sca3000_state *st = iio_priv(indio_dev);
+-	int len = 0, ret, val;
++	unsigned int len = 0;
++	int ret;
+ 
+ 	mutex_lock(&st->lock);
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
+-	val = st->rx[0];
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	mutex_unlock(&st->lock);
+ 	if (ret)
+ 		return ret;
+ 
+-	switch (val & SCA3000_REG_MODE_MODE_MASK) {
++	switch (ret & SCA3000_REG_MODE_MODE_MASK) {
+ 	case SCA3000_REG_MODE_MEAS_MODE_NORMAL:
+ 		len += sprintf(buf + len, "%d %d %d\n",
+ 			       st->info->measurement_mode_freq,
+@@ -1001,11 +976,10 @@ static void sca3000_ring_int_process(u8 val, struct iio_dev *indio_dev)
+ 	mutex_lock(&st->lock);
+ 
+ 	if (val & SCA3000_REG_INT_STATUS_HALF) {
+-		ret = sca3000_read_data_short(st, SCA3000_REG_BUF_COUNT_ADDR,
+-					      1);
++		ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_BUF_COUNT_ADDR));
+ 		if (ret)
+ 			goto error_ret;
+-		num_available = st->rx[0];
++		num_available = ret;
+ 		/*
+ 		 * num_available is the total number of samples available
+ 		 * i.e. number of time points * number of channels.
+@@ -1045,7 +1019,7 @@ static irqreturn_t sca3000_event_handler(int irq, void *private)
+ {
+ 	struct iio_dev *indio_dev = private;
+ 	struct sca3000_state *st = iio_priv(indio_dev);
+-	int ret, val;
++	int ret;
+ 	s64 last_timestamp = iio_get_time_ns(indio_dev);
+ 
+ 	/*
+@@ -1053,15 +1027,14 @@ static irqreturn_t sca3000_event_handler(int irq, void *private)
+ 	 * but ensures no interrupt is missed.
+ 	 */
+ 	mutex_lock(&st->lock);
+-	ret = sca3000_read_data_short(st, SCA3000_REG_INT_STATUS_ADDR, 1);
+-	val = st->rx[0];
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_INT_STATUS_ADDR));
+ 	mutex_unlock(&st->lock);
+ 	if (ret)
+ 		goto done;
+ 
+-	sca3000_ring_int_process(val, indio_dev);
++	sca3000_ring_int_process(ret, indio_dev);
+ 
+-	if (val & SCA3000_INT_STATUS_FREE_FALL)
++	if (ret & SCA3000_INT_STATUS_FREE_FALL)
+ 		iio_push_event(indio_dev,
+ 			       IIO_MOD_EVENT_CODE(IIO_ACCEL,
+ 						  0,
+@@ -1070,7 +1043,7 @@ static irqreturn_t sca3000_event_handler(int irq, void *private)
+ 						  IIO_EV_DIR_FALLING),
+ 			       last_timestamp);
+ 
+-	if (val & SCA3000_INT_STATUS_Y_TRIGGER)
++	if (ret & SCA3000_INT_STATUS_Y_TRIGGER)
+ 		iio_push_event(indio_dev,
+ 			       IIO_MOD_EVENT_CODE(IIO_ACCEL,
+ 						  0,
+@@ -1079,7 +1052,7 @@ static irqreturn_t sca3000_event_handler(int irq, void *private)
+ 						  IIO_EV_DIR_RISING),
+ 			       last_timestamp);
+ 
+-	if (val & SCA3000_INT_STATUS_X_TRIGGER)
++	if (ret & SCA3000_INT_STATUS_X_TRIGGER)
+ 		iio_push_event(indio_dev,
+ 			       IIO_MOD_EVENT_CODE(IIO_ACCEL,
+ 						  0,
+@@ -1088,7 +1061,7 @@ static irqreturn_t sca3000_event_handler(int irq, void *private)
+ 						  IIO_EV_DIR_RISING),
+ 			       last_timestamp);
+ 
+-	if (val & SCA3000_INT_STATUS_Z_TRIGGER)
++	if (ret & SCA3000_INT_STATUS_Z_TRIGGER)
+ 		iio_push_event(indio_dev,
+ 			       IIO_MOD_EVENT_CODE(IIO_ACCEL,
+ 						  0,
+@@ -1114,13 +1087,13 @@ static int sca3000_read_event_config(struct iio_dev *indio_dev,
+ 	/* read current value of mode register */
+ 	mutex_lock(&st->lock);
+ 
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		goto error_ret;
+ 
+ 	switch (chan->channel2) {
+ 	case IIO_MOD_X_AND_Y_AND_Z:
+-		ret = !!(st->rx[0] & SCA3000_REG_MODE_FREE_FALL_DETECT);
++		ret = !!(ret & SCA3000_REG_MODE_FREE_FALL_DETECT);
+ 		break;
+ 	case IIO_MOD_X:
+ 	case IIO_MOD_Y:
+@@ -1129,7 +1102,7 @@ static int sca3000_read_event_config(struct iio_dev *indio_dev,
+ 		 * Motion detection mode cannot run at the same time as
+ 		 * acceleration data being read.
+ 		 */
+-		if ((st->rx[0] & SCA3000_REG_MODE_MODE_MASK)
++		if ((ret & SCA3000_REG_MODE_MODE_MASK)
+ 		    != SCA3000_REG_MODE_MEAS_MODE_MOT_DET) {
+ 			ret = 0;
+ 		} else {
+@@ -1157,20 +1130,20 @@ static int sca3000_freefall_set_state(struct iio_dev *indio_dev, bool state)
+ 	int ret;
+ 
+ 	/* read current value of mode register */
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* if off and should be on */
+-	if (state && !(st->rx[0] & SCA3000_REG_MODE_FREE_FALL_DETECT))
++	if (state && !(ret & SCA3000_REG_MODE_FREE_FALL_DETECT))
+ 		return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR,
+-					 st->rx[0] | SCA3000_REG_MODE_FREE_FALL_DETECT);
++					 ret | SCA3000_REG_MODE_FREE_FALL_DETECT);
+ 	/* if on and should be off */
+-	else if (!state && (st->rx[0] & SCA3000_REG_MODE_FREE_FALL_DETECT))
++	if (!state && (ret & SCA3000_REG_MODE_FREE_FALL_DETECT))
+ 		return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR,
+-					 st->rx[0] & ~SCA3000_REG_MODE_FREE_FALL_DETECT);
+-	else
+-		return 0;
++					 ret & ~SCA3000_REG_MODE_FREE_FALL_DETECT);
++
++	return 0;
+ }
+ 
+ static int sca3000_motion_detect_set_state(struct iio_dev *indio_dev, int axis,
+@@ -1207,22 +1180,22 @@ static int sca3000_motion_detect_set_state(struct iio_dev *indio_dev, int axis,
+ 	}
+ 
+ 	/* read current value of mode register */
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		return ret;
+ 	/* if off and should be on */
+ 	if ((st->mo_det_use_count) &&
+-	    ((st->rx[0] & SCA3000_REG_MODE_MODE_MASK)
++	    ((ret & SCA3000_REG_MODE_MODE_MASK)
+ 	     != SCA3000_REG_MODE_MEAS_MODE_MOT_DET))
+ 		return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR,
+-			(st->rx[0] & ~SCA3000_REG_MODE_MODE_MASK)
++			(ret & ~SCA3000_REG_MODE_MODE_MASK)
+ 			| SCA3000_REG_MODE_MEAS_MODE_MOT_DET);
+ 	/* if on and should be off */
+ 	else if (!(st->mo_det_use_count) &&
+-		 ((st->rx[0] & SCA3000_REG_MODE_MODE_MASK)
++		 ((ret & SCA3000_REG_MODE_MODE_MASK)
+ 		  == SCA3000_REG_MODE_MEAS_MODE_MOT_DET))
+ 		return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR,
+-			st->rx[0] & SCA3000_REG_MODE_MODE_MASK);
++			ret & SCA3000_REG_MODE_MODE_MASK);
+ 	else
+ 		return 0;
+ }
+@@ -1280,18 +1253,18 @@ int __sca3000_hw_ring_state_set(struct iio_dev *indio_dev, bool state)
+ 	int ret;
+ 
+ 	mutex_lock(&st->lock);
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		goto error_ret;
+ 	if (state) {
+ 		dev_info(&indio_dev->dev, "supposedly enabling ring buffer\n");
+ 		ret = sca3000_write_reg(st,
+ 			SCA3000_REG_MODE_ADDR,
+-			(st->rx[0] | SCA3000_REG_MODE_RING_BUF_ENABLE));
++			ret | SCA3000_REG_MODE_RING_BUF_ENABLE);
+ 	} else
+ 		ret = sca3000_write_reg(st,
+ 			SCA3000_REG_MODE_ADDR,
+-			(st->rx[0] & ~SCA3000_REG_MODE_RING_BUF_ENABLE));
++			ret & ~SCA3000_REG_MODE_RING_BUF_ENABLE);
+ error_ret:
+ 	mutex_unlock(&st->lock);
+ 
+@@ -1315,12 +1288,12 @@ static int sca3000_hw_ring_preenable(struct iio_dev *indio_dev)
+ 	mutex_lock(&st->lock);
+ 
+ 	/* Enable the 50% full interrupt */
+-	ret = sca3000_read_data_short(st, SCA3000_REG_INT_MASK_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_INT_MASK_ADDR));
+ 	if (ret)
+ 		goto error_unlock;
+ 	ret = sca3000_write_reg(st,
+ 				SCA3000_REG_INT_MASK_ADDR,
+-				st->rx[0] | SCA3000_REG_INT_MASK_RING_HALF);
++				ret | SCA3000_REG_INT_MASK_RING_HALF);
+ 	if (ret)
+ 		goto error_unlock;
+ 
+@@ -1346,12 +1319,12 @@ static int sca3000_hw_ring_postdisable(struct iio_dev *indio_dev)
+ 	/* Disable the 50% full interrupt */
+ 	mutex_lock(&st->lock);
+ 
+-	ret = sca3000_read_data_short(st, SCA3000_REG_INT_MASK_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_INT_MASK_ADDR));
+ 	if (ret)
+ 		goto unlock;
+ 	ret = sca3000_write_reg(st,
+ 				SCA3000_REG_INT_MASK_ADDR,
+-				st->rx[0] & ~SCA3000_REG_INT_MASK_RING_HALF);
++				ret & ~SCA3000_REG_INT_MASK_RING_HALF);
+ unlock:
+ 	mutex_unlock(&st->lock);
+ 	return ret;
+@@ -1376,7 +1349,7 @@ static int sca3000_clean_setup(struct sca3000_state *st)
+ 
+ 	mutex_lock(&st->lock);
+ 	/* Ensure all interrupts have been acknowledged */
+-	ret = sca3000_read_data_short(st, SCA3000_REG_INT_STATUS_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_INT_MASK_ADDR));
+ 	if (ret)
+ 		goto error_ret;
+ 
+@@ -1402,7 +1375,7 @@ static int sca3000_clean_setup(struct sca3000_state *st)
+ 	if (ret)
+ 		goto error_ret;
+ 	/* Enable interrupts, relevant to mode and set up as active low */
+-	ret = sca3000_read_data_short(st, SCA3000_REG_INT_MASK_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_INT_MASK_ADDR));
+ 	if (ret)
+ 		goto error_ret;
+ 	ret = sca3000_write_reg(st,
+@@ -1416,11 +1389,11 @@ static int sca3000_clean_setup(struct sca3000_state *st)
+ 	 * Ring in 12 bit mode - it is fine to overwrite reserved bits 3,5
+ 	 * as that occurs in one of the example on the datasheet
+ 	 */
+-	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+ 	if (ret)
+ 		goto error_ret;
+ 	ret = sca3000_write_reg(st, SCA3000_REG_MODE_ADDR,
+-				(st->rx[0] & SCA3000_MODE_PROT_MASK));
++				ret & SCA3000_MODE_PROT_MASK);
+ 
+ error_ret:
+ 	mutex_unlock(&st->lock);
+@@ -1503,14 +1476,15 @@ static int sca3000_stop_all_interrupts(struct sca3000_state *st)
+ 	int ret;
+ 
+ 	mutex_lock(&st->lock);
+-	ret = sca3000_read_data_short(st, SCA3000_REG_INT_MASK_ADDR, 1);
++	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_INT_MASK_ADDR));
+ 	if (ret)
+ 		goto error_ret;
++
+ 	ret = sca3000_write_reg(st, SCA3000_REG_INT_MASK_ADDR,
+-				(st->rx[0] &
+-				 ~(SCA3000_REG_INT_MASK_RING_THREE_QUARTER |
+-				   SCA3000_REG_INT_MASK_RING_HALF |
+-				   SCA3000_REG_INT_MASK_ALL_INTS)));
++				ret &
++				~(SCA3000_REG_INT_MASK_RING_THREE_QUARTER |
++				  SCA3000_REG_INT_MASK_RING_HALF |
++				  SCA3000_REG_INT_MASK_ALL_INTS));
+ error_ret:
+ 	mutex_unlock(&st->lock);
+ 	return ret;
+-- 
+2.49.0
+
+
+Subject: Re: [PATCH v6 1/4] iio: accel: sca3000: replace usages of internal
+ read data helpers by spi helpers
+
+############ <######################> wrote:
+
+> Remove sca3000_read_data_short() function, replacing it by spi_w8r8()
+> and spi_w8r16be() helpers.
+> 
+> This is an old driver that was not making full use of the newer
+> infrastructure.
+> 
+> Signed-off-by: ############ <##########################>
+> Co-developed-by: ############## <####################>
+> Signed-off-by: ############## <####################>
+> Suggested-by: ################ <################>
+
+Hi. I made two related tweaks.  A few comments inline for further possible cleanup.
+
+Applied to the togreg branch of iio.git and initially pushed out as testing
+for 0-day to take a look at it.
+
+Thanks,
+
+########
+
+
+diff --git a/drivers/iio/accel/sca3000.c b/drivers/iio/accel/sca3000.c
+index c85a06cbea37..eb0cad22474e 100644
+--- a/drivers/iio/accel/sca3000.c
++++ b/drivers/iio/accel/sca3000.c
+@@ -589,8 +589,7 @@ static int sca3000_read_raw_samp_freq(struct sca3000_state *st, int *val)
+                return ret;
+ 
+        if (*val > 0) {
+-               ret &= SCA3000_REG_OUT_CTRL_BUF_DIV_MASK;
+-               switch (ret) {
++               switch (ret & SCA3000_REG_OUT_CTRL_BUF_DIV_MASK) {
+                case SCA3000_REG_OUT_CTRL_BUF_DIV_2:
+                        *val /= 2;
+                        break;
+@@ -644,8 +643,7 @@ static int sca3000_read_3db_freq(struct sca3000_state *st, int *val)
+                return ret;
+ 
+        /* mask bottom 2 bits - only ones that are relevant */
+-       ret &= SCA3000_REG_MODE_MODE_MASK;
+-       switch (ret) {
++       switch (ret & SCA3000_REG_MODE_MODE_MASK) {
+        case SCA3000_REG_MODE_MEAS_MODE_NORMAL:
+                *val = st->info->measurement_mode_3db_freq;
+                return IIO_VAL_INT;
+
+
+
+>  /**
+> @@ -427,13 +406,13 @@ static int sca3000_print_rev(struct iio_dev *indio_dev)
+>  	struct sca3000_state *st = iio_priv(indio_dev);
+>  
+>  	mutex_lock(&st->lock);
+> -	ret = sca3000_read_data_short(st, SCA3000_REG_REVID_ADDR, 1);
+> +	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_REVID_ADDR));
+>  	if (ret < 0)
+>  		goto error_ret;
+>  	dev_info(&indio_dev->dev,
+>  		 "sca3000 revision major=%lu, minor=%lu\n",
+> -		 st->rx[0] & SCA3000_REG_REVID_MAJOR_MASK,
+> -		 st->rx[0] & SCA3000_REG_REVID_MINOR_MASK);
+> +		 ret & SCA3000_REG_REVID_MAJOR_MASK,
+> +		 ret & SCA3000_REG_REVID_MINOR_MASK);
+Hmm. doesn't belong in this patch but it is rather odd to not see
+a shift on one of these.
+
+Hmm. Time to miss quote whoever it was who said:
+
+"kernel development is like a murder mystery where you try to solve
+ the crime only to realize you were the murderer."
+
+Below I mention using FIELD_GET() in appropriate places as a possible additional
+cleanup.  Fix this up when you do that (and note it in the patch description for
+that patch).
+
+>  error_ret:
+>  	mutex_unlock(&st->lock);
+>  
+> @@ -570,7 +549,7 @@ static inline int __sca3000_get_base_freq(struct sca3000_state *st,
+>  {
+>  	int ret;
+>  
+> -	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
+> +	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -660,13 +639,13 @@ static int sca3000_read_3db_freq(struct sca3000_state *st, int *val)
+>  {
+>  	int ret;
+>  
+> -	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
+> +	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+>  	if (ret)
+>  		return ret;
+>  
+>  	/* mask bottom 2 bits - only ones that are relevant */
+> -	st->rx[0] &= SCA3000_REG_MODE_MODE_MASK;
+> -	switch (st->rx[0]) {
+> +	ret &= SCA3000_REG_MODE_MODE_MASK;
+> +	switch (ret) {
+See discussion below.  This can be simplified as
+	switch (reg & SCA3000_REG_MODE_MASK)
+avoiding the modified 'ret' value in place comment.
+
+This one I'll tweak as it is easy to avoid the ugly pattern.
+
+>  	case SCA3000_REG_MODE_MEAS_MODE_NORMAL:
+>  		*val = st->info->measurement_mode_3db_freq;
+>  		return IIO_VAL_INT;
+> @@ -698,14 +677,14 @@ static int sca3000_write_3db_freq(struct sca3000_state *st, int val)
+>  		mode = SCA3000_REG_MODE_MEAS_MODE_OP_2;
+>  	else
+>  		return -EINVAL;
+> -	ret = sca3000_read_data_short(st, SCA3000_REG_MODE_ADDR, 1);
+> +	ret = spi_w8r8(st->us, SCA3000_READ_REG(SCA3000_REG_MODE_ADDR));
+>  	if (ret)
+>  		return ret;
+>  
+> -	st->rx[0] &= ~SCA3000_REG_MODE_MODE_MASK;
+> -	st->rx[0] |= (mode & SCA3000_REG_MODE_MODE_MASK);
+> +	ret &= ~SCA3000_REG_MODE_MODE_MASK;
+
+For a further potential cleanup it would be good to use FIELD_GET() and FIELD_PREP()
+in appropriate places in this driver. Do that into a separate local variable
+as using ret for all this is a little confusing as quite a bit of the time
+it's not a variable we are ever going to return.
+
+As a rule of thumb if we are modifying the ret only a little in a single reuse
+(i.e. masking out a bit in a parameter being passed to something else) then
+a local variable is probably overkill. If we are building up a new register
+value it is not really appropriate to do it into ret.
+
+I'm not asking for changes in this patch though as what you have here
+is the simplest and easiest to review change.  If you add those extra
+local variables as part of using FIELD_GET/ FIELD_PREP though that would
+be great.
+
+
+
+> +	ret |= mode & SCA3000_REG_MODE_MODE_MASK;
+>  
+> -	return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR, st->rx[0]);
+> +	return sca3000_write_reg(st, SCA3000_REG_MODE_ADDR, ret);
+>  }
+
+
+Subject: Re: [PATCH v6 1/4] iio: accel: sca3000: replace usages of internal
+ read data helpers by spi helpers
+
+On #################################### ################ <################>=
+ wrote:
+>
+> Hi. I made two related tweaks.  A few comments inline for further possibl=
+e cleanup.
+>
+> Applied to the togreg branch of iio.git and initially pushed out as testi=
+ng
+> for 0-day to take a look at it.
+>
+Thanks. Since there was a problem with my implementation, I'll send a
+new version along with your tweaks too.
+
+> >       if (ret < 0)
+> >               goto error_ret;
+> >       dev_info(&indio_dev->dev,
+> >                "sca3000 revision major=3D%lu, minor=3D%lu\n",
+> > -              st->rx[0] & SCA3000_REG_REVID_MAJOR_MASK,
+> > -              st->rx[0] & SCA3000_REG_REVID_MINOR_MASK);
+> > +              ret & SCA3000_REG_REVID_MAJOR_MASK,
+> > +              ret & SCA3000_REG_REVID_MINOR_MASK);
+> Hmm. doesn't belong in this patch but it is rather odd to not see
+> a shift on one of these.
+>
+> Hmm. Time to miss quote whoever it was who said:
+>
+> "kernel development is like a murder mystery where you try to solve
+>  the crime only to realize you were the murderer."
+>
+> Below I mention using FIELD_GET() in appropriate places as a possible add=
+itional
+> cleanup.  Fix this up when you do that (and note it in the patch descript=
+ion for
+> that patch).
+Ok! I'll do that.
+
+> >       /* mask bottom 2 bits - only ones that are relevant */
+> > -     st->rx[0] &=3D SCA3000_REG_MODE_MODE_MASK;
+> > -     switch (st->rx[0]) {
+> > +     ret &=3D SCA3000_REG_MODE_MODE_MASK;
+> > +     switch (ret) {
+> See discussion below.  This can be simplified as
+>         switch (reg & SCA3000_REG_MODE_MASK)
+> avoiding the modified 'ret' value in place comment.
+>
+> This one I'll tweak as it is easy to avoid the ugly pattern.
+>
+Nice! I'll pay attention to similar cases in the future.
+
+> >
+> > -     st->rx[0] &=3D ~SCA3000_REG_MODE_MODE_MASK;
+> > -     st->rx[0] |=3D (mode & SCA3000_REG_MODE_MODE_MASK);
+> > +     ret &=3D ~SCA3000_REG_MODE_MODE_MASK;
+>
+> For a further potential cleanup it would be good to use FIELD_GET() and F=
+IELD_PREP()
+> in appropriate places in this driver. Do that into a separate local varia=
+ble
+> as using ret for all this is a little confusing as quite a bit of the tim=
+e
+> it's not a variable we are ever going to return.
+>
+> As a rule of thumb if we are modifying the ret only a little in a single =
+reuse
+> (i.e. masking out a bit in a parameter being passed to something else) th=
+en
+> a local variable is probably overkill. If we are building up a new regist=
+er
+> value it is not really appropriate to do it into ret.
+>
+> I'm not asking for changes in this patch though as what you have here
+> is the simplest and easiest to review change.  If you add those extra
+> local variables as part of using FIELD_GET/ FIELD_PREP though that would
+> be great.
+
+That's great! I didn't know about FIELD_GET() and FIELD_PREP() before.
+This is really something that would be better in a separate patch, I
+could try to do that later.
+
+Thanks,
+######
+

@@ -1,0 +1,511 @@
+Subject: [PATCH v3] iio: light: apds9306: Refactor threshold get/set functions to use helper
+
+Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set
+functions to use a helper function (apds9306_get_thresh_reg) for obtaining the
+correct register based on the direction of the event. This improves code
+readability,minimize the number of lines  and maintains consistency
+in accessing threshold registers.
+
+Signed-off-by: ############### <##########################>
+Co-developed-by: ############# <##########################>
+Signed-off-by: ############# <##########################>
+---
+ drivers/iio/light/apds9306.c | 36 ++++++++++++++++++++----------------
+ 1 file changed, 20 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
+index 69a0d609c..9216d4974 100644
+--- a/drivers/iio/light/apds9306.c
++++ b/drivers/iio/light/apds9306.c
+@@ -744,20 +744,27 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
+ 	return regmap_field_write(rf->int_persist_val, val);
+ }
+ 
+-static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+-				     int *val)
++static int apds9306_get_thresh_reg(int dir)
+ {
+-	int var, ret;
+-	u8 buff[3];
+-
+ 	if (dir == IIO_EV_DIR_RISING)
+-		var = APDS9306_ALS_THRES_UP_0_REG;
++		return APDS9306_ALS_THRES_UP_0_REG;
+ 	else if (dir == IIO_EV_DIR_FALLING)
+-		var = APDS9306_ALS_THRES_LOW_0_REG;
++		return APDS9306_ALS_THRES_LOW_0_REG;
+ 	else
+ 		return -EINVAL;
++}
++
++static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
++				     int *val)
++{
++	int reg, ret;
++	u8 buff[3];
+ 
+-	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
++	reg = apds9306_get_thresh_reg(dir);
++	if (reg < 0)
++		return reg;
++
++	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+ static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
+ 				     int val)
+ {
+-	int var;
++	int reg;
+ 	u8 buff[3];
+ 
+-	if (dir == IIO_EV_DIR_RISING)
+-		var = APDS9306_ALS_THRES_UP_0_REG;
+-	else if (dir == IIO_EV_DIR_FALLING)
+-		var = APDS9306_ALS_THRES_LOW_0_REG;
+-	else
+-		return -EINVAL;
++	reg = apds9306_get_thresh_reg(dir);
++	if (reg < 0)
++		return reg;
+ 
+ 	if (!in_range(val, 0, APDS9306_ALS_THRES_VAL_MAX))
+ 		return -EINVAL;
+ 
+ 	put_unaligned_le24(val, buff);
+ 
+-	return regmap_bulk_write(data->regmap, var, buff, sizeof(buff));
++	return regmap_bulk_write(data->regmap, reg, buff, sizeof(buff));
+ }
+ 
+ static int apds9306_event_thresh_adaptive_get(struct apds9306_data *data, int *val)
+-- 
+2.34.1
+
+
+Subject: Re: [PATCH v3] iio: light: apds9306: Refactor threshold get/set
+ functions to use helper
+
+Hi ######, #####,
+
+> Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set
+> functions to use a helper function (apds9306_get_thresh_reg) for obtaining the
+> correct register based on the direction of the event. This improves code
+> readability,minimize the number of lines  and maintains consistency
+It actually adds four more lines to the driver file. Rephrase maybe.
+
+>   drivers/iio/light/apds9306.c | 36 ++++++++++++++++++++----------------
+>   1 file changed, 20 insertions(+), 16 deletions(-)
+20 additions and 16 deletions.
+   
+> @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+>   static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
+>   				     int val)
+>   {
+> -	int var;
+> +	int reg;
+I like the name changed from 'var' to reg', makes much more sense.
+>   	u8 buff[3];
+>
+There is always a balance/trade-off between modularity and execution speed.
+I agree with #######'s reply in the first patch and I also think that separate function for this does not add much value.
+
+Overall the patch looks good to me.
+
+With the above:
+Acked-by: ############## <#############################>
+
+Regards,
+##############
+
+Subject: Re: [PATCH v3] iio: light: apds9306: Refactor threshold get/set
+ functions to use helper
+
+Hi ########,
+
+Thanks for the feedback.
+
+I=E2=80=99ll send a new version with an updated commit message to better
+reflect the intent of the change, focusing on clarity and code
+consistency rather than line count reduction.
+
+Best regards,
+######
+
+<#############################> wrote:
+>
+> Hi ######, #####,
+>
+> > Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set
+> > functions to use a helper function (apds9306_get_thresh_reg) for obtain=
+ing the
+> > correct register based on the direction of the event. This improves cod=
+e
+> > readability,minimize the number of lines  and maintains consistency
+> It actually adds four more lines to the driver file. Rephrase maybe.
+>
+> >   drivers/iio/light/apds9306.c | 36 ++++++++++++++++++++---------------=
+-
+> >   1 file changed, 20 insertions(+), 16 deletions(-)
+> 20 additions and 16 deletions.
+>
+> > @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9=
+306_data *data, int dir,
+> >   static int apds9306_event_thresh_set(struct apds9306_data *data, int =
+dir,
+> >                                    int val)
+> >   {
+> > -     int var;
+> > +     int reg;
+> I like the name changed from 'var' to reg', makes much more sense.
+> >       u8 buff[3];
+> >
+> There is always a balance/trade-off between modularity and execution spee=
+d.
+> I agree with #######'s reply in the first patch and I also think that sep=
+arate function for this does not add much value.
+>
+> Overall the patch looks good to me.
+>
+> With the above:
+> Acked-by: ############## <#############################>
+>
+> Regards,
+> ##############
+
+Subject: [PATCH v3] iio: light: apds9306: Refactor threshold get/set functions to use helper
+
+From: ############### <##########################>
+
+Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set
+functions to use a helper function (apds9306_get_thresh_reg) for obtaining the
+correct register based on the direction of the event. This improves code
+readability and maintains consistency
+in accessing threshold registers.
+
+Signed-off-by: ############### <##########################>
+Co-developed-by: ############# <##########################>
+Signed-off-by: ############# <##########################>
+---
+ drivers/iio/light/apds9306.c | 36 ++++++++++++++++++++----------------
+ 1 file changed, 20 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
+index 69a0d609c..9216d4974 100644
+--- a/drivers/iio/light/apds9306.c
++++ b/drivers/iio/light/apds9306.c
+@@ -744,20 +744,27 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
+ 	return regmap_field_write(rf->int_persist_val, val);
+ }
+ 
+-static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+-				     int *val)
++static int apds9306_get_thresh_reg(int dir)
+ {
+-	int var, ret;
+-	u8 buff[3];
+-
+ 	if (dir == IIO_EV_DIR_RISING)
+-		var = APDS9306_ALS_THRES_UP_0_REG;
++		return APDS9306_ALS_THRES_UP_0_REG;
+ 	else if (dir == IIO_EV_DIR_FALLING)
+-		var = APDS9306_ALS_THRES_LOW_0_REG;
++		return APDS9306_ALS_THRES_LOW_0_REG;
+ 	else
+ 		return -EINVAL;
++}
++
++static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
++				     int *val)
++{
++	int reg, ret;
++	u8 buff[3];
+ 
+-	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
++	reg = apds9306_get_thresh_reg(dir);
++	if (reg < 0)
++		return reg;
++
++	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+ static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
+ 				     int val)
+ {
+-	int var;
++	int reg;
+ 	u8 buff[3];
+ 
+-	if (dir == IIO_EV_DIR_RISING)
+-		var = APDS9306_ALS_THRES_UP_0_REG;
+-	else if (dir == IIO_EV_DIR_FALLING)
+-		var = APDS9306_ALS_THRES_LOW_0_REG;
+-	else
+-		return -EINVAL;
++	reg = apds9306_get_thresh_reg(dir);
++	if (reg < 0)
++		return reg;
+ 
+ 	if (!in_range(val, 0, APDS9306_ALS_THRES_VAL_MAX))
+ 		return -EINVAL;
+ 
+ 	put_unaligned_le24(val, buff);
+ 
+-	return regmap_bulk_write(data->regmap, var, buff, sizeof(buff));
++	return regmap_bulk_write(data->regmap, reg, buff, sizeof(buff));
+ }
+ 
+ static int apds9306_event_thresh_adaptive_get(struct apds9306_data *data, int *val)
+-- 
+2.34.1
+
+
+Subject: Re: [PATCH v3] iio: light: apds9306: Refactor threshold get/set
+ functions to use helper
+
+###### <##########################> wrote:
+
+> From: ############### <##########################>
+> 
+> Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set
+> functions to use a helper function (apds9306_get_thresh_reg) for obtaining the
+> correct register based on the direction of the event. This improves code
+> readability and maintains consistency
+> in accessing threshold registers.
+> 
+> Signed-off-by: ############### <##########################>
+> Co-developed-by: ############# <##########################>
+> Signed-off-by: ############# <##########################>
+> ---
+Change log?
+
+Also this seems to be the second v3.
+
+>  drivers/iio/light/apds9306.c | 36 ++++++++++++++++++++----------------
+>  1 file changed, 20 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
+> index 69a0d609c..9216d4974 100644
+> --- a/drivers/iio/light/apds9306.c
+> +++ b/drivers/iio/light/apds9306.c
+> @@ -744,20 +744,27 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
+>  	return regmap_field_write(rf->int_persist_val, val);
+>  }
+>  
+> -static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+> -				     int *val)
+> +static int apds9306_get_thresh_reg(int dir)
+>  {
+> -	int var, ret;
+> -	u8 buff[3];
+> -
+>  	if (dir == IIO_EV_DIR_RISING)
+> -		var = APDS9306_ALS_THRES_UP_0_REG;
+> +		return APDS9306_ALS_THRES_UP_0_REG;
+>  	else if (dir == IIO_EV_DIR_FALLING)
+> -		var = APDS9306_ALS_THRES_LOW_0_REG;
+> +		return APDS9306_ALS_THRES_LOW_0_REG;
+>  	else
+>  		return -EINVAL;
+> +}
+> +
+> +static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+> +				     int *val)
+> +{
+> +	int reg, ret;
+> +	u8 buff[3];
+>  
+> -	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
+> +	reg = apds9306_get_thresh_reg(dir);
+> +	if (reg < 0)
+> +		return reg;
+> +
+> +	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
+>  static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
+>  				     int val)
+>  {
+> -	int var;
+> +	int reg;
+>  	u8 buff[3];
+>  
+> -	if (dir == IIO_EV_DIR_RISING)
+> -		var = APDS9306_ALS_THRES_UP_0_REG;
+> -	else if (dir == IIO_EV_DIR_FALLING)
+> -		var = APDS9306_ALS_THRES_LOW_0_REG;
+> -	else
+> -		return -EINVAL;
+> +	reg = apds9306_get_thresh_reg(dir);
+> +	if (reg < 0)
+> +		return reg;
+>  
+>  	if (!in_range(val, 0, APDS9306_ALS_THRES_VAL_MAX))
+>  		return -EINVAL;
+>  
+>  	put_unaligned_le24(val, buff);
+>  
+> -	return regmap_bulk_write(data->regmap, var, buff, sizeof(buff));
+> +	return regmap_bulk_write(data->regmap, reg, buff, sizeof(buff));
+>  }
+>  
+>  static int apds9306_event_thresh_adaptive_get(struct apds9306_data *data, int *val)
+
+
+Subject: Re: [PATCH v3] iio: light: apds9306: Refactor threshold get/set
+ functions to use helper
+
+Hello ######, #####,
+
+This version looks good to me.
+One minor thing below.
+
+On #####, ###### wrote:
+> From: ############### <##########################>
+> 
+> Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set
+> functions to use a helper function (apds9306_get_thresh_reg) for obtaining the
+nitpicking: commit message and description are wrapped to 75 columns.
+
+> correct register based on the direction of the event. This improves code
+> readability and maintains consistency
+I think part of the description from the line below could also fit into the line above.
+> in accessing threshold registers.
+> 
+> Signed-off-by: ############### <##########################>
+> Co-developed-by: ############# <##########################>
+> Signed-off-by: ############# <##########################>
+> ---
+Friendly reminder to add a change log below the --- if you send a v4 (or v5?).
+
+>  drivers/iio/light/apds9306.c | 36 ++++++++++++++++++++----------------
+>  1 file changed, 20 insertions(+), 16 deletions(-)
+> 
+
+Regards,
+#######
+
+Subject: Re: [PATCH v3] iio: light: apds9306: Refactor threshold get/set
+ functions to use helper
+
+Hi ########,
+
+I accidentally sent the v4 patch with the v3 description. Please
+kindly disregard this patch.
+
+I will send the corrected v4 shortly with the proper description.
+
+Thank you for your understanding.
+
+Best regards,
+###############
+
+On #################################### ################ <################>=
+ wrote:
+>
+> ###### <##########################> wrote:
+>
+> > From: ############### <##########################>
+> >
+> > Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set
+> > functions to use a helper function (apds9306_get_thresh_reg) for obtain=
+ing the
+> > correct register based on the direction of the event. This improves cod=
+e
+> > readability and maintains consistency
+> > in accessing threshold registers.
+> >
+> > Signed-off-by: ############### <##########################>
+> > Co-developed-by: ############# <##########################>
+> > Signed-off-by: ############# <##########################>
+> > ---
+> Change log?
+>
+> Also this seems to be the second v3.
+>
+> >  drivers/iio/light/apds9306.c | 36 ++++++++++++++++++++----------------
+> >  1 file changed, 20 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.=
+c
+> > index 69a0d609c..9216d4974 100644
+> > --- a/drivers/iio/light/apds9306.c
+> > +++ b/drivers/iio/light/apds9306.c
+> > @@ -744,20 +744,27 @@ static int apds9306_event_period_set(struct apds9=
+306_data *data, int val)
+> >       return regmap_field_write(rf->int_persist_val, val);
+> >  }
+> >
+> > -static int apds9306_event_thresh_get(struct apds9306_data *data, int d=
+ir,
+> > -                                  int *val)
+> > +static int apds9306_get_thresh_reg(int dir)
+> >  {
+> > -     int var, ret;
+> > -     u8 buff[3];
+> > -
+> >       if (dir =3D=3D IIO_EV_DIR_RISING)
+> > -             var =3D APDS9306_ALS_THRES_UP_0_REG;
+> > +             return APDS9306_ALS_THRES_UP_0_REG;
+> >       else if (dir =3D=3D IIO_EV_DIR_FALLING)
+> > -             var =3D APDS9306_ALS_THRES_LOW_0_REG;
+> > +             return APDS9306_ALS_THRES_LOW_0_REG;
+> >       else
+> >               return -EINVAL;
+> > +}
+> > +
+> > +static int apds9306_event_thresh_get(struct apds9306_data *data, int d=
+ir,
+> > +                                  int *val)
+> > +{
+> > +     int reg, ret;
+> > +     u8 buff[3];
+> >
+> > -     ret =3D regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
+> > +     reg =3D apds9306_get_thresh_reg(dir);
+> > +     if (reg < 0)
+> > +             return reg;
+> > +
+> > +     ret =3D regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+> >       if (ret)
+> >               return ret;
+> >
+> > @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9=
+306_data *data, int dir,
+> >  static int apds9306_event_thresh_set(struct apds9306_data *data, int d=
+ir,
+> >                                    int val)
+> >  {
+> > -     int var;
+> > +     int reg;
+> >       u8 buff[3];
+> >
+> > -     if (dir =3D=3D IIO_EV_DIR_RISING)
+> > -             var =3D APDS9306_ALS_THRES_UP_0_REG;
+> > -     else if (dir =3D=3D IIO_EV_DIR_FALLING)
+> > -             var =3D APDS9306_ALS_THRES_LOW_0_REG;
+> > -     else
+> > -             return -EINVAL;
+> > +     reg =3D apds9306_get_thresh_reg(dir);
+> > +     if (reg < 0)
+> > +             return reg;
+> >
+> >       if (!in_range(val, 0, APDS9306_ALS_THRES_VAL_MAX))
+> >               return -EINVAL;
+> >
+> >       put_unaligned_le24(val, buff);
+> >
+> > -     return regmap_bulk_write(data->regmap, var, buff, sizeof(buff));
+> > +     return regmap_bulk_write(data->regmap, reg, buff, sizeof(buff));
+> >  }
+> >
+> >  static int apds9306_event_thresh_adaptive_get(struct apds9306_data *da=
+ta, int *val)
+>
+

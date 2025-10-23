@@ -1,0 +1,124 @@
+Subject: [PATCH v2] iio: magnetometer: mmc35240: refactor volatile and writeable reg functions
+
+The two functions `mmc35240_is_volatile_reg()` and `mmc35240_is_writeable_reg()` implement exactly complementary logic.
+Refactor by having `mmc35240_is_volatile_reg()` simply return the logical negation of `mmc35240_is_writeable_reg()`.
+
+Signed-off-by: #################### <###################>
+Co-developed-by: ################### <#######################>
+Signed-off-by: ################### <#######################>
+---
+ drivers/iio/magnetometer/mmc35240.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetometer/mmc35240.c
+index 07f58567e521..80f023eaba9f 100644
+--- a/drivers/iio/magnetometer/mmc35240.c
++++ b/drivers/iio/magnetometer/mmc35240.c
+@@ -418,14 +418,16 @@ static const struct iio_info mmc35240_info = {
+ 	.attrs		= &mmc35240_attribute_group,
+ };
+ 
+-static bool mmc35240_reg_check(unsigned int reg)
+-{
+-	return reg == MMC35240_REG_CTRL0 || reg == MMC35240_REG_CTRL1;
+-}
+ 
+ static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int reg)
+ {
+-	return mmc35240_reg_check(reg);
++	switch (reg) {
++		case MMC35240_REG_CTRL0:
++		case MMC35240_REG_CTRL1:
++			return true;
++		default:
++    		return false;
++	}
+ }
+ 
+ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+@@ -447,7 +449,7 @@ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+ 
+ static bool mmc35240_is_volatile_reg(struct device *dev, unsigned int reg)
+ {
+-	return !mmc35240_reg_check(reg);
++	return !mmc35240_is_writeable_reg(dev, reg);
+ }
+ 
+ static const struct reg_default mmc35240_reg_defaults[] = {
+-- 
+2.43.0
+
+
+Subject: Re: [PATCH v2] iio: magnetometer: mmc35240: refactor volatile and
+ writeable reg functions
+
+Hi ######, #####,
+
+On 05/07, ################### wrote:
+> The two functions `mmc35240_is_volatile_reg()` and `mmc35240_is_writeable_reg()` implement exactly complementary logic.
+> Refactor by having `mmc35240_is_volatile_reg()` simply return the logical negation of `mmc35240_is_writeable_reg()`.
+
+Wrap commit title and description to 75 columns.
+
+> 
+> Signed-off-by: ################### <###################>
+> Co-developed-by: ################## <#######################>
+> Signed-off-by: ################## <#######################>
+> ---
+What were the changes since v1?
+It helps reviewers if a change log is provided in the covers letter and/or after
+the `---` of individual patches.
+
+>  drivers/iio/magnetometer/mmc35240.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetometer/mmc35240.c
+> index 07f58567e521..80f023eaba9f 100644
+> --- a/drivers/iio/magnetometer/mmc35240.c
+> +++ b/drivers/iio/magnetometer/mmc35240.c
+> @@ -418,14 +418,16 @@ static const struct iio_info mmc35240_info = {
+>  	.attrs		= &mmc35240_attribute_group,
+>  };
+>  
+> -static bool mmc35240_reg_check(unsigned int reg)
+> -{
+> -	return reg == MMC35240_REG_CTRL0 || reg == MMC35240_REG_CTRL1;
+> -}
+Hmm, I can't find mmc35240_reg_check() in drivers/iio/magnetometer/mmc35240.c.
+Was that part of an initial patch idea?
+
+>  
+>  static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int reg)
+>  {
+> -	return mmc35240_reg_check(reg);
+> +	switch (reg) {
+> +		case MMC35240_REG_CTRL0:
+> +		case MMC35240_REG_CTRL1:
+> +			return true;
+> +		default:
+> +    		return false;
+The line right above has spaces at the beginning. Use only 8 size tabs for
+indentation in the above case.
+By the way, the current mmc35240_is_writeable_reg() implementation in IIO testing
+branch seems to be doing what is proposed above.
+
+> +	}
+>  }
+>  
+>  static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+> @@ -447,7 +449,7 @@ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+>  
+>  static bool mmc35240_is_volatile_reg(struct device *dev, unsigned int reg)
+>  {
+> -	return !mmc35240_reg_check(reg);
+> +	return !mmc35240_is_writeable_reg(dev, reg);
+I guess what you wanted to do is to just make the volatile function return
+writeable_reg negated. Not the most wanted update but, if you do so, add a
+comment explaining why the volatile registers are the ones that are not
+writeable.
+
+>  }
+
+Regards,
+#######
+

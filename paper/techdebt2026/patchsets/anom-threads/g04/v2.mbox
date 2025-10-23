@@ -1,0 +1,267 @@
+Subject: [PATCH v2] iio: adc: ad7091r-base: Move reg volatility check to new macro
+
+Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
+same test, checking whether a given 'reg' code is
+AD7091R_REG_RESULT or AD7091R_REG_ALERT. While ad7091r_volatile_reg
+returned true, ad7091r_writeable_reg returned false for the same
+condition. As such, both functions introduced duplicate code.
+
+We chose to implement the test as the AD7091R_IS_READ_ONLY_REG
+macro to remove the duplicate code without introducing new
+function calls, which would be the case if we chose to fix the
+duplicate code with one of the two following alternatives:
+
+ A) Extracting a new function out of the test
+
+ B) Rewriting ad7091r_writeable_reg to call
+    ad7091r_volatile_reg or vice-versa.
+
+Co-developed-by: ############# <####################>
+Signed-off-by: ############# <####################>
+Co-developed-by: ############# <###############>
+Signed-off-by: ############# <###############>
+Signed-off-by: ############# <####################>
+---
+V1->V2: Renamed macro and added clarifying comment
+
+ drivers/iio/adc/ad7091r-base.c | 20 ++++++--------------
+ drivers/iio/adc/ad7091r-base.h |  2 ++
+ 2 files changed, 8 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/iio/adc/ad7091r-base.c b/drivers/iio/adc/ad7091r-base.c
+index 931ff71b2888..e07614b70d12 100644
+--- a/drivers/iio/adc/ad7091r-base.c
++++ b/drivers/iio/adc/ad7091r-base.c
+@@ -375,25 +375,17 @@ EXPORT_SYMBOL_NS_GPL(ad7091r_probe, "IIO_AD7091R");
+ 
+ bool ad7091r_writeable_reg(struct device *dev, unsigned int reg)
+ {
+-	switch (reg) {
+-	case AD7091R_REG_RESULT:
+-	case AD7091R_REG_ALERT:
+-		return false;
+-	default:
+-		return true;
+-	}
++	return !AD7091R_IS_READ_ONLY_REG(reg);
+ }
+ EXPORT_SYMBOL_NS_GPL(ad7091r_writeable_reg, "IIO_AD7091R");
+ 
+ bool ad7091r_volatile_reg(struct device *dev, unsigned int reg)
+ {
+-	switch (reg) {
+-	case AD7091R_REG_RESULT:
+-	case AD7091R_REG_ALERT:
+-		return true;
+-	default:
+-		return false;
+-	}
++	/*
++	 * The volatile ad7091r registers happen to be precisely the
++	 * two read-only registers.
++	 */
++	return AD7091R_IS_READ_ONLY_REG(reg);
+ }
+ EXPORT_SYMBOL_NS_GPL(ad7091r_volatile_reg, "IIO_AD7091R");
+ 
+diff --git a/drivers/iio/adc/ad7091r-base.h b/drivers/iio/adc/ad7091r-base.h
+index 092ddea0f395..498923801ce1 100644
+--- a/drivers/iio/adc/ad7091r-base.h
++++ b/drivers/iio/adc/ad7091r-base.h
+@@ -17,6 +17,8 @@
+ #define AD7091R_REG_CH_LOW_LIMIT(ch) ((ch) * 3 + 4)
+ #define AD7091R_REG_CH_HIGH_LIMIT(ch) ((ch) * 3 + 5)
+ #define AD7091R_REG_CH_HYSTERESIS(ch) ((ch) * 3 + 6)
++#define AD7091R_IS_READ_ONLY_REG(reg)                              \
++		((reg) == AD7091R_REG_RESULT || (reg) == AD7091R_REG_ALERT)
+ 
+ /* AD7091R_REG_RESULT */
+ #define AD7091R5_REG_RESULT_CH_ID(x)	    (((x) >> 13) & 0x3)
+-- 
+2.25.1
+
+
+Subject: Re: [PATCH v2] iio: adc: ad7091r-base: Move reg volatility check to
+ new macro
+
+############# <####################> wrote:
+
+> Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
+> same test, checking whether a given 'reg' code is
+> AD7091R_REG_RESULT or AD7091R_REG_ALERT. While ad7091r_volatile_reg
+> returned true, ad7091r_writeable_reg returned false for the same
+> condition. As such, both functions introduced duplicate code.
+> 
+> We chose to implement the test as the AD7091R_IS_READ_ONLY_REG
+> macro to remove the duplicate code without introducing new
+> function calls, which would be the case if we chose to fix the
+> duplicate code with one of the two following alternatives:
+> 
+>  A) Extracting a new function out of the test
+> 
+>  B) Rewriting ad7091r_writeable_reg to call
+>     ad7091r_volatile_reg or vice-versa.
+> 
+> Co-developed-by: ############# <####################>
+> Signed-off-by: ############# <####################>
+> Co-developed-by: ############# <###############>
+> Signed-off-by: ############# <###############>
+> Signed-off-by: ############# <####################>
+
+I'm late to the game but to me, simpler to not have a macro but avoid
+duplication by having one function call the other. Also a more
+minimal comment can convey the point you want to make.
+
+> ---
+> V1->V2: Renamed macro and added clarifying comment
+> 
+>  drivers/iio/adc/ad7091r-base.c | 20 ++++++--------------
+>  drivers/iio/adc/ad7091r-base.h |  2 ++
+>  2 files changed, 8 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ad7091r-base.c b/drivers/iio/adc/ad7091r-base.c
+> index 931ff71b2888..e07614b70d12 100644
+> --- a/drivers/iio/adc/ad7091r-base.c
+> +++ b/drivers/iio/adc/ad7091r-base.c
+> @@ -375,25 +375,17 @@ EXPORT_SYMBOL_NS_GPL(ad7091r_probe, "IIO_AD7091R");
+>  
+>  bool ad7091r_writeable_reg(struct device *dev, unsigned int reg)
+>  {
+> -	switch (reg) {
+> -	case AD7091R_REG_RESULT:
+> -	case AD7091R_REG_ALERT:
+> -		return false;
+> -	default:
+> -		return true;
+> -	}
+> +	return !AD7091R_IS_READ_ONLY_REG(reg);
+>  }
+
+I'd keep this function as is...
+
+>  EXPORT_SYMBOL_NS_GPL(ad7091r_writeable_reg, "IIO_AD7091R");
+>  
+>  bool ad7091r_volatile_reg(struct device *dev, unsigned int reg)
+>  {
+> -	switch (reg) {
+> -	case AD7091R_REG_RESULT:
+> -	case AD7091R_REG_ALERT:
+> -		return true;
+> -	default:
+> -		return false;
+> -	}
+> +	/*
+> +	 * The volatile ad7091r registers happen to be precisely the
+> +	 * two read-only registers.
+> +	 */
+> +	return AD7091R_IS_READ_ONLY_REG(reg);
+
+	 /* The volatile ad7091r registers are also the only RO ones. */
+	return !ad7981r_writeable_reg(dev, reg);
+
+>  }
+>  EXPORT_SYMBOL_NS_GPL(ad7091r_volatile_reg, "IIO_AD7091R");
+>  
+> diff --git a/drivers/iio/adc/ad7091r-base.h b/drivers/iio/adc/ad7091r-base.h
+> index 092ddea0f395..498923801ce1 100644
+> --- a/drivers/iio/adc/ad7091r-base.h
+> +++ b/drivers/iio/adc/ad7091r-base.h
+> @@ -17,6 +17,8 @@
+>  #define AD7091R_REG_CH_LOW_LIMIT(ch) ((ch) * 3 + 4)
+>  #define AD7091R_REG_CH_HIGH_LIMIT(ch) ((ch) * 3 + 5)
+>  #define AD7091R_REG_CH_HYSTERESIS(ch) ((ch) * 3 + 6)
+> +#define AD7091R_IS_READ_ONLY_REG(reg)                              \
+> +		((reg) == AD7091R_REG_RESULT || (reg) == AD7091R_REG_ALERT)
+>  
+>  /* AD7091R_REG_RESULT */
+>  #define AD7091R5_REG_RESULT_CH_ID(x)	    (((x) >> 13) & 0x3)
+
+
+Subject: Re: [PATCH v2] iio: adc: ad7091r-base: Move reg volatility check to
+ new macro
+
+Thanks for the comment, ########.
+
+################ <################> wrote:
+> I'm late to the game but to me, simpler to not have a macro but avoid
+> duplication by having one function call the other. Also a more
+> minimal comment can convey the point you want to make.
+>
+...
+>
+> ############# <####################> wrote:
+> >  EXPORT_SYMBOL_NS_GPL(ad7091r_writeable_reg, "IIO_AD7091R");
+> >
+> >  bool ad7091r_volatile_reg(struct device *dev, unsigned int reg)
+> >  {
+> > -     switch (reg) {
+> > -     case AD7091R_REG_RESULT:
+> > -     case AD7091R_REG_ALERT:
+> > -             return true;
+> > -     default:
+> > -             return false;
+> > -     }
+> > +     /*
+> > +      * The volatile ad7091r registers happen to be precisely the
+> > +      * two read-only registers.
+> > +      */
+> > +     return AD7091R_IS_READ_ONLY_REG(reg);
+>
+>          /* The volatile ad7091r registers are also the only RO ones. */
+>         return !ad7981r_writeable_reg(dev, reg);
+
+Perfect. Addressed your suggestion on v3:
+#################################################################################
+
+Subject: Re: [PATCH v2] iio: adc: ad7091r-base: Move reg volatility check to
+ new macro
+
+############# <####################> wrote:
+
+> Thanks for the comment, ########.
+> 
+> ################ <################> wrote:
+> > I'm late to the game but to me, simpler to not have a macro but avoid
+> > duplication by having one function call the other. Also a more
+> > minimal comment can convey the point you want to make.
+> >  
+> ...
+> >
+> > ############# <####################> wrote:  
+> > >  EXPORT_SYMBOL_NS_GPL(ad7091r_writeable_reg, "IIO_AD7091R");
+> > >
+> > >  bool ad7091r_volatile_reg(struct device *dev, unsigned int reg)
+> > >  {
+> > > -     switch (reg) {
+> > > -     case AD7091R_REG_RESULT:
+> > > -     case AD7091R_REG_ALERT:
+> > > -             return true;
+> > > -     default:
+> > > -             return false;
+> > > -     }
+> > > +     /*
+> > > +      * The volatile ad7091r registers happen to be precisely the
+> > > +      * two read-only registers.
+> > > +      */
+> > > +     return AD7091R_IS_READ_ONLY_REG(reg);  
+> >
+> >          /* The volatile ad7091r registers are also the only RO ones. */
+> >         return !ad7981r_writeable_reg(dev, reg);  
+> 
+> Perfect. Addressed your suggestion on v3:
+> #################################################################################
+
+I'm replying to a few people about this today.
+
+Don't bother replying to say you are taking a suggestion on board and
+sending a new version.  That information is implicit in the new version
+existing.
+
+It is noise on the list and slows things down a little.
+
+Thanks,
+
+########
+
+
+
