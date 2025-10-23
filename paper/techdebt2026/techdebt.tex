@@ -7,6 +7,16 @@
 \usepackage{seqsplit}
 \usepackage{todonotes}
 
+%% Takeaway Boxes %%
+\usepackage[most]{tcolorbox}
+\tcbset{colback=gray!10, colframe=gray!50!black, boxrule=0.5pt,
+        left=1mm, right=1mm, top=1mm, bottom=1mm, sharp corners}
+
+\newenvironment{takeaway}[1]{%
+  \begin{tcolorbox}
+  \textbf{#1:} \itshape}{\end{tcolorbox}}
+%% Takeaway Boxes %%
+
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
@@ -206,18 +216,18 @@ Regarding our analysis from the \textbf{participant-as-Observer} phase, Table~\r
 \textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Takeaway} & \textbf{Diff} \\
 \hline
 0 & AMD & ???\% & Accepted (v3) & T1 & +114/-520 \\ \hline
-1 & IIO & 100\% & Dropped (v2) & ? & +7/-14 \\ \hline
-2 & IIO & 100\% & Dropped (v1) & ? & +23/-27 \\ \hline
-3 & IIO & 100\% & Accepted (v1) & ? & +12/-30 \\ \hline
-4 & IIO & 100\% & Accepted (v3) & ? & +2/-7 \\ \hline
-5 & IIO & 90\% & Accepted (v1) & ? & +17/-70 \\ \hline
-6 & IIO & 90\% & Dropped (v1) & ? & +95/-92 \\ \hline
-7 & IIO & 90\% & Accepted (v3) & ? & +20/-36 \\ \hline
-8 & IIO & 90\% & Accepted (v4) & ? & +20/-16 \\ \hline
-9 & IIO & 90\% & Accepted (v6) & ? & +149/-243 \\ \hline
-10 & IIO & 90\% & Dropped (v1) & ? & +32/-58 \\ \hline
-11 & IIO & 100\% & Dropped (v1) & ? & +2/-12 \\ 
-   & AMD & 90\% & Accepted (v2) & ? & +90/-489 \\ \hline
+1 & IIO & 100\% & Dropped (v2) & T2, T3 & +7/-14 \\ \hline
+2 & IIO & 100\% & Dropped (v1) & T2 & +23/-27 \\ \hline
+3 & IIO & 100\% & Accepted (v1) & None & +12/-30 \\ \hline
+4 & IIO & 100\% & Accepted (v3) & T2 & +2/-7 \\ \hline
+5 & IIO & 90\% & Accepted (v1) & None & +17/-70 \\ \hline
+6 & IIO & 90\% & Dropped (v1) & T4 & +95/-92 \\ \hline
+7 & IIO & 90\% & Accepted (v3) & None & +20/-36 \\ \hline
+8 & IIO & 90\% & Accepted (v4) & T5 & +20/-16 \\ \hline
+9 & IIO & 90\% & Accepted (v6) & T5 & +149/-243 \\ \hline
+10 & IIO & 90\% & Dropped (v1) & T2, T5 & +32/-58 \\ \hline
+11 & IIO & 100\% & Dropped (v1) & None & +2/-12 \\
+   & AMD & 90\% & Accepted (v2) & None & +90/-489 \\ \hline
 
 \end{tabular}%
 
@@ -267,6 +277,90 @@ Finally, the AMD contribution from Group 11, which involves the complete use of 
     \item The AMD Display subsystem has a more centralized code structure and maintainer hierarchy, enabling contributors to tackle code duplications across a broader scope and multiple files, which happened to Group 11's contribution;
     \item The complete control over the process of finding code duplication gave Group 11 the opportunity to identify and reason better over the duplications found by our tool, enabling a more strategic approach to searching for promising patch possibilities. 
 \end{itemize}
+
+%TODO REMOVE ME!!! Essa seção é só para fazer o dump e ver como fica o tamanho.
+\section{Takeaways (temporary)}
+
+%TODO achar uma forma mais visual de colocar as aspas
+\noindent
+\begin{footnotesize}
+  \textit{
+    Quote: ``I think the old code is more readable than hiding the values in a macro
+    even if it is duplicating a few lines of code.''
+  }
+\end{footnotesize}
+
+\begin{takeaway}{Takeaway T2 (Readability)}
+  Maintainers notably prioritized readability over removing duplications in
+  many different contexts. In their view, going against the \textbf{DRY
+  principle} was worth it if it resulted in code that is easier to read and
+  understand.
+\end{takeaway}
+
+\noindent
+\begin{footnotesize}
+\textit{
+    Quote: ``[...] such patches might not worth it since the proposed
+    improvement is very small (and questionable) while the upstreaming process
+    still requires some effort.''
+  }
+\end{footnotesize}
+
+\begin{takeaway}{Takeaway T3 (Integration Overhead)}
+  A maintainer suggested that the effort put into the contribution after it was
+  accepted (i.e., the process of propagating the change to upper maintainers)
+  was considered. In other words, maintainers may \textbf{evaluate the
+  trade-off between the impact of contributions (not only deduplications) and
+  the struggle to integrate them into the complex Linux project}.
+\end{takeaway}
+
+\noindent
+\begin{footnotesize}
+\textit{
+    Quote: ``Wrapping this up doesn't provide any real advantage, requiring as
+    it does the reviewer to look at this function AND where the value is set
+    rather than seeing them in one place.''
+  }
+\end{footnotesize}
+
+%TODO Na citação abaixo, trazida pelo Arthur, pensar se não vale colocar as
+%referências base do paper do Lanza: ``Developers need to mentally reconstruct
+%the role and behavior of a class from scattered fragments of code [8],
+%presented as one page of text at a time. This process is cognitively demanding
+%[9], slow, and error-prone, especially in large systems with many
+%interdependent components [10].''
+%
+% Referências do paper do Lanza para esse trecho:
+%[8] M.-A. Storey, “Theories, methods and tools in program comprehension:
+%Past, present and future,” in Proceedings of IWPC 2005. IEEE, 2005,
+%pp. 181–191.
+%[9] J. Sillito, G. C. Murphy, and K. De Volder, “Questions programmers
+%ask during software evolution tasks,” in Proceedings FSE 2006. ACM,
+%2006, pp. 23––34.
+%[10] G. C. Murphy, D. Notkin, and K. Sullivan, “Software reflexion models:
+%Bridging the gap between source and high-level models,” in Proceedings
+%of FSE 1995. ACM, 1995, pp. 18–28.
+\begin{takeaway}{Takeaway T4 (Cognitive Load)}
+  Duplications that made it possible to read the code without needing to jump
+  to the function definition (to see its behavior) or the function call (to see
+  its concrete parameters) were justifiable to reduce cognitive load when
+  parsing through the code~\cite{skylines-cognitive-load}.
+\end{takeaway}
+
+\noindent
+\begin{footnotesize}
+\textit{
+    Quote: ``Note that is not an appropriate change for the large reads though
+    as \texttt{spi\_write\_then\_read()} bounces all buffers and so would add a
+    copy to those high(ish) performance paths.''
+  }
+\end{footnotesize}
+
+\begin{takeaway}{Takeaway T5 (Performance)}
+  Given the low-level development context of Linux and the IIO subsystem, which
+  is usually related to devices with limited resources, we detected hints that
+  duplication may be forgivable if it improves performance.
+\end{takeaway}
 
 \section{Concluding Remarks}
 
