@@ -12,7 +12,7 @@
 \tcbset{colback=gray!10, colframe=gray!50!black, boxrule=0.5pt,
         left=1mm, right=1mm, top=1mm, bottom=1mm, sharp corners}
 
-\newenvironment{takeaway}[1]{%
+\newenvironment{highlight-box}[1]{%
   \begin{tcolorbox}
   \textbf{#1:} \itshape}{\end{tcolorbox}}
 %% Takeaway Boxes %%
@@ -57,19 +57,24 @@ The vast scale and continuous evolution of the Linux kernel make its maintenance
 \section{Introduction}
 \label{sec:introduction}
 
-Coordinating hundreds or thousands of developers working on a software product is complex. Creating similar or even completely duplicated code is a frequent and often unavoidable outcome. Excessive duplication can negatively impact the maintainability of a project. When duplications occur, any change to a repeated code segment typically requires manual replication across all other copies. Developers must, therefore, remain constantly vigilant to synchronize different parts of the codebase, which is a highly error-prone and seemingly simple responsibility. With many duplications, modifications become slow, complex, and fragile. Removing or refactoring duplicated code demands great care to preserve the original behavior. Even minor mistakes can introduce subtle state changes that may lead to serious problems in the future.
+Hundreds or thousands of developers working together on a software product is a complex and demanding task. Similar or even exact copies are a frequent and often unavoidable outcome. Excessive duplication can negatively impact the maintainability of a project, as, when it occurs, any change to a repeated code segment (to fix a bug, for instance) requires replication across all other copies. Developers must, therefore, remain constantly vigilant to synchronize different parts of the codebase, which is a highly error-prone yet seemingly simple responsibility. Regarded as a major source of technical debt, removing or refactoring duplicated code demands great care to preserve the original behavior, with minor mistakes possibly leading to serious problems in the future.
 
-The Linux kernel is a foundational Free/Libre and Open Source Software (FLOSS) project, a vital component of the world's digital infrastructure. Its maintenance is a massive undertaking, encompassing over 28 million lines of code and involving contributions from over twenty thousand developers. Within this context, code duplication remains a significant challenge,  reducing the code readability and increasing the risk of introducing bugs~\cite{harmone,harmtwo}. This issue is particularly prominent in kernel device drivers, which account for over 66\% of the Linux kernel source code.
+A widespread dogma among developers is the \textit{Don't Repeat Yourself} principle~\cite{pragmatic-programmer}, stated as follows.
 
-%TODO: temos que citar o conceito de DRY aqui ... (Book: Pragmatic Programmer, The: From Journeyman to Master)
-% We feel that the only way to develop software reliably, and to make our developments easier to understand and maintain, is to follow what we call the DRY principle: Every piece of knowledge must have a single, unambiguous, authoritative representation within a system.
+\begin{highlight-box}{DRY principle}
+  ``We feel that the only way to develop software reliably, and to make our
+  developments easier to understand and maintain, is to follow what we call the
+  DRY principle: Every piece of knowledge must have a single, unambiguous,
+  authoritative representation within a system''.
+\end{highlight-box}
+
+The Linux kernel is a foundational Free/Libre and Open Source Software (FLOSS) project, a vital component of the world's digital infrastructure. Considering only lines of code (no comments or blank lines) of strictly programming languages, in version 6.17, the main repository has more than 27 million lines of code and involved contributions from over twenty thousand developers. Within this context, code duplication remains a significant challenge,  reducing the code readability and increasing the risk of introducing bugs~\cite{harmone,harmtwo}. This issue is particularly prominent in kernel device drivers, which account for over 66\% of the Linux kernel source code.
+
 The detection of code duplication, or \textit{code clones}, has been a research topic for decades~\cite{firstman}. The literature offers a widely accepted taxonomy that classifies clones into four types based on their similarity, from exact copies (Type-1) to semantically equivalent but syntactically different fragments (Type-4)~\cite{litreview}. Several detection techniques have emerged, including textual, token-based, tree-based, and graph-based approaches~\cite{litreview}. These efforts have culminated in state-of-the-art techniques, such as the graph-based approach proposed by Liu et al.~\cite{tailor}.
 
-To address the code duplication issue, we developed a command-line tool designed to support Linux kernel maintenance by detecting and analyzing function-level duplications. This paper presents a multimethod ethnographic study to validate the tool capabilities in identifying duplications and supporting contributions to the Linux kernel by mitigating redundant code. Therefore, the study investigates how the Linux kernel community perceives the code quality related to code clones. Our findings indicate that maintainers consider not only duplication but also factors such as readability and appropriate levels of abstraction regarding code maintainability.
+To address code duplication in the Linux kernel, we developed a command-line tool capable of detecting and analyzing function-level duplications. We conducted a multimethod ethnographic study to test the tool capabilities by identifying duplications and submitting contributions, directly or indirectly, to the Linux kernel, removing the redundant code. Through interactions with maintainers, this study gained insights into how the Linux community perceives the code quality related to code clones. Contrary to the DRY principle, our findings indicate that, in some contexts, maintainers can tolerate duplications for better readability, performance increases, or even to avoid integration overhead.\looseness=-1
 
-Ethnography is a well-established qualitative research method used to understand people, their cultures, and their work practices~\cite{bookethno}. It enables researchers to gain insights into values, beliefs, and practices from the perspective of community members~\cite{ethnosoft}.  
-In this study, we first adopted a complete participant observation approach, where the main author actively engaged in mitigating code duplications while documenting the process and outcomes. Later, we conducted a partipant-as-observer study involving students tasked with resolving duplications identified by the tool. These combined studies showed that our tool can collaborate to reduce the entry barrier for new contributors. The student groups (and we) used the tool to guide their initial contributions to the Linux kernel.
-
+Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members’ values, beliefs, and practices~\cite{ethnosoft}. In this study, we first employed a complete participant observation approach, actively contributing by performing deduplications while documenting the process. We then conducted a participant-as-observer study with students resolving duplications identified by the tool. Beyond demonstrating that our tool lowered the entry barrier for new contributors, these studies yielded intriguing observations on kernel deduplications. This paper describes the aforementioned studies, along with our visions and reflections from diving into the development process.
 
 \section{The Linux Kernel}
 
@@ -286,12 +291,12 @@ Finally, the AMD contribution from Group 11, which involves the complete use of 
   }
 \end{footnotesize}
 
-\begin{takeaway}{Takeaway T2 (Readability)}
+\begin{highlight-box}{Takeaway T2 (Readability)}
   Maintainers notably prioritized readability over removing duplications in
   many different contexts. In their view, going against the \textbf{DRY
   principle} was worth it if it resulted in code that is easier to read and
   understand.
-\end{takeaway}
+\end{highlight-box}
 
 \noindent
 \begin{footnotesize}
@@ -302,13 +307,13 @@ Finally, the AMD contribution from Group 11, which involves the complete use of 
   }
 \end{footnotesize}
 
-\begin{takeaway}{Takeaway T3 (Integration Overhead)}
+\begin{highlight-box}{Takeaway T3 (Integration Overhead)}
   A maintainer suggested that the effort put into the contribution after it was
   accepted (i.e., the process of propagating the change to upper maintainers)
   was considered. In other words, maintainers may \textbf{evaluate the
   trade-off between the impact of contributions (not only deduplications) and
   the struggle to integrate them into the complex Linux project}.
-\end{takeaway}
+\end{highlight-box}
 
 \noindent
 \begin{footnotesize}
@@ -336,12 +341,12 @@ Finally, the AMD contribution from Group 11, which involves the complete use of 
 %[10] G. C. Murphy, D. Notkin, and K. Sullivan, “Software reflexion models:
 %Bridging the gap between source and high-level models,” in Proceedings
 %of FSE 1995. ACM, 1995, pp. 18–28.
-\begin{takeaway}{Takeaway T4 (Cognitive Load)}
+\begin{highlight-box}{Takeaway T4 (Cognitive Load)}
   Duplications that made it possible to read the code without needing to jump
   to the function definition (to see its behavior) or the function call (to see
   its concrete parameters) were justifiable to reduce cognitive load when
   parsing through the code~\cite{skylines-cognitive-load}.
-\end{takeaway}
+\end{highlight-box}
 
 \noindent
 \begin{footnotesize}
@@ -352,11 +357,11 @@ Finally, the AMD contribution from Group 11, which involves the complete use of 
   }
 \end{footnotesize}
 
-\begin{takeaway}{Takeaway T5 (Performance)}
+\begin{highlight-box}{Takeaway T5 (Performance)}
   Given the low-level development context of Linux and the IIO subsystem, which
   is usually related to devices with limited resources, we detected hints that
   duplication may be forgivable if it improves performance.
-\end{takeaway}
+\end{highlight-box}
 
 \section{Concluding Remarks}
 
