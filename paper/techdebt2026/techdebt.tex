@@ -234,10 +234,7 @@ Regarding our analysis from the \textbf{participant-as-Observer} phase, Table~\r
 \label{tab:stu}
 \end{table}
 
-Regarding to refactor methods ....
-
-%TODO: nao descrever e discutir mais as estrategias de refatoracao por patch ...
-Seven groups applied the parameterized refactor method, two groups used the extractor method, and one group applied the inline method to their approaches to mitigate their duplications. Four patches do not contain a refactoring technique defined in the literature (undefined). Six groups had their patches accepted and fully merged into Linux; four groups had their patches dropped; one group has its patchset partially applied and is still working on patch submission, currently in the sixth version of the patch when this document was written, but we can also consider this case as accepted.
+We observed that most groups applied the parameterized refactor method while a few used the extractor method.
 
 Groups 1 and 4 have worked in similar duplications, where two functions are involved: one to determine if a register is volatile and the other to determine if it is writable. These are two functions that return opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Group 2 used macros. After feedback from maintainers, both solutions converged to keep one of the functions while changing the content of the other to return a negated query of the former function. However, by the end of the feedback cycle, maintainers considered the patch from Group 1 irrelevant, while the patch from Group 4 was accepted. The reason is that Group 1 has chosen to apply the refactoring to a device that contains a register that is both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
 
