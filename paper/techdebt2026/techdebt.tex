@@ -308,17 +308,22 @@ We derived the following takeaways from \textbf{participant-as-observer observat
 
 \section{Concluding Remarks}
 
-The ethnographic studies, which included participant observation and experimentation with students, offered a realistic perspective on the opportunities and significant challenges in mitigating code duplications found by our tool. The tool was effectively used by first-time contributors to the Linux kernel to identify duplications and submit patches.
-%TODO: disponibilizar artefato da mesma forma que mandamos para a ICSE Education Track~\footnote{To avoid violating the double-anonymized review process, we will add the tool repository, patches, and artifact links in the final camera-ready version of the paper, if it is accepted for publication.}
+Ethnographic studies, including full participant and participant-as-observer observations, provided a realistic view of the opportunities and challenges in removing code duplications detected by our tool. First-time Linux kernel contributors could effectively use the tool to identify duplications and submit patches.
 
-While this research included 1 successfully merged patch by the main author, and 7 out of 11 student groups had their patches accepted and merged into Linux, a portion of the students' efforts encountered hurdles: 4 student groups had their patches rejected.
-%TODO: avaliar se não estamos sendo muito negativos ao destacar aqui as 4 rejeições.
-Despite reducing duplication, these difficulties often stemmed from maintainer feedback, where proposed changes were rejected or required substantial rework. This was often due to concerns about code readability, added abstraction, or the specific context of the code. Technical complexities, such as using C macros in configuration files, also contributed to the challenges. Additionally, lengthy patch review times further compounded these difficulties.
+While this research included one successfully merged patch by the authors, and 7 out of 12 patches sent by students were accepted and merged into Linux, a portion of the students' efforts encountered hurdles: 4 student groups had their patches rejected.
 
-Furthermore, the studies indicated that maintainers may not always view code duplication as inherently unfavorable, especially when it might improve clarity or facilitate independent hardware support (in the IIO subsystem matter). This suggests a nuanced understanding of code quality within the Linux kernel community, where practicality and maintainability in specific contexts can sometimes outweigh the general principle of eliminating all code duplication.
+Nevertheless, our work suggests that maintainers do not always view code duplication as inherently unfavorable, especially when it improves clarity, performance, and more. This suggests a nuanced understanding of code quality within the Linux kernel community that can go against the DRY principle, where practicality and maintainability in specific contexts sometimes outweigh the general principle of eliminating all code duplication.
 
+%TODO ADICIONADO APENAS PARA FECHAR 5 PGS CERTINHO. ME REMOVA!!!
+\hfill\\
 
-%\section*{Acknowledgments}
+\section*{Replication Package}
+
+All anonymized threads containing the entire review process and interactions with maintainers are available in this Zenodo repository: \href{https://doi.org/10.5281/zenodo.17432193}{https://doi.org/10.5281/zenodo.17432193}.
+
+%TODO ADD ANONYMIZED ARKANJO REPO
+
+To avoid violating the double-anonymized review process, we will add the tool repository, artifact links, and omitted references in the final camera-ready version of the paper if it is accepted for publication.
 
 
 \bibliographystyle{IEEEtran}
