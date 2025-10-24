@@ -116,14 +116,13 @@ We compared our tool against the BigCloneBench dataset~\cite{bigclonebench}. Thi
 
 To investigate whether we can use our tool to find ways to contribute to the Linux kernel, we conducted a complete participant observation experiment, where we acted as first-time contributors to the AMD Display driver, collecting artifacts of our experience in the process.
 
-In the AMD Display driver codebase, we executed our tool. We manually analyzed the biggest duplications regarding the number of lines and found two duplicated function pairs that we judged interesting to try to mitigate. We have chosen to approach the biggest duplications as proof of concept so that we can make significant impacts. 
+In the AMD Display driver codebase, we executed our tool. We manually analyzed the biggest duplications regarding the number of lines and found one duplicated function pairs that we judged interesting to try to reduce the duplication. We have chosen to approach the biggest duplications as proof of concept so that we can make significant impacts. 
 
-Given the two duplicated function pairs, we observed that the files in the functions 
+Given the duplicated function pair, we observed that the files in the functions
 contain multiple other duplications. Thus, we proposed a simple systematic approach 
 to mitigate all the functions duplicated in the context, not just the duplicated 
 function pairs. 
-After we approached the duplications with the systematic strategy, for the duplicated 
-function pairs that had successfully mitigated the duplication, we sent patches to the 
+After we approached the duplications with the systematic strategy, we sent patch to the 
 AMD Display driver email list to validate the mitigations and see the maintainer's opinion 
 while documenting the process and our impressions.
 The systematic approach is defined below. 
@@ -174,26 +173,17 @@ The groups were requested to document their experiences and approaches to refact
 \section{Results}
 %TODO: ver como inicar melhor aqui ...
 
-In the \textbf{complete participant observation} study, we chose two function pair found on AMD Display Driver to approach and apply the systematic approach ...
+In the \textbf{complete participant observation} study, we chose one function pair found on AMD Display Driver to approach and apply the systematic approach.
 
 %TODO (Luan): nao terah mitigation 1 e 2, apenas a contribuicao enviada mesmo.
 
-Firt, we found that the duplicated function from mitigation 1
-exists in 10 code files, enclosing multiple GPU architectures. The duplicated 
-functions are not exactly equal, as some minimal specific logic is applied to each GPU architecture. To address this issue, we used the extract method to 
-break the function into smaller parts and the parameterized method to address 
-the specific logic for the GPUs.
-
 We reached a point where we had a scratch on how to mitigate the duplications found, but we could not complete the refactoring to a state capable of submitting as a patch to the driver. We found that the configuration files on the AMD Display driver are designed to be imported at compilation time using \textit{\#define} macros. The configuration files' design choice makes refactoring duplications on generic approaches trickier, as refactoring code that depends on these files requires significant refactoring of the configuration files' design and deep knowledge of the codebase, which we, as first-time contributors, do not have. Thus, we opted not to continue investigating this mitigation.
-
-Second, we found that the duplicated function from mitigation 2 exists in five code files, 
+We found that the duplicated function from the code redution exists in five code files, 
 and two other functions are duplicated in those five code files. All functions across the files were exactly equal, 
 so there was no need to apply the refactoring methods presented in the literature. 
 The refactoring was resumed to create a generic library and fix the compilation targets.
 
-The code files in the second mitigation do not depend on configuration files. Thus, 
-we did not face the same issues during the first mitigation. Refactoring the code 
-to mitigate duplications reached a point we judged was good enough to submit as a 
+Refactoring the code to reduce the duplications reached a point we judged was good enough to submit as a 
 patch to contribute to the AMD Display driver code quality. Thus, we moved to send 
 the refactoring to the driver maintainers as a patch, documenting our findings and experiences 
 on the process.
@@ -202,8 +192,16 @@ We submitted the initial patch: the maintainers only asked for minor changes to 
 %\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
 
 %TODO: deve ficar claro que isto aqui, mesmo que não dito explicitamente pelo mantenedores, é o resultado da Complete Participant Observation
-\noindent\textbf{Takeaway T1:} Some of the code in the driver is shared across all operating systems that support the implemented GPUs. This fact creates a complex process within AMD to format and submit changes across the supported systems while simultaneously implementing measures to mitigate errors. Additionally, \textbf{we comprehended that AMD Display driver developers can not view duplicated code negatively, as we understand it is a good practice in software engineering}. One example shared with us is that duplicated code enhances the independence of GPU driver code, allowing developers to make changes to a specific GPU without needing to test compatibility with others. This approach helps save a significant amount of time and effort.
-\todo[inline]{...Foi tirado apenas das conversas com o Siqueira; tem o paper que o Gregório citou que menciona que duplicações podem ser bem vistas em drivers; isto um resultado/conclusão da Complete Participant Observation; e vamos citar que confirmamos o que está no paper Cloning Considered Harmful (Luan, acha que consegue fechar essa parte assim?)}
+\noindent\textbf{Takeaway T1:}
+\textbf{We came to understand that AMD Display driver developers do not view duplicated code negatively, 
+which seems to contradict standard software engineering practices.} 
+In our attempt to understand the reason for the delay in the review process, 
+we contacted a maintainer. It was mentioned to us that one reason for the delay 
+is that duplicated code enhances the independence of GPU driver code. This allows 
+developers to make changes to a specific GPU without needing to test compatibility 
+with others, which helps save a significant amount of time and effort. This example of 
+hardware variations, also mentioned by Kapser and Godfrey~\cite{cloneharm}, 
+corroborates our understanding that driver developers do not view duplicated code negatively by default.
 
 %TODO: ver se transicao estah boa; ou se eh melhor ter subsecoes
 Regarding our analysis from the \textbf{participant-as-Observer} phase, Table~\ref{tab:stu} summarizes the student groups' mitigation approaches. It contains the information about the chosen subsystem (SS) and the similarity threshold for groups (SML) that opted for the first approach. Each entry also has the patch status, and code diff corresponding to the final patch versions before it was dropped or accepted into the code base. The code diff for a patchset corresponds to the sum of added and removed lines of each of its patches.
