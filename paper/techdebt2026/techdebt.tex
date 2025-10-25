@@ -47,7 +47,15 @@ Voices from the Trenches of Linux Kernel Maintainers on Code Duplication}
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
-The vast scale and continuous evolution of the Linux kernel make its maintenance a complex undertaking, where code duplication remains a persistent challenge that can hinder development and introduce bugs. This paper presents a multimethod ethnographic study investigating the socio-technical dynamics of contributing to the Linux kernel by reducing identified code duplication. To support this study, we developed a command-line utility tool for detecting function-level duplications, offering a concrete entry point for new contributors. Our ethnographic approach, including complete participant observation and participant-as-observer analyses, demonstrated that addressing duplications is viable for lowering the contribution barrier. This point is evidenced by 8 of 13 (62\%) accepted contributions (patches) from 24 newcomers (16 undergraduate and 8 graduate students) in the Linux kernel project, collectively removing 1.397 lines of duplicated code. Nevertheless, the study reveals a more intriguing and complex reality beyond mindlessly removing clones. An analysis of maintainer feedback on both accepted and rejected contributions highlights a nuanced understanding of technical debt due to code duplication within the Linux kernel community, where the benefits of eliminating duplications are carefully weighed against factors such as readability, the introduction of new abstractions, and the specific code context.
+The vast scale and continuous evolution of the Linux kernel make its maintenance a complex undertaking, where code duplication remains a persistent challenge that can hinder development and introduce bugs.
+%
+This paper presents a multimethod ethnographic study investigating the socio-technical dynamics of contributing to the Linux kernel by reducing identified code duplication.
+%
+To support this study, we developed a command-line utility tool for detecting function-level duplications, offering a concrete entry point for new contributors.
+%
+Our ethnographic approach, including complete participant observation and participant-as-observer analyses, demonstrated that addressing duplications is viable for lowering the contribution barrier. This point is evidenced by 8 of 13 (62\%) accepted contributions (patches) from 24 newcomers (16 undergraduate and 8 graduate students) in the Linux kernel project, collectively removing 1.397 lines of duplicated code.
+%
+Nevertheless, the study reveals a more intriguing and complex reality beyond mindlessly removing clones. An analysis of maintainer feedback on both accepted and rejected contributions highlights a nuanced understanding of technical debt due to code duplication within the Linux kernel community, where the benefits of eliminating duplications are carefully weighed against factors such as readability, the introduction of new abstractions, and the specific code context.
 \end{abstract}
 
 % no keywords
@@ -72,9 +80,12 @@ The Linux kernel is a foundational Free/Libre and Open Source Software (FLOSS) p
 
 The detection of code duplication, or \textit{code clones}, has been a research topic for decades~\cite{firstman}. The literature offers a widely accepted taxonomy that classifies clones into four types based on their similarity, from exact copies (Type-1) to semantically equivalent but syntactically different fragments (Type-4)~\cite{litreview}. Several detection techniques have emerged, including textual, token-based, tree-based, and graph-based approaches~\cite{litreview}. These efforts have culminated in state-of-the-art techniques, such as the graph-based approach proposed by Liu et al.~\cite{tailor}.
 
-To address code duplication in the Linux kernel, we developed a command-line tool capable of detecting and analyzing function-level duplications. We conducted a multimethod ethnographic study to test the tool capabilities by identifying duplications and submitting contributions, directly or indirectly, to the Linux kernel, removing the redundant code. Through interactions with maintainers, this study gained insights into how the Linux community perceives the code quality related to code clones. Contrary to the DRY principle, our findings indicate that, in some contexts, maintainers can tolerate duplications for better readability, performance increases, or even to avoid integration overhead.\looseness=-1
+To address code duplication in the Linux kernel, we developed a command-line tool capable of detecting and analyzing function-level duplications\footnote{The tool and its documentation will be referenced after the review process.}. We conducted a multimethod ethnographic study leveraging the tool capabilities to identify duplications and submit contributions, directly or indirectly, to the Linux kernel, aiming to remove redundant code.
+%
+Through interactions with maintainers, this study gained insights into how the Linux community perceives the code quality related to code clones. Contrary to the DRY principle, our findings indicate that, in some contexts, maintainers can tolerate duplications for better readability, performance increases, or even to avoid integration overhead.
+%\looseness=-1
 
-Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members’ values, beliefs, and practices~\cite{ethnosoft}. In this study, we first employed a complete participant observation approach, actively contributing by performing deduplications while documenting the process. We then conducted a participant-as-observer study with students resolving duplications identified by the tool. Beyond demonstrating that our tool lowered the entry barrier for new contributors, these studies yielded intriguing observations on kernel deduplications. This paper describes the aforementioned studies, along with our visions and reflections from diving into the development process.
+Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members' values, beliefs, and practices~\cite{ethnosoft}. In this study, we first employed a complete participant observation approach~\cite{gold1958roles}, actively contributing by performing deduplications while documenting the process. We then conducted a participant-as-observer study~\cite{gold1958roles} with students resolving duplications identified by the tool. Beyond demonstrating that the tool lowered the entry barrier for new contributors, these studies yielded intriguing observations on kernel Linux deduplications. This paper describes the aforementioned studies, along with our visions and reflections from diving into the development process.
 
 \section{The Linux Kernel}
 
@@ -84,43 +95,33 @@ This study focuses on two of these subsystems, selected to represent different c
 
 \section{Research Strategy}
 
-We employed a multi-method research approach. We developed and evaluated a proposed tool using a method from the literature~[X]. Given this validation, we proceeded to understand the viability of reducing duplications found by the tool with an ethnographic study using a participant observation methodology~\cite{}. In the first phase, we interacted with the Linux kernel community and got their feedback (\textit{complete participant observation}~\cite{}) through sending deduplication patches to the AMD Display driver. In the second phase, during a university course, we proposed a similar activity of sending patches to AMD Display or IIO to students. At the same time, we guided and mentored them throughout the process (\textit{participant-as-observer}~\cite{}).
-
-%Uniformizar este entendimento abaixo ao longo do texto:
-%Fase 1:Complete Participant
-%O pesquisador não estava observando outros desenvolvedores passarem pelo processo; ele se tornou o desenvolvedor. Ele se imergiu totalmente no papel de um contribuidor do kernel, enfrentando os mesmos desafios, normas sociais e barreiras técnicas que qualquer membro da comunidade enfrentaria.
-% O objetivo aqui é ganhar uma visão "êmica" (de dentro), entendendo a cultura e o processo por meio da experiência vivida. Isso é, por vezes, também chamado de autoetnografia. Ele não estava "fingindo", ele estava genuinamente tentando contribuir para entender as dores.
-
-%Fase 2: Participant-as-Observer
-%O papel do pesquisador (no caso pesquisadores) mudou fundamentalmente. Ele deixou de ser o ator principal (o contribuidor) e passou a ser o facilitador (mentor).
-%O foco dos dados coletados não é mais a autoexperiência do pesquisador, mas sim a experiência dos estudantes.
-%A participação ainda é alta (selecionar, direcionar, revisar), o que influencia ativamente o cenário. No entanto, a identidade principal perante os participantes (os estudantes) é a de pesquisador/mentor, e o objetivo é observar o processo deles.
+We employed a multi-method research approach. We developed and evaluated a proposed tool using a method from the literature~\cite{bigclonebench}. Given this validation, we proceeded to understand the viability of reducing duplications found by the tool with an ethnographic study using a participant observation methodology~\cite{gold1958roles}. In the first phase, we interacted with the Linux kernel community and got their feedback (\textit{complete participant observation}~\cite{gold1958roles}) through sending deduplication patches to the AMD Display driver. In the second phase, during a university course, we proposed a similar activity of sending patches to AMD Display or IIO to students. At the same time, we guided and mentored them throughout the process (\textit{participant-as-observer}~\cite{gold1958roles}).
 
 \subsection{Tool}
 
-Academic research on code duplication often focuses on pairwise comparison of code artifacts, which is not directly applicable to comprehensive codebase analyses. Other existing free software tools we explored in practice suffered from limited functionality~[X]. Thus, we developed a command-line tool~[X] designed to detect and analyze function-level code duplication within the Linux kernel to support our investigation. Released under the LGPL license, it employs a two-stage architecture that separates the computationally intensive task of finding duplicates from the process of querying the results. The first stage analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage uses this database to quickly retrieve information about the identified duplications.
+Academic research on code duplication often focuses on pairwise comparison of code artifacts, which is not directly applicable to comprehensive codebase analyses. Existing free software tools we explored in practice suffered from limited functionality~[omitted]. Thus, we developed a command-line tool\footnote{Anonymous repository:  \url{https://anonymous.4open.science/r/arkanjo-C548}} designed to detect and analyze function-level code duplication within large codebases, such as the Linux kernel. The tool is released under the LGPLv3 ( GNU Lesser General Public License, version 3) and employs a two-stage architecture that separates the computationally intensive task of finding duplicates from the process of querying the results. The first stage analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage uses this database to retrieve information about the identified duplications quickly.
 %The tool is available at \textit{\href{https://github.com/arkanjo-tool/arkanjo}{github.com/arkanjo-tool/arkanjo}}.
 
-Our tool is designed for the specific challenges of the kernel, with a focus on scalability to handle its size and prioritizing duplications that impact maintainability. The tool uses a text similarity method that applies TF-IDF vector embedding, implemented with the Gensim library~\cite{gensim}, and computes cosine distance similarity to detect clones. 
+The tool was designed to address the specific challenges posed by large-scale codebases, focusing on scalability and prioritization of duplications that may impact maintainability. It uses a text similarity method based on TF-IDF vector embedding, implemented with the Gensim library~\cite{gensim}, and computes cosine similarity to detect clones.
 
-We compared our tool against the BigCloneBench dataset~\cite{bigclonebench}. This validation showed that it can detect the majority of Type-1 and Type-2 duplications (100\% of Type-1 and 85\% of Type-2 with a cosine similarity threshold of 0.9)~[X], demonstrating sufficient accuracy for conducting our ethnographic studies.
+We compared our tool against the BigCloneBench dataset~\cite{bigclonebench}. This validation showed that the tool is capable of detecting the majority of Type-1 and Type-2 duplications (100\% of Type-1 and 85\% of Type-2 with a cosine similarity threshold of 0.9), demonstrating sufficient accuracy to support our ethnographic studies.
 
 \subsection{Complete Participant Observation Study}
 \label{sec:participant}
 
-To investigate whether we could use our tool to find ways to contribute to the Linux kernel, we conducted a complete participant observation experiment, where we acted as first-time contributors to the AMD Display driver, collecting artifacts of our experience in the process.
+To investigate whether we could use the tool to find ways to contribute to the Linux kernel, we conducted a complete participant observation experiment, where we acted as first-time contributors to the AMD Display driver, collecting artifacts of our experience in the process.
 
-We executed our tool in the AMD Display driver codebase. We manually analyzed the biggest duplications regarding the number of lines, finding one pair that we judged promising to try to deduplicate. We approached big duplications as proof of concept to gauge the tool's potential for enabling significant impacts.
+We executed the tool in the AMD Display driver codebase. We manually analyzed the biggest duplications regarding the number of lines, finding one pair that we judged promising to try to deduplicate. We approached big duplications as proof of concept to gauge the tool's potential for enabling significant impacts.
 
 Given the duplicated function pair, we observed that the files in the functions contained multiple other duplications. Thus, we proposed a simple systematic approach to mitigate all the functions duplicated in the context, not just the duplicated function pairs. After approaching the duplications with a systematic strategy, we sent a patch to the AMD development mailing list for the feedback of maintainers, while documenting the process, interactions, and impressions.
 
-In C programming, communication between source files is achieved by creating header files that specify libraries~\cite{Cbook}. Since the Linux kernel is primarily written in C, our systematic strategy consisted of eliminating code duplications through consolidating the duplicated code into a single library, which would replace instances of duplication across the codebase. For each duplicated function pair, for each function in the pair, we used our tool to locate all duplications of the function in the codebase, as it could have been duplicated more times than the two occurrences detected initially. This strategy resulted in a collection of duplicated functions and corresponding code files.
+In C programming, communication between source files is achieved by creating header files that specify libraries~\cite{Cbook}. Since the Linux kernel is primarily written in C, our systematic strategy consisted of eliminating code duplications through consolidating the duplicated code into a single library, which would replace instances of duplication across the codebase. For each duplicated function pair, for each function in the pair, we used the tool to locate all duplications of the function in the codebase, as it could have been duplicated more times than the two occurrences detected initially. This strategy resulted in a collection of duplicated functions and corresponding code files.
 
 To identify shared code more effectively, we extended this approach to search for other common functions across all collection files. We then applied specific refactoring methods to each shared function. If the functions were identical across files, we removed the duplicates and created a single function in the library. If modifications existed, we applied case-specific refactoring.
 
 \subsection{Participant-as-Observer Observation Study}
 
-A core dynamic of the university course where we conducted the participant-as-observer study was to have students make a practical contribution to a free software project. In the first semester of 2025, we identified an opportunity to leverage our tool within this pedagogical structure. As a contribution option, we proposed that students remove code duplications found in the Linux kernel as one possible way of contributing to a free software project.
+A core dynamic of the university course where we conducted the participant-as-observer study was to have students make a practical contribution to a free software project. In the first semester of 2025, we identified an opportunity to leverage the tool within this pedagogical structure. As a contribution option, we proposed that students remove code duplications found in the Linux kernel as one possible way of contributing to a free software project.
 
 The 2025 course offering had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of two or three members. To assist students in this task, we prepared multiple alternatives for contributing to free software projects, including simpler contributions such as updating documentation or fixing code style issues. In this context, two options related to removing duplications in the Linux kernel were offered.
 
@@ -134,9 +135,9 @@ In the first option, we ran the tool on the IIO subsystem, creating a list of du
 
 The students' task was to select a recommended entry from the list, refactor the code to eliminate these duplications, and then submit their patches to the IIO mailing list for the maintainers' review.
 
-For the second alternative, students were offered an experience similar to our initial complete participant observation. In this model, students were responsible for the entire workflow: executing our tool on the AMD Display drivers, independently analyzing the results to identify a potential deduplication, creating a patch with it, and sending the patch to the driver's maintainers.
+For the second alternative, students were offered an experience similar to our initial complete participant observation. In this model, students were responsible for the entire workflow: executing the tool on the AMD Display drivers, independently analyzing the results to identify a potential deduplication, creating a patch with it, and sending the patch to the driver's maintainers.
 
-Of the students who chose to work on our tool-related tasks, 23 (16 undergraduate and 7 graduate) formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative. Notably, none of these students had prior experience contributing to the Linux kernel, making this their first attempt to submit a patch as newcomers to the project.
+Of the students who chose to work on the tool-related tasks, 23 (16 undergraduate and 7 graduate) formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative. Notably, none of these students had prior experience contributing to the Linux kernel, making this their first attempt to submit a patch as newcomers to the project.
 
 Using blog posts, the groups documented their experiences and approaches to refactoring the duplications, as well as their experiences submitting a patch to the Linux kernel. We also analyzed these posts to understand the refactoring patterns used in deduplications, the experience of sending patches, and the opinions of subsystem maintainers on them.
 
@@ -205,13 +206,13 @@ Group 9 initially approached the selected duplication with a parameterized metho
 
 Group 11 was a single student who took the second option and executed the tool, completing the entire process of identifying duplications himself. The student identified a duplication in the driver that occurred across eighteen code files, creating a patch to remove approximately four hundred lines of duplicated code. The student sent the deduplications to the maintainers, and their feedback pointed to fixing warnings in the code without arguing about the merit of the duplication removals. After addressing the issue, the patch was applied. This student also contributed to IIO, tackling a code duplication with inline method refactoring. This one, however, was received with more skepticism by the maintainer, and the student dropped the contribution because he did not think the feedback instructions were clear enough.
 
-Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that people without previous experience in Linux kernel development could approach the duplications found by our tool as a comprehensive and more straightforward way to become contributors to the kernel. We observed that not all duplications are viewed as code of bad quality, with maintainers analyzing the trade-off between the purpose of the duplicated code and many other factors.
+Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that people without previous experience in Linux kernel development could approach the duplications found by the tool as a comprehensive and more straightforward way to become contributors to the kernel. We observed that not all duplications are viewed as code of bad quality, with maintainers analyzing the trade-off between the purpose of the duplicated code and many other factors.
 
 The eleven groups, which have submitted 11 contributions to the IIO subsystem, have collectively requested the insertion of 379 lines and the deletion of 605 lines in the subsystem, representing an average of 34.45 lines added and 55 lines removed per contribution.
 
 Considering the sum of fully merged contributions, we have a code diff value of +51/-143, with an average of +12.75/-35.75. This ratio is better than dropped contributions, which have a total of +179/-219 with an average of +29.83/-36.5.
 
-It is also possible to notice a difference based on the similarity threshold used to detect duplications. The proposed patches to address 100\%-similarity duplications summed up to +46/-90 (average of +9.2/-18). For a 90\% value, the result was a total of +333/-515 with an average of +55.5/-85.83. The 90\% value enabled our tool to identify less strict duplication cases, and, therefore, code segments with a greater extension, compared to the 100\% similarity entries, which were shorter segments, causing a difference in the average number of modified lines.
+It is also possible to notice a difference based on the similarity threshold used to detect duplications. The proposed patches to address 100\%-similarity duplications summed up to +46/-90 (average of +9.2/-18). For a 90\% value, the result was a total of +333/-515 with an average of +55.5/-85.83. The 90\% value enabled the tool to identify less strict duplication cases, and, therefore, code segments with a greater extension, compared to the 100\% similarity entries, which were shorter segments, causing a difference in the average number of modified lines.
 
 Finally, the AMD contribution from Group 11, which involved the complete use of our developed tool components, got a completely different outcome. With a total of 90 lines inserted and 489 lines removed, there are some points to be considered for the success and high modification extension of the contribution: (1) the AMD Display subsystem has some self-reported problems regarding overall technical debt; (2) the AMD Display subsystem has a more centralized code structure and maintainer hierarchy, enabling contributors to tackle code duplications across a broader scope and multiple files, which happened to Group 11's contribution;
 
@@ -308,7 +309,7 @@ We derived the following takeaways from \textbf{participant-as-observer observat
 
 \section{Concluding Remarks}
 
-Ethnographic studies, including full participant and participant-as-observer observations, provided a realistic view of the opportunities and challenges in removing code duplications detected by our tool. First-time Linux kernel contributors could effectively use the tool to identify duplications and submit patches.
+Ethnographic studies, including full participant and participant-as-observer observations, provided a realistic view of the opportunities and challenges in removing code duplications detected by the tool. First-time Linux kernel contributors could effectively use the tool to identify duplications and submit patches.
 
 While this research included one successfully merged patch by the authors, and 7 out of 12 patches sent by students were accepted and merged into Linux, a portion of the students' efforts encountered hurdles: 4 student groups had their patches rejected.
 
@@ -321,10 +322,7 @@ Nevertheless, our work suggests that maintainers do not always view code duplica
 
 All anonymized threads containing the entire review process and interactions with maintainers are available in this Zenodo repository: \href{https://doi.org/10.5281/zenodo.17432193}{https://doi.org/10.5281/zenodo.17432193}.
 
-%TODO ADD ANONYMIZED ARKANJO REPO
-
-To avoid violating the double-anonymized review process, we will add the tool repository, artifact links, and omitted references in the final camera-ready version of the paper if it is accepted for publication.
-
+To avoid violating the double-anonymized review process, the anonymous repository of the developed tool is available at \url{https://anonymous.4open.science/r/arkanjo-C548}. The tool website link and omitted references will be added in the camera-ready version of the paper.
 
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
