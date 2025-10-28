@@ -196,34 +196,7 @@ Regarding our analysis from the \textbf{participant-as-observer} phase, Table~\r
 
 We observed that most groups applied the parameterized refactor method while a few used the extractor method.
 
-Groups 1 and 4 worked on similar duplications, where two functions are involved: one to determine if a register was volatile and the other to determine if it was writable. These were two functions that returned opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Group 2 used macros. After feedback from maintainers, both solutions converged to keep one of the functions while changing the content of the other to return a negated query of the former function. However, by the end of the feedback cycle, maintainers considered the patch from Group 1 irrelevant, while the patch from Group 4 was accepted. The reason is that Group 1 chose to apply the refactoring to a device that contained a register that was both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
-
-Groups 3, 6, and 10 created a struct to encapsulate the parameters and remove the duplication by applying the parameterized method. The patches from Groups 6 and 10 were rejected by the same maintainer who approved the patch from Group 3. The maintainer's justification for rejecting the patch from Group 6 was that it proposed to fix a duplication while adding more lines than removing, and that it was not convincing enough in other aspects, such as readability. The reason for rejecting the patch from Group 10 was that they refactored code files with simple context; therefore, adding a layer of abstraction to remove duplication decreased code readability without clear gains in codebase quality. Interestingly, both rejected groups addressed duplications across initialization functions for different devices, where code readability was vulnerable to refactoring methods. In contrast, Group 3 tackled the duplication of a simple iterative algorithm, which also contained a bug that could be inferred by inspecting both functions. In this case, the group refactored code from a more critical technical debt and took the opportunity to fix an unnoticed incorrect behavior.
-
-Groups 7 and 8 used the extract method to approach the deduplications. Group 8 sent their patch to the maintainers, and the code changes were approved, with minor requested changes in code style and smaller errors fixed. In the case of Group 7, the maintainer initially rejected the proposed patch but suggested a new refactoring approach: applying the extraction method refactoring to the duplicated code to an existing helper function. After the feedback cycle, maintainers accepted the patch in version 3.
-
-Group 9 initially approached the selected duplication with a parameterized method, but after entering the feedback cycle, it was revealed that the problem represented a much more complex technical debt. From the first version to the last (version six), the patch was split into a series with four patches, where two of them have been applied, and the remaining entries are receiving suggestions. Even though the patch became a series of four, only one of them (one of the accepted) was strictly tackling duplication.
-
-Group 11 was a single student who took the second option and executed the tool, completing the entire process of identifying duplications himself. The student identified a duplication in the driver that occurred across eighteen code files, creating a patch to remove approximately four hundred lines of duplicated code. The student sent the deduplications to the maintainers, and their feedback pointed to fixing warnings in the code without arguing about the merit of the duplication removals. After addressing the issue, the patch was applied. This student also contributed to IIO, tackling a code duplication with inline method refactoring. This one, however, was received with more skepticism by the maintainer, and the student dropped the contribution because he did not think the feedback instructions were clear enough.
-
-Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that people without previous experience in Linux kernel development could approach the duplications found by the tool as a comprehensive and more straightforward way to become contributors to the kernel. We observed that not all duplications are viewed as code of bad quality, with maintainers analyzing the trade-off between the purpose of the duplicated code and many other factors.
-
-The eleven groups, which have submitted 11 contributions to the IIO subsystem, have collectively requested the insertion of 379 lines and the deletion of 605 lines in the subsystem, representing an average of 34.45 lines added and 55 lines removed per contribution.
-
-Considering the sum of fully merged contributions, we have a code diff value of +51/-143, with an average of +12.75/-35.75. This ratio is better than dropped contributions, which have a total of +179/-219 with an average of +29.83/-36.5.
-
-It is also possible to notice a difference based on the similarity threshold used to detect duplications. The proposed patches to address 100\%-similarity duplications summed up to +46/-90 (average of +9.2/-18). For a 90\% value, the result was a total of +333/-515 with an average of +55.5/-85.83. The 90\% value enabled the tool to identify less strict duplication cases, and, therefore, code segments with a greater extension, compared to the 100\% similarity entries, which were shorter segments, causing a difference in the average number of modified lines.
-
-Finally, the AMD contribution from Group 11, which involved the complete use of our developed tool components, got a completely different outcome. With a total of 90 lines inserted and 489 lines removed, there are some points to be considered for the success and high modification extension of the contribution: (1) the AMD Display subsystem has some self-reported problems regarding overall technical debt; (2) the AMD Display subsystem has a more centralized code structure and maintainer hierarchy, enabling contributors to tackle code duplications across a broader scope and multiple files, which happened to Group 11's contribution;
-
-We derived the following takeaways from \textbf{participant-as-observer observation}. These takeaways are accompanied by example quotes from the maintainers that originated during the review process~\footnote{It is paramount to state that we \textbf{are not affirming} that these quotes represent the complete positioning of the maintainers who wrote them on code duplication.}.
-
-\begin{highlight-box}{Takeaway T2 (Readability)}
-  Maintainers notably prioritized readability over removing duplications in
-  many different contexts. In their view, going against the \textbf{DRY
-  principle} was worth it if it resulted in code that is easier to read and
-  understand.
-\hfill\\
+Groups 1 and 4 worked on similar duplications, where two functions are involved: one to determine if a register was volatile and the other to determine if it was writable. These were two functions that returned opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Group 2 used macros. After feedback from maintainers, both solutions converged to keep one of the functions while changing the content of the other to return a negated query of the former function. However, by the end of the feedback cycle, maintainers considered the patch from Group 1 irrelevant, while the patch from Group 4 was accepted.
 
 \noindent
 \begin{footnotesize}
@@ -232,16 +205,15 @@ We derived the following takeaways from \textbf{participant-as-observer observat
   even if it is duplicating a few lines of code.''
 }
 \end{footnotesize}
+
+\begin{highlight-box}{Takeaway T2 (Readability)}
+  Maintainers notably prioritized readability over removing duplications in
+  many different contexts. In their view, going against the \textbf{DRY
+  principle} was worth it if it resulted in code that is easier to read and
+  understand.
 \end{highlight-box}
 
-
-\begin{highlight-box}{Takeaway T3 (Integration Overhead)}
-  A maintainer suggested that the effort put into the contribution after it was
-  accepted (i.e., the process of propagating the change to upper maintainers)
-  was considered. In other words, maintainers may \textbf{evaluate the
-  trade-off between the impact of contributions (not only deduplications) and
-  the struggle to integrate them into the complex Linux project}.
-\hfill\\
+The reason is that Group 1 chose to apply the refactoring to a device that contained a register that was both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
 
 \noindent
 \begin{footnotesize}
@@ -251,7 +223,20 @@ We derived the following takeaways from \textbf{participant-as-observer observat
   still requires some effort.''
 }
 \end{footnotesize}
+
+\begin{highlight-box}{Takeaway T3 (Integration Overhead)}
+  A maintainer suggested that the effort put into the contribution after it was
+  accepted (i.e., the process of propagating the change to upper maintainers)
+  was considered. In other words, maintainers may \textbf{evaluate the
+  trade-off between the impact of contributions (not only deduplications) and
+  the struggle to integrate them into the complex Linux project}.
 \end{highlight-box}
+
+
+
+Groups 3, 6, and 10 created a struct to encapsulate the parameters and remove the duplication by applying the parameterized method. The patches from Groups 6 and 10 were rejected by the same maintainer who approved the patch from Group 3, tackling the duplication of a simple iterative algorithm, which also contained a bug that could be inferred by inspecting both functions. In this case, the group refactored code from a more critical technical debt and took the opportunity to fix an unnoticed incorrect behavior.
+
+The maintainer's justification for rejecting the patch from Group 6 was that it proposed to fix a duplication while adding more lines than removing, and that it was not convincing enough in other aspects, such as readability.
 
 \begin{highlight-box}{Takeaway T4 (Cognitive Load)}
   Needing to jump to a function definition (to see its behavior) or a function
@@ -271,12 +256,7 @@ We derived the following takeaways from \textbf{participant-as-observer observat
 \end{footnotesize}
 \end{highlight-box}
 
-
-\begin{highlight-box}{Takeaway T5 (Performance)}
-  Given the low-level development context of Linux and the IIO subsystem, which
-  is usually related to devices with limited resources, we detected hints that
-  duplication may be forgivable if it improves performance.
-\hfill\\
+The reason for rejecting the patch from Group 10 was that they refactored code files with simple context; therefore, adding a layer of abstraction to remove duplication decreased code readability without clear gains in codebase quality. Interestingly, both rejected groups addressed duplications across initialization functions for different devices, where code readability was vulnerable to refactoring methods (T2  + T5). [blabla] Group 9 initially approached the selected duplication with a parameterized method, but after entering the feedback cycle, it was revealed that the problem represented a much more complex technical debt. From the first version to the last (version six), the patch was split into a series with four patches, where two of them have been applied, and the remaining entries are receiving suggestions. Even though the patch became a series of four, only one of them (one of the accepted) was strictly tackling duplication.
 
 \noindent
 \begin{footnotesize}
@@ -286,10 +266,32 @@ We derived the following takeaways from \textbf{participant-as-observer observat
   copy to those high(ish) performance paths.''
 }
 \end{footnotesize}
+
+\begin{highlight-box}{Takeaway T5 (Performance)}
+  Given the low-level development context of Linux and the IIO subsystem, which
+  is usually related to devices with limited resources, we detected hints that
+  duplication may be forgivable if it improves performance.
+\hfill\\
 \end{highlight-box}
 
-%TODO ADICIONADO APENAS PARA FECHAR 5 PGS CERTINHO. ME REMOVA!!!
-\hfill\\
+
+Groups 7 and 8 used the extract method to approach the deduplications. Group 8 sent their patch to the maintainers, and the code changes were approved, with minor requested changes in code style and smaller errors fixed (++T5). In the case of Group 7, the maintainer initially rejected the proposed patch but suggested a new refactoring approach: applying the extraction method refactoring to the duplicated code to an existing helper function. After the feedback cycle, maintainers accepted the patch in version 3.
+
+
+Group 11 was a single student who took the second option and executed the tool, completing the entire process of identifying duplications himself. The student identified a duplication in the driver that occurred across eighteen code files, creating a patch to remove approximately four hundred lines of duplicated code. The student sent the deduplications to the maintainers, and their feedback pointed to fixing warnings in the code without arguing about the merit of the duplication removals. After addressing the issue, the patch was applied. This student also contributed to IIO, tackling a code duplication with inline method refactoring. This one, however, was received with more skepticism by the maintainer, and the student dropped the contribution because he did not think the feedback instructions were clear enough.
+
+Analyzing the students' approaches to the duplications and the maintainers' feedback, we saw that people without previous experience in Linux kernel development could approach the duplications found by the tool as a comprehensive and more straightforward way to become contributors to the kernel. We observed that not all duplications are viewed as code of bad quality, with maintainers analyzing the trade-off between the purpose of the duplicated code and many other factors.
+
+The eleven groups, which have submitted 11 contributions to the IIO subsystem, have collectively requested the insertion of 379 lines and the deletion of 605 lines in the subsystem, representing an average of 34.45 lines added and 55 lines removed per contribution.
+
+Considering the sum of fully merged contributions, we have a code diff value of +51/-143, with an average of +12.75/-35.75. This ratio is better than dropped contributions, which have a total of +179/-219 with an average of +29.83/-36.5.
+
+It is also possible to notice a difference based on the similarity threshold used to detect duplications. The proposed patches to address 100\%-similarity duplications summed up to +46/-90 (average of +9.2/-18). For a 90\% value, the result was a total of +333/-515 with an average of +55.5/-85.83. The 90\% value enabled the tool to identify less strict duplication cases, and, therefore, code segments with a greater extension, compared to the 100\% similarity entries, which were shorter segments, causing a difference in the average number of modified lines.
+
+Finally, the AMD contribution from Group 11, which involved the complete use of our developed tool components, got a completely different outcome. With a total of 90 lines inserted and 489 lines removed, there are some points to be considered for the success and high modification extension of the contribution: (1) the AMD Display subsystem has some self-reported problems regarding overall technical debt; (2) the AMD Display subsystem has a more centralized code structure and maintainer hierarchy, enabling contributors to tackle code duplications across a broader scope and multiple files, which happened to Group 11's contribution;
+
+We derived four takeaways from \textbf{participant-as-observer observation}. These takeaways are accompanied by example quotes from the maintainers that originated during the review process~\footnote{It is paramount to state that we \textbf{are not affirming} that these quotes represent the complete positioning of the maintainers who wrote them on code duplication.}.
+
 
 \section{Concluding Remarks}
 
