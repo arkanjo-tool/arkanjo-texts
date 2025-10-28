@@ -157,7 +157,7 @@ In the feedback on the first submitted version, the maintainers only asked for m
 
 Since we suffered a delay in the review process, we directly contacted a maintainer to understand why. From this conversation, we understand that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This approach allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by Kapser and Godfrey~\cite{cloneharm}, leads us to the primary conclusion of our complete participant observation:
 %
-\begin{highlight-box}{Takeaway T1}
+\begin{highlight-box}{Takeaway T0}
 Driver developers do not necessarily view duplicated code negatively, which contradicts standard software engineering practices.
 \end{highlight-box}
 
@@ -195,18 +195,18 @@ Regarding our analysis from the \textbf{participant-as-observer} phase, we ident
 
 By the end of the feedback cycle, the patch from Group 4 was accepted, but the final implementation differed substantially from the original without using macros. The change was primarily driven by a maintainer's feedback: \textit{``I think the old code is more readable than hiding the values in a macro even if it is duplicating a few lines of code.''}.
 %
-This response category (also from groups 1, 2, and 10) revealed a recurring concern among maintainers that went beyond functional correctness or redundancy reduction. Instead, it reflected a preference for code clarity and comprehension. Building on these consistent insights from multiple review interactions, we formulated our second takeaway:
+This response category (also from groups 1, 2, and 10) revealed a recurring concern among maintainers that went beyond functional correctness or redundancy reduction. Instead, it reflected a preference for code clarity and comprehension. Building on these consistent insights from multiple review interactions, we formulated our first takeaway:
 %\vspace{-.5cm}
-\begin{highlight-box}{Takeaway T2 (Readability)}
+\begin{highlight-box}{Takeaway T1 (Readability)}
 Maintainers prioritized readability over removing duplications in many different contexts. In their view, going against the \textbf{DRY principle} was worth it if it resulted in easier-to-read and understand code.
 \end{highlight-box}
 
 Still focusing on Group 1, maintainers considered the patch irrelevant. The reason was that Group 1 chose to apply the refactoring to a device containing a register that was both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
 %
 While the previous interactions highlighted how maintainers often favor readability over strict code deduplication, this case added a new dimension to our understanding: the \textit{cost-benefit} evaluation of proposed changes. A maintainer pointed out that the effort required to propagate such modifications after acceptance (i.e., during the upstreaming process) could outweigh the perceived benefits: ``\textit{[...] such patches might not worth it since the proposed improvement is very small (and questionable) while the upstreaming process still requires some effort.}''
-From this feedback, we crafted our third takeaway:
+From this feedback, we crafted our second takeaway:
 %\vspace{-.5cm}
-\begin{highlight-box}{Takeaway T3 (Integration Overhead)}
+\begin{highlight-box}{Takeaway T2 (Integration Overhead)}
 Maintainers may evaluate the trade-off between the impact of contributions
 (not only deduplications) and the struggle to integrate them into the complex
 Linux project.
@@ -242,7 +242,6 @@ The reason for rejecting the patch from Group 10 was that they refactored code f
   Given the low-level development context of Linux and the IIO subsystem, which
   is usually related to devices with limited resources, we detected hints that
   duplication may be forgivable if it improves performance.
-\hfill\\
 \end{highlight-box}
 
 
@@ -261,16 +260,14 @@ It is also possible to notice a difference based on the similarity threshold use
 
 Finally, the AMD contribution from Group 11, which involved the complete use of our developed tool components, got a completely different outcome. With a total of 90 lines inserted and 489 lines removed, there are some points to be considered for the success and high modification extension of the contribution: (1) the AMD Display subsystem has some self-reported problems regarding overall technical debt; (2) the AMD Display subsystem has a more centralized code structure and maintainer hierarchy, enabling contributors to tackle code duplications across a broader scope and multiple files, which happened to Group 11's contribution;
 
-We derived four takeaways from \textbf{participant-as-observer observation}. These takeaways are accompanied by example quotes from the maintainers that originated during the review process~\footnote{It is paramount to state that we \textbf{are not affirming} that these quotes represent the complete positioning of the maintainers who wrote them on code duplication.}.
-
 
 \section{Concluding Remarks}
 
-Ethnographic studies, including full participant and participant-as-observer observations, provided a realistic view of the opportunities and challenges in removing code duplications detected by the tool. First-time Linux kernel contributors could effectively use the tool to identify duplications and submit patches.
+This ethnographic study, combining complete participant and participant-as-observer observations, provided a realistic view of the opportunities and challenges in removing code duplications detected by the tool. First-time Linux kernel contributors could effectively use the tool to identify duplicated functions and submit meaningful patches.
 
-While this research included one successfully merged patch by the authors, and 7 out of 12 patches sent by students were accepted and merged into Linux, a portion of the students' efforts encountered hurdles: 4 student groups had their patches rejected.
+Throughout this process, we observed that maintainers do not necessarily regard code duplication as inherently harmful. Instead, their decisions reflect a nuanced and context-dependent understanding of software quality. As evidenced by our takeaways\footnote{It is paramount to state that we \textbf{are not affirming} that these quotes represent the complete positioning of the maintainers who wrote them on code duplication.}, readability often outweighed strict adherence to the DRY principle (T1), while the effort required to propagate changes also influenced maintainers’ acceptance decisions (T2). Moreover, avoiding cognitive overhead when navigating the code (T3) and preserving performance in resource-constrained environments (T4) emerged as additional justifications for tolerating certain forms of duplication.
 
-Nevertheless, our work suggests that maintainers do not always view code duplication as inherently unfavorable, especially when it improves clarity, performance, and more. This suggests a nuanced understanding of code quality within the Linux kernel community that can go against the DRY principle, where practicality and maintainability in specific contexts sometimes outweigh the general principle of eliminating all code duplication.
+Overall, these findings reveal that, within the Linux kernel community, the evaluation of code duplication extends beyond technical redundancy. Maintainability, clarity, and practical trade-offs play a decisive role in shaping maintainers’ judgments, suggesting that DRY is sometimes less valuable than keeping the code understandable, efficient, and integrated smoothly into a large and evolving system.
 
 \section*{Replication Package}
 
