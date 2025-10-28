@@ -1,4 +1,4 @@
-	\documentclass[10pt,conference]{IEEEtran}
+\documentclass[10pt,conference]{IEEEtran}
 \usepackage{graphicx,url}
 \usepackage{hyperref}
 \usepackage{nicematrix}
@@ -156,7 +156,7 @@ In the feedback on the first submitted version, the maintainers only asked for m
 %\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
 
 Since we suffered a delay in the review process, we directly contacted a maintainer to understand why. From this conversation, we understand that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This approach allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by Kapser and Godfrey~\cite{cloneharm}, leads us to the primary conclusion of our complete participant observation:
-
+%
 \begin{highlight-box}{Takeaway T1}
 Driver developers do not necessarily view duplicated code negatively, which contradicts standard software engineering practices.
 \end{highlight-box}
@@ -191,40 +191,33 @@ Table~\ref{tab:stu} summarizes all the contributions sent by the main author and
 \label{tab:stu}
 \end{table}
 
-Regarding our analysis from the \textbf{participant-as-observer} phase, we identified that most groups applied the parameterized refactor method, while a few used the extractor method. For instance, Groups 1 and 4 worked on similar duplications, where two functions were involved: one to determine if a register was volatile and another to determine if it was writable. These two functions returned opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Groups 2 and 4 used macros. After feedback from maintainers, both solutions converged toward keeping one of the functions while modifying the other to return a negated query of the former function.
+Regarding our analysis from the \textbf{participant-as-observer} phase, we identified that most groups applied the parameterized refactor method, while a few used the extractor method. For instance, Groups 1 and 4 worked on similar duplications, where two functions were involved: one to determine if a register was volatile and another to determine if it was writable. These two functions returned opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Groups 2 and 4 used macros. After feedback from maintainers, all solutions converged toward keeping one of the functions while modifying the other to return a negated query of the former function.
 
-By the end of the feedback cycle, the patch from Group 4 was accepted, but the final implementation differed substantially from the original. The change was primarily driven by a maintainer's feedback: \textit{``I think the old code is more readable than hiding the values in a macro even if it is duplicating a few lines of code.''}
+By the end of the feedback cycle, the patch from Group 4 was accepted, but the final implementation differed substantially from the original without using macros. The change was primarily driven by a maintainer's feedback: \textit{``I think the old code is more readable than hiding the values in a macro even if it is duplicating a few lines of code.''}.
 %
-This response category revealed a recurring concern among maintainers that went beyond functional correctness or redundancy reduction. Instead, it reflected a preference for code clarity and comprehension. Building on these consistent insights from multiple review interactions, we formulated our second takeaway:
-
+This response category (also from groups 1, 2, and 10) revealed a recurring concern among maintainers that went beyond functional correctness or redundancy reduction. Instead, it reflected a preference for code clarity and comprehension. Building on these consistent insights from multiple review interactions, we formulated our second takeaway:
+%\vspace{-.5cm}
 \begin{highlight-box}{Takeaway T2 (Readability)}
 Maintainers prioritized readability over removing duplications in many different contexts. In their view, going against the \textbf{DRY principle} was worth it if it resulted in easier-to-read and understand code.
 \end{highlight-box}
 
-Maintainers considered the patch from Group 1 irrelevant.
-The reason is that Group 1 chose to apply the refactoring to a device that contained a register that was both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
-
-\noindent
-\begin{footnotesize}
-\textit{
-  Quote: ``[...] such patches might not worth it since the proposed
-  improvement is very small (and questionable) while the upstreaming process
-  still requires some effort.''
-}
-\end{footnotesize}
-
+Still focusing on Group 1, maintainers considered the patch irrelevant. The reason was that Group 1 chose to apply the refactoring to a device containing a register that was both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
+%
+While the previous interactions highlighted how maintainers often favor readability over strict code deduplication, this case added a new dimension to our understanding: the \textit{cost-benefit} evaluation of proposed changes. A maintainer pointed out that the effort required to propagate such modifications after acceptance (i.e., during the upstreaming process) could outweigh the perceived benefits: ``\textit{[...] such patches might not worth it since the proposed improvement is very small (and questionable) while the upstreaming process still requires some effort.}''
+From this feedback, we crafted our third takeaway:
+%\vspace{-.5cm}
 \begin{highlight-box}{Takeaway T3 (Integration Overhead)}
-  A maintainer suggested that the effort put into the contribution after it was
-  accepted (i.e., the process of propagating the change to upper maintainers)
-  was considered. In other words, maintainers may \textbf{evaluate the
-  trade-off between the impact of contributions (not only deduplications) and
-  the struggle to integrate them into the complex Linux project}.
+Maintainers may evaluate the trade-off between the impact of contributions
+(not only deduplications) and the struggle to integrate them into the complex
+Linux project.
 \end{highlight-box}
 
-
+%TODO: David, consolidar a partir daqui
 Groups 3, 6, and 10 created a struct to encapsulate the parameters and remove the duplication by applying the parameterized method. The patches from Groups 6 and 10 were rejected by the same maintainer who approved the patch from Group 3, tackling the duplication of a simple iterative algorithm, which also contained a bug that could be inferred by inspecting both functions. In this case, the group refactored code from a more critical technical debt and took the opportunity to fix an unnoticed incorrect behavior.
 
-The maintainer's justification for rejecting the patch from Group 6 was that it proposed to fix a duplication while adding more lines than removing, and that it was not convincing enough in other aspects, such as readability.
+The maintainer's justification for rejecting the patch from Group 6 was that it proposed to fix a duplication while adding more lines than removing, and that it was not convincing enough in other aspects, such as readability. ... ``Wrapping this up doesn't provide any real advantage, requiring as
+  it does the reviewer to look at this function AND where the value is set
+  rather than seeing them in one place.''
 
 \begin{highlight-box}{Takeaway T4 (Cognitive Load)}
   Needing to jump to a function definition (to see its behavior) or a function
@@ -232,16 +225,6 @@ The maintainer's justification for rejecting the patch from Group 6 was that it 
   cognitively demanding task for developers~\cite{questions-programmers-ask}.
   Duplications that avoided this were justifiable to reduce cognitive load when
   parsing through the code.
-\hfill\\
-
-\noindent
-\begin{footnotesize}
-\textit{
-  Quote: ``Wrapping this up doesn't provide any real advantage, requiring as
-  it does the reviewer to look at this function AND where the value is set
-  rather than seeing them in one place.''
-}
-\end{footnotesize}
 \end{highlight-box}
 
 The reason for rejecting the patch from Group 10 was that they refactored code files with simple context; therefore, adding a layer of abstraction to remove duplication decreased code readability without clear gains in codebase quality. Interestingly, both rejected groups addressed duplications across initialization functions for different devices, where code readability was vulnerable to refactoring methods (T2  + T5). [blabla] Group 9 initially approached the selected duplication with a parameterized method, but after entering the feedback cycle, it was revealed that the problem represented a much more complex technical debt. From the first version to the last (version six), the patch was split into a series with four patches, where two of them have been applied, and the remaining entries are receiving suggestions. Even though the patch became a series of four, only one of them (one of the accepted) was strictly tackling duplication.
@@ -288,9 +271,6 @@ Ethnographic studies, including full participant and participant-as-observer obs
 While this research included one successfully merged patch by the authors, and 7 out of 12 patches sent by students were accepted and merged into Linux, a portion of the students' efforts encountered hurdles: 4 student groups had their patches rejected.
 
 Nevertheless, our work suggests that maintainers do not always view code duplication as inherently unfavorable, especially when it improves clarity, performance, and more. This suggests a nuanced understanding of code quality within the Linux kernel community that can go against the DRY principle, where practicality and maintainability in specific contexts sometimes outweigh the general principle of eliminating all code duplication.
-
-%TODO ADICIONADO APENAS PARA FECHAR 5 PGS CERTINHO. ME REMOVA!!!
-\hfill\\
 
 \section*{Replication Package}
 
