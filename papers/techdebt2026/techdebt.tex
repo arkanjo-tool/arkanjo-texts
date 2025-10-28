@@ -1,4 +1,4 @@
-\documentclass[10pt,conference]{IEEEtran}
+	\documentclass[10pt,conference]{IEEEtran}
 \usepackage{graphicx,url}
 \usepackage{hyperref}
 \usepackage{nicematrix}
@@ -155,15 +155,14 @@ In this attempt, we reached a point where the deduplication was good enough to s
 In the feedback on the first submitted version, the maintainers only asked for minor changes to align with the coding style, correct license use, and align with initially unknown conventions. We submitted a second version, in which the maintainers asked us to move the functions created in the generic library to an existing file instead of creating a new one. We sent a third version, and the patch was accepted and integrated into the kernel codebase on February 25, 2025.
 %\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
 
-Since we suffered a delay in the review process, and to understand why, we directly contacted a maintainer. From this conversation, we understand that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This approach allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by Kapser and Godfrey~\cite{cloneharm}, leads us to the primary conclusion of our complete participant observation:
+Since we suffered a delay in the review process, we directly contacted a maintainer to understand why. From this conversation, we understand that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This approach allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by Kapser and Godfrey~\cite{cloneharm}, leads us to the primary conclusion of our complete participant observation:
 
 \begin{highlight-box}{Takeaway T1}
-  Driver developers do not necessarily view
-  duplicated code negatively, which contradicts standard software engineering
-  practices.
+Driver developers do not necessarily view duplicated code negatively, which contradicts standard software engineering practices.
 \end{highlight-box}
 
-%TODO: precisamos fazer um gancho, para sinalizar que a partir do que observamos no T1, vimos a necessidade de investigar a visão dos mantenedores a partir de outros patches relacionados a redução de duplicação...
+Building on this insight, we realized that the perception identified in T1 might not be limited to driver developers alone. To deepen our understanding, we systematically examined other contributions related to code duplication reduction and analyzed how different maintainers responded to such patches. This broader analysis aimed to capture diverse maintainer perspectives and contextual factors influencing their decisions.
+
 Table~\ref{tab:stu} summarizes all the contributions sent by the main author and student groups (GID)~\footnote{As in the first phase, the first author is also a newcomer, we included this experience in the table as Group 0. Nevertheless, the subsequent analysis will focus more on the patches sent by students.}. It contains the information about the chosen subsystem (SS) and the similarity threshold (SML). Each entry also has the patch status, takeaways that may have surfaced from the interaction, and a code differential corresponding to the final patch versions before it was dropped or accepted into the code base. The code differential for a set of patches corresponds to the sum of added and removed lines of each patch.
 
 \begin{table}[ht]
@@ -192,25 +191,17 @@ Table~\ref{tab:stu} summarizes all the contributions sent by the main author and
 \label{tab:stu}
 \end{table}
 
-Regarding our analysis from the \textbf{participant-as-observer} phase, we observed that most groups applied the parameterized refactor method while a few used the extractor method.
+Regarding our analysis from the \textbf{participant-as-observer} phase, we identified that most groups applied the parameterized refactor method, while a few used the extractor method. For instance, Groups 1 and 4 worked on similar duplications, where two functions were involved: one to determine if a register was volatile and another to determine if it was writable. These two functions returned opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Groups 2 and 4 used macros. After feedback from maintainers, both solutions converged toward keeping one of the functions while modifying the other to return a negated query of the former function.
 
-Groups 1 and 4 worked on similar duplications, where two functions are involved: one to determine if a register was volatile and the other to determine if it was writable. These were two functions that returned opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Group 2 used macros. After feedback from maintainers, both solutions converged to keep one of the functions while changing the content of the other to return a negated query of the former function. However, by the end of the feedback cycle, maintainers considered the patch from Group 1 irrelevant, while the patch from Group 4 was accepted.
-
-\noindent
-\begin{footnotesize}
-\textit{
-  Quote: ``I think the old code is more readable than hiding the values in a macro
-  even if it is duplicating a few lines of code.''
-}
-\end{footnotesize}
+By the end of the feedback cycle, the patch from Group 4 was accepted, but the final implementation differed substantially from the original. The change was primarily driven by a maintainer's feedback: \textit{``I think the old code is more readable than hiding the values in a macro even if it is duplicating a few lines of code.''}
+%
+This response category revealed a recurring concern among maintainers that went beyond functional correctness or redundancy reduction. Instead, it reflected a preference for code clarity and comprehension. Building on these consistent insights from multiple review interactions, we formulated our second takeaway:
 
 \begin{highlight-box}{Takeaway T2 (Readability)}
-  Maintainers notably prioritized readability over removing duplications in
-  many different contexts. In their view, going against the \textbf{DRY
-  principle} was worth it if it resulted in code that is easier to read and
-  understand.
+Maintainers prioritized readability over removing duplications in many different contexts. In their view, going against the \textbf{DRY principle} was worth it if it resulted in easier-to-read and understand code.
 \end{highlight-box}
 
+Maintainers considered the patch from Group 1 irrelevant.
 The reason is that Group 1 chose to apply the refactoring to a device that contained a register that was both read-only and non-volatile. Thus, the technical debt selected by Group 1 was not merely a duplication but an incorrect implementation of the method.
 
 \noindent
@@ -229,7 +220,6 @@ The reason is that Group 1 chose to apply the refactoring to a device that conta
   trade-off between the impact of contributions (not only deduplications) and
   the struggle to integrate them into the complex Linux project}.
 \end{highlight-box}
-
 
 
 Groups 3, 6, and 10 created a struct to encapsulate the parameters and remove the duplication by applying the parameterized method. The patches from Groups 6 and 10 were rejected by the same maintainer who approved the patch from Group 3, tackling the duplication of a simple iterative algorithm, which also contained a bug that could be inferred by inspecting both functions. In this case, the group refactored code from a more critical technical debt and took the opportunity to fix an unnoticed incorrect behavior.
