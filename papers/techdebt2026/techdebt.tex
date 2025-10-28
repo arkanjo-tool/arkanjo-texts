@@ -124,24 +124,16 @@ To broaden our study and observations, we adopted a participant-as-observer appr
 
 The 2025 course offering had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of two or three members, but graduate students could work individually. To assist students in this task, we (a professor and three more experienced graduate students) prepared several alternatives for contributing to the Linux kernel, including simpler contributions such as fixing code style issues. In this context, we specified two options for removing duplications in the Linux kernel.
 
-As the first option, we ran the tool on the IIO subsystem, creating a list of duplicated function pairs. Then, we curated the list even more to get more actionable duplications for the students using this approach:
+\paragraph*{\textbf{Deduplication Option 1}} We ran the tool on the IIO subsystem to generate a list of duplicated function pairs, then curated it to highlight actionable cases for students. Specifically, we (1) kept only pairs within the same file, since cross-driver duplications could involve multiple maintainers or distinct interfaces; (2) removed very short duplications; and (3) manually ranked the remaining pairs, adding annotations to guide students toward entries likely to be accepted. In this option, students were tasked with selecting a recommended entry, devising a way to remove the duplication, and submitting their patches to the IIO mailing list for review.
 
-\begin{enumerate}
-    \item We filtered the list to keep only duplicated pairs that happened in the same file, because the IIO subsystem is very decentralized, and a duplication between two different drivers may involve the cooperation of different maintainers and/or the unification of totally different interfaces;
-    \item We removed duplications that were too short and would not represent a significant contribution;
-    \item We manually ranked code duplications and marked some duplications with insights based on personal opinion and perceptions over the remaining entries. This was done to guide students so that they could approach the technical debt with a greater chance of having their contribution merged into the code.
-\end{enumerate}
-
-The students' task was to select a recommended entry from the list, refactor the code to eliminate these duplications, and then submit their patches to the IIO mailing list for the maintainers' review.
-%TODO: explicar o processo do envio para o mentores/monitores, o tipo de feedback que recebiam antes enviarem.
-
-For the second alternative, students were offered an experience similar to our initial complete participant observation. In this approach, students were responsible for the entire workflow: executing the tool, independently analyzing the results to identify a potential deduplication, creating a patch, and sending the patch to the driver's maintainers.
-%TODO: aqui, no caso do Sebastian, também houve a revisão intermediária dos mentores?
+\paragraph*{\textbf{Deduplication Option 2}} We offered an experience similar to our initial complete participant observation, where students managed the entire workflow: running the tool, analyzing results to identify potential deduplications, creating a patch, and submitting it to the driver's maintainers. This option provided freedom of choice but made the students' task more complex.
 
 Of the students who chose to work on the tool-related tasks, 23 (16 undergraduate and 7 graduate) formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative. Notably, none of these students had prior experience contributing to the Linux kernel, making this their first attempt to submit a patch as newcomers to the project.
 
-Using blog posts, the groups documented their experiences and approaches to refactoring the duplications, as well as their experiences submitting a patch to the Linux kernel~[omitted]. We also analyzed these posts to understand the refactoring patterns used in deduplications, the experience of sending patches, and the opinions of subsystem maintainers on them.
-%TODO: é fácil e queremos disponibilizar esses blogs também no pacote de replicação?
+It is important to stress that, \textbf{no matter the chosen approach}, we supported all groups by providing review cycles on their contributions before submission, to prepare students for the interactions with the maintainers and alleviate rough, but natural, newcomers' mistakes. After the submission, we helped students understand the feedback from maintainers and gave directions on how to move forward. This close, yet indirect, participation through intimate mentoring characterizes the second phase as our participant-as-observer observation.
+
+For this second phase, our primary data source was the mailing list threads, where all development occurred (available in our Replication Package). Using blog posts, the groups documented their experiences submitting a patch to the Linux kernel~[omitted], and we also leveraged those to complement our observations. % (available in our Replication Package).
+%TODO: Add blogs ao pacote de replicação
 
 \section{Results}
 
