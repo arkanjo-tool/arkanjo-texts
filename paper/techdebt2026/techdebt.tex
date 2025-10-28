@@ -83,15 +83,14 @@ The detection of code duplication, or \textit{code clones}, has been a research 
 To address code duplication in the Linux kernel, we developed a command-line tool capable of detecting and analyzing function-level duplications\footnote{The tool and its documentation will be referenced after the review process.}. We conducted a multimethod ethnographic study leveraging the tool capabilities to identify duplications and submit contributions, directly or indirectly, to the Linux kernel, aiming to remove redundant code.
 %
 Through interactions with maintainers, this study gained insights into how the Linux community perceives the code quality related to code clones. Contrary to the DRY principle, our findings indicate that, in some contexts, maintainers can tolerate duplications for better readability, performance increases, or even to avoid integration overhead.
-%\looseness=-1
 
-Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members' values, beliefs, and practices~\cite{ethnosoft}. In this study, we first employed a complete participant observation approach~\cite{gold1958roles}, actively contributing by performing deduplications while documenting the process. We then conducted a participant-as-observer study~\cite{gold1958roles} with students resolving duplications identified by the tool. Beyond demonstrating that the tool lowered the entry barrier for new contributors, these studies yielded intriguing observations on kernel Linux deduplications. This paper describes the aforementioned studies, along with our visions and reflections from diving into the development process.
+Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members' values, beliefs, and practices~\cite{ethnosoft}. In this study, we first employed a complete participant observation approach~\cite{gold1958roles}, actively contributing by performing deduplications while documenting the process. We then conducted a participant-as-observer study~\cite{gold1958roles} with students resolving duplications identified by the tool. Beyond demonstrating that the tool lowered the entry barrier for new contributors, these studies yielded intriguing observations on kernel Linux deduplications. This paper describes the aforementioned studies, along with our visions and reflections from diving into the Linux kernel development process.
 
 \section{The Linux Kernel}
 
-The Linux kernel is a complex project organized into subsystems, such as the process scheduler, memory management, and device drivers. Each subsystem typically has a dedicated maintainer or a team of maintainers overseeing its development and managing contributions. The development process is coordinated through Git, and contributions are formatted as patches, text documents that outline the differences between two source code versions. These patches are then submitted to the relevant Linux mailing lists for public review and discussion.
+The Linux kernel is a complex project organized into subsystems, such as the process scheduler, memory management, and device drivers. Each subsystem typically has a dedicated maintainer or a team of maintainers overseeing its development and managing contributions. The development process is coordinated through Git (also designed by Linus Torvald, focused on the Linux kernel development), and contributions are formatted as patches, text documents that outline the differences between two source code versions. These patches are then submitted to the relevant Linux mailing lists for public review and discussion.
 
-This study focuses on two of these subsystems, selected to represent different contexts for contribution. We explore the \textit{AMD Display drivers}, chosen for their importance within the hardware ecosystem, which is responsible for natively enabling AMD GPU functionality in Linux. This subsystem is substantial, with over 391,000 lines of code across more than 1,089 files. We also investigate the \textit{Industrial I/O (IIO)} subsystem, often considered an accessible entry point for new contributors. The IIO subsystem provides support for devices that perform analog-to-digital or digital-to-analog conversions\footnote{\href{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}} and contains over 281,772 lines of code in more than 755 files.
+This study focuses on two of these subsystems, selected to represent different contexts for contribution. We explore the \textit{AMD Display drivers}, chosen for their importance within the hardware ecosystem, which is responsible for natively enabling AMD GPU functionality in Linux. This subsystem is substantial, with over 391,000 lines of code across more than 1,089 files. We also investigate the \textit{Industrial Input/Output (IIO)} subsystem, often considered an accessible entry point for new contributors. The IIO subsystem provides support for devices that perform analog-to-digital or digital-to-analog conversions\footnote{\href{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}} and contains over 281,772 lines of code in more than 755 files.
 
 \section{Research Strategy}
 
@@ -102,18 +101,18 @@ We employed a multi-method research approach. We developed and evaluated a propo
 Academic research on code duplication often focuses on pairwise comparison of code artifacts, which is not directly applicable to comprehensive codebase analyses. Existing free software tools we explored in practice suffered from limited functionality~[omitted]. Thus, we developed a command-line tool\footnote{Anonymous repository:  \url{https://anonymous.4open.science/r/arkanjo-C548}} designed to detect and analyze function-level code duplication within large codebases, such as the Linux kernel. The tool is released under the LGPLv3 ( GNU Lesser General Public License, version 3) and employs a two-stage architecture that separates the computationally intensive task of finding duplicates from the process of querying the results. The first stage analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage uses this database to retrieve information about the identified duplications quickly.
 %The tool is available at \textit{\href{https://github.com/arkanjo-tool/arkanjo}{github.com/arkanjo-tool/arkanjo}}.
 
-The tool was designed to address the specific challenges posed by large-scale codebases, focusing on scalability and prioritization of duplications that may impact maintainability. It uses a text similarity method based on TF-IDF vector embedding, implemented with the Gensim library~\cite{gensim}, and computes cosine similarity to detect clones.
+The tool was designed to address the specific challenges posed by large-scale codebases, focusing on scalability and prioritization of duplications that may impact maintainability. It uses a text similarity method based on TF-IDF (Term Frequency-Inverse Document Frequency) vector embedding, implemented with the Gensim library~\cite{gensim}, and computes cosine similarity to detect clones.
 
 We compared our tool against the BigCloneBench dataset~\cite{bigclonebench}. This validation showed that the tool is capable of detecting the majority of Type-1 and Type-2 duplications (100\% of Type-1 and 85\% of Type-2 with a cosine similarity threshold of 0.9), demonstrating sufficient accuracy to support our ethnographic studies.
 
 \subsection{Complete Participant Observation Study}
 \label{sec:participant}
 
-To investigate whether we could use the tool to find ways to contribute to the Linux kernel, we conducted a complete participant observation experiment, where we acted as first-time contributors to the AMD Display driver, collecting artifacts of our experience in the process.
+To investigate whether we could use the tool to find ways to contribute to the Linux kernel, we first conducted a complete participant observation experiment, where the main author (a graduate student) acted as a first-time contributor to the AMD Display driver, collecting artifacts of our experience in the process.
 
 We executed the tool in the AMD Display driver codebase. We manually analyzed the biggest duplications regarding the number of lines, finding one pair that we judged promising to try to deduplicate. We approached big duplications as proof of concept to gauge the tool's potential for enabling significant impacts.
 
-Given the duplicated function pair, we observed that the files in the functions contained multiple other duplications. Thus, we proposed a simple systematic approach to mitigate all the functions duplicated in the context, not just the duplicated function pairs. After approaching the duplications with a systematic strategy, we sent a patch to the AMD development mailing list for the feedback of maintainers, while documenting the process, interactions, and impressions.
+Given the duplicated function pair, we observed that the files in the functions contained multiple other duplications. Thus, we proposed a simple systematic approach to mitigate all the functions duplicated in the context, not just the duplicated function pairs. After approaching the duplications with a systematic strategy, we sent a patch to the AMD development mailing list for the feedback of maintainers, while documenting the process, interactions, and impressions (available in our Replication Package).
 
 In C programming, communication between source files is achieved by creating header files that specify libraries~\cite{Cbook}. Since the Linux kernel is primarily written in C, our systematic strategy consisted of eliminating code duplications through consolidating the duplicated code into a single library, which would replace instances of duplication across the codebase. For each duplicated function pair, for each function in the pair, we used the tool to locate all duplications of the function in the codebase, as it could have been duplicated more times than the two occurrences detected initially. This strategy resulted in a collection of duplicated functions and corresponding code files.
 
@@ -121,11 +120,11 @@ To identify shared code more effectively, we extended this approach to search fo
 
 \subsection{Participant-as-Observer Observation Study}
 
-A core dynamic of the university course where we conducted the participant-as-observer study was to have students make a practical contribution to a free software project. In the first semester of 2025, we identified an opportunity to leverage the tool within this pedagogical structure. As a contribution option, we proposed that students remove code duplications found in the Linux kernel as one possible way of contributing to a free software project.
+To broaden our study and observations, we adopted a participant-as-observer approach, involving students as free software project newcomers to make practical contributions to the Linux kernel. This approach formed the core activity of a university course, in which we guided students to remove code duplications in the Linux kernel as one possible pathway for contributing to the project in the first phase of the course~[omitted].
 
-The 2025 course offering had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of two or three members. To assist students in this task, we prepared multiple alternatives for contributing to free software projects, including simpler contributions such as updating documentation or fixing code style issues. In this context, two options related to removing duplications in the Linux kernel were offered.
+The 2025 course offering had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of two or three members, but graduate students could work individually. To assist students in this task, we (a professor and three more experienced graduate students) prepared several alternatives for contributing to the Linux kernel, including simpler contributions such as fixing code style issues. In this context, we specified two options for removing duplications in the Linux kernel.
 
-In the first option, we ran the tool on the IIO subsystem, creating a list of duplicated function pairs. Then, we curated the list even more to get more actionable duplications for the students using this approach:
+As the first option, we ran the tool on the IIO subsystem, creating a list of duplicated function pairs. Then, we curated the list even more to get more actionable duplications for the students using this approach:
 
 \begin{enumerate}
     \item We filtered the list to keep only duplicated pairs that happened in the same file, because the IIO subsystem is very decentralized, and a duplication between two different drivers may involve the cooperation of different maintainers and/or the unification of totally different interfaces;
@@ -134,39 +133,37 @@ In the first option, we ran the tool on the IIO subsystem, creating a list of du
 \end{enumerate}
 
 The students' task was to select a recommended entry from the list, refactor the code to eliminate these duplications, and then submit their patches to the IIO mailing list for the maintainers' review.
+%TODO: explicar o processo do envio para o mentores/monitores, o tipo de feedback que recebiam antes enviarem.
 
-For the second alternative, students were offered an experience similar to our initial complete participant observation. In this model, students were responsible for the entire workflow: executing the tool on the AMD Display drivers, independently analyzing the results to identify a potential deduplication, creating a patch with it, and sending the patch to the driver's maintainers.
+For the second alternative, students were offered an experience similar to our initial complete participant observation. In this approach, students were responsible for the entire workflow: executing the tool, independently analyzing the results to identify a potential deduplication, creating a patch, and sending the patch to the driver's maintainers.
+%TODO: aqui, no caso do Sebastian, também houve a revisão intermediária dos mentores?
 
 Of the students who chose to work on the tool-related tasks, 23 (16 undergraduate and 7 graduate) formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative. Notably, none of these students had prior experience contributing to the Linux kernel, making this their first attempt to submit a patch as newcomers to the project.
 
-Using blog posts, the groups documented their experiences and approaches to refactoring the duplications, as well as their experiences submitting a patch to the Linux kernel. We also analyzed these posts to understand the refactoring patterns used in deduplications, the experience of sending patches, and the opinions of subsystem maintainers on them.
+Using blog posts, the groups documented their experiences and approaches to refactoring the duplications, as well as their experiences submitting a patch to the Linux kernel~[omitted]. We also analyzed these posts to understand the refactoring patterns used in deduplications, the experience of sending patches, and the opinions of subsystem maintainers on them.
+%TODO: é fácil e queremos disponibilizar esses blogs também no pacote de replicação?
 
 \section{Results}
 
-In the \textbf{complete participant observation} study, we chose one function pair found on AMD Display Driver to approach and apply the systematic approach.
-
+In the \textbf{complete participant observation} study (first phase), we chose one function pair found on AMD Display Driver to approach and apply the systematic approach.
+%
 We reached a point where we had an idea of how to remove the duplications found, but we could not complete the refactoring to a state capable of submitting as a patch to the driver. We found that the configuration files on the AMD Display driver are designed to be imported at compilation time using \textit{\#define} macros. The configuration files' design choice makes refactoring duplications on generic approaches trickier, as refactoring code that depends on these files requires significant modification of the configuration files' design and deep knowledge of the codebase, which we, as first-time contributors, did not have. Thus, we opted not to continue investigating this deduplication. We found that the duplicated function from the code reduction existed in five code files, and two other functions were duplicated in those five. All functions across the files were exactly equal, so there was no need to apply the refactoring methods presented in the literature. The refactoring was resumed to create a generic library and fix the compilation targets.
 
 In this attempt, we reached a point where the deduplication was good enough to submit it as a contribution to the AMD Display driver code quality. Thus, we moved to sending the refactoring to the driver maintainers as a patch.
 
+%TODO: dado que falamos da demora do feedback, colocar a data de envia da V1.
 In the feedback on the first submitted version, the maintainers only asked for minor changes to align with the coding style, correct license use, and align with initially unknown conventions. We submitted a second version, in which the maintainers asked us to move the functions created in the generic library to an existing file instead of creating a new one. We sent a third version, and the patch was accepted and integrated into the kernel codebase on February 25, 2025.
 %\footnote{Patch submitted: \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br}}.
 
-\begin{highlight-box}{Takeaway T1:}
-  \textbf{As the primary result of our complete participant observation we
-  understood that AMD Display driver developers do not necessarily view
+Since we suffered a delay in the review process, and to understand why, we directly contacted a maintainer. It was mentioned to us that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by Kapser and Godfrey~\cite{cloneharm}, corroborates our understanding that GPU driver developers do not view duplicated code negatively by default. Thus, as the primary result of our complete participant observation we understood that:
+
+\begin{highlight-box}{Takeaway T1}
+  Driver developers do not necessarily view
   duplicated code negatively, which contradicts standard software engineering
-  practices}. We suffered a delay in the review process, and to understand why,
-  we directly contacted a maintainer. It was mentioned to us that one reason for
-  the delay was that duplicated code enhances the independence of GPU driver
-  code. This allows developers to make changes to a specific GPU without needing
-  to test compatibility with others, which helps save a significant amount of
-  time and effort. This example of hardware variations, also mentioned by Kapser
-  and Godfrey~\cite{cloneharm}, corroborates our understanding that GPU driver
-  developers do not view duplicated code negatively by default.
+  practices.
 \end{highlight-box}
 
-Regarding our analysis from the \textbf{participant-as-observer} phase, Table~\ref{tab:stu} summarizes all the contributions sent by newcomer groups (GID)~\footnote{As in the first phase, we were also newcomers, we included our experience in the table as Group 0. Nevertheless, the subsequent analysis will focus more on the patches sent by students.}. It contains the information about the chosen subsystem (SS) and the similarity threshold (SML). Each entry also has the patch status, takeaways that may have surfaced from the interaction, and a code differential corresponding to the final patch versions before it was dropped or accepted into the code base. The code differential for a set of patches corresponds to the sum of added and removed lines of each patch.
+Table~\ref{tab:stu} summarizes all the contributions sent by the main author and student groups (GID)~\footnote{As in the first phase, the first author is also a newcomer, we included this experience in the table as Group 0. Nevertheless, the subsequent analysis will focus more on the patches sent by students.}. It contains the information about the chosen subsystem (SS) and the similarity threshold (SML). Each entry also has the patch status, takeaways that may have surfaced from the interaction, and a code differential corresponding to the final patch versions before it was dropped or accepted into the code base. The code differential for a set of patches corresponds to the sum of added and removed lines of each patch.
 
 \begin{table}[ht]
 \centering
@@ -194,7 +191,7 @@ Regarding our analysis from the \textbf{participant-as-observer} phase, Table~\r
 \label{tab:stu}
 \end{table}
 
-We observed that most groups applied the parameterized refactor method while a few used the extractor method.
+Regarding our analysis from the \textbf{participant-as-observer} phase, we observed that most groups applied the parameterized refactor method while a few used the extractor method.
 
 Groups 1 and 4 worked on similar duplications, where two functions are involved: one to determine if a register was volatile and the other to determine if it was writable. These were two functions that returned opposite Boolean results. Group 1 initially addressed the problem using the extract method, while Group 2 used macros. After feedback from maintainers, both solutions converged to keep one of the functions while changing the content of the other to return a negated query of the former function. However, by the end of the feedback cycle, maintainers considered the patch from Group 1 irrelevant, while the patch from Group 4 was accepted.
 
