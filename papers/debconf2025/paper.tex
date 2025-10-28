@@ -54,8 +54,7 @@ large-scale codebases. Existing solutions generally fail to address the Linux ke
 developers, and (3) integration with kernel development workflows.
 %
 This paper presents \textit{ArKanjo}, a novel command-line tool for Linux kernel maintenance 
-designed to detect and analyze function-level duplications. Released under the MIT 
-license, ArKanjo employs a two-stage architecture consisting of a Preprocessor and 
+designed to detect and analyze function-level duplications. Released under the GNU Lesser General Public License (LGPL), ArKanjo employs a two-stage architecture consisting of a Preprocessor and 
 a Query Responder that separates computationally intensive analysis from efficient 
 querying for duplications within large codebases. Pivotal advantages of ArKanjo over 
 existing solutions include: (1) preprocessing that enables rapid queries without redundant analysis; 
@@ -112,8 +111,8 @@ methods and ethnographic studies to test it.
 \section{ArKanjo Tool}
 
 ArKanjo, our proposed tool, is a Command Line Interface (CLI) application designed to
-help developers identify code clone duplication at the function level. Released under the
-MIT license, ArKanjo is available at 
+help developers identify code clone duplication at the function level. Released under
+LGPLv3 (GNU Lesser General Public License, version 3), ArKanjo is available at 
 \textit{\href{https://github.com/arkanjo-tool/arkanjo}{github.com/arkanjo-tool/arkanjo}}.
 
 \subsection{Architecture}
