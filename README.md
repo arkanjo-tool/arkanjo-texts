@@ -1,0 +1,1 @@
+Luan Arcanjo's master's thesis and papers from your research on "An approach for detecting and mitigating code duplication in the Linux Kernel," conducted at the Institute os Mathematics, Statistics, and Computer Science, University of São Paulo (IME-USP).
