@@ -115,9 +115,9 @@ We compared our tool against the BigCloneBench dataset~\cite{bigclonebench}. Thi
 
 To investigate whether we could use the tool to find ways to contribute to the Linux kernel, we first conducted a complete participant observation experiment, where the main author (a graduate student) acted as a first-time contributor to the AMD Display driver, collecting artifacts of our experience in the process.
 
-We executed the tool in the AMD Display driver codebase. We manually analyzed the biggest duplications regarding the number of lines, finding one pair that we judged promising to try to deduplicate. We approached big duplications as proof of concept to gauge the tool's potential for enabling significant impacts.
+We executed the tool in the AMD Display driver codebase and manually analyzed the biggest duplications regarding the number of lines, finding one pair that we judged promising to try to deduplicate. We approached big duplications as proof of concept to gauge the tool's potential for enabling significant impacts.
 
-Given the duplicated function pair, we observed that the files in the functions contained multiple other duplications. Thus, we proposed a simple systematic approach to mitigate all the functions duplicated in the context, not just the duplicated function pairs. After approaching the duplications with a systematic strategy, we sent a patch to the AMD development mailing list for the feedback of maintainers, while documenting the process, interactions, and impressions (available in our Replication Package).
+Given the duplicated function pair, we observed that the files in the functions contained multiple other duplications. Thus, we proposed a simple systematic approach to mitigate all the functions duplicated in the context, not just the duplicated function pairs. After approaching the duplications with a systematic strategy, we sent a patch to the AMD development mailing list for the feedback of maintainers, while documenting the process, interactions, and impressions (available in our replication package\footnote{\url{https://doi.org/10.5281/zenodo.17432193}}	).
 
 In C programming, communication between source files is achieved by creating header files that specify libraries~\cite{Cbook}. Since the Linux kernel is primarily written in C, our systematic strategy consisted of eliminating code duplications through consolidating the duplicated code into a single library, which would replace instances of duplication across the codebase. For each duplicated function pair, for each function in the pair, we used the tool to locate all duplications of the function in the codebase, as it could have been duplicated more times than the two occurrences detected initially. This strategy resulted in a collection of duplicated functions and corresponding code files.
 
@@ -135,11 +135,12 @@ The 2025 course offering had 37 students (25 undergraduate and 12 graduate), who
 
 Of the students who chose to work on the tool-related tasks, 23 (16 undergraduate and 7 graduate) formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative. Notably, none of these students had prior experience contributing to the Linux kernel, making this their first attempt to submit a patch as newcomers to the project.
 
-It is important to stress that, \textbf{no matter the chosen approach}, we supported all groups by providing review cycles on their contributions before submission, to prepare students for the interactions with the maintainers and alleviate rough, but natural, newcomers' mistakes. After the submission, we helped students understand the feedback from maintainers and gave directions on how to move forward. This close, yet indirect, participation through intimate mentoring characterizes the second phase as our participant-as-observer observation.
+It is important to stress that, \textbf{no matter the chosen approach, we supported all groups by providing review cycles on their contributions before submission}, to prepare students for the interactions with the maintainers and alleviate rough, but natural, newcomers' mistakes. After the submission, we helped students understand the feedback from maintainers and gave directions on how to move forward. This close, yet indirect, participation through intimate mentoring characterizes the second phase as our participant-as-observer observation.
 
-For this second phase, our primary data source was the mailing list threads, where all development occurred (available in our Replication Package). Using blog posts, the groups documented their experiences submitting a patch to the Linux kernel~[omitted], and we also leveraged those to complement our observations. % (available in our Replication Package).
+For this second phase, our primary data source was the mailing list threads, where all development occurred (also available in our replication package). Using blog posts, the groups documented their experiences submitting a patch to the Linux kernel~[omitted], and we also leveraged those to complement our observations. % (available in our Replication Package).
 %TODO: Add blogs ao pacote de replicação
 
+\vspace{-.2cm}
 \section{Results}
 
 In the \textbf{complete participant observation} study (first phase), we chose one function pair found on the AMD Display Driver to approach and apply the systematic approach.
@@ -156,8 +157,6 @@ Driver developers do not necessarily view duplicated code negatively, which cont
 \end{highlight-box}
 
 Building on this insight, we realized that the perception identified in takeaway T0 might not be limited to AMD Display alone. To deepen our understanding, we examined other contributions regarding code duplication reduction and analyzed how different maintainers responded to such patches. This broader analysis aimed to capture diverse maintainer perspectives and contextual factors influencing their decisions.
-
-Table~\ref{tab:stu} summarizes all the contributions sent by the main author and student groups (GID)~\footnote{Since the first author was also a newcomer, the first phase experience was included as Group 0.}. It contains the information about the chosen subsystem (SS) and the similarity threshold (SML). Each entry also has the patch status, takeaways that may have surfaced from the interaction, and a code differential corresponding to the final patch versions before it was dropped or accepted into the code base. The code differential for a set of patches corresponds to the sum of added and removed lines of each patch.
 
 \begin{table}[ht]
 \centering
@@ -185,7 +184,9 @@ Table~\ref{tab:stu} summarizes all the contributions sent by the main author and
 \label{tab:stu}
 \end{table}
 
-We derived four takeaways from our \textbf{participant-as-observer observation}. We substantiate these takeaways with quotes from the maintainers that originated during the review process~\footnote{We \textbf{do not claim} these quotes fully represent the maintainers’ stance on code duplication.}.
+Table~\ref{tab:stu} summarizes all the contributions sent by the main author and student groups (GID)~\footnote{Since the first author was also a newcomer, the first phase experience was included as Group 0.}. It contains the information about the chosen subsystem (SS) and the similarity threshold (SML). Each entry also has the patch status, takeaways that may have surfaced from the interaction, and a code differential corresponding to the final patch versions before it was dropped or accepted into the code base. The code differential for a set of patches corresponds to the sum of added and removed lines of each patch.
+
+We derived four takeaways from our \textbf{participant-as-observer observation}. We substantiate these takeaways with quotes from the maintainers that originated during the review process\footnote{We \textbf{do not claim} these quotes fully represent the maintainers’ stance on code duplication.}.
 
 Groups 1 and 4 worked on similar duplications using the extract method on predicate functions (functions that return a boolean) that, essentially, were the negation of one another. Group 4 initially used macros, but, after feedback from maintainers, both solutions converged toward keeping one of the functions while modifying the other to return the negation of the former. Both cases suffered substantial mutations, even though they were correct in their first iterations, and these changes were primarily driven by the feedback of maintainers regarding readability. For Group 1, a maintainer said that \textit{``[...] the naming as \texttt{\_reg\_check()} is not helpful as it doesn't indicate anything specific is being checked.''}, while for Group 4, the feedback explicitly highlighted the precedence of readability over deduplications: \textit{``I think the old code is more readable than hiding the values in a macro even if it is duplicating a few lines of code.''}.
 
@@ -194,7 +195,7 @@ Even though the deduplication of Group 2 was not similar to that of Group 1 and 
 These experiences revealed a recurring concern among maintainers beyond functional correctness or redundancy reduction. Instead, it reflected a preference for code clarity and comprehension. From these consistent insights that originated from multiple review interactions, we formulated our first takeaway:
 
 \begin{highlight-box}{Takeaway T1 (Readability)}
-Maintainers prioritized readability over removing duplications in many different contexts. In their view, going against the \textbf{DRY principle} was worth it if it resulted in easier-to-read and understand code.
+Maintainers prioritized readability over removing duplications in many different contexts. In their view, going against the DRY principle was worth it if it resulted in easier-to-read and understand code.
 \end{highlight-box}
 
 Still focusing on Group 1, maintainers questioned the merit of the proposed patch. While the previous interactions highlighted how maintainers often favor readability over strict code deduplication, this case added a new dimension to our understanding: the \textit{cost-benefit} evaluation of proposed changes. A maintainer pointed out that the effort required to propagate such modifications after acceptance (i.e., during the upstreaming process) could outweigh the perceived benefits: ``\textit{[...] such patches might not worth it since the proposed improvement is very small (and questionable) while the upstreaming process still requires some effort.}''. From this feedback, we crafted our second takeaway:
@@ -207,13 +208,13 @@ Linux project.
 
 Groups 3, 6, and 10 used the parameterized method by introducing a new struct used as a parameter to a generic function. Notwithstanding that the same maintainer reviewed all three contributions, only Group 3 had its patch accepted. Our understanding was that this change, in particular, acted on a simple iterative algorithm that (colaterally) also fixed a bug, which favored its straightforward acceptance.
 
-Although removing duplications does not necessarily mean reducing lines of code, the patch from Group 6 added more net lines, which the maintainer pointed out as a drawback. Still, the real reason for the rejection was that the deduplication scattered parts of a complex code that resided close together before: \textit{``Wrapping this up doesn't provide any real advantage, requiring as it does the reviewer to look at this function AND where the value is set rather than seeing them in one place.''}. Needing to jump to a function definition (to see its behavior) or a function call (to see its concrete parameters) in order to understand code is a cognitively demanding task for developers~\cite{questions-programmers-ask}. Merging these informations, we derived our third takeaway:
+Although removing duplications does not necessarily mean reducing lines of code, the patch from Group 6 resulted in a positive net change in lines of code, which the maintainer pointed out as a drawback. Still, the real reason for the rejection was that the deduplication scattered parts of a complex code that resided close together before: \textit{``Wrapping this up doesn't provide any real advantage, requiring as it does the reviewer to look at this function AND where the value is set rather than seeing them in one place.''}. Needing to jump to a function definition (to see its behavior) or a function call (to see its concrete parameters) to understand code is a cognitively demanding task for developers~\cite{questions-programmers-ask}. Merging these informations, we derived our third takeaway:
 
 \begin{highlight-box}{Takeaway T3 (Cognitive Load)}
 Maintainers can justify duplications if they avoid having to jump back and forth in the code when parsing through the file.
 \end{highlight-box}
 
-The reason for rejecting the patch from Group 10 involved the deduplication lowering readability, as the maintainer was \textit{``[...] not sure the code reduction is sufficiently to cover the resulting loss of readability.''}, reinforcing takeaway T1.
+The reason for rejecting the patch from Group 10 involved the deduplication lowering readability, as the maintainer was \textit{``[...] not sure the code reduction is sufficiently to cover the resulting loss of readability.''}, reinforcing the takeaway T1.
 
 In the interaction of Group 10, there was also a hint that performance could be considered when evaluating the worth of a deduplication, whilst reaffirming that readability was a priority in that context: \textit{``I'd be slightly interested to see the optimized output of the two approaches, but this is far from a high performance path so we care a lot more about readability here.''}. Nonetheless, this notion surfaced aggressively with Group 10, where the contribution could completely remove both duplicated functions using the inline method by leveraging helpers; however, one of the functions had a call that, if eliminated, would result in a significant performance impact: \textit{``Note that is not an appropriate change for the large reads though [...] This is the one case were \texttt{spi\_write\_then\_read()} is probably not appropriate due to the large buffers that are potentially involved.''}. These interactions, coupled with the low-level development context of Linux and driver development, which is usually related to devices with limited resources, produced our fourth and final takeaway:
 
@@ -221,7 +222,7 @@ In the interaction of Group 10, there was also a hint that performance could be 
 Interactions with maintainers hinted that duplications can be forgiven if they improve performance in contexts where resources are limited.
 \end{highlight-box}
 
-Groups 7 and 8 used the extract method using helpers to remove duplicated code in the function's body. Group 7 refined its patch from the maintainers' feedback, resulting in a smooth acceptance process that did not produce any insights. Group 8 followed a similar course, but generated an interaction reinforcing takeaway T4. In the feedback of version 1, a maintainer claimed that \textit{``Even though there is less code repetition, we now have an extra comparison [...]''}, with another maintainer corroborating this in version three by saying \textit{``There is always a balance/trade-off between modularity and execution speed. I agree with \texttt{anonymous-maintainer}'s reply in the first patch [...]''}, regardless of the fact that the patch was eventually accepted in version four.
+Groups 7 and 8 used the extract method using helpers to remove duplicated code in the function's body. Group 7 refined its patch from the maintainers' feedback, resulting in a smooth acceptance process that did not produce any insights. Group 8 followed a similar course, but generated an interaction reinforcing the takeaway T4. In the feedback of version 1, a maintainer claimed that \textit{``Even though there is less code repetition, we now have an extra comparison [...]''}, with another maintainer corroborating this in version three by saying: \textit{``There is always a balance/trade-off between modularity and execution speed. I agree with \texttt{anonymous-maintainer}'s reply in the first patch [...]''}, regardless of the fact that the patch was eventually accepted in version four.
 
 We did not explore the contributions of Group 5 and Group 11 in detail, as they did not result in (or influence) any insights regarding these fascinating perspectives from the Linux community that are dissonant with the apparently unquestionable DRY principle. However, they were still meaningful as they produced impactful contributions that reduced a lot of duplicated code. Especially in Group 11, where a single student executed the whole workflow we did in the first phase, and managed to remove four hundred net lines of code.
 
@@ -243,7 +244,7 @@ This ethnographic study, combining complete participant and participant-as-obser
 
 Throughout this process, we observed that maintainers do not necessarily regard code duplication as inherently harmful. Instead, their decisions reflect a nuanced and context-dependent understanding of software quality. As evidenced by our takeaways, readability often outweighed strict adherence to the DRY principle (T1), while the effort required to propagate changes also influenced maintainers’ acceptance decisions (T2). Moreover, avoiding cognitive overhead when navigating the code (T3) and preserving performance in resource-constrained environments (T4) emerged as additional justifications for tolerating certain forms of duplication.
 
-Overall, these findings reveal that, within the Linux kernel community, the evaluation of code duplication extends beyond technical redundancy. Maintainability, clarity, and practical trade-offs play a decisive role in shaping maintainers’ judgments, suggesting that DRY is sometimes less valuable than keeping the code understandable, efficient, and integrated smoothly into a large and evolving system.
+Overall, these findings reveal that, within the Linux kernel community, the evaluation of code duplication extends beyond technical redundancy. Maintainability, clarity, and practical trade-offs play a decisive role in shaping maintainers’ judgments, suggesting that the DRY principle is sometimes less valuable than keeping the code understandable, efficient, and integrated smoothly into a large and evolving system.
 
 \section*{Replication Package}
 
@@ -251,6 +252,7 @@ All anonymized threads containing the entire review process and interactions wit
 
 To avoid violating the double-anonymized review process, the anonymous repository of the developed tool is available at \url{https://anonymous.4open.science/r/arkanjo-C548}. The tool website link and omitted references will be added in the camera-ready version of the paper.
 
+\newpage
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 \bibliography{IEEEabrv,references}
