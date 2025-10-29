@@ -6,16 +6,21 @@
 \usepackage[utf8]{inputenc}  
 \usepackage{seqsplit}
 \usepackage{todonotes}
+\usepackage[most]{tcolorbox}
 
 %% Takeaway Boxes %%
-\usepackage[most]{tcolorbox}
-\tcbset{colback=gray!10, colframe=gray!50!black, boxrule=0.5pt,
-        left=1mm, right=1mm, top=1mm, bottom=1mm, sharp corners}
-
 \newenvironment{highlight-box}[1]{%
-  \begin{tcolorbox}
+  \begin{tcolorbox}[colback=gray!10, colframe=gray!50!black, boxrule=0.5pt,
+                    left=1mm, right=1mm, top=1mm, bottom=1mm, sharp corners]
   \textbf{#1:} \itshape}{\end{tcolorbox}}
 %% Takeaway Boxes %%
+
+%% DRY Highlight Box %%
+\newenvironment{dry-highlight-box}[1]{%
+  \begin{tcolorbox}[colback=blue!5!white, colframe=blue!60!black, boxrule=0.5pt,
+                    left=1mm, right=1mm, top=1mm, bottom=1mm, sharp corners]
+  \textbf{#1:} \itshape}{\end{tcolorbox}}
+%% DRY Highlight Box %%
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -69,12 +74,12 @@ Hundreds or thousands of developers working together on a software product is a 
 
 A widespread dogma among developers is the \textit{Don't Repeat Yourself} principle~\cite{pragmatic-programmer}, stated as follows.
 
-\begin{highlight-box}{DRY principle}
+\begin{dry-highlight-box}{DRY principle}
   ``We feel that the only way to develop software reliably, and to make our
   developments easier to understand and maintain, is to follow what we call the
   DRY principle: Every piece of knowledge must have a single, unambiguous,
   authoritative representation within a system''.
-\end{highlight-box}
+\end{dry-highlight-box}
 
 The Linux kernel is a foundational Free/Libre and Open Source Software (FLOSS) project, a vital component of the world's digital infrastructure. Considering only lines of code (no comments or blank lines) of strictly programming languages, in version 6.17, the main repository has more than 27 million lines of code and involved contributions from over twenty thousand developers. Within this context, code duplication remains a significant challenge,  reducing the code readability and increasing the risk of introducing bugs~\cite{harmone,harmtwo}. This issue is particularly prominent in kernel device drivers, which account for over 66\% of the Linux kernel source code.
 
