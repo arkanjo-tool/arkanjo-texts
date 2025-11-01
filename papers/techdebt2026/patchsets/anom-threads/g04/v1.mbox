@@ -279,7 +279,7 @@ Thanks ##### and ####### for the feedback.
 
 I, too, agree with you and see that a comment would be adequate.
 
-Regarding the name of the macro, I see David's suggestion as being
+Regarding the name of the macro, I see #####'s suggestion as being
 slightly more
 intuitive. Otherwise, someone might eventually argue that the same comment on
 the read-only volatile registers should accompany the definition of the macro.

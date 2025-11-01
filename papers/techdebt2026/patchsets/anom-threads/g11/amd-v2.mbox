@@ -1802,7 +1802,6 @@ On ############, ######################## wrote:
 >   #endif
 
 
-ser-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2] drm/amd/display/dc/irq: Remove duplications of hpd_ack
  function from IRQ
 

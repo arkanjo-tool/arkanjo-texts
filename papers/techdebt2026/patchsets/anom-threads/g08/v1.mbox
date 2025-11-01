@@ -19,7 +19,7 @@ index 69a0d609c..8e1cdaeb0 100644
 +++ b/drivers/iio/light/apds9306.c
 @@ -6,7 +6,6 @@
   *
-  * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+  * Copyright (C) 2024 ##############################################
   */
 -
  #include <linux/bits.h>
@@ -128,7 +128,7 @@ Wrap commit description to 75 columns.
 > +++ b/drivers/iio/light/apds9306.c
 > @@ -6,7 +6,6 @@
 >   *
->   * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+>   * Copyright (C) 2024 ##############################################
 >   */
 > -
 This doesn't seem to have any relation with the intent of the patch.
@@ -245,7 +245,7 @@ Subject: Re: [PATCH] iio: light: apds9306: Refactor threshold get/set
 > > +++ b/drivers/iio/light/apds9306.c
 > > @@ -6,7 +6,6 @@
 > >   *
-> >   * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+> >   * Copyright (C) 2024 ##############################################
 > >   */
 > > -  
 > This doesn't seem to have any relation with the intent of the patch.
@@ -359,7 +359,6 @@ Best regards,
 ######
 
 
-On Sun, Apr 20, 2025 at 3:25=E2=80=AFPM ###############
 <##########################> wrote:
 >
 > Hello ######, #####,
@@ -397,7 +396,7 @@ c
 > > +++ b/drivers/iio/light/apds9306.c
 > > @@ -6,7 +6,6 @@
 > >   *
-> >   * Copyright (C) 2024 Subhajit Ghosh <subhajit.ghosh@tweaklogic.com>
+> >   * Copyright (C) 2024 ##############################################
 > >   */
 > > -
 > This doesn't seem to have any relation with the intent of the patch.
