@@ -103,7 +103,7 @@ We employed a multi-method research approach. We developed and evaluated a propo
 
 \subsection{Tool}
 
-Academic research on code duplication often focuses on pairwise comparison of code artifacts, which is not directly applicable to comprehensive codebase analyses. Existing free software tools we explored in practice suffered from limited functionality~[omitted]. Thus, we developed a command-line tool\footnote{Anonymous repository:  \url{https://anonymous.4open.science/r/arkanjo-C548}} designed to detect and analyze function-level code duplication within large codebases, such as the Linux kernel. The tool is released under LGPLv3 (GNU Lesser General Public License, version 3) and employs a two-stage architecture that separates the computationally intensive task of finding duplicates from the process of querying the results. The first stage analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage uses this database to retrieve information about the identified duplications quickly.
+Academic research on code duplication often focuses on pairwise comparison of code artifacts, which is not directly applicable to comprehensive codebase analyses. Existing free software tools we explored in practice suffered from limited functionality~[omitted]. Thus, we developed a command-line tool\footnote{Anonymized repository:  \url{https://anonymous.4open.science/r/anonymous-repo-tech-debt/}} designed to detect and analyze function-level code duplication within large codebases, such as the Linux kernel. The tool is released under LGPLv3 (GNU Lesser General Public License, version 3) and employs a two-stage architecture that separates the computationally intensive task of finding duplicates from the process of querying the results. The first stage analyzes the entire codebase, parses C functions, and stores identified duplicates in a database. The second stage uses this database to retrieve information about the identified duplications quickly.
 %The tool is available at \textit{\href{https://github.com/arkanjo-tool/arkanjo}{github.com/arkanjo-tool/arkanjo}}.
 
 The tool was designed to address the specific challenges posed by large-scale codebases, focusing on scalability and prioritization of duplications that may impact maintainability. It uses a text similarity method based on TF-IDF (Term Frequency-Inverse Document Frequency) vector embedding, implemented with the Gensim library~\cite{gensim}, and computes cosine similarity to detect clones.
@@ -250,7 +250,7 @@ Overall, these findings reveal that, within the Linux kernel community, the eval
 
 All anonymized threads containing the entire review process and interactions with maintainers are available in this Zenodo repository: \href{https://doi.org/10.5281/zenodo.17474124}{https://doi.org/10.5281/zenodo.17474124}.
 
-To avoid violating the double-anonymized review process, the anonymous repository of the developed tool is available at \url{https://anonymous.4open.science/r/arkanjo-C548}. The tool website link and omitted references will be added in the camera-ready version of the paper.
+To avoid violating the double-anonymized review process, the anonymous repository of the developed tool is available at \url{https://anonymous.4open.science/r/anonymous-repo-tech-debt/}. The tool website link and omitted references will be added in the camera-ready version of the paper.
 
 \newpage
 \bibliographystyle{IEEEtran}
