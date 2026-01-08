@@ -38,13 +38,13 @@ Voices from the Trenches of Linux Kernel Maintainers on Code Duplication}
 
 \author{\IEEEauthorblockN{Anonymous Authors}}
 
-%\author{\IEEEauthorblockN{Luan Arcanjo, Marcelo Spessoto, David Tadokoro, Paulo Meirelles}
-%\IEEEauthorblockA{
-%Free Software Competence Center\\
-%Institute of Mathematics, Statistics, and Computer Science
-%Universidade de São Paulo, Brazil\\
-%\{luanicaro,marcelomspessoto,davidbtadokoro\}@usp.br,paulormm@ime.usp.br}
-%}
+\author{\IEEEauthorblockN{Luan Arcanjo, David Tadokoro, Marcelo Spessoto, Rafael Passos, Paulo Meirelles}
+\IEEEauthorblockA{
+Free Software Competence Center\\
+Institute of Mathematics, Statistics, and Computer Science
+Universidade de São Paulo, Brazil\\
+\{luanicaro,davidbtadokoro,marcelomspessoto,rpassos,paulormm\}@ime.usp.br}
+}
 
 % make the title area
 \maketitle
@@ -58,7 +58,7 @@ This paper presents a multimethod ethnographic study investigating the socio-tec
 %
 To support this study, we developed a command-line utility tool for detecting function-level duplications, offering a concrete entry point for new contributors.
 %
-Our ethnographic approach, including complete participant observation and participant-as-observer analyses, demonstrated that addressing duplications is viable for lowering the contribution barrier. This point is evidenced by 8 of 13 (62\%) accepted contributions (patches) from 24 newcomers (16 undergraduate and 8 graduate students) in the Linux kernel project, collectively removing 1.397 lines of duplicated code.
+Our ethnographic approach, including complete participant observation and participant-as-observer analyses, demonstrated that addressing duplications is viable for lowering the contribution barrier. This point is evidenced by 8 of 13 (62\%) accepted contributions (patches) from 24 newcomers (16 undergraduate and 8 graduate students) in the Linux kernel project, collectively removing 1,397 lines of duplicated code.
 %
 Nevertheless, the study reveals a more intriguing and complex reality beyond mindlessly removing clones. An analysis of maintainer feedback on both accepted and rejected contributions highlights a nuanced understanding of technical debt due to code duplication within the Linux kernel community, where the benefits of eliminating duplications are carefully weighed against factors such as readability, the introduction of new abstractions, and the specific code context.
 \end{abstract}
@@ -254,6 +254,10 @@ Overall, these findings reveal that, within the Linux kernel community, the eval
 All anonymized threads containing the entire review process and interactions with maintainers are available in this Zenodo repository: \href{https://doi.org/10.5281/zenodo.17503684}{https://doi.org/10.5281/zenodo.17503684}.
 
 To avoid violating the double-anonymized review process, the anonymous repository of the developed tool is available at \url{https://anonymous.4open.science/r/anonymous-repo-tech-debt/}. The tool website link and omitted references will be added in the camera-ready version of the paper.
+
+%\begin{acks}
+%...
+%\end{acks}
 
 \newpage
 \bibliographystyle{IEEEtran}
