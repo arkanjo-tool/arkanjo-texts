@@ -19,35 +19,79 @@
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+\newcommand{\afiliacao}{
+\affiliation{%
+  %\institution{Institute of Mathematics, Statistics, \\ and Computer Science,\\ University of São Paulo}
+  \institution{University of São Paulo}
+  \city{São Paulo}
+  %\state{São Paulo}
+  \country{Brazil}
+}}
+
 
 \begin{document}
 
 \title{When Do You Repeat Yourself? Voices from the Trenches of Linux Kernel Maintainers on Code Duplication}
 
 \author{Luan Arcanjo}
+\email{luanicaro@usp.br}
+\orcid{0009-0003-3657-5519}
+\afiliacao
+
 \author{David Tadokoro}
+\email{davidbtadokoro@ime.usp.br}
+\orcid{0009-0000-4639-1578}
+\afiliacao
+
 \author{Marcelo Spessoto}
+\email{marcelomspessoto@usp.br}
+\orcid{0000-0000-0000-0000}
+\afiliacao
+
 \author{Rafael Passos}
+\email{rcpassos@ime.usp.br}
+\orcid{0009-0003-3657-5519}
+\afiliacao
+
 \author{Paulo Meirelles}
-\affiliation{
-  \institution{Free Software Competence Center, Institute of Mathematics, Statistics, and Computer Science, Universidade de São Paulo}
-  \country{Brazil}
-}
-\email{{marcelomspessoto,luanicaro,davidbtadokoro}@usp.br; rpassos,paulormm\}@ime.usp.br}
+\email{paulormm@ime.usp.br}
+\orcid{0000-0002-8923-2814}
+\afiliacao
 
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
 \begin{abstract}
 The vast scale and continuous evolution of the Linux kernel make its maintenance a complex undertaking, where code duplication remains a persistent challenge that can hinder development and introduce bugs.
 %
-This paper presents a multimethod ethnographic study investigating the socio-technical dynamics of contributing to the Linux kernel by reducing identified code duplication.
+We conducted an ethnographic study on the socio-technical dynamics of contributing to the Linux kernel by reducing identified code duplication.
 %
-To support this study, we developed a command-line utility tool for detecting function-level duplications, offering a concrete entry point for new contributors.
+Our approach, including complete participant observation and participant-as-observer analyses, demonstrated that addressing duplications is viable for lowering the contribution barrier. This point is evidenced by 8 of 13 (62\%) accepted contributions (patches) from 24 newcomers (16 undergraduate and 8 graduate students) in the Linux kernel project, collectively removing 1,397 lines of duplicated code.
 %
-Our ethnographic approach, including complete participant observation and participant-as-observer analyses, demonstrated that addressing duplications is viable for lowering the contribution barrier. This point is evidenced by 8 of 13 (62\%) accepted contributions (patches) from 24 newcomers (16 undergraduate and 8 graduate students) in the Linux kernel project, collectively removing 1,397 lines of duplicated code.
-%
-Nevertheless, the study reveals a more intriguing and complex reality beyond mindlessly removing clones. An analysis of maintainer feedback on both accepted and rejected contributions highlights a nuanced understanding of technical debt due to code duplication within the Linux kernel community, where the benefits of eliminating duplications are carefully weighed against factors such as readability, the introduction of new abstractions, and the specific code context.
+Our analysis of maintainers' feedback reveals a nuanced understanding of technical debt resulting from code duplication within the Linux kernel community, where the benefits of eliminating duplications are carefully weighed against factors such as readability, the introduction of new abstractions, and the specific code context.
 \end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10003120.10003130.10003233.10003597</concept_id>
+       <concept_desc>Human-centered computing~Open source software</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10011007.10011074.10011134.10003559</concept_id>
+       <concept_desc>Software and its engineering~Open source model</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Software and its engineering~Open source model}
+\ccsdesc[500]{Human-centered computing~Open source software}
+
+%%
+%% Keywords. The author(s) should pick words that accurately describe
+%% the work being presented. Separate the keywords with commas.
+\keywords{Linux kernel, Code Quality, Deduplication, Maintainers}
 
 \maketitle
 
@@ -74,7 +118,7 @@ This study focuses on two of these subsystems, selected to represent different c
 
 \section{Research Strategy}
 
-Preliminarily, we conducted an initial exploratory survey of existing static analysis tools, including PMD, Duplo, Simian, and CodeClimate. While these tools offer established detection capabilities, we observed practical limitations when applying them to the scale and specificities of the Linux kernel. Many solutions were either restricted by commercial licensing, relied exclusively on token-based matching, or, in the case of FLOSS alternatives like the \textit{duplicate-code-detection-tool}, were limited to file-scope comparisons, thereby missing intra-file duplications. To overcome these specific constraints and streamline our analysis, we developed a custom command-line tool, Arkanjo, adapted to detect function-level redundancy within large C codebases.
+Preliminarily, we conducted an initial exploratory survey of existing static analysis tools, including PMD, Duplo, Simian, and CodeClimate\footnote{All analyzed tools and our notes regarding them are at \url{https://github.com/arkanjo-tool/arkanjo/wiki/Evaluation-of-other-duplication-tools}}. While these tools offer established detection capabilities, we observed practical limitations when applying them to the scale and specificities of the Linux kernel. Many solutions were either restricted by commercial licensing, relied exclusively on token-based matching, or, in the case of FLOSS alternatives like the \textit{duplicate-code-detection-tool}, were limited to file-scope comparisons, thereby missing intra-file duplications. To overcome these specific constraints and streamline our analysis, we developed a custom command-line tool, Arkanjo, adapted to detect function-level redundancy within large C codebases.
 
 The tool, released under the LGPLv3, employs a standard text similarity method based on TF-IDF (Term Frequency-Inverse Document Frequency) vector embeddings [REF ArKanjo DebConf]. By computing cosine similarity between C functions, the tool addresses the ``same-file'' blind spots of previous file-scope parsers. The decision to implement this specific instrumentation was driven by the need for a simple, lightweight CLI that prioritizes maintainability, allowing the research focus to remain on the qualitative analysis of the code and subsequent community interactions, rather than on the tool itself.
 
@@ -227,11 +271,11 @@ All anonymized threads containing the entire review process and interactions wit
 
 To avoid violating the double-anonymized review process, the anonymous repository of the developed tool is available at \url{https://anonymous.4open.science/r/anonymous-repo-tech-debt/}. The tool website link and omitted references will be added in the camera-ready version of the paper.
 
-%\begin{acks}
-%...
-%\end{acks}
+\begin{acks}
+This study is funded by the São Paulo Research Foundation (FAPESP) and the São Paulo State Data Analysis System Foundation (SEADE), under grants 2023/18026-8 and 2025/05395-0.
+\end{acks}
 
-\newpage
+
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 
