@@ -110,11 +110,15 @@ Through interactions with maintainers, this study gained insights into how the L
 
 Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members' values, beliefs, and practices~\cite{ethnosoft}. In this study, we first employed a complete participant observation approach~\cite{gold1958roles}, actively contributing by performing deduplications while documenting the process. We then conducted a participant-as-observer study~\cite{gold1958roles} with students resolving duplications identified by the tool. Beyond demonstrating that the tool lowered the entry barrier for new contributors, these studies yielded intriguing observations on kernel Linux deduplications. This paper describes the aforementioned studies, along with our visions and reflections from diving into the Linux kernel development process.
 
-\section{The Linux Kernel}
+\section{Related Work}
+Some works focus on proposing new techniques to identify duplications, using the Linux Kernel codebase as an example, such as \citet{ccfinder2002} and \citet{CP-Miner-2006}.
+% \citet{CP-Miner-2006} studied the clone coverage rate of the Linux kernel over 10 years and observed a steady growth of the clone coverage rate over time.
+\citet{kapserCloningConsideredHarmful2008} discussed patterns of cloning used in software, including situations where this could be positive.
+\citet{juergensCodeClonesMatter2009} analyzed a commercial and an open-source project, but on a smaller scale. They argue that the most inconsistent changes to clones lead to faults.
+\citet{scsi-cloning-2011} explores the use of cloning as a development technique for the SCSI drivers in the Linux Kernel, where similar devices had drivers born from code cloning.
+\citet{harderSoftwareClonesGuilty2017} acknowledges the harmful case of cloned bugs but provides empirical evidence regarding the adverse effects of software clones, which contradicts the conclusion. The work concludes without providing clear guidance for practitioners and leaving an open path for future research, such as this one.
 
-The Linux kernel is a complex project organized into subsystems, such as the process scheduler, memory management, and device drivers. Each subsystem typically has a dedicated maintainer or a team of maintainers overseeing its development and managing contributions. The development process is coordinated through Git (also designed by Linus Torvald, focused on the Linux kernel development), and contributions are formatted as patches, text documents that outline the differences between two source code versions. These patches are then submitted to the relevant Linux mailing lists for public review and discussion.
-
-This study focuses on two of these subsystems, selected to represent different contexts for contribution. We explore the \textit{AMD Display drivers}, chosen for their importance within the hardware ecosystem, which is responsible for natively enabling AMD GPU functionality in Linux. This subsystem is substantial, with over 391,000 lines of code across more than 1,089 files. We also investigate the \textit{Industrial Input/Output (IIO)} subsystem, often considered an accessible entry point for new contributors. The IIO subsystem provides support for devices that perform analog-to-digital or digital-to-analog conversions\footnote{\href{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}} and contains over 281,772 lines of code in more than 755 files.
+Our study provides additional empirical evidence and a different methodological perspective for researchers and practitioners interested in technical debt, code quality, and socio-technical practices within the Linux kernel project. We obtained key insights by analyzing the reasoning of maintainers when they accepted or rejected patches submitted by contributors. We provide a new contribution to a long-standing conversation among software engineering researchers regarding the question of when and how duplicate code matters.
 
 \section{Research Strategy}
 
@@ -122,7 +126,9 @@ Preliminarily, we conducted an initial exploratory survey of existing static ana
 
 The tool, released under the LGPLv3, employs a standard text similarity method based on TF-IDF (Term Frequency-Inverse Document Frequency) vector embeddings [REF ArKanjo DebConf]. By computing cosine similarity between C functions, the tool addresses the ``same-file'' blind spots of previous file-scope parsers. The decision to implement this specific instrumentation was driven by the need for a simple, lightweight CLI that prioritizes maintainability, allowing the research focus to remain on the qualitative analysis of the code and subsequent community interactions, rather than on the tool itself.
 
-To support the iterative nature of the study, the tool utilizes a two-stage architecture that decouples the computationally intensive parsing from data retrieval. We measured the pre-processor's execution time on a machine equipped with a Ryzen 5700X processor and 32GB of RAM. Across multiple runs on complex subsystems, such as the AMD Display driver and IIO, the worst-case indexing time was approximately 9 minutes and 41 seconds. In contrast, the query responder processed requests in under 2 seconds. These tests confirmed that the tool was sufficiently efficient to enable our ethnographic study, providing rapid access to analysis data without introducing significant overhead to the workflow.
+The Linux kernel is a complex project organized into subsystems, such as the process scheduler, memory management, and device drivers. Each subsystem typically has a dedicated maintainer or a team of maintainers overseeing its development and managing contributions. Our study focuses on two of these subsystems, selected to represent different contexts for contribution. We explore the \textit{AMD Display drivers}, chosen for their importance within the hardware ecosystem, which is responsible for natively enabling AMD GPU functionality in Linux. This subsystem is substantial, with over 391,000 lines of code across more than 1,089 files. We also investigate the \textit{Industrial Input/Output (IIO)} subsystem, often considered an accessible entry point for new contributors. The IIO subsystem provides support for devices that perform analog-to-digital or digital-to-analog conversions\footnote{\href{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}{https://kernel.org/doc/html/v6.17/driver-api/iio/intro.html}} and contains over 281,772 lines of code in more than 755 files.
+
+To support the iterative nature of this study, the tool utilizes a two-stage architecture that decouples the computationally intensive parsing from data retrieval. We measured the pre-processor's execution time on a machine equipped with a Ryzen 5700X processor and 32GB of RAM. Across multiple runs on complex subsystems, such as the AMD Display driver and IIO, the worst-case indexing time was approximately 9 minutes and 41 seconds. In contrast, the query responder processed requests in under 2 seconds. These tests confirmed that the tool was sufficiently efficient to enable our ethnographic study, providing rapid access to analysis data without introducing significant overhead to the workflow.
 
 Using Arkanjo, we proceeded to assess the viability of reducing the identified duplications through an ethnographic study using a participant observation methodology~\cite{gold1958roles}. In the first phase, adopting the role of \textit{complete participant}~\cite{gold1958roles}, we engaged directly with the Linux kernel community by submitting deduplication patches to the AMD Display driver. In the second phase, shifting to the role of \textit{participant-as-observer}~\cite{gold1958roles}, we introduced a similar activity within a university course, where students were tasked with proposing patches for the AMD Display or IIO subsystems. Throughout this process, we provided guidance and mentorship to the students as they interacted with the community.
 
@@ -156,16 +162,6 @@ It is important to stress that, \textbf{no matter the chosen approach, we suppor
 For this second phase, our primary data source was the mailing list threads, where all development occurred (also available in our replication package). Using blog posts, the groups documented their experiences submitting a patch to the Linux kernel~[omitted], and we also leveraged those to complement our observations. % (available in our Replication Package).
 %TODO: Add blogs ao pacote de replicação
 
-\vspace{-.2cm}
-\section{Related Work}
-Some works focus on proposing new techniques to identify duplications, using the Linux Kernel codebase as an example, such as \citet{ccfinder2002} and \citet{CP-Miner-2006}.
-% \citet{CP-Miner-2006} studied the clone coverage rate of the Linux kernel over 10 years and observed a steady growth of the clone coverage rate over time
-. \citet{kapserCloningConsideredHarmful2008} discussed patterns of cloning used in software, including situations where this could be positive.
-\citet{juergensCodeClonesMatter2009} analyzed a commercial and an open-source project, but on a smaller scale. They argue that the most inconsistent changes to clones lead to faults.
-\citet{scsi-cloning-2011} explores the use of cloning as a development technique for the SCSI drivers in the Linux Kernel, where similar devices had drivers born from code cloning.
-\citet{harderSoftwareClonesGuilty2017} acknowledges the harmful case of cloned bugs, but provides empirical evidence for beneficial cases as well; concluding the thesis without clear advice for practitioners, and an open path for new research, like this one.
-
-\vspace{-.2cm}
 \section{Results}
 
 In the \textbf{complete participant observation} study (first phase), we chose one function pair found on the AMD Display Driver to approach and apply the systematic approach.
@@ -175,7 +171,7 @@ We reached a point where we had an idea of removing the duplications found, but 
 At this stage, we considered the deduplication proposal good enough to submit it to the AMD Display driver as a patch. We sent the first patch on August 9, 2024, and a resend followed on October 9, 2024, due to a lack of initial feedback. Nevertheless, for the first two versions, the maintainers' response requested minor changes for coding style, license use, and alignment with existing conventions. In the third version, the feedback was to move the new generic library functions to an existing file, instead of creating a new one. Then, the fourth version was accepted and integrated into the kernel on February 25, 2025.
 %\footnote{V1: \href{https://lore.kernel.org/amd-gfx/20240809210122.23814-1-luanicaro@usp.br/}{https://lore.kernel.org/amd-gfx/20240809210122.23814-1-luanicaro@usp.br/}, V1 (resend): \href{https://lore.kernel.org/amd-gfx/20241009153424.15256-1-luanicaro@usp.br/}{https://lore.kernel.org/amd-gfx/20241009153424.15256-1-luanicaro@usp.br/}, V4 (approved): \href{https://lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}{lore.kernel.org/all/20250225015532.303032-1-luanicaro@usp.br/}}.
 
-Since we suffered a delay in the review process, we directly contacted a maintainer to understand why. From this conversation, we understand that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This approach allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by Kapser and Godfrey~\cite{cloneharm}, leads us to the primary conclusion of our complete participant observation:
+Since we suffered a delay in the review process, we directly contacted a maintainer to understand why. From this conversation, we understand that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This approach allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by~\cite{kapserCloningConsideredHarmful2008}, leads us to the primary conclusion of our complete participant observation:
 %
 \begin{highlight-box}{Takeaway T0}
 Driver developers do not necessarily view duplicated code negatively, which contradicts standard software engineering practices.
@@ -253,16 +249,7 @@ We did not explore the contributions of Group 5 and Group 11 in detail, as they 
 
 In this sense, we discuss another aspect of importance stemming from this work: using the developed tool to create deduplication opportunities in the Linux kernel can be an excellent introduction for newcomers.
 
-To illustrate this point, we display some statistics concerning the 13 contributions contemplated in this paper:
-
-\begin{itemize}
-  \item Collectively, the patches proposed the insertion of 585 lines and the removal of 1626 lines.
-  \item 8 out of 13 contributions were accepted, resulting in a success rate of 62\%.
-  \item For accepted contributions, the code diff value was +255/-1152, averaging +31.9/-144.0 additions/removals.
-  \item For rejected contributions, the code diff value was +181/-231, averaging +36.2/-46.2 additions/removals.
-\end{itemize}
-
-\hfill\\
+To illustrate this point, we display some statistics concerning the 13 contributions contemplated in this paper: (i) Collectively, the patches proposed the insertion of 585 lines and the removal of 1626 lines; (ii) 8 out of 13 contributions were accepted, resulting in a success rate of 62\%; (iii) for accepted contributions, the code diff value was +255/-1152, averaging +31.9/-144.0 additions/removals; (iv) For rejected contributions, the code diff value was +181/-231, averaging +36.2/-46.2 additions/removals.
 
 \section{Concluding Remarks}
 
@@ -271,8 +258,6 @@ This ethnographic study, combining complete participant and participant-as-obser
 Throughout this process, we observed that maintainers do not necessarily regard code duplication as inherently harmful. Instead, their decisions reflect a nuanced and context-dependent understanding of software quality. As evidenced by our takeaways, readability often outweighed strict adherence to the DRY principle (T1), while the effort required to propagate changes also influenced maintainers’ acceptance decisions (T2). Moreover, avoiding cognitive overhead when navigating the code (T3) and preserving performance in resource-constrained environments (T4) emerged as additional justifications for tolerating certain forms of duplication.
 
 Overall, these findings reveal that, within the Linux kernel community, the evaluation of code duplication extends beyond technical redundancy. Maintainability, clarity, and practical trade-offs play a decisive role in shaping maintainers’ judgments, suggesting that the DRY principle is sometimes less valuable than keeping the code understandable, efficient, and integrated smoothly into a large and evolving system.
-
-\hfill
 
 \section*{Replication Package}
 
