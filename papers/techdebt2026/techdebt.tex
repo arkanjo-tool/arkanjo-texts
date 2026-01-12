@@ -157,6 +157,15 @@ For this second phase, our primary data source was the mailing list threads, whe
 %TODO: Add blogs ao pacote de replicação
 
 \vspace{-.2cm}
+\section{Related Work}
+Some works focus on proposing new techniques to identify duplications, using the Linux Kernel codebase as an example, such as \citet{ccfinder2002} and \citet{CP-Miner-2006}.
+% \citet{CP-Miner-2006} studied the clone coverage rate of the Linux kernel over 10 years and observed a steady growth of the clone coverage rate over time
+. \citet{kapserCloningConsideredHarmful2008} discussed patterns of cloning used in software, including situations where this could be positive.
+\citet{juergensCodeClonesMatter2009} analyzed a commercial and an open-source project, but on a smaller scale. They argue that the most inconsistent changes to clones lead to faults.
+\citet{scsi-cloning-2011} explores the use of cloning as a development technique for the SCSI drivers in the Linux Kernel, where similar devices had drivers born from code cloning.
+\citet{harderSoftwareClonesGuilty2017} acknowledges the harmful case of cloned bugs, but provides empirical evidence for beneficial cases as well; concluding the thesis without clear advice for practitioners, and an open path for new research, like this one.
+
+\vspace{-.2cm}
 \section{Results}
 
 In the \textbf{complete participant observation} study (first phase), we chose one function pair found on the AMD Display Driver to approach and apply the systematic approach.
