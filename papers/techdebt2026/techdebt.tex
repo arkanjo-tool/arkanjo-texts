@@ -1,33 +1,11 @@
 \documentclass[sigconf]{acmart}
 \usepackage{url}
-\usepackage{hyperref}
 
-%% Takeaway Boxes - ACM Compatible %%
+%% Takeaway Boxes %%
 \usepackage{framed}
-\newenvironment{highlight-box}[1]{%
-  \begin{framed}%
-  \noindent\textbf{#1:} \itshape\ignorespaces}{%
-  \end{framed}}
-
-%% DRY Highlight Box - ACM Compatible %%
-\newenvironment{dry-highlight-box}[1]{%
-  \begin{framed}%
-  \noindent\textbf{[#1]} \itshape\ignorespaces}{%
-  \end{framed}}
-%% DRY Highlight Box %%
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
-
-\newcommand{\afiliacao}{
-\affiliation{%
-  %\institution{Institute of Mathematics, Statistics, \\ and Computer Science,\\ University of São Paulo}
-  \institution{University of São Paulo}
-  \city{São Paulo}
-  %\state{São Paulo}
-  \country{Brazil}
-}}
-
 
 \begin{document}
 
@@ -36,27 +14,47 @@
 \author{Luan Arcanjo}
 \email{luanicaro@usp.br}
 \orcid{0009-0003-3657-5519}
-\afiliacao
+\affiliation{%
+  \institution{University of São Paulo}
+  \city{São Paulo}
+  \country{Brazil}
+}
 
 \author{David Tadokoro}
 \email{davidbtadokoro@ime.usp.br}
 \orcid{0009-0000-4639-1578}
-\afiliacao
+\affiliation{%
+  \institution{University of São Paulo}
+  \city{São Paulo}
+  \country{Brazil}
+}
 
 \author{Marcelo Spessoto}
 \email{marcelomspessoto@usp.br}
-\orcid{0000-0000-0000-0000}
-\afiliacao
+\orcid{0009-0002-3301-4874}
+\affiliation{%
+  \institution{University of São Paulo}
+  \city{São Paulo}
+  \country{Brazil}
+}
 
 \author{Rafael Passos}
 \email{rcpassos@ime.usp.br}
 \orcid{0009-0003-3657-5519}
-\afiliacao
+\affiliation{%
+  \institution{University of São Paulo}
+  \city{São Paulo}
+  \country{Brazil}
+}
 
 \author{Paulo Meirelles}
 \email{paulormm@ime.usp.br}
 \orcid{0000-0002-8923-2814}
-\afiliacao
+\affiliation{%
+  \institution{University of São Paulo}
+  \city{São Paulo}
+  \country{Brazil}
+}
 
 % As a general rule, do not put math, special symbols or citations
 % in the abstract
@@ -151,9 +149,9 @@ To broaden our study and observations, we adopted a participant-as-observer appr
 
 The 2025 course offering had 37 students (25 undergraduate and 12 graduate), who were asked to form groups of two or three members, but graduate students could work individually. To assist students in this task, we (a professor and three more experienced graduate students) prepared several alternatives for contributing to the Linux kernel, including simpler contributions such as fixing coding style issues. In this context, we specified two options for removing duplications in the Linux kernel.
 
-\paragraph*{\textbf{Deduplication Option 1}} We ran the tool on the IIO subsystem to generate a list of duplicated function pairs, then curated it to highlight actionable cases for students. Specifically, we (1) kept only pairs within the same file, since cross-driver duplications could involve multiple maintainers or distinct interfaces; (2) removed very short duplications; and (3) manually ranked the remaining pairs, adding annotations to guide students toward entries likely to be accepted. In this option, students were tasked with selecting a recommended entry, devising a way to remove the duplication, and submitting their patches to the IIO mailing list for review.
+\paragraph{\textbf{Deduplication Option 1}} We ran the tool on the IIO subsystem to generate a list of duplicated function pairs, then curated it to highlight actionable cases for students. Specifically, we (1) kept only pairs within the same file, since cross-driver duplications could involve multiple maintainers or distinct interfaces; (2) removed very short duplications; and (3) manually ranked the remaining pairs, adding annotations to guide students toward entries likely to be accepted. In this option, students were tasked with selecting a recommended entry, devising a way to remove the duplication, and submitting their patches to the IIO mailing list for review.
 
-\paragraph*{\textbf{Deduplication Option 2}} We offered an experience similar to our initial complete participant observation, where students managed the entire workflow: running the tool, analyzing results to identify potential deduplications, creating a patch, and submitting it to the driver's maintainers. This option provided freedom of choice but made the students' task more complex.
+\paragraph{\textbf{Deduplication Option 2}} We offered an experience similar to our initial complete participant observation, where students managed the entire workflow: running the tool, analyzing results to identify potential deduplications, creating a patch, and submitting it to the driver's maintainers. This option provided freedom of choice but made the students' task more complex.
 
 Of the students who chose to work on the tool-related tasks, 23 (16 undergraduate and 7 graduate) formed 11 groups to pursue the first alternative. One graduate student opted for the second alternative. Notably, none of these students had prior experience contributing to the Linux kernel, making this their first attempt to submit a patch as newcomers to the project.
 
@@ -173,15 +171,16 @@ At this stage, we considered the deduplication proposal good enough to submit it
 
 Since we suffered a delay in the review process, we directly contacted a maintainer to understand why. From this conversation, we understand that one reason for the delay was that duplicated code enhances the independence of GPU driver code. This approach allows developers to make changes to a specific GPU without needing to test compatibility with others, which helps save a significant amount of time and effort. This example of hardware variations, also mentioned by~\cite{kapserCloningConsideredHarmful2008}, leads us to the primary conclusion of our complete participant observation:
 %
-\begin{highlight-box}{Takeaway T0}
-Driver developers do not necessarily view duplicated code negatively, which contradicts standard software engineering practices.
-\end{highlight-box}
+\begin{framed}
+\noindent\textbf{Takeaway T0:} \itshape Driver developers do not necessarily view duplicated code negatively, which contradicts standard software engineering practices.
+\end{framed}
 
 Building on this insight, we realized that the perception identified in takeaway T0 might not be limited to AMD Display alone. To deepen our understanding, we examined other contributions regarding code duplication reduction and analyzed how different maintainers responded to such patches. This broader analysis aimed to capture diverse maintainer perspectives and contextual factors influencing their decisions.
 
 \begin{table}[ht]
 \centering
 \caption{Summary of newcomer deduplication contributions.}
+\Description{A table with 12 rows showing group contributions including subsystem (AMD or IIO), similarity threshold, patch status (Accepted or Dropped), associated takeaways (T0-T4), and code differential showing lines added and removed.}
 \begin{tabular}{ |c |c |c |c |c | c| }
 \hline
 \textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Takeaway} & \textbf{Diff} \\
@@ -215,33 +214,31 @@ Even though the deduplication of Group 2 was not similar to that of Group 1 and 
 
 These experiences revealed a recurring concern among maintainers beyond functional correctness or redundancy reduction. Instead, it reflected a preference for code clarity and comprehension. From these consistent insights that originated from multiple review interactions, we formulated our first takeaway:
 
-\begin{highlight-box}{Takeaway T1 (Readability)}
-Maintainers prioritized readability over removing duplications in many different contexts. In their view, going against the DRY principle was worth it if it resulted in easier-to-read and understand code.
-\end{highlight-box}
+\begin{framed}
+\noindent\textbf{Takeaway T1 (Readability):} \itshape Maintainers prioritized readability over removing duplications in many different contexts. In their view, going against the DRY principle was worth it if it resulted in easier-to-read and understand code.
+\end{framed}
 
 Still focusing on Group 1, maintainers questioned the merit of the proposed patch. While the previous interactions highlighted how maintainers often favor readability over strict code deduplication, this case added a new dimension to our understanding: the \textit{cost-benefit} evaluation of proposed changes. A maintainer pointed out that the effort required to propagate such modifications after acceptance (i.e., during the upstreaming process) could outweigh the perceived benefits: ``\textit{[...] such patches might not worth it since the proposed improvement is very small (and questionable) while the upstreaming process still requires some effort.}''. From this feedback, we crafted our second takeaway:
 
-\begin{highlight-box}{Takeaway T2 (Integration Overhead)}
-Maintainers may evaluate the trade-off between the impact of contributions
-(not only deduplications) and the struggle to integrate them into the complex
-Linux project.
-\end{highlight-box}
+\begin{framed}
+\noindent\textbf{Takeaway T2 (Integration Overhead):} \itshape Maintainers may evaluate the trade-off between the impact of contributions (not only deduplications) and the struggle to integrate them into the complex Linux project.
+\end{framed}
 
 Groups 3, 6, and 10 used the parameterized method by introducing a new struct used as a parameter to a generic function. Notwithstanding that the same maintainer reviewed all three contributions, only Group 3 had its patch accepted. Our understanding was that this change, in particular, acted on a simple iterative algorithm that (colaterally) also fixed a bug, which favored its straightforward acceptance.
 
 Although removing duplications does not necessarily mean reducing lines of code, the patch from Group 6 resulted in a positive net change in lines of code, which the maintainer pointed out as a drawback. Still, the real reason for the rejection was that the deduplication scattered parts of a complex code that resided close together before: \textit{``Wrapping this up doesn't provide any real advantage, requiring as it does the reviewer to look at this function AND where the value is set rather than seeing them in one place.''}. Needing to jump to a function definition (to see its behavior) or a function call (to see its concrete parameters) to understand code is a cognitively demanding task for developers~\cite{questions-programmers-ask}. Merging these informations, we derived our third takeaway:
 
-\begin{highlight-box}{Takeaway T3 (Cognitive Load)}
-Maintainers can justify duplications if they avoid having to jump back and forth in the code when parsing through the file.
-\end{highlight-box}
+\begin{framed}
+\noindent\textbf{Takeaway T3 (Cognitive Load):} \itshape Maintainers can justify duplications if they avoid having to jump back and forth in the code when parsing through the file.
+\end{framed}
 
 The reason for rejecting the patch from Group 10 involved the deduplication lowering readability, as the maintainer was \textit{``[...] not sure the code reduction is sufficiently to cover the resulting loss of readability.''}, reinforcing the takeaway T1.
 
 In the interaction of Group 10, there was also a hint that performance could be considered when evaluating the worth of a deduplication, whilst reaffirming that readability was a priority in that context: \textit{``I'd be slightly interested to see the optimized output of the two approaches, but this is far from a high performance path so we care a lot more about readability here.''}. Nonetheless, this notion surfaced aggressively with Group 10, where the contribution could completely remove both duplicated functions using the inline method by leveraging helpers; however, one of the functions had a call that, if eliminated, would result in a significant performance impact: \textit{``Note that is not an appropriate change for the large reads though [...] This is the one case were \texttt{spi\_write\_then\_read()} is probably not appropriate due to the large buffers that are potentially involved.''}. These interactions, coupled with the low-level development context of Linux and driver development, which is usually related to devices with limited resources, produced our fourth and final takeaway:
 
-\begin{highlight-box}{Takeaway T4 (Performance)}
-Interactions with maintainers hinted that duplications can be forgiven if they improve performance in contexts where resources are limited.
-\end{highlight-box}
+\begin{framed}
+\noindent\textbf{Takeaway T4 (Performance):} \itshape Interactions with maintainers hinted that duplications can be forgiven if they improve performance in contexts where resources are limited.
+\end{framed}
 
 Groups 7 and 8 used the extract method using helpers to remove duplicated code in the function's body. Group 7 refined its patch from the maintainers' feedback, resulting in a smooth acceptance process that did not produce any insights. Group 8 followed a similar course, but generated an interaction reinforcing the takeaway T4. In the feedback of version 1, a maintainer claimed that \textit{``Even though there is less code repetition, we now have an extra comparison [...]''}, with another maintainer corroborating this in version three by saying: \textit{``There is always a balance/trade-off between modularity and execution speed. I agree with \texttt{anonymous-maintainer}'s reply in the first patch [...]''}, regardless of the fact that the patch was eventually accepted in version four.
 
@@ -259,7 +256,7 @@ Throughout this process, we observed that maintainers do not necessarily regard 
 
 Overall, these findings reveal that, within the Linux kernel community, the evaluation of code duplication extends beyond technical redundancy. Maintainability, clarity, and practical trade-offs play a decisive role in shaping maintainers’ judgments, suggesting that the DRY principle is sometimes less valuable than keeping the code understandable, efficient, and integrated smoothly into a large and evolving system.
 
-\section*{Replication Package}
+\section{Replication Package}
 
 All anonymized threads containing the entire review process and interactions with maintainers are available in this Zenodo repository: \href{https://doi.org/10.5281/zenodo.17503684}{https://doi.org/10.5281/zenodo.17503684}.
 
