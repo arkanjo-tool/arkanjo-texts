@@ -38,20 +38,21 @@
 % apresentacao.tex, mas isso não é um problema: você pode
 % ter um banco de dados com todos os papers que são de seu
 % interesse e, em um dado texto, citar apenas alguns deles.
-
 @inproceedings{arcanjo2025arkanjo,
-  author    = {Luan Arcanjo and David Tadokoro and Paulo Meirelles},
-  title     = {ArKanjo: a Tool for Detecting Function-Level Code Duplication in the Linux Kernel},
-  booktitle = {DebConf25},
-  address   = {Brest, France},
-  publisher = {IRISA},
-  month     = jul,
-  year      = {2025},
-  pages     = {p.3},
-  note      = {<https://hal.archives-ouvertes.fr/hal-05335545>},
-  hal_id    = {hal-05335545}
+  TITLE = {{ArKanjo: a tool for detecting function-level Code Duplication in the Linux Kernel}},
+  AUTHOR = {Arcanjo, Luan and Tadokoro, David and Meirelles, Paulo},
+  URL = {https://hal.science/hal-05335545},
+  BOOKTITLE = {{DebConf25}},
+  ADDRESS = {Brest, France},
+  ORGANIZATION = {{IRISA}},
+  EDITOR = {Olivier Barais and Bastien Roucari{\`e}s},
+  PAGES = {3},
+  YEAR = {2025},
+  MONTH = Jul,
+  PDF = {https://hal.science/hal-05335545v1/file/published_version_ArKanjoTool.pdf},
+  HAL_ID = {hal-05335545},
+  HAL_VERSION = {v1},
 }
-
 
 @article{gold1958roles,
   author    = {Gold, Raymond L.},
@@ -854,26 +855,31 @@ series = {ICSE-NIER '20}
   doi={10.1109/ICSE48619.2023.00040}}
 
 @inproceedings{harmone,
-  title={Harmfulness of code duplication-a structured review of the evidence},
-  author={Hordijk, Wiebe and Ponisio, Mar{\'\i}a Laura and Wieringa, Roel},
-  booktitle={13th International Conference on Evaluation and Assessment in Software Engineering (EASE)},
-  year={2009},
-  organization={BCS Learning \& Development}
+  author = {Hordijk, Wiebe and Ponisio, Maria Laura and Wieringa, Roel},
+  title = {Harmfulness of code duplication: a structured review of the evidence},
+  year = {2009},
+  publisher = {BCS Learning \& Development Ltd.},
+  address = {Swindon, GBR},
+  abstract = {Duplication of code has long been thought to decrease changeabili-ty of systems, but recently doubts have been expressed whether this is true in general. This is a problem for researchers because it makes the value of research aimed against clones uncertain, and for practitioners as they cannot be sure whether their effort in reducing duplication is well-spent. In this paper we try to shed light on this is-sue by collecting empirical evidence in favor and against the nega-tive effects of duplication on changeability. We go beyond the flat yes/no-question of harmfulness and present an explanatory model to show the mechanisms through which duplication is suspected to affect quality. We aggregate the evidence for each of the causal links in the model. This sheds light on the current state of duplication re-search and helps practitioners choose between the available mitiga-tion strategies.},
+  booktitle = {Proceedings of the 13th International Conference on Evaluation and Assessment in Software Engineering},
+  pages = {88–97},
+  numpages = {10},
+  keywords = {changeability, clones, duplication, maintainability, structured review},
+  location = {UK},
+  series = {EASE'09}
 }
 
 @article{harmtwo,
-author = {Hotta, Keisuke and Sasaki, Yui and Sano, Yukiko and Higo, Yoshiki and Kusumoto, Shinji},
-title = {An empirical study on the impact of duplicate code},
-year = {2012},
-publisher = {Hindawi Limited},
-address = {London, GBR},
-volume = {2012},
-issn = {1687-8655},
-url = {https://doi.org/10.1155/2012/938296},
-doi = {10.1155/2012/938296},
-abstract = {It is said that the presence of duplicate code is one of the factors that make software maintenance more difficult. Many research efforts have been performed on detecting, removing, or managing duplicate code on this basis. However, some researchers doubt this basis in recent years and have conducted empirical studies to investigate the influence of the presence of duplicate code. In this study, we conduct an empirical study to investigate this matter from a different standpoint from previous studies. In this study, we define a new indicator "modification frequency" tomeasure the impact of duplicate code and compare the values between duplicate code and nonduplicate code. The features of this study are as follows the indicator used in this study is based on modification places instead of the ratio of modified lines; we use multiple duplicate code detection tools to reduce biases of detection tools; and we compare the result of the proposed method with other two investigation methods. The result shows that duplicate code tends to be less frequently modified than nonduplicate code, and we found some instances that the proposed method can evaluate the influence of duplicate code more accurately than the existing investigation methods.},
-journal = {Adv. Soft. Eng.},
-month = {1},
+  author = {Hotta, Keisuke and Sasaki, Yui and Sano, Yukiko and Higo, Yoshiki and Kusumoto, Shinji},
+  title = {An Empirical Study on the Impact of Duplicate Code},
+  journal = {Advances in Software Engineering},
+  volume = {2012},
+  number = {1},
+  pages = {938296},
+  doi = {https://doi.org/10.1155/2012/938296},
+  url = {https://onlinelibrary.wiley.com/doi/abs/10.1155/2012/938296},
+  abstract = {It is said that the presence of duplicate code is one of the factors that make software maintenance more difficult. Many research efforts have been performed on detecting, removing, or managing duplicate code on this basis. However, some researchers doubt this basis in recent years and have conducted empirical studies to investigate the influence of the presence of duplicate code. In this study, we conduct an empirical study to investigate this matter from a different standpoint from previous studies. In this study, we define a new indicator “modification frequency” to measure the impact of duplicate code and compare the values between duplicate code and nonduplicate code. The features of this study are as follows the indicator used in this study is based on modification places instead of the ratio of modified lines; we use multiple duplicate code detection tools to reduce biases of detection tools; and we compare the result of the proposed method with other two investigation methods. The result shows that duplicate code tends to be less frequently modified than nonduplicate code, and we found some instances that the proposed method can evaluate the influence of duplicate code more accurately than the existing investigation methods.},
+  year = {2012}
 }
 
 @article{firstman,
@@ -913,15 +919,15 @@ month = {1},
 }
 
 @article{ethnosoft,
-  title={The role of ethnographic studies in empirical software engineering},
-  author={Sharp, Helen and Dittrich, Yvonne and De Souza, Cleidson RB},
-  journal={IEEE Transactions on Software Engineering},
+  author={Sharp, Helen and Dittrich, Yvonne and de Souza, Cleidson R. B.},
+  journal={IEEE Transactions on Software Engineering}, 
+  title={The Role of Ethnographic Studies in Empirical Software Engineering}, 
+  year={2016},
   volume={42},
   number={8},
-  pages={786--804},
-  year={2016},
-  publisher={IEEE}
-}
+  pages={786-804},
+  keywords={Software engineering;Software;Context;Sociology;Electronic mail;Computer science;Guidelines;Design tools and techniques;human factors in software design;software engineering process;computer-supported collaborative work},
+  doi={10.1109/TSE.2016.2519887}}
 
 @misc{iiodoc,
 	title        = {The Linux driver implementer’s API guide - Industrial I/O - Introduction},
@@ -1007,32 +1013,25 @@ address = {USA}
 }
 
 @book{harderSoftwareClonesGuilty2017,
-  title = {Software {{Clones}} - {{Guilty}} until {{Proven Innocent}}?},
-  author = {Harder, Jan},
-  date = {2017},
-  publisher = {Logos Verlag Berlin},
+  title={Software Clones-Guilty Until Proven Innocent?},
+  author={Harder, Jan},
+  day={11},
+  month={12},
+  year={2017},
   location = {Berlin},
-  abstract = {Intro -- 1 Introduction -- 1.1 Contributions -- 1.1.1 Clone Stability -- 1.1.2 Clone Authorship -- 1.1.3 Clones and Programmer Performance -- 1.2 Previously Published Content -- 1.3 Thesis Outline -- 2 Definition and Terminology -- 2.1 Definition -- 2.2 Terminology -- 3 Detecting Clones -- 3.1 Detection -- 3.1.1 Textual Comparison -- 3.1.2 Token Comparison -- 3.1.3 Syntactical Comparison -- 3.1.4 Metric Comparison -- 3.1.5 Dependency Comparison -- 3.1.6 Other techniques -- 3.2 Evolution -- 3.2.1 Incremental Detection -- 3.2.2 Tracking Clones -- 3.2.3 Evolution Patterns -- 3.3 Clone Detection for this Thesis -- 3.3.1 Detection and Tracking Approach -- 3.3.2 Improving Precision -- 3.3.3 Detection Thresholds -- 4 Causes and Effects of Clones -- 4.1 Causes -- 4.1.1 Technical Reasons -- 4.1.2 Organizational Reasons -- 4.1.3 Personal Reasons -- 4.2 Effects -- 4.2.1 Program Changeability -- 4.2.2 Program Correctness -- 4.2.3 Program Comprehension -- 5 Managing Clones -- 5.1 Preventive -- 5.2 Compensative -- 5.3 Corrective -- 6 Clone Stability -- 6.1 Research Questions -- 6.2 The Original Study Compared to Ours -- 6.3 Study Setup -- 6.3.1 Clone Detection -- 6.3.2 Subject Systems -- 6.3.3 Data Collection -- 6.3.4 Measurement -- 6.4 Results -- 6.4.1 Validation of the original studies' results -- 6.4.2 Generalizability -- 6.4.3 The Relationship of Detection Parameters and Stability -- 6.4.4 Deletion Characteristics -- 6.4.5 Distribution Over Time -- 6.5 Threats to Validity -- 6.5.1 Internal validity -- 6.5.2 Construct Validity -- 6.5.3 External Validity -- 6.6 Discussion -- 6.7 Further Studies on Clone Stability -- 6.7.1 Modification Frequency -- 6.7.2 Proportional Stability Metrics -- 6.8 Conclusion -- 7 Clone Authorship -- 7.1 Research Questions -- 7.2 Authorship Detection -- 7.2.1 Authorship vs. Ownership -- 7.2.2 Existing Techniques},
-  isbn = {978-3-8325-4588-8 978-3-8325-9259-2},
-  langid = {english},
-  pagetotal = {1},
+  publisher={Logos Verlag Berlin GmbH}
 }
 
-@inproceedings{juergensCodeClonesMatter2009,
-  title = {Do Code Clones Matter?},
-  booktitle = {2009 {{IEEE}} 31st {{International Conference}} on {{Software Engineering}}},
-  author = {Juergens, Elmar and Deissenboeck, Florian and Hummel, Benjamin and Wagner, Stefan},
-  date = {2009},
-  pages = {485--495},
-  publisher = {IEEE},
-  location = {Vancouver, BC, Canada},
-  doi = {10.1109/ICSE.2009.5070547},
-  url = {http://ieeexplore.ieee.org/document/5070547/},
-  urldate = {2026-01-11},
-  eventtitle = {2009 {{IEEE}} 31st {{International Conference}} on {{Software Engineering}}},
-  isbn = {978-1-4244-3453-4},
-  file = {/home/auyer/Zotero/ZoteroHome/storage/VIYPVIHP/Do code clones matter - 2009 - Juergens et al..pdf}
-}
+@INPROCEEDINGS{juergensCodeClonesMatter2009,
+  author={Juergens, Elmar and Deissenboeck, Florian and Hummel, Benjamin and Wagner, Stefan},
+  booktitle={2009 IEEE 31st International Conference on Software Engineering}, 
+  title={Do code clones matter?}, 
+  year={2009},
+  volume={},
+  number={},
+  pages={485-495},
+  keywords={Cloning;Costs;Large-scale systems;Fault diagnosis;Software maintenance;Open source software;Java;Detection algorithms;Software quality;Software engineering},
+  doi={10.1109/ICSE.2009.5070547}}
 
 @article{kapserCloningConsideredHarmful2008,
 author = {Kapser, Cory J. and Godfrey, Michael W.},
@@ -1058,14 +1057,13 @@ keywords = {Reverse engineering, Clone detection, Clone analysis, Case study}
   title = {Software {{Design X-Rays}}: {{Fix Technical Debt}} with {{Behavioral Code Analysis}}},
   shorttitle = {Software {{Design X-Rays}}},
   author = {Tornhill, Adam},
-  date = {2018},
+  year = {2018},
   edition = {1st ed},
-  publisher = {Pragmatic Programmers, LLC, The},
+  publisher = {The Pragmatic Programmers, LLC},
   location = {La Vergne},
   abstract = {Cover -- Table of Contents -- Acknowledgments -- The World of Behavioral Code Analysis -- Why You Should Read This Book -- Who Is This Book For? -- How Should You Read This Book? -- How Do I Get Behavioral Data for My Code? -- Online Resources -- Part I-Prioritize and React to Technical Debt -- 1. Why Technical Debt Isn't Technical -- Questioning Technical Debt -- The Perils of Quantifying Technical Debt -- Mine Your Organization's Collective Intelligence -- Prioritize Improvements Guided by Data -- 2. Identify Code with High Interest Rates -- Measure Interest Rates -- Prioritize Technical Debt with Hotspots -- Evaluate Hotspots with Complexity Trends -- Use X-Rays to Get Deep Insights into Code -- Escape the Technical-Debt Trap -- Exercises -- 3. Coupling in Time: A Heuristic for the Concept of Surprise -- Uncover Expensive Change Patterns -- Detect Cochanging Files -- The Dirty Secret of Copy-Paste -- The Power of Language-Neutral Analyses -- Exercises -- 4. Pay Off Your Technical Debt -- Follow the Principle of Proximity -- Refactor Congested Code with the Splinter Pattern -- Build Temporary Tests as a Safety Net -- Turn Hotspot Methods into Brain-Friendly Chunks -- The Curse of a Successful System -- 5. The Principles of Code Age -- Stabilize Code by Age -- The Three Generations of Code -- Refactor Your Package Structure -- Scale from Files to Systems -- Exercises -- Part II-Work with Large Codebases and Organizations -- 6. Spot Your System's Tipping Point -- Is Software Too Hard? -- Divide and Conquer with Architectural Hotspots -- Analyze Subsystems -- Fight the Normalization of Deviance -- Toward Team-Oriented Measures -- Exercises -- 7. Beyond Conway's Law -- Software Architecture Is About Making Choices -- Measure Coordination Needs -- Code Ownership and Diffusion of Responsibility -- Analyze Operational Team Boundaries},
   isbn = {978-1-68050-272-5 978-1-68050-581-8},
   langid = {english},
-  pagetotal = {1},
 }
 @INPROCEEDINGS{scsi-cloning-2011,
   author={Wang, Wei and Godfrey, Michael W.},
@@ -1107,4 +1105,42 @@ keywords = {Reverse engineering, Clone detection, Clone analysis, Case study}
   doi={10.1109/TSE.2002.1019480},
   ISSN={1939-3520},
   month={July},}
+
+
+@book{fowler2018refactoring,
+  title     = {Refactoring: improving the design of existing code},
+  author    = {Fowler, Martin},
+  year      = {2018},
+  edition   = {2},
+  isbn      = {978-0134757599},
+  publisher = {Addison-Wesley Professional}
+}
+
+@online{linux6.17devstats,
+  title   = {Development statistics for 6.17},
+  author = {Jonathan Corbet},
+  year = 2025,
+  month = 9,
+  day = 29,
+  organization = {Linux Weekly News},
+  url     = {https://lwn.net/Articles/1038358/},
+  journal = {[LWN.net]},
+  note = {[Online; Last accessed on Jan. 25th, 2026]},
+}
+
+@Article{rahman2012clonesSmell,
+  author={Rahman, Foyzur and Bird, Christian and Devanbu, Premkumar},
+  title={Clones: what is that smell?},
+  journal={Empirical Software Engineering},
+  year={2012},
+  month={Aug},
+  day={01},
+  volume={17},
+  number={4},
+  pages={503-530},
+  abstract={Clones are generally considered bad programming practice in software engineering folklore. They are identified as a bad smell (Fowler et al. 1999) and a major contributor to project maintenance difficulties. Clones inherently cause code bloat, thus increasing project size and maintenance costs. In this work, we try to validate the conventional wisdom empirically to see whether cloning makes code more defect prone. This paper analyses the relationship between cloning and defect proneness. For the four medium to large open source projects that we studied, we find that, first, the great majority of bugs are not significantly associated with clones. Second, we find that clones may be less defect prone than non-cloned code. Third, we find little evidence that clones with more copies are actually more error prone. Fourth, we find little evidence to support the claim that clone groups that span more than one file or directory are more defect prone than collocated clones. Finally, we find that developers do not need to put a disproportionately higher effort to fix clone dense bugs. Our findings do not support the claim that clones are really a ``bad smell'' (Fowler et al. 1999). Perhaps we can clone, and breathe easily, at the same time.},
+  issn={1573-7616},
+  doi={10.1007/s10664-011-9195-3},
+  url={https://doi.org/10.1007/s10664-011-9195-3}
+}
 
