@@ -3,7 +3,7 @@
 
 %% Takeaway Boxes %%
 \usepackage{framed}
-\FrameSep1pt
+\FrameSep5pt
 
 % correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
@@ -24,16 +24,13 @@
 
 \author{Luan Arcanjo}
 \email{luanicaro@usp.br}
-\orcid{0009-0003-3657-5519}
-\affiliation{%
-  \institution{University of São Paulo}
-  \city{São Paulo}
-  \country{Brazil}
-}
+\orcid{0009-0002-8802-9643}
+
 
 \author{David Tadokoro}
 \email{davidbtadokoro@ime.usp.br}
 \orcid{0009-0000-4639-1578}
+
 \affiliation{%
   \institution{University of São Paulo}
   \city{São Paulo}
@@ -43,15 +40,11 @@
 \author{Marcelo Spessoto}
 \email{marcelomspessoto@usp.br}
 \orcid{0009-0002-3301-4874}
-\affiliation{%
-  \institution{University of São Paulo}
-  \city{São Paulo}
-  \country{Brazil}
-}
 
 \author{Rafael Passos}
 \email{rcpassos@ime.usp.br}
 \orcid{0009-0003-3657-5519}
+
 \affiliation{%
   \institution{University of São Paulo}
   \city{São Paulo}
@@ -68,7 +61,9 @@
 }
 
 \begin{abstract}
-The Don't Repeat Yourself (DRY) principle is central to software maintainability, but empirical studies challenge its rigid use, describing beneficial cases of duplication. However, these rely on retrospective analyses, leaving a gap in understanding real-time decision-making and socio-technical dynamics. This paper presents an ethnographic study on how the Linux kernel community manages duplication debt via deduplication contributions. Using a clone detection tool called ArKanjo, we conducted a multimethod ethnographic study: first as a complete participant submitting patches to AMDGPU, then as a participant-as-observer mentoring 23 newcomers contributing to AMDGPU and IIO. Analysis of patch reviews suggests maintainers can tolerate duplication to accommodate driver-forking (T1), prioritize readability (T2), reduce integration overhead (T3), and preserve performance (T4). Our findings demonstrate that managing duplication in Linux is a nuanced process in which trade-offs among maintainability, clarity, and practicality outweigh dogmatic adherence to the DRY principle. This work also offers a novel ethnographic approach and illustrates how deduplication contributions can aid newcomer onboarding.
+The Don't Repeat Yourself (DRY) principle is central to software maintainability, but empirical studies challenge its rigid use, describing beneficial cases of duplication. However, these rely on retrospective analyses, leaving a gap in understanding real-time decision-making and socio-technical dynamics. This paper presents an ethnographic study on how the Linux kernel community manages duplication debt via deduplication contributions. Using a clone detection tool called ArKanjo, we conducted a multimethod ethnographic study: first as a complete participant submitting patches to AMDGPU, then as a participant-as-observer mentoring 23 newcomers contributing to AMDGPU and IIO. Analysis of patch reviews suggests maintainers can tolerate duplication to accommodate driver-forking (T1), prioritize readability (T2), reduce integration overhead (T3), and preserve performance (T4). Our findings demonstrate that managing duplication in Linux is a nuanced process in which trade-offs among maintainability, clarity, and practicality outweigh dogmatic adherence to the DRY principle.
+%This work also offers a novel ethnographic approach and illustrates how deduplication contributions can aid newcomer onboarding.
+%Paulo: não sei se devemos chamar atencao para isso aqui no abstract.
 \end{abstract}
 
 \begin{CCSXML}
@@ -101,22 +96,27 @@ The Don't Repeat Yourself (DRY) principle is central to software maintainability
 
 Having tens or hundreds of developers working together on a software product is a complex and demanding task. Similar or even exact copies are a frequent and often unavoidable outcome. Regarded as a bad smell~\cite{fowler2018refactoring} and a major source of technical debt, \textit{code duplication} (or \textit{code cloning}) can negatively impact a project's maintainability, as any change to a repeated code segment (to fix a bug, for instance) requires replication across all other copies. Developers must therefore remain constantly vigilant to synchronize different parts of the codebase, a seemingly simple yet highly error-prone responsibility~\cite{juergensCodeClonesMatter2009}. Removing duplicated code (\textit{deduplication}) demands great care to preserve the original behavior, with minor mistakes possibly leading to serious problems in the future.
 
-A widespread dogma among developers is the \textit{Don't Repeat Yourself} (DRY) principle~\cite{pragmatic-programmer}, which asserts that to develop reliable and maintainable software, ``\textbf{\emph{every piece of knowledge must have a single, unambiguous, authoritative representation within a system.}}'' Through static program analysis and mining software repository techniques, some empirical studies conducted on living real-world projects have challenged the DRY principle, showing that duplication can be advantageous depending on the context and evolution of the clones~\cite{kapserCloningConsideredHarmful2008,harderSoftwareClonesGuilty2017,tornhillSoftwareDesignXRays2018,rahman2012clonesSmell}. Nevertheless, these types of analysis primarily operate in hindsight; identifying, cataloguing, and drawing conclusions from the already made and final decisions regarding technical debt management, which, in turn, can obscure the reasons and the whole story behind accepting certain clone debts or actively blocking repayments in complex projects. This work aims to capture that process as it unfolds.
+A widespread dogma among developers is the \textit{Don't Repeat Yourself} (DRY) principle~\cite{pragmatic-programmer}, which asserts that to develop reliable and maintainable software, ``\textit{every piece of knowledge must have a single, unambiguous, authoritative representation within a system.}'' Through static program analysis and mining software repository techniques, some empirical studies conducted on living real-world projects have challenged the DRY principle, showing that duplication can be advantageous depending on the context and evolution of the clones~\cite{kapserCloningConsideredHarmful2008,harderSoftwareClonesGuilty2017,tornhillSoftwareDesignXRays2018,rahman2012clonesSmell}. Nevertheless, these types of analysis primarily operate in hindsight; identifying, cataloguing, and drawing conclusions from the already made and final decisions regarding technical debt management, which, in turn, can obscure \textbf{the reasons and the whole story behind accepting certain clone debts or actively blocking repayments in complex projects}. This work aims to capture that process as it unfolds.
 
-For instance, the Linux kernel is a foundational \textit{Free/Libre and Open Source Software} (FLOSS) project with more than 27 million lines of code, excluding non-programming code (verifiable through our replication package in Section~\ref{sec:replication-package}), and over 2,000 developers involved in version 6.17~\cite{linux6.17devstats}. Although it is known that some Linux device drivers deliberately duplicate code~\cite{kapserCloningConsideredHarmful2008}, it can be hard to determine why a specific clone exists, even when analyzing upstream commits in the mainline and subsystems. One could argue that the debt interest is too low and the debt principal is too high, or that there is a motive for accepting the clone unrelated to technical debt, or that simply no reasonable deduplication proposal has ever been submitted. We are left to speculate (in a well-informed manner) about the debt management practices of developers, and the chain of thought behind each commit we analyze.
+To investigate these decision-making processes in a realistic setting, we turn to one of the largest and most influential software systems ever developed: the Linux kernel, a foundational \textit{Free/Libre and Open Source Software} (FLOSS) project with more than 27 million lines of code, excluding non-programming code (verifiable through our replication package, see Section~\ref{sec:replication-package}), and over 2,000 developers involved in version 6.17~\cite{linux6.17devstats}. Although it is known that some Linux device drivers deliberately duplicate code~\cite{kapserCloningConsideredHarmful2008}, \textbf{it can be hard to determine why a specific clone exists}, even when analyzing upstream commits in the mainline and subsystems. One could argue that the debt interest is too low and the debt principal is too high, or that there is a motive for accepting the clone unrelated to technical debt, or that simply no reasonable deduplication proposal has ever been submitted. We are left to speculate (in a well-informed manner) about developers' debt management practices and the reasoning behind each commit we analyze.
 
-Leveraging a function-level clone detection tool we developed specifically for the context of Linux, called \textit{ArKanjo}~\cite{arcanjo2025arkanjo}, we conducted a multimethod ethnographic study regarding code duplication. Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members' values, beliefs, and practices~\cite{ethnosoft}. In this study, we detected duplications and submitted deduplications (directly or indirectly) to two Linux subsystems.
+Leveraging a function-level clone detection tool we developed specifically for the context of Linux, called \textit{ArKanjo}~\cite{arcanjo2025arkanjo}, we conducted a multimethod ethnographic study regarding code duplication. Ethnography is a well-established qualitative method for understanding people, their cultures, and work practices~\cite{bookethno}. It provides insights into community members' values, beliefs, and practices~\cite{ethnosoft}. In this study, we detected duplications and submitted deduplications
+%(directly or indirectly)
+%Paulo: acho que pode confundir; nem para mim acho que fica claro o "indirectly" =)
+to two Linux subsystems.
 
-Through interactions with maintainers, we gained insights into how the Linux community perceives code quality related to code clones in the project's ``development trenches''. Contrary to the DRY principle, our findings indicate that, in some contexts, maintainers can tolerate duplication to improve readability, enhance performance, or even avoid integration overhead. This empirical work also offers a novel approach to researching technical debt management practices related to code duplication in FLOSS projects, beyond indicating that deduplication contributions are a viable entryway for newcomers in the Linux kernel.
+Through interactions with maintainers, we gained insights into how the Linux community perceives code quality related to code clones in the project's ``development trenches''. Contrary to the DRY principle, our findings confirm that, in some contexts, maintainers can tolerate duplication to improve readability. We also identified reasons coupled to \textbf{enhancing performance and avoiding integration overhead}. This empirical work also offers a distinct approach to researching technical debt management practices related to code duplication in FLOSS projects, beyond indicating that deduplication contributions are a viable entryway for newcomers in the Linux kernel.
 
 \section{Related Work}
 The works by \citet{ccfinder2002} and \citet{CP-Miner-2006} proposed techniques to identify duplications, using the Linux codebase as a case study. \citet{kapserCloningConsideredHarmful2008} discussed patterns of cloning used in software, including situations where this could be positive, and \citet{rahman2012clonesSmell} contested the notion of clones as a bad smell. \citet{tornhillSoftwareDesignXRays2018} claims that clones evolving independently might not be problematic, whilst \citet{juergensCodeClonesMatter2009} argue that inconsistent changes to clones that should evolve together are what primarily lead to faults. \citet{scsi-cloning-2011} explores the use of cloning as a development technique for the SCSI drivers in the Linux Kernel, where similar devices had drivers born from code cloning. \citet{harderSoftwareClonesGuilty2017} acknowledges the harmful case of cloned bugs but provides empirical evidence contradicting popular beliefs regarding the adverse effects of clones. The work concludes without providing clear guidance for practitioners and leaving an open path for future research, such as this one.
 
-Our study provides additional empirical evidence and a different methodological perspective for researchers and practitioners interested in technical debt, code quality, and socio-technical practices within the Linux kernel project. We obtained key insights by analyzing the reasoning of maintainers when they accepted or rejected submitted changes (\textit{patches}). In this respect, we make a new contribution to a long-standing conversation among software engineering researchers about when and how duplicate code matters.
+Our study provides additional empirical evidence and a distinct methodological perspective for researchers and practitioners interested in technical debt, code quality, and socio-technical practices within the Linux kernel project. \textbf{We obtained key insights by analyzing maintainers' reasoning when they accepted or rejected submitted changes (\textit{patches})}. In this respect, we make a new contribution to a long-standing discussion among software engineering researchers about when and how duplicate code matters.
 
 \section{Research Strategy}
 
-First, we needed a tool for detecting code duplication suitable for the Linux context. After reviewing existing static analysis tools like \textit{PMD}, \textit{Duplo}, \textit{Simian}, and \textit{CodeClimate} (analysis of candidate tools is available in our replication package in Section~\ref{sec:replication-package}), we found practical limitations when applying them to the Linux kernel. Many were commercially licensed, used only token-based matching, or, like some FLOSS alternatives, were limited to file-scope comparisons, missing intra-file duplications. To address these constraints, we developed ArKanjo, a custom command-line tool for detecting duplicated functions in large C codebases. Released under LGPLv3, it uses TF-IDF vector embeddings and cosine similarity that identify the four clone types described in the literature (Type-1 to Type-4)~\cite{litreview}, including within the same file. This lightweight CLI prioritizes maintainability, keeping our focus on code analysis and community interactions rather than tool development.
+First, we needed a tool for detecting code duplication suitable for the Linux context. After reviewing existing static analysis tools such as \textit{PMD}, \textit{Duplo}, \textit{Simian}, and \textit{CodeClimate} (the analysis of candidate tools is available in our replication package), we identified practical limitations when applying them to specific Linux kernel subsystems.
+%Paulo: nao queria deixar geral para o kernel; e nao sei se vale a pena citar o AMDGPU logo aqui; acho que como eh citado depois, fica claro que testamos nos substems que escolhemos.
+Many were commercially licensed, used only token-based matching, or, like some FLOSS alternatives, were limited to file-scope comparisons, missing intra-file duplications. To address these constraints, we developed ArKanjo, a custom command-line tool for detecting duplicated functions in large C codebases. Released under LGPLv3, it uses Term Frequency-Inverse Document Frequency (TF-IDF) vector embeddings and cosine similarity that identify the four clone types described in the literature (Type-1 to Type-4)~\cite{litreview}, including within the same file. This lightweight Command Line Interface (CLI) prioritizes maintainability, keeping our focus on code analysis and community interactions rather than tool development.
 
 
 The Linux kernel is organized into subsystems like the process scheduler, memory management, and device drivers, each typically overseen by a dedicated maintainer or team. Our study focuses on two subsystems representing different contribution contexts. The first is the \textit{AMDGPU DRM drivers subsystem}~\footnote{Specifically, the \textit{Display Core} component, the \textit{hardware-abstraction layer} (HAL) for display functionality.}, which natively enables AMD GPU functionality in Linux. This substantial subsystem contains over 391,000 lines of code across more than 1,089 files. We selected it because, similar to the SCSI subsystem studied by \citet{scsi-cloning-2011}, AMDGPU has a multi-layered architecture with generic higher layers and lower layers comprising hardware-specific drivers implementing the same basic functionality. The second subsystem is the \textit{Industrial Input/Output} (IIO) subsystem, chosen because it is considered an accessible entry point for new contributors. IIO provides support for devices performing analog-to-digital or digital-to-analog conversions and contains over 281,772 lines of code across more than 755 files.
