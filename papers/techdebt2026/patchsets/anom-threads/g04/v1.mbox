@@ -1,291 +1,267 @@
-Subject: [PATCH v1] iio: adc: ad7091r-base: Move reg volatility check to new macro
+Subject: [PATCH] iio: light: zopt2201: Remove code duplication in scale write functions
 
-Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
-same test, checking whether a given 'reg' code is
-AD7091R_REG_RESULT or AD7091R_REG_ALERT. While ad7091r_volatile_reg
-returned true, ad7091r_writeable_reg returned false for the same
-condition. As such, both functions introduced duplicate code.
+Consolidate duplicated logic from zopt2201_write_scale_als_by_idx() and
+zopt2201_write_scale_uvb_by_idx() into a new generic helper function
+zopt2201_write_scale_by_idx(). This function takes an additional
+parameter: a pointer to a zopt2201_scale array.
 
-We chose to implement the test as the AD7091R_IS_VOLATILE_REG
-macro to remove the duplicate code without introducing new
-function calls, which would be the case if we chose to fix the
-duplicate code with one of the two following alternatives:
+To support this, the previously anonymous and duplicated struct used in
+the scale arrays was promoted to a named struct: zopt2201_scale.
 
- A) Extracting a new function out of the test
+This change also corrects an incorrect array access that existed in
+zopt2201_write_scale_uvb_by_idx().
 
- B) Rewriting ad7091r_writeable_reg to call
-    ad7091r_volatile_reg or vice-versa.
-
-Signed-off-by: ############# <####################>
-Co-developed-by: ############# <####################>
-Signed-off-by: ############# <####################>
-Co-developed-by: ############# <###############>
-Signed-off-by: ############# <###############>
+Signed-off-by: ################### <#############################>
+Co-developed-by: ############### <#######################>
+Signed-off-by: ############### <#######################>
 ---
- drivers/iio/adc/ad7091r-base.c | 16 ++--------------
- drivers/iio/adc/ad7091r-base.h |  2 ++
- 2 files changed, 4 insertions(+), 14 deletions(-)
+ drivers/iio/light/zopt2201.c | 42 +++++++++++-------------------------
+ 1 file changed, 12 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/iio/adc/ad7091r-base.c b/drivers/iio/adc/ad7091r-base.c
-index 931ff71b2888..8329552f0be8 100644
---- a/drivers/iio/adc/ad7091r-base.c
-+++ b/drivers/iio/adc/ad7091r-base.c
-@@ -375,25 +375,13 @@ EXPORT_SYMBOL_NS_GPL(ad7091r_probe, "IIO_AD7091R");
+diff --git a/drivers/iio/light/zopt2201.c b/drivers/iio/light/zopt2201.c
+index 604be60e9..1e5e9bf29 100644
+--- a/drivers/iio/light/zopt2201.c
++++ b/drivers/iio/light/zopt2201.c
+@@ -113,11 +113,13 @@ static const struct {
+ 	{ 13,   3125 },
+ };
  
- bool ad7091r_writeable_reg(struct device *dev, unsigned int reg)
- {
--	switch (reg) {
--	case AD7091R_REG_RESULT:
--	case AD7091R_REG_ALERT:
--		return false;
--	default:
--		return true;
--	}
-+	return !AD7091R_IS_VOLATILE_REG(reg);
+-static const struct {
++struct zopt2201_scale {
+ 	unsigned int scale, uscale; /* scale factor as integer + micro */
+ 	u8 gain; /* gain register value */
+ 	u8 res; /* resolution register value */
+-} zopt2201_scale_als[] = {
++};
++
++static struct zopt2201_scale zopt2201_scale_als[] = {
+ 	{ 19, 200000, 0, 5 },
+ 	{  6, 400000, 1, 5 },
+ 	{  3, 200000, 2, 5 },
+@@ -142,11 +144,7 @@ static const struct {
+ 	{  0,   8333, 4, 0 },
+ };
+ 
+-static const struct {
+-	unsigned int scale, uscale; /* scale factor as integer + micro */
+-	u8 gain; /* gain register value */
+-	u8 res; /* resolution register value */
+-} zopt2201_scale_uvb[] = {
++static struct zopt2201_scale zopt2201_scale_uvb[] = {
+ 	{ 0, 460800, 0, 5 },
+ 	{ 0, 153600, 1, 5 },
+ 	{ 0,  76800, 2, 5 },
+@@ -348,16 +346,17 @@ static int zopt2201_set_gain(struct zopt2201_data *data, u8 gain)
+ 	return 0;
  }
- EXPORT_SYMBOL_NS_GPL(ad7091r_writeable_reg, "IIO_AD7091R");
  
- bool ad7091r_volatile_reg(struct device *dev, unsigned int reg)
+-static int zopt2201_write_scale_als_by_idx(struct zopt2201_data *data, int idx)
++static int zopt2201_write_scale_by_idx(struct zopt2201_data *data, int idx,
++				     struct zopt2201_scale *zopt2201_scale_array)
  {
--	switch (reg) {
--	case AD7091R_REG_RESULT:
--	case AD7091R_REG_ALERT:
--		return true;
--	default:
--		return false;
--	}
-+	return AD7091R_IS_VOLATILE_REG(reg);
+ 	int ret;
+ 
+ 	mutex_lock(&data->lock);
+-	ret = zopt2201_set_resolution(data, zopt2201_scale_als[idx].res);
++	ret = zopt2201_set_resolution(data, zopt2201_scale_array[idx].res);
+ 	if (ret < 0)
+ 		goto unlock;
+ 
+-	ret = zopt2201_set_gain(data, zopt2201_scale_als[idx].gain);
++	ret = zopt2201_set_gain(data, zopt2201_scale_array[idx].gain);
+ 
+ unlock:
+ 	mutex_unlock(&data->lock);
+@@ -371,29 +370,12 @@ static int zopt2201_write_scale_als(struct zopt2201_data *data,
+ 
+ 	for (i = 0; i < ARRAY_SIZE(zopt2201_scale_als); i++)
+ 		if (val == zopt2201_scale_als[i].scale &&
+-		    val2 == zopt2201_scale_als[i].uscale) {
+-			return zopt2201_write_scale_als_by_idx(data, i);
+-		}
++		    val2 == zopt2201_scale_als[i].uscale)
++			return zopt2201_write_scale_by_idx(data, i, zopt2201_scale_als);
+ 
+ 	return -EINVAL;
  }
- EXPORT_SYMBOL_NS_GPL(ad7091r_volatile_reg, "IIO_AD7091R");
  
-diff --git a/drivers/iio/adc/ad7091r-base.h b/drivers/iio/adc/ad7091r-base.h
-index 092ddea0f395..1b4e0ef43260 100644
---- a/drivers/iio/adc/ad7091r-base.h
-+++ b/drivers/iio/adc/ad7091r-base.h
-@@ -17,6 +17,8 @@
- #define AD7091R_REG_CH_LOW_LIMIT(ch) ((ch) * 3 + 4)
- #define AD7091R_REG_CH_HIGH_LIMIT(ch) ((ch) * 3 + 5)
- #define AD7091R_REG_CH_HYSTERESIS(ch) ((ch) * 3 + 6)
-+#define AD7091R_IS_VOLATILE_REG(reg) (reg == AD7091R_REG_RESULT \
-+	|| reg == AD7091R_REG_ALERT)
+-static int zopt2201_write_scale_uvb_by_idx(struct zopt2201_data *data, int idx)
+-{
+-	int ret;
+-
+-	mutex_lock(&data->lock);
+-	ret = zopt2201_set_resolution(data, zopt2201_scale_als[idx].res);
+-	if (ret < 0)
+-		goto unlock;
+-
+-	ret = zopt2201_set_gain(data, zopt2201_scale_als[idx].gain);
+-
+-unlock:
+-	mutex_unlock(&data->lock);
+-	return ret;
+-}
+-
+ static int zopt2201_write_scale_uvb(struct zopt2201_data *data,
+ 				     int val, int val2)
+ {
+@@ -402,7 +384,7 @@ static int zopt2201_write_scale_uvb(struct zopt2201_data *data,
+ 	for (i = 0; i < ARRAY_SIZE(zopt2201_scale_uvb); i++)
+ 		if (val == zopt2201_scale_uvb[i].scale &&
+ 		    val2 == zopt2201_scale_uvb[i].uscale)
+-			return zopt2201_write_scale_uvb_by_idx(data, i);
++			return zopt2201_write_scale_by_idx(data, i, zopt2201_scale_uvb);
  
- /* AD7091R_REG_RESULT */
- #define AD7091R5_REG_RESULT_CH_ID(x)	    (((x) >> 13) & 0x3)
+ 	return -EINVAL;
+ }
 -- 
-2.25.1
+2.49.0
 
 
-Subject: Re: [PATCH v1] iio: adc: ad7091r-base: Move reg volatility check to
- new macro
+Subject: Re: [PATCH] iio: light: zopt2201: Remove code duplication in scale
+ write functions
 
-On ################, ############# wrote:
-> Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
-> same test, checking whether a given 'reg' code is
-> AD7091R_REG_RESULT or AD7091R_REG_ALERT. While ad7091r_volatile_reg
-> returned true, ad7091r_writeable_reg returned false for the same
-> condition. As such, both functions introduced duplicate code.
+################### <#############################> wrote:
+
+> Consolidate duplicated logic from zopt2201_write_scale_als_by_idx() and
+> zopt2201_write_scale_uvb_by_idx() into a new generic helper function
+> zopt2201_write_scale_by_idx(). This function takes an additional
+> parameter: a pointer to a zopt2201_scale array.
 > 
-> We chose to implement the test as the AD7091R_IS_VOLATILE_REG
-> macro to remove the duplicate code without introducing new
-> function calls, which would be the case if we chose to fix the
-> duplicate code with one of the two following alternatives:
+> To support this, the previously anonymous and duplicated struct used in
+> the scale arrays was promoted to a named struct: zopt2201_scale.
 > 
->  A) Extracting a new function out of the test
+> This change also corrects an incorrect array access that existed in
+> zopt2201_write_scale_uvb_by_idx().
 > 
->  B) Rewriting ad7091r_writeable_reg to call
->     ad7091r_volatile_reg or vice-versa.
-> 
-> Signed-off-by: ############# <####################>
-> Co-developed-by: ############# <####################>
-> Signed-off-by: ############# <####################>
-> Co-developed-by: ############# <###############>
-> Signed-off-by: ############# <###############>
-> ---
->  drivers/iio/adc/ad7091r-base.c | 16 ++--------------
->  drivers/iio/adc/ad7091r-base.h |  2 ++
->  2 files changed, 4 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/ad7091r-base.c b/drivers/iio/adc/ad7091r-base.c
-> index 931ff71b2888..8329552f0be8 100644
-> --- a/drivers/iio/adc/ad7091r-base.c
-> +++ b/drivers/iio/adc/ad7091r-base.c
-> @@ -375,25 +375,13 @@ EXPORT_SYMBOL_NS_GPL(ad7091r_probe, "IIO_AD7091R");
->  
->  bool ad7091r_writeable_reg(struct device *dev, unsigned int reg)
->  {
-> -	switch (reg) {
-> -	case AD7091R_REG_RESULT:
-> -	case AD7091R_REG_ALERT:
-> -		return false;
-> -	default:
-> -		return true;
-> -	}
-> +	return !AD7091R_IS_VOLATILE_REG(reg);
->  }
->  EXPORT_SYMBOL_NS_GPL(ad7091r_writeable_reg, "IIO_AD7091R");
->  
->  bool ad7091r_volatile_reg(struct device *dev, unsigned int reg)
->  {
-> -	switch (reg) {
-> -	case AD7091R_REG_RESULT:
-> -	case AD7091R_REG_ALERT:
-> -		return true;
-> -	default:
-> -		return false;
-> -	}
-> +	return AD7091R_IS_VOLATILE_REG(reg);
->  }
->  EXPORT_SYMBOL_NS_GPL(ad7091r_volatile_reg, "IIO_AD7091R");
->  
-> diff --git a/drivers/iio/adc/ad7091r-base.h b/drivers/iio/adc/ad7091r-base.h
-> index 092ddea0f395..1b4e0ef43260 100644
-> --- a/drivers/iio/adc/ad7091r-base.h
-> +++ b/drivers/iio/adc/ad7091r-base.h
-> @@ -17,6 +17,8 @@
->  #define AD7091R_REG_CH_LOW_LIMIT(ch) ((ch) * 3 + 4)
->  #define AD7091R_REG_CH_HIGH_LIMIT(ch) ((ch) * 3 + 5)
->  #define AD7091R_REG_CH_HYSTERESIS(ch) ((ch) * 3 + 6)
-> +#define AD7091R_IS_VOLATILE_REG(reg) (reg == AD7091R_REG_RESULT \
-> +	|| reg == AD7091R_REG_ALERT)
->  
->  /* AD7091R_REG_RESULT */
->  #define AD7091R5_REG_RESULT_CH_ID(x)	    (((x) >> 13) & 0x3)
+> Signed-off-by: ################### <#############################>
+> Co-developed-by: ############### <#######################>
+> Signed-off-by: ############### <#######################>
+Looks good to me.
 
-TBH, I think the old code is more readable than hiding the values in a macro
-even if it is duplicating a few lines of code.
+If you want a follow up, this driver could benefit from use of guard()
 
-But if everyone else thinks this is better, I would at least suggest to make
-the macro AD7091R_IS_READ_ONLY_REG instead of volatile. Using not volatile
-as an indicator of writable seems really strange. But using readonly as an
-indication of volatile seems more logical. A comment to the effect of "the
-read-only registers also happen to be the only volatile registers" in the
-ad7091r_volatile_reg() function would help too.
-
-
-Subject: Re: [PATCH v1] iio: adc: ad7091r-base: Move reg volatility check to
- new macro
-
-Hello ######, #####, #####,
-
-Your patch looks good to me. Just one comment inline.
-With the macro updated according to suggestion
-Reviewed-by: ############### <##########################>
-
-On #####, ############# wrote:
-> From: ############# <####################>
-> 
-> Both ad7091r_writeable_reg() and ad7091r_volatile_reg() perform the
-> same test, checking whether a given 'reg' code is
-> AD7091R_REG_RESULT or AD7091R_REG_ALERT. While ad7091r_volatile_reg
-> returned true, ad7091r_writeable_reg returned false for the same
-> condition. As such, both functions introduced duplicate code.
-> 
-> We chose to implement the test as the AD7091R_IS_VOLATILE_REG
-> macro to remove the duplicate code without introducing new
-> function calls, which would be the case if we chose to fix the
-> duplicate code with one of the two following alternatives:
-> 
->  A) Extracting a new function out of the test
-> 
->  B) Rewriting ad7091r_writeable_reg to call
->     ad7091r_volatile_reg or vice-versa.
-> 
-> Signed-off-by: ############# <####################>
-> Co-developed-by: ############# <####################>
-> Signed-off-by: ############# <####################>
-> Co-developed-by: ############# <###############>
-> Signed-off-by: ############# <###############>
-> ---
-...
-> diff --git a/drivers/iio/adc/ad7091r-base.h b/drivers/iio/adc/ad7091r-base.h
-> index 092ddea0f395..1b4e0ef43260 100644
-> --- a/drivers/iio/adc/ad7091r-base.h
-> +++ b/drivers/iio/adc/ad7091r-base.h
-> @@ -17,6 +17,8 @@
->  #define AD7091R_REG_CH_LOW_LIMIT(ch) ((ch) * 3 + 4)
->  #define AD7091R_REG_CH_HIGH_LIMIT(ch) ((ch) * 3 + 5)
->  #define AD7091R_REG_CH_HYSTERESIS(ch) ((ch) * 3 + 6)
-> +#define AD7091R_IS_VOLATILE_REG(reg) (reg == AD7091R_REG_RESULT \
-> +	|| reg == AD7091R_REG_ALERT)
-Can we have the macro implementation all in one line?
-
-#define AD7091R_IS_VOLATILE_REG(reg)					\
-	((reg) == AD7091R_REG_RESULT || (reg) == AD7091R_REG_ALERT)
-
-The extra () around reg is to make sure the expression is fully evaluated before
-comparing to the address.
+Applied to the togreg branch of iio.git, and initially pushed out as testing
+for 0-day to take a look at it.
 
 Thanks,
-#######
 
-Subject: Re: [PATCH v1] iio: adc: ad7091r-base: Move reg volatility check to
- new macro
+########
 
-...
-> > diff --git a/drivers/iio/adc/ad7091r-base.h b/drivers/iio/adc/ad7091r-base.h
-> > index 092ddea0f395..1b4e0ef43260 100644
-> > --- a/drivers/iio/adc/ad7091r-base.h
-> > +++ b/drivers/iio/adc/ad7091r-base.h
-> > @@ -17,6 +17,8 @@
-> >  #define AD7091R_REG_CH_LOW_LIMIT(ch) ((ch) * 3 + 4)
-> >  #define AD7091R_REG_CH_HIGH_LIMIT(ch) ((ch) * 3 + 5)
-> >  #define AD7091R_REG_CH_HYSTERESIS(ch) ((ch) * 3 + 6)
-> > +#define AD7091R_IS_VOLATILE_REG(reg) (reg == AD7091R_REG_RESULT \
-> > +	|| reg == AD7091R_REG_ALERT)
-> >  
-> >  /* AD7091R_REG_RESULT */
-> >  #define AD7091R5_REG_RESULT_CH_ID(x)	    (((x) >> 13) & 0x3)
+> ---
+>  drivers/iio/light/zopt2201.c | 42 +++++++++++-------------------------
+>  1 file changed, 12 insertions(+), 30 deletions(-)
 > 
-> TBH, I think the old code is more readable than hiding the values in a macro
-> even if it is duplicating a few lines of code.
-> 
-> But if everyone else thinks this is better, I would at least suggest to make
-> the macro AD7091R_IS_READ_ONLY_REG instead of volatile. Using not volatile
-> as an indicator of writable seems really strange. But using readonly as an
-> indication of volatile seems more logical. A comment to the effect of "the
-> read-only registers also happen to be the only volatile registers" in the
-> ad7091r_volatile_reg() function would help too.
-> 
->From my side, no strong preference between having the expanded code or a macro.
-About the name, I was thinking about it the other way around. All
-ad7091r-2/-4/-5/-8 registers are writeable, except the ones that are updated by
-the device itself and those are read only. Of course, that logic only applies
-because ad7091r happens to not have any read only reg that is not volatile
-(e.g. a device or vendor ID reg). Agree though that it would be nice to add
-a comment clarifying why volatile regs are read only and vice-versa.
+> diff --git a/drivers/iio/light/zopt2201.c b/drivers/iio/light/zopt2201.c
+> index 604be60e9..1e5e9bf29 100644
+> --- a/drivers/iio/light/zopt2201.c
+> +++ b/drivers/iio/light/zopt2201.c
+> @@ -113,11 +113,13 @@ static const struct {
+>  	{ 13,   3125 },
+>  };
+>  
+> -static const struct {
+> +struct zopt2201_scale {
+>  	unsigned int scale, uscale; /* scale factor as integer + micro */
+>  	u8 gain; /* gain register value */
+>  	u8 res; /* resolution register value */
+> -} zopt2201_scale_als[] = {
+> +};
+> +
+> +static struct zopt2201_scale zopt2201_scale_als[] = {
+>  	{ 19, 200000, 0, 5 },
+>  	{  6, 400000, 1, 5 },
+>  	{  3, 200000, 2, 5 },
+> @@ -142,11 +144,7 @@ static const struct {
+>  	{  0,   8333, 4, 0 },
+>  };
+>  
+> -static const struct {
+> -	unsigned int scale, uscale; /* scale factor as integer + micro */
+> -	u8 gain; /* gain register value */
+> -	u8 res; /* resolution register value */
+> -} zopt2201_scale_uvb[] = {
+> +static struct zopt2201_scale zopt2201_scale_uvb[] = {
+>  	{ 0, 460800, 0, 5 },
+>  	{ 0, 153600, 1, 5 },
+>  	{ 0,  76800, 2, 5 },
+> @@ -348,16 +346,17 @@ static int zopt2201_set_gain(struct zopt2201_data *data, u8 gain)
+>  	return 0;
+>  }
+>  
+> -static int zopt2201_write_scale_als_by_idx(struct zopt2201_data *data, int idx)
+> +static int zopt2201_write_scale_by_idx(struct zopt2201_data *data, int idx,
+> +				     struct zopt2201_scale *zopt2201_scale_array)
+>  {
+>  	int ret;
+>  
+>  	mutex_lock(&data->lock);
 
-Subject: Re: [PATCH v1] iio: adc: ad7091r-base: Move reg volatility check to
- new macro
+Here is an example where cleanup.h / guard would simplify the code by allowing a
+direct return.
 
-Thanks ##### and ####### for the feedback.
-...
-> > TBH, I think the old code is more readable than hiding the values in a macro
-> > even if it is duplicating a few lines of code.
-> >
-> > But if everyone else thinks this is better, I would at least suggest to make
-> > the macro AD7091R_IS_READ_ONLY_REG instead of volatile. Using not volatile
-> > as an indicator of writable seems really strange. But using readonly as an
-> > indication of volatile seems more logical. A comment to the effect of "the
-> > read-only registers also happen to be the only volatile registers" in the
-> > ad7091r_volatile_reg() function would help too.
-> >
-> From my side, no strong preference between having the expanded code or a macro.
-> About the name, I was thinking about it the other way around. All
-> ad7091r-2/-4/-5/-8 registers are writeable, except the ones that are updated by
-> the device itself and those are read only. Of course, that logic only applies
-> because ad7091r happens to not have any read only reg that is not volatile
-> (e.g. a device or vendor ID reg). Agree though that it would be nice to add
-> a comment clarifying why volatile regs are read only and vice-versa.
+> -	ret = zopt2201_set_resolution(data, zopt2201_scale_als[idx].res);
+> +	ret = zopt2201_set_resolution(data, zopt2201_scale_array[idx].res);
+>  	if (ret < 0)
+>  		goto unlock;
+>  
+> -	ret = zopt2201_set_gain(data, zopt2201_scale_als[idx].gain);
+> +	ret = zopt2201_set_gain(data, zopt2201_scale_array[idx].gain);
+>  
+>  unlock:
+>  	mutex_unlock(&data->lock);
+> @@ -371,29 +370,12 @@ static int zopt2201_write_scale_als(struct zopt2201_data *data,
+>  
+>  	for (i = 0; i < ARRAY_SIZE(zopt2201_scale_als); i++)
+>  		if (val == zopt2201_scale_als[i].scale &&
+> -		    val2 == zopt2201_scale_als[i].uscale) {
+> -			return zopt2201_write_scale_als_by_idx(data, i);
+> -		}
+> +		    val2 == zopt2201_scale_als[i].uscale)
+> +			return zopt2201_write_scale_by_idx(data, i, zopt2201_scale_als);
+>  
+>  	return -EINVAL;
+>  }
+>  
+> -static int zopt2201_write_scale_uvb_by_idx(struct zopt2201_data *data, int idx)
+> -{
+> -	int ret;
+> -
+> -	mutex_lock(&data->lock);
+> -	ret = zopt2201_set_resolution(data, zopt2201_scale_als[idx].res);
+> -	if (ret < 0)
+> -		goto unlock;
+> -
+> -	ret = zopt2201_set_gain(data, zopt2201_scale_als[idx].gain);
+> -
+> -unlock:
+> -	mutex_unlock(&data->lock);
+> -	return ret;
+> -}
+> -
+>  static int zopt2201_write_scale_uvb(struct zopt2201_data *data,
+>  				     int val, int val2)
+>  {
+> @@ -402,7 +384,7 @@ static int zopt2201_write_scale_uvb(struct zopt2201_data *data,
+>  	for (i = 0; i < ARRAY_SIZE(zopt2201_scale_uvb); i++)
+>  		if (val == zopt2201_scale_uvb[i].scale &&
+>  		    val2 == zopt2201_scale_uvb[i].uscale)
+> -			return zopt2201_write_scale_uvb_by_idx(data, i);
+> +			return zopt2201_write_scale_by_idx(data, i, zopt2201_scale_uvb);
+>  
+>  	return -EINVAL;
+>  }
 
-I, too, agree with you and see that a comment would be adequate.
 
-Regarding the name of the macro, I see #####'s suggestion as being
-slightly more
-intuitive. Otherwise, someone might eventually argue that the same comment on
-the read-only volatile registers should accompany the definition of the macro.
+Subject: Re: [PATCH] iio: light: zopt2201: Remove code duplication in scale write functions
 
-I'm addressing your comments on a new patch.
+Hi ########,
 
-Thank you,
-######
+Thank you for the feedback.
+
+We will study the possibility of continuing our contributions to this
+driver. We appreciate your suggestion regarding the use of guard(), and
+we will take it into consideration during further improvements.
+
+Thanks again,
+###################
 

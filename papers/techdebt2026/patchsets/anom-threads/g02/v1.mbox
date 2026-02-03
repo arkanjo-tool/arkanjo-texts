@@ -1,314 +1,144 @@
-Subject: [PATCH] iio: proximity: sx9500: Deduplicate buffer managing functions
+Subject: [PATCH] iio: magnetometer: mmc35240: refactor volatile and writeable reg functions
 
-Refactor to share logic between buffer enable/disable handlers.
+Refactor 'mmc35240_is_volatile_reg' and 'mmc35240_is_writeable_reg' as they
+share similar logic, returning the inverse of each other.
 
-Signed-off-by: ################################## <#######################>
-Co-developed-by: ################ <################>
-Signed-off-by: ################ <################>
+Introduce a new helper function 'mmc35240_reg_check' to generalize this
+behavior, which is then used by both 'mmc35240_is_volatile_reg' and
+'mmc35240_is_writeable_reg'.
+
+Signed-off-by: ################### <###################>
+Co-developed-by: ################## <#######################>
+Signed-off-by: ################## <#######################>
 ---
- drivers/iio/proximity/sx9500.c | 50 ++++++++++++++++------------------
- 1 file changed, 23 insertions(+), 27 deletions(-)
+ drivers/iio/magnetometer/mmc35240.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/iio/proximity/sx9500.c b/drivers/iio/proximity/sx9500.c
-index c4e94d0fb163..75459c85116b 100644
---- a/drivers/iio/proximity/sx9500.c
-+++ b/drivers/iio/proximity/sx9500.c
-@@ -674,52 +674,48 @@ static irqreturn_t sx9500_trigger_handler(int irq, void *private)
- 	return IRQ_HANDLED;
- }
+diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetometer/mmc35240.c
+index e08a57cd6de2..07f58567e521 100644
+--- a/drivers/iio/magnetometer/mmc35240.c
++++ b/drivers/iio/magnetometer/mmc35240.c
+@@ -418,15 +418,14 @@ static const struct iio_info mmc35240_info = {
+ 	.attrs		= &mmc35240_attribute_group,
+ };
  
--static int sx9500_buffer_postenable(struct iio_dev *indio_dev)
-+static int sx9500_buffer_manage_chan_users(struct iio_dev *indio_dev, bool enable_channels)
- {
- 	struct sx9500_data *data = iio_priv(indio_dev);
- 	int ret = 0, i;
- 
- 	mutex_lock(&data->mutex);
- 
--	for (i = 0; i < SX9500_NUM_CHANNELS; i++)
-+	for (i = 0; i < SX9500_NUM_CHANNELS; i++) {
- 		if (test_bit(i, indio_dev->active_scan_mask)) {
--			ret = sx9500_inc_chan_users(data, i);
-+			if (enable_channels)
-+				ret = sx9500_inc_chan_users(data, i);
-+			else
-+				ret = sx9500_dec_chan_users(data, i);
- 			if (ret)
- 				break;
- 		}
-+	}
- 
--	if (ret)
--		for (i = i - 1; i >= 0; i--)
--			if (test_bit(i, indio_dev->active_scan_mask))
--				sx9500_dec_chan_users(data, i);
-+	if (ret) {
-+		for (i = i - 1; i >= 0; i--) {
-+			if (test_bit(i, indio_dev->active_scan_mask)) {
-+				if (enable_channels)
-+					sx9500_dec_chan_users(data, i);
-+				else
-+					sx9500_inc_chan_users(data, i);
-+			}
-+		}
-+	}
- 
- 	mutex_unlock(&data->mutex);
- 
- 	return ret;
- }
- 
--static int sx9500_buffer_predisable(struct iio_dev *indio_dev)
-+static int sx9500_buffer_postenable(struct iio_dev *indio_dev)
- {
--	struct sx9500_data *data = iio_priv(indio_dev);
--	int ret = 0, i;
--
--	mutex_lock(&data->mutex);
--
--	for (i = 0; i < SX9500_NUM_CHANNELS; i++)
--		if (test_bit(i, indio_dev->active_scan_mask)) {
--			ret = sx9500_dec_chan_users(data, i);
--			if (ret)
--				break;
--		}
--
--	if (ret)
--		for (i = i - 1; i >= 0; i--)
--			if (test_bit(i, indio_dev->active_scan_mask))
--				sx9500_inc_chan_users(data, i);
--
--	mutex_unlock(&data->mutex);
-+	return sx9500_buffer_manage_chan_users(indio_dev, true);
-+}
- 
--	return ret;
-+static int sx9500_buffer_predisable(struct iio_dev *indio_dev)
++static bool mmc35240_reg_check(unsigned int reg)
 +{
-+	return sx9500_buffer_manage_chan_users(indio_dev, false);
++	return reg == MMC35240_REG_CTRL0 || reg == MMC35240_REG_CTRL1;
++}
++
+ static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int reg)
+ {
+-	switch (reg) {
+-	case MMC35240_REG_CTRL0:
+-	case MMC35240_REG_CTRL1:
+-		return true;
+-	default:
+-		return false;
+-	}
++	return mmc35240_reg_check(reg);
  }
  
- static const struct iio_buffer_setup_ops sx9500_buffer_setup_ops = {
+ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+@@ -448,13 +447,7 @@ static bool mmc35240_is_readable_reg(struct device *dev, unsigned int reg)
+ 
+ static bool mmc35240_is_volatile_reg(struct device *dev, unsigned int reg)
+ {
+-	switch (reg) {
+-	case MMC35240_REG_CTRL0:
+-	case MMC35240_REG_CTRL1:
+-		return false;
+-	default:
+-		return true;
+-	}
++	return !mmc35240_reg_check(reg);
+ }
+ 
+ static const struct reg_default mmc35240_reg_defaults[] = {
 -- 
-2.25.1
+2.43.0
 
 
-Subject: Re: [PATCH] iio: proximity: sx9500: Deduplicate buffer managing
- functions
+Subject: Re: [PATCH] iio: magnetometer: mmc35240: refactor volatile and
+ writeable reg functions
 
-################################## <#######################> wrote:
+######################## <####################> wrote:
 
-> Refactor to share logic between buffer enable/disable handlers.
-> 
-> Signed-off-by: ################################## <#######################>
-> Co-developed-by: ################ <################>
-> Signed-off-by: ################ <################>
-> ---
->  drivers/iio/proximity/sx9500.c | 50 ++++++++++++++++------------------
+> Refactor 'mmc35240_is_volatile_reg' and 'mmc35240_is_writeable_reg' as th=
+ey
+> share similar logic, returning the inverse of each other.
+>=20
+> Introduce a new helper function 'mmc35240_reg_check' to generalize this
+> behavior, which is then used by both 'mmc35240_is_volatile_reg' and
+> 'mmc35240_is_writeable_reg'.
+>=20
+> Signed-off-by: ######################## <###################>
+> Co-developed-by: ####################### <#######################>
+> Signed-off-by: ####################### <#######################>
+Hi ######, ##########
 
-In my view this isn't a significant enough reduction to justify the more complex code.
-Particularly in the error paths.
+The patch is mostly fine but I think the naming as
+_reg_check() is not helpful as it doesn't indicate anything specific
+is being checked.  I think ti would be cleaner to leave _is_writeable_reg()=
+ alone
+and them make the implementation of _is_volatile_reg()
+
+	return !mmc35240_is_writeable_reg(dev, reg);
+
+Which will effectively document that all non writeable registers are volati=
+le.
 
 ########
 
-
->  1 file changed, 23 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/iio/proximity/sx9500.c b/drivers/iio/proximity/sx9500.c
-> index c4e94d0fb163..75459c85116b 100644
-> --- a/drivers/iio/proximity/sx9500.c
-> +++ b/drivers/iio/proximity/sx9500.c
-> @@ -674,52 +674,48 @@ static irqreturn_t sx9500_trigger_handler(int irq, void *private)
->  	return IRQ_HANDLED;
->  }
->  
-> -static int sx9500_buffer_postenable(struct iio_dev *indio_dev)
-> +static int sx9500_buffer_manage_chan_users(struct iio_dev *indio_dev, bool enable_channels)
->  {
->  	struct sx9500_data *data = iio_priv(indio_dev);
->  	int ret = 0, i;
->  
->  	mutex_lock(&data->mutex);
->  
-> -	for (i = 0; i < SX9500_NUM_CHANNELS; i++)
-> +	for (i = 0; i < SX9500_NUM_CHANNELS; i++) {
->  		if (test_bit(i, indio_dev->active_scan_mask)) {
-> -			ret = sx9500_inc_chan_users(data, i);
-> +			if (enable_channels)
-> +				ret = sx9500_inc_chan_users(data, i);
-> +			else
-> +				ret = sx9500_dec_chan_users(data, i);
->  			if (ret)
->  				break;
->  		}
-> +	}
->  
-> -	if (ret)
-> -		for (i = i - 1; i >= 0; i--)
-> -			if (test_bit(i, indio_dev->active_scan_mask))
-> -				sx9500_dec_chan_users(data, i);
-> +	if (ret) {
-> +		for (i = i - 1; i >= 0; i--) {
-> +			if (test_bit(i, indio_dev->active_scan_mask)) {
-> +				if (enable_channels)
-> +					sx9500_dec_chan_users(data, i);
-> +				else
-> +					sx9500_inc_chan_users(data, i);
-> +			}
-> +		}
-> +	}
->  
->  	mutex_unlock(&data->mutex);
->  
->  	return ret;
->  }
->  
-> -static int sx9500_buffer_predisable(struct iio_dev *indio_dev)
-> +static int sx9500_buffer_postenable(struct iio_dev *indio_dev)
->  {
-> -	struct sx9500_data *data = iio_priv(indio_dev);
-> -	int ret = 0, i;
-> -
-> -	mutex_lock(&data->mutex);
-> -
-> -	for (i = 0; i < SX9500_NUM_CHANNELS; i++)
-> -		if (test_bit(i, indio_dev->active_scan_mask)) {
-> -			ret = sx9500_dec_chan_users(data, i);
-> -			if (ret)
-> -				break;
-> -		}
-> -
-> -	if (ret)
-> -		for (i = i - 1; i >= 0; i--)
-> -			if (test_bit(i, indio_dev->active_scan_mask))
-> -				sx9500_inc_chan_users(data, i);
-> -
-> -	mutex_unlock(&data->mutex);
-> +	return sx9500_buffer_manage_chan_users(indio_dev, true);
-> +}
->  
-> -	return ret;
-> +static int sx9500_buffer_predisable(struct iio_dev *indio_dev)
+> ---
+>  drivers/iio/magnetometer/mmc35240.c | 21 +++++++--------------
+>  1 file changed, 7 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/iio/magnetometer/mmc35240.c b/drivers/iio/magnetomet=
+er/mmc35240.c
+> index e08a57cd6de2..07f58567e521 100644
+> --- a/drivers/iio/magnetometer/mmc35240.c
+> +++ b/drivers/iio/magnetometer/mmc35240.c
+> @@ -418,15 +418,14 @@ static const struct iio_info mmc35240_info =3D {
+>  	.attrs		=3D &mmc35240_attribute_group,
+>  };
+> =20
+> +static bool mmc35240_reg_check(unsigned int reg)
 > +{
-> +	return sx9500_buffer_manage_chan_users(indio_dev, false);
+> +	return reg =3D=3D MMC35240_REG_CTRL0 || reg =3D=3D MMC35240_REG_CTRL1;
+> +}
+> +
+>  static bool mmc35240_is_writeable_reg(struct device *dev, unsigned int r=
+eg)
+>  {
+> -	switch (reg) {
+> -	case MMC35240_REG_CTRL0:
+> -	case MMC35240_REG_CTRL1:
+> -		return true;
+> -	default:
+> -		return false;
+> -	}
+> +	return mmc35240_reg_check(reg);
 >  }
->  
->  static const struct iio_buffer_setup_ops sx9500_buffer_setup_ops = {
+> =20
+>  static bool mmc35240_is_readable_reg(struct device *dev, unsigned int re=
+g)
+> @@ -448,13 +447,7 @@ static bool mmc35240_is_readable_reg(struct device *=
+dev, unsigned int reg)
+> =20
+>  static bool mmc35240_is_volatile_reg(struct device *dev, unsigned int re=
+g)
+>  {
+> -	switch (reg) {
+> -	case MMC35240_REG_CTRL0:
+> -	case MMC35240_REG_CTRL1:
+> -		return false;
+> -	default:
+> -		return true;
+> -	}
+> +	return !mmc35240_reg_check(reg);
+>  }
+> =20
+>  static const struct reg_default mmc35240_reg_defaults[] =3D {
 
-
-Subject: Re: [PATCH] iio: proximity: sx9500: Deduplicate buffer managing functions
-
-Hi ########,
-
-Thanks for the feedback. I've decided not to continue with this change
-and will abandon it.
-
-Best, #######
-
-################ <###########################> escreveu:
->
-> ################################## <#######################> wrote:
->
-> > Refactor to share logic between buffer enable/disable handlers.
-> >
-> > Signed-off-by: ################################## <#####################
-###>
-> > Co-developed-by: ################ <################>
-> > Signed-off-by: ################ <################>
-> > ---
-> >  drivers/iio/proximity/sx9500.c | 50 ++++++++++++++++------------------
->
-> In my view this isn't a significant enough reduction to justify the more =
-complex code.
-> Particularly in the error paths.
->
-> ########
->
->
-> >  1 file changed, 23 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/drivers/iio/proximity/sx9500.c b/drivers/iio/proximity/sx9=
-500.c
-> > index c4e94d0fb163..75459c85116b 100644
-> > --- a/drivers/iio/proximity/sx9500.c
-> > +++ b/drivers/iio/proximity/sx9500.c
-> > @@ -674,52 +674,48 @@ static irqreturn_t sx9500_trigger_handler(int irq=
-, void *private)
-> >       return IRQ_HANDLED;
-> >  }
-> >
-> > -static int sx9500_buffer_postenable(struct iio_dev *indio_dev)
-> > +static int sx9500_buffer_manage_chan_users(struct iio_dev *indio_dev, =
-bool enable_channels)
-> >  {
-> >       struct sx9500_data *data =3D iio_priv(indio_dev);
-> >       int ret =3D 0, i;
-> >
-> >       mutex_lock(&data->mutex);
-> >
-> > -     for (i =3D 0; i < SX9500_NUM_CHANNELS; i++)
-> > +     for (i =3D 0; i < SX9500_NUM_CHANNELS; i++) {
-> >               if (test_bit(i, indio_dev->active_scan_mask)) {
-> > -                     ret =3D sx9500_inc_chan_users(data, i);
-> > +                     if (enable_channels)
-> > +                             ret =3D sx9500_inc_chan_users(data, i);
-> > +                     else
-> > +                             ret =3D sx9500_dec_chan_users(data, i);
-> >                       if (ret)
-> >                               break;
-> >               }
-> > +     }
-> >
-> > -     if (ret)
-> > -             for (i =3D i - 1; i >=3D 0; i--)
-> > -                     if (test_bit(i, indio_dev->active_scan_mask))
-> > -                             sx9500_dec_chan_users(data, i);
-> > +     if (ret) {
-> > +             for (i =3D i - 1; i >=3D 0; i--) {
-> > +                     if (test_bit(i, indio_dev->active_scan_mask)) {
-> > +                             if (enable_channels)
-> > +                                     sx9500_dec_chan_users(data, i);
-> > +                             else
-> > +                                     sx9500_inc_chan_users(data, i);
-> > +                     }
-> > +             }
-> > +     }
-> >
-> >       mutex_unlock(&data->mutex);
-> >
-> >       return ret;
-> >  }
-> >
-> > -static int sx9500_buffer_predisable(struct iio_dev *indio_dev)
-> > +static int sx9500_buffer_postenable(struct iio_dev *indio_dev)
-> >  {
-> > -     struct sx9500_data *data =3D iio_priv(indio_dev);
-> > -     int ret =3D 0, i;
-> > -
-> > -     mutex_lock(&data->mutex);
-> > -
-> > -     for (i =3D 0; i < SX9500_NUM_CHANNELS; i++)
-> > -             if (test_bit(i, indio_dev->active_scan_mask)) {
-> > -                     ret =3D sx9500_dec_chan_users(data, i);
-> > -                     if (ret)
-> > -                             break;
-> > -             }
-> > -
-> > -     if (ret)
-> > -             for (i =3D i - 1; i >=3D 0; i--)
-> > -                     if (test_bit(i, indio_dev->active_scan_mask))
-> > -                             sx9500_inc_chan_users(data, i);
-> > -
-> > -     mutex_unlock(&data->mutex);
-> > +     return sx9500_buffer_manage_chan_users(indio_dev, true);
-> > +}
-> >
-> > -     return ret;
-> > +static int sx9500_buffer_predisable(struct iio_dev *indio_dev)
-> > +{
-> > +     return sx9500_buffer_manage_chan_users(indio_dev, false);
-> >  }
-> >
-> >  static const struct iio_buffer_setup_ops sx9500_buffer_setup_ops =3D {
->
 

@@ -1,490 +1,268 @@
-Subject: [PATCH] iio: light: apds9306: Refactor threshold get/set functions to
+Subject: [PATCH] iio: imu: inv_mpu6050: refactor aux read/write to use shared xfer logic
 
-Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set functions
-to use a helper function (get_thresh_reg) for obtaining the correct register
-based on the direction of the event. This improves code readability,
-minimize the number of lines  and maintains consistency in accessing
-threshold registers.
+Extract common transfer logic from inv_mpu_aux_read() and
+inv_mpu_aux_write() into a new helper function,
+inv_mpu_aux_exec_xfer(), which performs the I2C transfer.
 
-Signed-off-by: ############### <##########################>
-Co-developed-by: ############# <##########################>
-Signed-off-by: ############# <##########################>
+This refactoring removes code duplication and improves maintainability.
+No functional changes are intended.
+
+Signed-off-by: ################ <########################>
+Co-developed-by: ################## <#########################>
+Signed-off-by: ################## <#########################>
 ---
- drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
- 1 file changed, 21 insertions(+), 17 deletions(-)
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c | 41 +++++++++++------------
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h |  2 ++
+ 2 files changed, 21 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
-index 69a0d609c..8e1cdaeb0 100644
---- a/drivers/iio/light/apds9306.c
-+++ b/drivers/iio/light/apds9306.c
-@@ -6,7 +6,6 @@
-  *
-  * Copyright (C) 2024 ##############################################
-  */
--
- #include <linux/bits.h>
- #include <linux/cleanup.h>
- #include <linux/delay.h>
-@@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
- 	return regmap_field_write(rf->int_persist_val, val);
- }
- 
--static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
--				     int *val)
-+static int get_thresh_reg(int dir)
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+index 8a7f29119..de013e034 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c
+@@ -117,7 +117,6 @@ int inv_mpu_aux_init(const struct inv_mpu6050_state *st)
+ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		     uint8_t reg, uint8_t *val, size_t size)
  {
--	int var, ret;
--	u8 buff[3];
--
- 	if (dir == IIO_EV_DIR_RISING)
--		var = APDS9306_ALS_THRES_UP_0_REG;
-+		return  APDS9306_ALS_THRES_UP_0_REG;
- 	else if (dir == IIO_EV_DIR_FALLING)
--		var = APDS9306_ALS_THRES_LOW_0_REG;
-+		return APDS9306_ALS_THRES_LOW_0_REG;
- 	else
- 		return -EINVAL;
-+}
-+
-+static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
-+				     int *val)
-+{
-+	int reg, ret;
-+	u8 buff[3];
-+
-+	reg = get_thresh_reg(dir);
+-	unsigned int status;
+ 	int ret;
  
--	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
-+	if (reg == -EINVAL)
-+		return reg;
-+
-+	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
+ 	if (size > 0x0F)
+@@ -136,30 +135,13 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
  	if (ret)
  		return ret;
  
-@@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
- static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
- 				     int val)
- {
--	int var;
-+	int reg;
- 	u8 buff[3];
-+	reg = get_thresh_reg(dir);
+-	/* do i2c xfer */
+-	ret = inv_mpu_i2c_master_xfer(st);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* disable i2c slave */
+-	ret = regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	if (ret)
+-		goto error_disable_i2c;
+-
+-	/* check i2c status */
+-	ret = regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);
++	ret = inv_mpu_aux_exec_xfer(st);
+ 	if (ret)
+ 		return ret;
+-	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
+-		return -EIO;
  
--	if (dir == IIO_EV_DIR_RISING)
--		var = APDS9306_ALS_THRES_UP_0_REG;
--	else if (dir == IIO_EV_DIR_FALLING)
--		var = APDS9306_ALS_THRES_LOW_0_REG;
--	else
--		return -EINVAL;
-+	if (reg == -EINVAL)
-+		return reg;
- 
- 	if (!in_range(val, 0, APDS9306_ALS_THRES_VAL_MAX))
- 		return -EINVAL;
- 
- 	put_unaligned_le24(val, buff);
- 
--	return regmap_bulk_write(data->regmap, var, buff, sizeof(buff));
-+	return regmap_bulk_write(data->regmap, reg, buff, sizeof(buff));
+ 	/* read data in registers */
+ 	return regmap_bulk_read(st->map, INV_MPU6050_REG_EXT_SENS_DATA,
+ 				val, size);
+-
+-error_disable_i2c:
+-	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+-	return ret;
  }
  
- static int apds9306_event_thresh_adaptive_get(struct apds9306_data *data, int *val)
+ /**
+@@ -174,7 +156,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		      uint8_t reg, uint8_t val)
+ {
+-	unsigned int status;
+ 	int ret;
+ 
+ 	/* setup i2c SLV0 control: i2c addr, register, value, enable + size */
+@@ -192,6 +173,24 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (ret)
+ 		return ret;
+ 
++	ret = inv_mpu_aux_exec_xfer(st);
++	if (ret)
++	return ret;
++
++	return 0;
++}
++
++/**
++ * inv_mpu_aux_exec_xfer() - executes i2c auxiliary transfer and checks status
++ * @st: driver internal state.
++ *
++ *  Returns 0 on success, a negative error code otherwise.
++ */
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st)
++{
++	int ret;
++	unsigned int status;
++
+ 	/* do i2c xfer */
+ 	ret = inv_mpu_i2c_master_xfer(st);
+ 	if (ret)
+@@ -209,8 +208,6 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)
+ 		return -EIO;
+ 
+-	return 0;
+-
+ error_disable_i2c:
+ 	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);
+ 	return ret;
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h
+index b66997545..0353103aa 100644
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h
+@@ -16,4 +16,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,
+ 		      uint8_t reg, uint8_t val);
+ 
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st);
++
+ #endif		/* INV_MPU_AUX_H_ */
 -- 
-2.34.1
+2.43.0
 
 
-Subject: Re: [PATCH] iio: light: apds9306: Refactor threshold get/set
- functions to
+Subject: Re: [PATCH] iio: imu: inv_mpu6050: refactor aux read/write to use
+ shared xfer logic
 
-Hello ######, #####,
+Hello,=0A=
+=0A=
+I don't really see the point in this patch.=0A=
+=0A=
+We already have a common function inv_mpu_i2c_master_xfer() for handling ma=
+ster I2C transfer, and there is no need to create a new external function i=
+nv_mpu_aux_exec_xfer() that is never called outside the inv_mpu_aux.c file.=
+=0A=
+=0A=
+If you want to factorize the I2C transfer status check, better add it to th=
+e inv_mpu_i2c_master_xfer function. This way it would make sense. But you n=
+eed to warn that only SLV0 slot has to be used for transfer if we are enfor=
+cing SLV0 transfer check.=0A=
+=0A=
+In the actual implementation we're free to use the slave slot we want, sinc=
+e all SLV(x) calls are done in the same function. It is easier to understan=
+d like this, I think.=0A=
+=0A=
+Thanks,=0A=
+##=0A=
+=0A=
 
-Not sure it's worth extrancting the event direction comparison into that
-separate function. Even though there is less code repetition, we now have an
-extra comparison to handle get_thresh_reg() return. Despite of that, see
-comments below.
-
-On #####, ###### wrote:
-> From: ############### <##########################>
-> 
-> Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set functions
-> to use a helper function (get_thresh_reg) for obtaining the correct register
-Wrap commit description to 75 columns.
-
-> based on the direction of the event. This improves code readability,
-> minimize the number of lines  and maintains consistency in accessing
-> threshold registers.
-> 
-> Signed-off-by: ############### <##########################>
-> Co-developed-by: ############# <##########################>
-> Signed-off-by: ############# <##########################>
-> ---
->  drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
->  1 file changed, 21 insertions(+), 17 deletions(-)
-> 
-> diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
-> index 69a0d609c..8e1cdaeb0 100644
-> --- a/drivers/iio/light/apds9306.c
-> +++ b/drivers/iio/light/apds9306.c
-> @@ -6,7 +6,6 @@
->   *
->   * Copyright (C) 2024 ##############################################
->   */
-> -
-This doesn't seem to have any relation with the intent of the patch.
-Drop this unrelated change.
-
->  #include <linux/bits.h>
->  #include <linux/cleanup.h>
->  #include <linux/delay.h>
-> @@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
->  	return regmap_field_write(rf->int_persist_val, val);
->  }
->  
-> -static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
-> -				     int *val)
-> +static int get_thresh_reg(int dir)
-Even though these functions are declared static, it's common patter in IIO
-that driver functions start with the name of the driver. So, it would be more
-conventional to call it apds9306_get_thresh_reg().
-
->  {
-> -	int var, ret;
-> -	u8 buff[3];
-> -
->  	if (dir == IIO_EV_DIR_RISING)
-> -		var = APDS9306_ALS_THRES_UP_0_REG;
-> +		return  APDS9306_ALS_THRES_UP_0_REG;
->  	else if (dir == IIO_EV_DIR_FALLING)
-> -		var = APDS9306_ALS_THRES_LOW_0_REG;
-> +		return APDS9306_ALS_THRES_LOW_0_REG;
->  	else
->  		return -EINVAL;
-> +}
-> +
-> +static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
-> +				     int *val)
-> +{
-> +	int reg, ret;
-> +	u8 buff[3];
-> +
-> +	reg = get_thresh_reg(dir);
->  
-> -	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
-There is now a blank line between function call (apds9306_get_thresh_reg()) and
-the return check, which is unusual in IIO. Drop the blank line between those
-	reg = get_thresh_reg(dir);
-	if (reg == -EINVAL)
-...
-
-> +	if (reg == -EINVAL)
-> +		return reg;
-> +
-> +	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
->  	if (ret)
->  		return ret;
->  
-> @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
->  static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
->  				     int val)
->  {
-> -	int var;
-> +	int reg;
->  	u8 buff[3];
-Add a blank line between local variable declarations and rest of function code.
-> +	reg = get_thresh_reg(dir);
->  
-Another blank line between function call and return check to be dropped here.
-
-> -	if (dir == IIO_EV_DIR_RISING)
-> -		var = APDS9306_ALS_THRES_UP_0_REG;
-> -	else if (dir == IIO_EV_DIR_FALLING)
-> -		var = APDS9306_ALS_THRES_LOW_0_REG;
-> -	else
-> -		return -EINVAL;
-> +	if (reg == -EINVAL)
-> +		return reg;
->  
-
-Regards,
-#######
-
-Subject: Re: [PATCH] iio: light: apds9306: Refactor threshold get/set
- functions to
-
-############### <##########################> wrote:
-
-> Hello ######, #####,
-> 
-> Not sure it's worth extrancting the event direction comparison into that
-> separate function. Even though there is less code repetition, we now have an
-> extra comparison to handle get_thresh_reg() return. Despite of that, see
-> comments below.
-> 
-> On #####, ###### wrote:
-> > From: ############### <##########################>
-> > 
-> > Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set functions
-> > to use a helper function (get_thresh_reg) for obtaining the correct register  
-> Wrap commit description to 75 columns.
-> 
-> > based on the direction of the event. This improves code readability,
-> > minimize the number of lines  and maintains consistency in accessing
-> > threshold registers.
-> > 
-> > Signed-off-by: ############### <##########################>
-> > Co-developed-by: ############# <##########################>
-> > Signed-off-by: ############# <##########################>
-> > ---
-> >  drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
-> >  1 file changed, 21 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.c
-> > index 69a0d609c..8e1cdaeb0 100644
-> > --- a/drivers/iio/light/apds9306.c
-> > +++ b/drivers/iio/light/apds9306.c
-> > @@ -6,7 +6,6 @@
-> >   *
-> >   * Copyright (C) 2024 ##############################################
-> >   */
-> > -  
-> This doesn't seem to have any relation with the intent of the patch.
-> Drop this unrelated change.
-> 
-> >  #include <linux/bits.h>
-> >  #include <linux/cleanup.h>
-> >  #include <linux/delay.h>
-> > @@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9306_data *data, int val)
-> >  	return regmap_field_write(rf->int_persist_val, val);
-> >  }
-> >  
-> > -static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
-> > -				     int *val)
-> > +static int get_thresh_reg(int dir)  
-> Even though these functions are declared static, it's common patter in IIO
-> that driver functions start with the name of the driver. So, it would be more
-> conventional to call it apds9306_get_thresh_reg().
-> 
-> >  {
-> > -	int var, ret;
-> > -	u8 buff[3];
-> > -
-> >  	if (dir == IIO_EV_DIR_RISING)
-> > -		var = APDS9306_ALS_THRES_UP_0_REG;
-> > +		return  APDS9306_ALS_THRES_UP_0_REG;
-
-Just one space after return
-
-> >  	else if (dir == IIO_EV_DIR_FALLING)
-> > -		var = APDS9306_ALS_THRES_LOW_0_REG;
-> > +		return APDS9306_ALS_THRES_LOW_0_REG;
-> >  	else
-> >  		return -EINVAL;
-> > +}
-> > +
-> > +static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
-> > +				     int *val)
-> > +{
-> > +	int reg, ret;
-> > +	u8 buff[3];
-> > +
-> > +	reg = get_thresh_reg(dir);
-> >  
-> > -	ret = regmap_bulk_read(data->regmap, var, buff, sizeof(buff));  
-> There is now a blank line between function call (apds9306_get_thresh_reg()) and
-> the return check, which is unusual in IIO. Drop the blank line between those
-> 	reg = get_thresh_reg(dir);
-> 	if (reg == -EINVAL)
-> ...
-> 
-> > +	if (reg == -EINVAL)
-> > +		return reg;
-> > +
-> > +	ret = regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9306_data *data, int dir,
-> >  static int apds9306_event_thresh_set(struct apds9306_data *data, int dir,
-> >  				     int val)
-> >  {
-> > -	int var;
-> > +	int reg;
-> >  	u8 buff[3];  
-> Add a blank line between local variable declarations and rest of function code.
-> > +	reg = get_thresh_reg(dir);
-> >    
-> Another blank line between function call and return check to be dropped here.
-> 
-> > -	if (dir == IIO_EV_DIR_RISING)
-> > -		var = APDS9306_ALS_THRES_UP_0_REG;
-> > -	else if (dir == IIO_EV_DIR_FALLING)
-> > -		var = APDS9306_ALS_THRES_LOW_0_REG;
-> > -	else
-> > -		return -EINVAL;
-> > +	if (reg == -EINVAL)
-> > +		return reg;
-> >    
-> 
-> Regards,
-> #######
-
-
-Subject: Re: [PATCH] iio: light: apds9306: Refactor threshold get/set
- functions to
-
-Hello #######,
-thank you for the feedback.
-
->  Not sure it's worth extracting the event direction comparison into that =
-separate function. Even though there is less code repetition, we now have a=
-n extra comparison to handle get_thresh_reg() return.
-I understand your point. The main goal was to reduce code duplication
-and perhaps improve readability and maintainability, but I agree that
-it introduces a small trade-off with the additional return check.
-
->  Even though these functions are declared static, it's common pattern in =
-IIO that driver functions start with the name of the driver. So, it would b=
-e more conventional to call it apds9306_get_thresh_reg().
-Got it. I=E2=80=99ll rename the helper function to follow the IIO driver
-naming convention.
-
-I understand the blank line problems and I'll correct them.
-
-I=E2=80=99ll send a v2 soon with all these adjustments.
-
-Thanks again for your feedback!
-
-Best regards,
-######
-
-
-<##########################> wrote:
->
-> Hello ######, #####,
->
-> Not sure it's worth extrancting the event direction comparison into that
-> separate function. Even though there is less code repetition, we now have=
- an
-> extra comparison to handle get_thresh_reg() return. Despite of that, see
-> comments below.
->
-> On #####, ###### wrote:
-> > From: ############### <##########################>
-> >
-> > Refactor the apds9306_event_thresh_get and apds9306_event_thresh_set fu=
-nctions
-> > to use a helper function (get_thresh_reg) for obtaining the correct reg=
-ister
-> Wrap commit description to 75 columns.
->
-> > based on the direction of the event. This improves code readability,
-> > minimize the number of lines  and maintains consistency in accessing
-> > threshold registers.
-> >
-> > Signed-off-by: ############### <##########################>
-> > Co-developed-by: ############# <##########################>
-> > Signed-off-by: ############# <##########################>
-> > ---
-> >  drivers/iio/light/apds9306.c | 38 ++++++++++++++++++++----------------
-> >  1 file changed, 21 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/drivers/iio/light/apds9306.c b/drivers/iio/light/apds9306.=
-c
-> > index 69a0d609c..8e1cdaeb0 100644
-> > --- a/drivers/iio/light/apds9306.c
-> > +++ b/drivers/iio/light/apds9306.c
-> > @@ -6,7 +6,6 @@
-> >   *
-> >   * Copyright (C) 2024 ##############################################
-> >   */
-> > -
-> This doesn't seem to have any relation with the intent of the patch.
-> Drop this unrelated change.
->
-> >  #include <linux/bits.h>
-> >  #include <linux/cleanup.h>
-> >  #include <linux/delay.h>
-> > @@ -744,20 +743,28 @@ static int apds9306_event_period_set(struct apds9=
-306_data *data, int val)
-> >       return regmap_field_write(rf->int_persist_val, val);
-> >  }
-> >
-> > -static int apds9306_event_thresh_get(struct apds9306_data *data, int d=
-ir,
-> > -                                  int *val)
-> > +static int get_thresh_reg(int dir)
-> Even though these functions are declared static, it's common patter in II=
-O
-> that driver functions start with the name of the driver. So, it would be =
-more
-> conventional to call it apds9306_get_thresh_reg().
->
-> >  {
-> > -     int var, ret;
-> > -     u8 buff[3];
-> > -
-> >       if (dir =3D=3D IIO_EV_DIR_RISING)
-> > -             var =3D APDS9306_ALS_THRES_UP_0_REG;
-> > +             return  APDS9306_ALS_THRES_UP_0_REG;
-> >       else if (dir =3D=3D IIO_EV_DIR_FALLING)
-> > -             var =3D APDS9306_ALS_THRES_LOW_0_REG;
-> > +             return APDS9306_ALS_THRES_LOW_0_REG;
-> >       else
-> >               return -EINVAL;
-> > +}
-> > +
-> > +static int apds9306_event_thresh_get(struct apds9306_data *data, int d=
-ir,
-> > +                                  int *val)
-> > +{
-> > +     int reg, ret;
-> > +     u8 buff[3];
-> > +
-> > +     reg =3D get_thresh_reg(dir);
-> >
-> > -     ret =3D regmap_bulk_read(data->regmap, var, buff, sizeof(buff));
-> There is now a blank line between function call (apds9306_get_thresh_reg(=
-)) and
-> the return check, which is unusual in IIO. Drop the blank line between th=
-ose
->         reg =3D get_thresh_reg(dir);
->         if (reg =3D=3D -EINVAL)
-> ...
->
-> > +     if (reg =3D=3D -EINVAL)
-> > +             return reg;
-> > +
-> > +     ret =3D regmap_bulk_read(data->regmap, reg, buff, sizeof(buff));
-> >       if (ret)
-> >               return ret;
-> >
-> > @@ -769,22 +776,19 @@ static int apds9306_event_thresh_get(struct apds9=
-306_data *data, int dir,
-> >  static int apds9306_event_thresh_set(struct apds9306_data *data, int d=
-ir,
-> >                                    int val)
-> >  {
-> > -     int var;
-> > +     int reg;
-> >       u8 buff[3];
-> Add a blank line between local variable declarations and rest of function=
- code.
-> > +     reg =3D get_thresh_reg(dir);
-> >
-> Another blank line between function call and return check to be dropped h=
-ere.
->
-> > -     if (dir =3D=3D IIO_EV_DIR_RISING)
-> > -             var =3D APDS9306_ALS_THRES_UP_0_REG;
-> > -     else if (dir =3D=3D IIO_EV_DIR_FALLING)
-> > -             var =3D APDS9306_ALS_THRES_LOW_0_REG;
-> > -     else
-> > -             return -EINVAL;
-> > +     if (reg =3D=3D -EINVAL)
-> > +             return reg;
-> >
->
-> Regards,
-> #######
+Extract common transfer logic from inv_mpu_aux_read() and=0A=
+inv_mpu_aux_write() into a new helper function,=0A=
+inv_mpu_aux_exec_xfer(), which performs the I2C transfer.=0A=
+=0A=
+This refactoring removes code duplication and improves maintainability.=0A=
+No functional changes are intended.=0A=
+=0A=
+Signed-off-by: ################ <########################>=0A=
+Co-developed-by: ################## <#########################>=0A=
+Signed-off-by: ################## <#########################>=0A=
+---=0A=
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c | 41 +++++++++++------------=0A=
+ drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h |  2 ++=0A=
+ 2 files changed, 21 insertions(+), 22 deletions(-)=0A=
+=0A=
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c b/drivers/iio/imu/in=
+v_mpu6050/inv_mpu_aux.c=0A=
+index 8a7f29119..de013e034 100644=0A=
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c=0A=
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.c=0A=
+@@ -117,7 +117,6 @@ int inv_mpu_aux_init(const struct inv_mpu6050_state *st=
+)=0A=
+ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, uint8_t addr,=0A=
+ 		     uint8_t reg, uint8_t *val, size_t size)=0A=
+ {=0A=
+-	unsigned int status;=0A=
+ 	int ret;=0A=
+ =0A=
+ 	if (size > 0x0F)=0A=
+@@ -136,30 +135,13 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *=
+st, uint8_t addr,=0A=
+ 	if (ret)=0A=
+ 		return ret;=0A=
+ =0A=
+-	/* do i2c xfer */=0A=
+-	ret =3D inv_mpu_i2c_master_xfer(st);=0A=
+-	if (ret)=0A=
+-		goto error_disable_i2c;=0A=
+-=0A=
+-	/* disable i2c slave */=0A=
+-	ret =3D regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);=0A=
+-	if (ret)=0A=
+-		goto error_disable_i2c;=0A=
+-=0A=
+-	/* check i2c status */=0A=
+-	ret =3D regmap_read(st->map, INV_MPU6050_REG_I2C_MST_STATUS, &status);=0A=
++	ret =3D inv_mpu_aux_exec_xfer(st);=0A=
+ 	if (ret)=0A=
+ 		return ret;=0A=
+-	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)=0A=
+-		return -EIO;=0A=
+ =0A=
+ 	/* read data in registers */=0A=
+ 	return regmap_bulk_read(st->map, INV_MPU6050_REG_EXT_SENS_DATA,=0A=
+ 				val, size);=0A=
+-=0A=
+-error_disable_i2c:=0A=
+-	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);=0A=
+-	return ret;=0A=
+ }=0A=
+ =0A=
+ /**=0A=
+@@ -174,7 +156,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st=
+, uint8_t addr,=0A=
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,=0A=
+ 		      uint8_t reg, uint8_t val)=0A=
+ {=0A=
+-	unsigned int status;=0A=
+ 	int ret;=0A=
+ =0A=
+ 	/* setup i2c SLV0 control: i2c addr, register, value, enable + size */=0A=
+@@ -192,6 +173,24 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *=
+st, uint8_t addr,=0A=
+ 	if (ret)=0A=
+ 		return ret;=0A=
+ =0A=
++	ret =3D inv_mpu_aux_exec_xfer(st);=0A=
++	if (ret)=0A=
++	return ret;=0A=
++=0A=
++	return 0;=0A=
++}=0A=
++=0A=
++/**=0A=
++ * inv_mpu_aux_exec_xfer() - executes i2c auxiliary transfer and checks st=
+atus=0A=
++ * @st: driver internal state.=0A=
++ *=0A=
++ *  Returns 0 on success, a negative error code otherwise.=0A=
++ */=0A=
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st)=0A=
++{=0A=
++	int ret;=0A=
++	unsigned int status;=0A=
++=0A=
+ 	/* do i2c xfer */=0A=
+ 	ret =3D inv_mpu_i2c_master_xfer(st);=0A=
+ 	if (ret)=0A=
+@@ -209,8 +208,6 @@ int inv_mpu_aux_write(const struct inv_mpu6050_state *s=
+t, uint8_t addr,=0A=
+ 	if (status & INV_MPU6050_BIT_I2C_SLV0_NACK)=0A=
+ 		return -EIO;=0A=
+ =0A=
+-	return 0;=0A=
+-=0A=
+ error_disable_i2c:=0A=
+ 	regmap_write(st->map, INV_MPU6050_REG_I2C_SLV_CTRL(0), 0);=0A=
+ 	return ret;=0A=
+diff --git a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h b/drivers/iio/imu/in=
+v_mpu6050/inv_mpu_aux.h=0A=
+index b66997545..0353103aa 100644=0A=
+--- a/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h=0A=
++++ b/drivers/iio/imu/inv_mpu6050/inv_mpu_aux.h=0A=
+@@ -16,4 +16,6 @@ int inv_mpu_aux_read(const struct inv_mpu6050_state *st, =
+uint8_t addr,=0A=
+ int inv_mpu_aux_write(const struct inv_mpu6050_state *st, uint8_t addr,=0A=
+ 		      uint8_t reg, uint8_t val);=0A=
+ =0A=
++int inv_mpu_aux_exec_xfer(const struct inv_mpu6050_state *st);=0A=
++=0A=
+ #endif		/* INV_MPU_AUX_H_ */=0A=
+-- =0A=
+2.43.0=0A=
+=0A=
 

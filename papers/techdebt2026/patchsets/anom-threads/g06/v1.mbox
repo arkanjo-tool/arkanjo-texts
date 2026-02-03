@@ -1,507 +1,171 @@
-Subject: [PATCH] iio: light : veml6030 Remove code duplication
+Subject: [PATCH v1] iio: accel: kxcjk-1013: Deduplicate setup interrupt functions
 
-veml6030_hw_init() and veml6035_hw_init() have very similar bodies.
+The contents of kxcjk1013_setup_any_motion_interrupt and
+kxcj1013_setup_new_data_interrupt are very similar. Deduplicate these
+functions by introducing a generic function named
+kxcjk1013_setup_interrupt that has an additional flag indicating if
+it's a new data interrupt.
 
-Reduce code duplication by creating a common initialization function veml603x_hw_common_init().
-
-Signed-off-by: ############# <########################>
-Co-developed-by: ############ <############################>
-Co-developed-by: ############ <#####################>
+Signed-off-by: ########### <##################>
+Co-developed-by: ################### <#############################>
+Signed-off-by: ################### <#############################>
 ---
- drivers/iio/light/veml6030.c | 187 ++++++++++++++++++-----------------
- 1 file changed, 95 insertions(+), 92 deletions(-)
+ drivers/iio/accel/kxcjk-1013.c | 87 +++++++---------------------------
+ 1 file changed, 17 insertions(+), 70 deletions(-)
 
-diff --git a/drivers/iio/light/veml6030.c b/drivers/iio/light/veml6030.c
-index 473a9c3e32a3..7959075b1ae8 100644
---- a/drivers/iio/light/veml6030.c
-+++ b/drivers/iio/light/veml6030.c
-@@ -33,6 +33,18 @@
- #include <linux/iio/trigger_consumer.h>
- #include <linux/iio/triggered_buffer.h>
- 
-+int veml603x_hw_common_init(
-+    struct iio_dev *indio_dev, 
-+    struct device *dev,
-+    int iio_init_val1,
-+    int iio_init_val2,
-+    const struct iio_gain_sel_pair *gain_sel,
-+    size_t gain_sel_size,
-+    const struct iio_itime_sel_mul *it_sel,
-+    size_t it_sel_size,
-+    int als_conf_val2
-+);
-+
- /* Device registers */
- #define VEML6030_REG_ALS_CONF   0x00
- #define VEML6030_REG_ALS_WH     0x01
-@@ -248,6 +260,66 @@ static void veml6030_als_shut_down_action(void *data)
- 	veml6030_als_shut_down(data);
- }
- 
-+int veml603x_hw_common_init(
-+    struct iio_dev *indio_dev, 
-+    struct device *dev,
-+    int iio_init_val1,
-+    int iio_init_val2,
-+    const struct iio_gain_sel_pair *gain_sel,
-+    size_t gain_sel_size,
-+    const struct iio_itime_sel_mul *it_sel,
-+    size_t it_sel_size,
-+    int als_conf_val2
-+)
-+{
-+	int ret, val;
-+	struct veml6030_data *data = iio_priv(indio_dev);
-+
-+	ret = devm_iio_init_iio_gts(dev, iio_init_val1, iio_init_val2,
-+			gain_sel, gain_sel_size,
-+			it_sel, it_sel_size,
-+			&data->gts);
-+	if (ret)
-+	return dev_err_probe(dev, ret, "failed to init iio gts\n");
-+
-+	ret = veml6030_als_shut_down(data);
-+	if (ret)
-+	return dev_err_probe(dev, ret, "can't shutdown als\n");
-+
-+	ret = regmap_write(data->regmap, VEML6030_REG_ALS_CONF, als_conf_val2);
-+	if (ret)
-+	return dev_err_probe(dev, ret, "can't setup als configs\n");
-+
-+	ret = regmap_update_bits(data->regmap, VEML6030_REG_ALS_PSM,
-+		VEML6030_PSM | VEML6030_PSM_EN, 0x03);
-+	if (ret)
-+	return dev_err_probe(dev, ret, "can't setup default PSM\n");
-+
-+	ret = regmap_write(data->regmap, VEML6030_REG_ALS_WH, 0xFFFF);
-+	if (ret)
-+	return dev_err_probe(dev, ret, "can't setup high threshold\n");
-+
-+	ret = regmap_write(data->regmap, VEML6030_REG_ALS_WL, 0x0000);
-+	if (ret)
-+	return dev_err_probe(dev, ret, "can't setup low threshold\n");
-+
-+	ret = veml6030_als_pwr_on(data);
-+	if (ret)
-+	return dev_err_probe(dev, ret, "can't poweron als\n");
-+
-+	ret = devm_add_action_or_reset(dev, veml6030_als_shut_down_action, data);
-+	if (ret < 0)
-+	return ret;
-+
-+	/* Clear stale interrupt status bits if any during start */
-+	ret = regmap_read(data->regmap, VEML6030_REG_ALS_INT, &val);
-+	if (ret < 0)
-+	return dev_err_probe(dev, ret,
-+			"can't clear als interrupt status\n");
-+
-+	return ret;
-+}
-+
- static const struct iio_event_spec veml6030_event_spec[] = {
- 	{
- 		.type = IIO_EV_TYPE_THRESH,
-@@ -973,52 +1045,17 @@ static int veml6030_regfield_init(struct iio_dev *indio_dev)
-  */
- static int veml6030_hw_init(struct iio_dev *indio_dev, struct device *dev)
- {
--	int ret, val;
--	struct veml6030_data *data = iio_priv(indio_dev);
--
--	ret = devm_iio_init_iio_gts(dev, 2, 150400000,
--				    veml6030_gain_sel, ARRAY_SIZE(veml6030_gain_sel),
--				    veml6030_it_sel, ARRAY_SIZE(veml6030_it_sel),
--				    &data->gts);
--	if (ret)
--		return dev_err_probe(dev, ret, "failed to init iio gts\n");
--
--	ret = veml6030_als_shut_down(data);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't shutdown als\n");
--
--	ret = regmap_write(data->regmap, VEML6030_REG_ALS_CONF, 0x1001);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup als configs\n");
--
--	ret = regmap_update_bits(data->regmap, VEML6030_REG_ALS_PSM,
--				 VEML6030_PSM | VEML6030_PSM_EN, 0x03);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup default PSM\n");
--
--	ret = regmap_write(data->regmap, VEML6030_REG_ALS_WH, 0xFFFF);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup high threshold\n");
--
--	ret = regmap_write(data->regmap, VEML6030_REG_ALS_WL, 0x0000);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup low threshold\n");
--
--	ret = veml6030_als_pwr_on(data);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't poweron als\n");
--
--	ret = devm_add_action_or_reset(dev, veml6030_als_shut_down_action, data);
--	if (ret < 0)
--		return ret;
--
--	/* Clear stale interrupt status bits if any during start */
--	ret = regmap_read(data->regmap, VEML6030_REG_ALS_INT, &val);
--	if (ret < 0)
--		return dev_err_probe(dev, ret,
--				     "can't clear als interrupt status\n");
--
--	return ret;
-+	return veml603x_hw_common_init(
-+		indio_dev,
-+		dev,
-+		2,
-+		150400000,
-+		veml6030_gain_sel,
-+		ARRAY_SIZE(veml6030_gain_sel),
-+		veml6030_it_sel,
-+		ARRAY_SIZE(veml6030_it_sel),
-+		0x1001
-+	);
- }
- 
- /*
-@@ -1029,52 +1066,18 @@ static int veml6030_hw_init(struct iio_dev *indio_dev, struct device *dev)
-  * update registers and then power on the sensor.
-  */
- static int veml6035_hw_init(struct iio_dev *indio_dev, struct device *dev)
--{
--	int ret, val;
--	struct veml6030_data *data = iio_priv(indio_dev);
--
--	ret = devm_iio_init_iio_gts(dev, 0, 409600000,
--				    veml6035_gain_sel, ARRAY_SIZE(veml6035_gain_sel),
--				    veml6030_it_sel, ARRAY_SIZE(veml6030_it_sel),
--				    &data->gts);
--	if (ret)
--		return dev_err_probe(dev, ret, "failed to init iio gts\n");
--
--	ret = veml6030_als_shut_down(data);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't shutdown als\n");
--
--	ret = regmap_write(data->regmap, VEML6030_REG_ALS_CONF,
--			   VEML6035_SENS | VEML6035_CHAN_EN | VEML6030_ALS_SD);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup als configs\n");
--
--	ret = regmap_update_bits(data->regmap, VEML6030_REG_ALS_PSM,
--				 VEML6030_PSM | VEML6030_PSM_EN, 0x03);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup default PSM\n");
--
--	ret = regmap_write(data->regmap, VEML6030_REG_ALS_WH, 0xFFFF);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup high threshold\n");
--
--	ret = regmap_write(data->regmap, VEML6030_REG_ALS_WL, 0x0000);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't setup low threshold\n");
--
--	ret = veml6030_als_pwr_on(data);
--	if (ret)
--		return dev_err_probe(dev, ret, "can't poweron als\n");
--
--	ret = devm_add_action_or_reset(dev, veml6030_als_shut_down_action, data);
--	if (ret < 0)
--		return ret;
--
--	/* Clear stale interrupt status bits if any during start */
--	ret = regmap_read(data->regmap, VEML6030_REG_ALS_INT, &val);
--	if (ret < 0)
--		return dev_err_probe(dev, ret,
--				     "can't clear als interrupt status\n");
-+{	
-+	veml603x_hw_common_init(
-+        indio_dev,
-+        dev,
-+        0,
-+        409600000,
-+        veml6035_gain_sel,
-+        ARRAY_SIZE(veml6035_gain_sel),
-+        veml6030_it_sel,
-+        ARRAY_SIZE(veml6030_it_sel),
-+        VEML6035_SENS | VEML6035_CHAN_EN | VEML6030_ALS_SD
-+	);
- 
+diff --git a/drivers/iio/accel/kxcjk-1013.c b/drivers/iio/accel/kxcjk-1013.c
+index 971b76c98606..910d7b5716e1 100644
+--- a/drivers/iio/accel/kxcjk-1013.c
++++ b/drivers/iio/accel/kxcjk-1013.c
+@@ -674,8 +674,8 @@ static int kxcjk1013_chip_update_thresholds(struct kxcjk1013_data *data)
  	return 0;
  }
+ 
+-static int kxcjk1013_setup_any_motion_interrupt(struct kxcjk1013_data *data,
+-						bool status)
++static int kxcjk1013_setup_interrupt(struct kxcjk1013_data *data,
++						bool status, bool is_new_data)
+ {
+ 	const struct kx_chipset_regs *regs = data->info->regs;
+ 	int ret;
+@@ -690,69 +690,12 @@ static int kxcjk1013_setup_any_motion_interrupt(struct kxcjk1013_data *data,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = kxcjk1013_chip_update_thresholds(data);
+-	if (ret < 0)
+-		return ret;
+-
+-	ret = i2c_smbus_read_byte_data(data->client, regs->int_ctrl1);
+-	if (ret < 0) {
+-		dev_err(&data->client->dev, "Error reading reg_int_ctrl1\n");
+-		return ret;
+-	}
+-
+-	if (status)
+-		ret |= KXCJK1013_REG_INT_CTRL1_BIT_IEN;
+-	else
+-		ret &= ~KXCJK1013_REG_INT_CTRL1_BIT_IEN;
+-
+-	ret = i2c_smbus_write_byte_data(data->client, regs->int_ctrl1, ret);
+-	if (ret < 0) {
+-		dev_err(&data->client->dev, "Error writing reg_int_ctrl1\n");
+-		return ret;
+-	}
+-
+-	ret = i2c_smbus_read_byte_data(data->client, regs->ctrl1);
+-	if (ret < 0) {
+-		dev_err(&data->client->dev, "Error reading reg_ctrl1\n");
+-		return ret;
+-	}
+-
+-	if (status)
+-		ret |= KXCJK1013_REG_CTRL1_BIT_WUFE;
+-	else
+-		ret &= ~KXCJK1013_REG_CTRL1_BIT_WUFE;
+-
+-	ret = i2c_smbus_write_byte_data(data->client, regs->ctrl1, ret);
+-	if (ret < 0) {
+-		dev_err(&data->client->dev, "Error writing reg_ctrl1\n");
+-		return ret;
+-	}
+-
+-	if (store_mode == OPERATION) {
+-		ret = kxcjk1013_set_mode(data, OPERATION);
++	if (is_new_data == true) {
++		ret = kxcjk1013_chip_update_thresholds(data);
+ 		if (ret < 0)
+ 			return ret;
+ 	}
+ 
+-	return 0;
+-}
+-
+-static int kxcjk1013_setup_new_data_interrupt(struct kxcjk1013_data *data,
+-					      bool status)
+-{
+-	const struct kx_chipset_regs *regs = data->info->regs;
+-	int ret;
+-	enum kxcjk1013_mode store_mode;
+-
+-	ret = kxcjk1013_get_mode(data, &store_mode);
+-	if (ret < 0)
+-		return ret;
+-
+-	/* This is requirement by spec to change state to STANDBY */
+-	ret = kxcjk1013_set_mode(data, STANDBY);
+-	if (ret < 0)
+-		return ret;
+-
+ 	ret = i2c_smbus_read_byte_data(data->client, regs->int_ctrl1);
+ 	if (ret < 0) {
+ 		dev_err(&data->client->dev, "Error reading reg_int_ctrl1\n");
+@@ -776,10 +719,17 @@ static int kxcjk1013_setup_new_data_interrupt(struct kxcjk1013_data *data,
+ 		return ret;
+ 	}
+ 
+-	if (status)
+-		ret |= KXCJK1013_REG_CTRL1_BIT_DRDY;
+-	else
+-		ret &= ~KXCJK1013_REG_CTRL1_BIT_DRDY;
++	if (is_new_data) {
++		if (status)
++			ret |= KXCJK1013_REG_CTRL1_BIT_DRDY;
++		else
++			ret &= ~KXCJK1013_REG_CTRL1_BIT_DRDY;
++	} else {
++		if (status)
++			ret |= KXCJK1013_REG_CTRL1_BIT_WUFE;
++		else
++			ret &= ~KXCJK1013_REG_CTRL1_BIT_WUFE;
++	}
+ 
+ 	ret = i2c_smbus_write_byte_data(data->client, regs->ctrl1, ret);
+ 	if (ret < 0) {
+@@ -1112,7 +1062,7 @@ static int kxcjk1013_write_event_config(struct iio_dev *indio_dev,
+ 		return ret;
+ 	}
+ 
+-	ret =  kxcjk1013_setup_any_motion_interrupt(data, state);
++	ret =  kxcjk1013_setup_interrupt(data, state, false);
+ 	if (ret < 0) {
+ 		kxcjk1013_set_power_state(data, false);
+ 		data->ev_enable_state = 0;
+@@ -1293,10 +1243,7 @@ static int kxcjk1013_data_rdy_trigger_set_state(struct iio_trigger *trig,
+ 		mutex_unlock(&data->mutex);
+ 		return ret;
+ 	}
+-	if (data->motion_trig == trig)
+-		ret = kxcjk1013_setup_any_motion_interrupt(data, state);
+-	else
+-		ret = kxcjk1013_setup_new_data_interrupt(data, state);
++	ret = kxcjk1013_setup_interrupt(data, state, data->motion_trig != trig);
+ 	if (ret < 0) {
+ 		kxcjk1013_set_power_state(data, false);
+ 		mutex_unlock(&data->mutex);
 -- 
 2.43.0
 
 
-Subject: Re: [PATCH] iio: light : veml6030 Remove code duplication
+Subject: Re: [PATCH v1] iio: accel: kxcjk-1013: Deduplicate setup interrupt
+ functions
 
-###################### <###########################> wrote:
+########### <##################> wrote:
 
-> veml6030_hw_init() and veml6035_hw_init() have very similar bodies.
->=20
-> Reduce code duplication by creating a common initialization function veml=
-603x_hw_common_init().
->=20
-> Signed-off-by: ############# <########################>
-> Co-developed-by: ############ <############################>
-> Co-developed-by: ############## <#####################>
-> ---
->  drivers/iio/light/veml6030.c | 187 ++++++++++++++++++-----------------
+> The contents of kxcjk1013_setup_any_motion_interrupt and
+> kxcj1013_setup_new_data_interrupt are very similar. Deduplicate these
+> functions by introducing a generic function named
+> kxcjk1013_setup_interrupt that has an additional flag indicating if
+> it's a new data interrupt.
+> 
+> Signed-off-by: ########### <##################>
+> Co-developed-by: ################### <#############################>
+> Signed-off-by: ################### <#############################>
+Seems fine to me.
 
-When a patch removing duplication ends up adding code it might not be
-such a good idea...
+Applied to the togreg branch of iio.git.
 
-A few comments inline, but in general there isn't a convincing argument
-that I can see for this code unification.  So drop this.
+Thanks,
 
-
->  1 file changed, 95 insertions(+), 92 deletions(-)
->=20
-> diff --git a/drivers/iio/light/veml6030.c b/drivers/iio/light/veml6030.c
-> index 473a9c3e32a3..7959075b1ae8 100644
-> --- a/drivers/iio/light/veml6030.c
-> +++ b/drivers/iio/light/veml6030.c
-> @@ -33,6 +33,18 @@
->  #include <linux/iio/trigger_consumer.h>
->  #include <linux/iio/triggered_buffer.h>
-> =20
-> +int veml603x_hw_common_init(
-> +    struct iio_dev *indio_dev,=20
-> +    struct device *dev,
-> +    int iio_init_val1,
-> +    int iio_init_val2,
-> +    const struct iio_gain_sel_pair *gain_sel,
-> +    size_t gain_sel_size,
-> +    const struct iio_itime_sel_mul *it_sel,
-> +    size_t it_sel_size,
-> +    int als_conf_val2
-> +);
-
-You have defined the function before it is used so why do you need
-a forwards declaration?
-
-> +
->  /* Device registers */
->  #define VEML6030_REG_ALS_CONF   0x00
->  #define VEML6030_REG_ALS_WH     0x01
-> @@ -248,6 +260,66 @@ static void veml6030_als_shut_down_action(void *data)
->  	veml6030_als_shut_down(data);
->  }
-> =20
-> +int veml603x_hw_common_init(
-> +    struct iio_dev *indio_dev,=20
-> +    struct device *dev,
-> +    int iio_init_val1,
-> +    int iio_init_val2,
-
-These parameters have names that managed to obscure what is going on
-generally making this patch a bad idea.
-
-> +    const struct iio_gain_sel_pair *gain_sel,
-> +    size_t gain_sel_size,
-> +    const struct iio_itime_sel_mul *it_sel,
-> +    size_t it_sel_size,
-> +    int als_conf_val2
-Why 2?
-
-> +)
-> +{
-> +	int ret, val;
-> +	struct veml6030_data *data =3D iio_priv(indio_dev);
-> +
-> +	ret =3D devm_iio_init_iio_gts(dev, iio_init_val1, iio_init_val2,
-> +			gain_sel, gain_sel_size,
-> +			it_sel, it_sel_size,
-> +			&data->gts);
-> +	if (ret)
-> +	return dev_err_probe(dev, ret, "failed to init iio gts\n");
-
-Looks like you have some big formatting issues in here.
-
-> +
-> +	ret =3D veml6030_als_shut_down(data);
-> +	if (ret)
-> +	return dev_err_probe(dev, ret, "can't shutdown als\n");
-> +
-> +	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_CONF, als_conf_val2=
-);
-
-Wrapping this up doesn't provide any real advantage, requiring as it does
-the reviewer to look at this function AND where the value is set rather
-than seeing them in one place.
-
-> +	if (ret)
-> +	return dev_err_probe(dev, ret, "can't setup als configs\n");
-> +
-> +	ret =3D regmap_update_bits(data->regmap, VEML6030_REG_ALS_PSM,
-> +		VEML6030_PSM | VEML6030_PSM_EN, 0x03);
-> +	if (ret)
-> +	return dev_err_probe(dev, ret, "can't setup default PSM\n");
-> +
-> +	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_WH, 0xFFFF);
-> +	if (ret)
-> +	return dev_err_probe(dev, ret, "can't setup high threshold\n");
-> +
-> +	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_WL, 0x0000);
-> +	if (ret)
-> +	return dev_err_probe(dev, ret, "can't setup low threshold\n");
-> +
-> +	ret =3D veml6030_als_pwr_on(data);
-> +	if (ret)
-> +	return dev_err_probe(dev, ret, "can't poweron als\n");
-> +
-> +	ret =3D devm_add_action_or_reset(dev, veml6030_als_shut_down_action, da=
-ta);
-> +	if (ret < 0)
-> +	return ret;
-> +
-> +	/* Clear stale interrupt status bits if any during start */
-> +	ret =3D regmap_read(data->regmap, VEML6030_REG_ALS_INT, &val);
-> +	if (ret < 0)
-> +	return dev_err_probe(dev, ret,
-> +			"can't clear als interrupt status\n");
-> +
-> +	return ret;
-> +}
-> +
->  static const struct iio_event_spec veml6030_event_spec[] =3D {
->  	{
->  		.type =3D IIO_EV_TYPE_THRESH,
-> @@ -973,52 +1045,17 @@ static int veml6030_regfield_init(struct iio_dev *=
-indio_dev)
->   */
->  static int veml6030_hw_init(struct iio_dev *indio_dev, struct device *de=
-v)
->  {
-> -	int ret, val;
-> -	struct veml6030_data *data =3D iio_priv(indio_dev);
-> -
-> -	ret =3D devm_iio_init_iio_gts(dev, 2, 150400000,
-> -				    veml6030_gain_sel, ARRAY_SIZE(veml6030_gain_sel),
-> -				    veml6030_it_sel, ARRAY_SIZE(veml6030_it_sel),
-> -				    &data->gts);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "failed to init iio gts\n");
-> -
-> -	ret =3D veml6030_als_shut_down(data);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't shutdown als\n");
-> -
-> -	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_CONF, 0x1001);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup als configs\n");
-> -
-> -	ret =3D regmap_update_bits(data->regmap, VEML6030_REG_ALS_PSM,
-> -				 VEML6030_PSM | VEML6030_PSM_EN, 0x03);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup default PSM\n");
-> -
-> -	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_WH, 0xFFFF);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup high threshold\n");
-> -
-> -	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_WL, 0x0000);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup low threshold\n");
-> -
-> -	ret =3D veml6030_als_pwr_on(data);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't poweron als\n");
-> -
-> -	ret =3D devm_add_action_or_reset(dev, veml6030_als_shut_down_action, da=
-ta);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	/* Clear stale interrupt status bits if any during start */
-> -	ret =3D regmap_read(data->regmap, VEML6030_REG_ALS_INT, &val);
-> -	if (ret < 0)
-> -		return dev_err_probe(dev, ret,
-> -				     "can't clear als interrupt status\n");
-> -
-> -	return ret;
-> +	return veml603x_hw_common_init(
-> +		indio_dev,
-> +		dev,
-> +		2,
-> +		150400000,
-> +		veml6030_gain_sel,
-> +		ARRAY_SIZE(veml6030_gain_sel),
-> +		veml6030_it_sel,
-> +		ARRAY_SIZE(veml6030_it_sel),
-> +		0x1001
-> +	);
->  }
-> =20
->  /*
-> @@ -1029,52 +1066,18 @@ static int veml6030_hw_init(struct iio_dev *indio=
-_dev, struct device *dev)
->   * update registers and then power on the sensor.
->   */
->  static int veml6035_hw_init(struct iio_dev *indio_dev, struct device *de=
-v)
-> -{
-> -	int ret, val;
-> -	struct veml6030_data *data =3D iio_priv(indio_dev);
-> -
-> -	ret =3D devm_iio_init_iio_gts(dev, 0, 409600000,
-> -				    veml6035_gain_sel, ARRAY_SIZE(veml6035_gain_sel),
-> -				    veml6030_it_sel, ARRAY_SIZE(veml6030_it_sel),
-> -				    &data->gts);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "failed to init iio gts\n");
-> -
-> -	ret =3D veml6030_als_shut_down(data);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't shutdown als\n");
-> -
-> -	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_CONF,
-> -			   VEML6035_SENS | VEML6035_CHAN_EN | VEML6030_ALS_SD);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup als configs\n");
-> -
-> -	ret =3D regmap_update_bits(data->regmap, VEML6030_REG_ALS_PSM,
-> -				 VEML6030_PSM | VEML6030_PSM_EN, 0x03);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup default PSM\n");
-> -
-> -	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_WH, 0xFFFF);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup high threshold\n");
-> -
-> -	ret =3D regmap_write(data->regmap, VEML6030_REG_ALS_WL, 0x0000);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't setup low threshold\n");
-> -
-> -	ret =3D veml6030_als_pwr_on(data);
-> -	if (ret)
-> -		return dev_err_probe(dev, ret, "can't poweron als\n");
-> -
-> -	ret =3D devm_add_action_or_reset(dev, veml6030_als_shut_down_action, da=
-ta);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	/* Clear stale interrupt status bits if any during start */
-> -	ret =3D regmap_read(data->regmap, VEML6030_REG_ALS_INT, &val);
-> -	if (ret < 0)
-> -		return dev_err_probe(dev, ret,
-> -				     "can't clear als interrupt status\n");
-> +{=09
-> +	veml603x_hw_common_init(
-> +        indio_dev,
-> +        dev,
-> +        0,
-> +        409600000,
-> +        veml6035_gain_sel,
-> +        ARRAY_SIZE(veml6035_gain_sel),
-> +        veml6030_it_sel,
-> +        ARRAY_SIZE(veml6030_it_sel),
-> +        VEML6035_SENS | VEML6035_CHAN_EN | VEML6030_ALS_SD
-> +	);
-> =20
->  	return 0;
->  }
-
+########
 
