@@ -14,6 +14,12 @@
   similarity: 100
   state: accepted
 
+  notes: |
+    Takeaway 1
+    Takeaway 5?
+
+    CROSS_VERSION_FUNCTION_REUSE
+
 - gid: 2
   messageId:
     - "https://lore.kernel.org/amd-gfx/20260422003911.33841-1-tiagodourado@usp.br/"
@@ -22,17 +28,57 @@
   similarity: 100
   state: accepted
 
+  notes: |
+    Takeaway 1
+
+    "Usually we intentionally don't do any cross IP version reuse, that has
+    cause tons of problems in the past."
+    Christian König
+
+    "There are a number of existing places where VCN or jpeg use one function
+    implementation across multiple generations."
+    Alex Deucher
+
+    "I think we should add a comment to functions which are used for more than
+    one IP generation.
+    Just to make sure that we don't accidentially add modifications which are
+    specific to one generation."
+    Christian König
+
+    CROSS_VERSION_FUNCTION_REUSE
+
 - gid: 3
   messageId: "https://lore.kernel.org/amd-gfx/20260417090841.6190-1-erick.am@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
   state: rejected
 
+  notes: |
+    Takeaway 1
+    Takeaway 5? (scope)
+
+    "Additional to that the separation was intentional."
+    Christian König
+
+    COMMON_SUBSYSTEM_HELPER
+
 - gid: 4
   messageId: "https://lore.kernel.org/amd-gfx/20260415164029.52537-1-leonardocesar@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
   state: accepted
+
+  notes: |
+    Takeaway 1
+
+    "[...] there isn't anything HW generation specific in the function. [...]
+    why we have that for gfx12 in the first place."
+    Christian König
+
+    "[...] probably just copy and pasted over when we brought up gfx12."
+    Alex Deucher
+
+    COMMON_SUBSYSTEM_HELPER
 
 - gid: 5
   messageId: 
@@ -43,6 +89,14 @@
   similarity: 100
   state: accepted
 
+  notes: |
+    Takeaway 2, 4
+
+    "Isn't the new table also prone to errors? Neither is very complicated.
+    Seems like the advantage is rather the reduction in verbosity."
+
+    TABLE_REFACTORING
+
 - gid: 6
   messageId:
     - "https://lore.kernel.org/linux-iio/20260417225959.16688-1-natalia.andre@ime.usp.br/"
@@ -52,17 +106,37 @@
   similarity: 100
   state: accepted
 
+  notes: |
+    Takeaway 2, 3
+
+    "This feels like a helper that doesn't necessarily add much value."
+    Jonathan Cameron
+
+    COMMON_SUBSYSTEM_HELPER
+
 - gid: 7
   messageId: "https://lore.kernel.org/amd-gfx/20260418201545.20673-1-andrejhirata@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
   state: rejected
 
+  notes: |
+    Takeaway 1
+
+    "Well again this is *not* something we want to do. Those functions are
+    intentionally separated.""
+    Christian König
+
+    COMMON_SUBSYSTEM_HELPER
+
 - gid: 8
   messageId: "https://lore.kernel.org/amd-gfx/20260520224217.17615-1-ryan.oliveiraf@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
   state: no_response
+
+  notes: |
+    COMMON_SUBSYSTEM_HELPER
 
 - gid: 9
   messageId: "https://lore.kernel.org/amd-gfx/20260429173646.7653-1-ulissespaixao@usp.br/"
@@ -72,11 +146,33 @@
   similarity: 100
   state: accepted
 
+  notes: |
+    Takeaway 3
+    Takeaway 5?
+
+    COMMON_SUBSYSTEM_HELPER
+
 - gid: 10
   messageId: "https://lore.kernel.org/amd-gfx/20260420032858.10286-1-giovannauchoa@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
   state: rejected
+
+  notes: |
+    Takeaway 1
+    Takeaway 5?
+
+    O Alex Deucher inicialmente aceitou o patch, mas Christian König dropou
+    
+    "We have avoided tons of issues with that approach since the code is
+    independent per generation and modifications doesn't automatically affect
+    all of them."
+    Christian König
+
+    "I can kind of go either way on this."
+    Alex Deucher
+
+    COMMON_SUBSYSTEM_HELPER
 
 - gid: 11
   messageId: 
@@ -87,6 +183,22 @@
   similarity: 90
   state: rejected
 
+  notes: |
+    Takeaway 2, 3
+
+    A função introduziu parâmetros booleanos (`is_accel`) e múltiplos níveis de
+    ponteiros.
+
+    "Here and below the function is completely uglified. Even kernel
+    documentation suggests to avoid bool parameters like this."
+    Andy Shevchenko
+
+    "When you get a patch to 'remove duplicated' code and it adds 1 line, then
+    start questioning if it is a good idea."
+    Jonathan Cameron
+
+    PARAMETERIZED_CONFIG
+
 - gid: 12
   messageId:
     - "https://lore.kernel.org/linux-iio/20260420201441.18055-1-gabrielblo@ime.usp.br/"
@@ -95,11 +207,19 @@
   similarity: 90
   state: dropped
 
+  notes: |
+    Takeaway 2
+
+    PARAMETERIZED_CONFIG
+
 - gid: 1
   messageId: "https://lore.kernel.org/amd-gfx/20260331015202.51017-1-guilherme.bozi@usp.br/"
   context: "Author (2026)"
   similarity: 100
   state: no_response
+
+  notes: |
+    COMMON_SUBSYSTEM_HELPER
 
 - gid: 2
   messageId: "https://lore.kernel.org/linux-iio/20260405213725.25426-2-guilherme.bozi@usp.br/"
@@ -113,6 +233,9 @@
   similarity: 100
   state: accepted
 
+  notes: |
+    Takeaway 2
+
 - gid: 4
   messageId: 
     - "https://lore.kernel.org/amd-gfx/20260512190019.228440-1-guilherme.bozi@usp.br/"
@@ -122,6 +245,16 @@
   similarity: 90
   state: accepted
 
+  notes: |
+    Takeaway 2, 4
+
+    "Not to block this patch set, but please keep in mind that when some array
+    index comes from userspace to use array_index_nospec() to avoid security
+    problems..."
+    Christian König
+
+    TABLE_REFACTORING
+
 - gid: 5
   messageId: 
     - "https://lore.kernel.org/amd-gfx/20260330224503.548284-1-gabrielsousa230@gmail.com/"
@@ -129,3 +262,21 @@
   context: "Author (2026)"
   similarity: 100
   state: accepted
+
+  notes: |
+    Takeaway 3
+    Takeaway 5? (scope)
+
+    "And that is at least sometimes completely intentional."
+    Christian König
+
+    "messing up the backends"
+    Christian König
+
+    COMMON_SUBSYSTEM_HELPER
+
+# Takeaway T5 (Abstraction Scope): Maintainers may reject or redirect a
+# deduplication when the code is common to only a subset of the components
+# covered by a broader abstraction. Consolidating such code into a shared layer
+# can be considered inappropriate when the behavior does not apply uniformly
+# to every component that the layer serves.
