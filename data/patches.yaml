@@ -1,0 +1,131 @@
+# gid não é um id único
+
+# state         Significado
+# -------------+--------------------------------------------
+# under_review  está em revisão
+# accepted      aceito
+# rejected      rejeitado explicitamente
+# no_response   enviado, mas não houve resposta registrada
+# dropped       abandonado/removido pelo autor ou pela série
+
+- gid: 1
+  messageId: "https://lore.kernel.org/amd-gfx/20260421200236.30927-1-andrebueno.mac@gmail.com/"
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 2
+  messageId:
+    - "https://lore.kernel.org/amd-gfx/20260422003911.33841-1-tiagodourado@usp.br/"
+    - "https://lore.kernel.org/amd-gfx/20260626024948.19131-1-tiagodourado@usp.br/" # rename series
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 3
+  messageId: "https://lore.kernel.org/amd-gfx/20260417090841.6190-1-erick.am@usp.br/"
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: rejected
+
+- gid: 4
+  messageId: "https://lore.kernel.org/amd-gfx/20260415164029.52537-1-leonardocesar@usp.br/"
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 5
+  messageId: 
+    - "https://lore.kernel.org/linux-iio/20260418185422.166542-1-lucas.rabaquim@usp.br/"
+    - "https://lore.kernel.org/linux-iio/20260419003557.45287-1-lucas.rabaquim@usp.br/" # rename series
+    - "https://lore.kernel.org/linux-iio/20260528185912.24774-1-matheus.feitosa@usp.br/" # change from
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 6
+  messageId:
+    - "https://lore.kernel.org/linux-iio/20260417225959.16688-1-natalia.andre@ime.usp.br/"
+    - "https://lore.kernel.org/linux-iio/20260421222210.16016-1-natalia.andre@ime.usp.br/" # rename series
+    - "https://lore.kernel.org/linux-iio/20260512012302.20883-1-natalia.andre@ime.usp.br/" # rename series
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 7
+  messageId: "https://lore.kernel.org/amd-gfx/20260418201545.20673-1-andrejhirata@usp.br/"
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: rejected
+
+- gid: 8
+  messageId: "https://lore.kernel.org/amd-gfx/20260520224217.17615-1-ryan.oliveiraf@usp.br/"
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: no_response
+
+- gid: 9
+  messageId: "https://lore.kernel.org/amd-gfx/20260429173646.7653-1-ulissespaixao@usp.br/"
+  # https://lore.kernel.org/amd-gfx/20260731063128.3026783-4-Jesse.Zhang@amd.com/
+  # https://lore.kernel.org/amd-gfx/CAJxfpZJDvFuz40a-euL0jRkPBR82M8Y5NxBrpABeP+EZScFxGw@mail.gmail.com/
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 10
+  messageId: "https://lore.kernel.org/amd-gfx/20260420032858.10286-1-giovannauchoa@usp.br/"
+  context: "MAC0470/5856 (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 11
+  messageId: 
+    - "https://lore.kernel.org/linux-iio/20260423020922.4057-1-joaovictor.fernandes@usp.br/"
+    - "https://lore.kernel.org/linux-iio/20260503031703.33330-1-joaovictor.fernandes@usp.br/"
+    - "https://lore.kernel.org/linux-iio/20260423020922.4057-1-joaovictor.fernandes@usp.br/"
+  context: "MAC0470/5856 (2026)"
+  similarity: 90
+  state: rejected
+
+- gid: 12
+  messageId:
+    - "https://lore.kernel.org/linux-iio/20260420201441.18055-1-gabrielblo@ime.usp.br/"
+    - "https://lore.kernel.org/linux-iio/20260502234348.131563-1-gabrielblo@ime.usp.br/" # rename series
+  context: "MAC0470/5856 (2026)"
+  similarity: 90
+  state: dropped
+
+- gid: 1
+  messageId: "https://lore.kernel.org/amd-gfx/20260331015202.51017-1-guilherme.bozi@usp.br/"
+  context: "Author (2026)"
+  similarity: 100
+  state: no_response
+
+- gid: 2
+  messageId: "https://lore.kernel.org/linux-iio/20260405213725.25426-2-guilherme.bozi@usp.br/"
+  context: "Author (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 3
+  messageId: "https://lore.kernel.org/linux-iio/20260414093018.7153-1-guilherme.bozi@usp.br/"
+  context: "Author (2026)"
+  similarity: 100
+  state: accepted
+
+- gid: 4
+  messageId: 
+    - "https://lore.kernel.org/amd-gfx/20260512190019.228440-1-guilherme.bozi@usp.br/"
+    - "https://lore.kernel.org/amd-gfx/20260611195026.25125-1-guilherme.bozi@usp.br/" # resend
+    - "https://lore.kernel.org/all/1527e77b-5ae7-4c82-94d0-a1e204a487d5@amd.com/" # answered without to
+  context: "Author (2026)"
+  similarity: 90
+  state: accepted
+
+- gid: 5
+  messageId: 
+    - "https://lore.kernel.org/amd-gfx/20260330224503.548284-1-gabrielsousa230@gmail.com/"
+    - "https://lore.kernel.org/amd-gfx/20260424004910.21003-1-gabrielsousa230@gmail.com/" # rename series
+  context: "Author (2026)"
+  similarity: 100
+  state: accepted
