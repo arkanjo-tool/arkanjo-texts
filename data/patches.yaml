@@ -76,7 +76,7 @@
   messageId: "https://lore.kernel.org/amd-gfx/20260420032858.10286-1-giovannauchoa@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
-  state: accepted
+  state: rejected
 
 - gid: 11
   messageId: 
