@@ -147,8 +147,12 @@
   state: accepted
 
   notes: |
-    Takeaway 3
+    Takeaway 1
     Takeaway 5?
+
+    T5: "This part can be moved into amdgpu_gfx. But I would remove the switch
+    (me_id) part and just go over all gfx and compute rings to search for the
+    matching me and pipe."
 
     COMMON_SUBSYSTEM_HELPER
 
