@@ -90,7 +90,7 @@
   state: accepted
 
   notes: |
-    Takeaway 2, 4
+    Takeaway 2
 
     "Isn't the new table also prone to errors? Neither is very complicated.
     Seems like the advantage is rather the reduction in verbosity."
@@ -246,7 +246,7 @@
   state: accepted
 
   notes: |
-    Takeaway 2, 4
+    Takeaway 2
 
     "Not to block this patch set, but please keep in mind that when some array
     index comes from userspace to use array_index_nospec() to avoid security
