@@ -277,7 +277,7 @@
     COMMON_SUBSYSTEM_HELPER
 
 # Takeaway T5 (Abstraction Scope): Maintainers may reject or redirect a
-# deduplication when the code is common to only a subset of the components
-# covered by a broader abstraction. Consolidating such code into a shared layer
-# can be considered inappropriate when the behavior does not apply uniformly
-# to every component that the layer serves.
+# deduplication when duplicated code does not share an appropriate abstraction
+# boundary. Consolidating such code into a shared layer can be considered
+# inappropriate when the behavior does not apply uniforml to every component
+# that the layer serves.
