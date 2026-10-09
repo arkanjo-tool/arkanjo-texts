@@ -1,4 +1,5 @@
 from argparse import Namespace
+import argparse
 from pathlib import Path
 import re
 import shutil
@@ -59,12 +60,12 @@ def append_file(source, destination):
         shutil.copyfileobj(src, dst)
 
 
-def main():
+def main(year):
     with open(workdir_path / "patches.yaml", "r") as file:
         patches = yaml.safe_load(file)
 
     for patch in patches:
-        if "2026" not in patch.get("context", ""):
+        if year not in patch.get("context", ""):
             continue
 
         message_ids = patch["messageId"]
@@ -117,5 +118,10 @@ if __name__ == "__main__":
         print("Error: 'data/patches.yaml' not found. Run this command from the project root directory.")
         exit(1)
 
+    parser = argparse.ArgumentParser(description="Patch series processing script")
+    parser.add_argument("-y", "--year", type=str)
+
+    args = parser.parse_args()
+
     output_path.mkdir(parents=True, exist_ok=True)
-    main()
+    main(args.year)
