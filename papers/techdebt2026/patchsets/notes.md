@@ -27,6 +27,8 @@ predicado faziam a mesma lógica, apenas retornando a negação uma da outra.
 Assim, implementaram uma função que fazia esta lógica duplicada e chamaram ela
 nas funções duplicadas.
 
+> EXTRACT_METHOD
+
 ## Motivos para aceitação/rejeição
 
 ### v1
@@ -77,6 +79,8 @@ funções faziam a mesma lógica complexa e os autores criaram uma função gen�
 que aceitava um novo parâmetro, o qual definiria o comportamento específico
 para cada função.
 
+> PARAMETERIZE_METHOD
+
 ## Motivos para aceitação/rejeição
 
 ### v1
@@ -117,6 +121,8 @@ funções faziam essencialmente a mesma lógica apenas divergindo sobre qual tip
 de `struct` operavam; as autoras então criaram uma `struct` genérica e uma
 função geral que aceita esse nova `struct` como parâmetro.
 
+> PARAMETERIZE_METHOD
+
 ## Motivos para aceitação/rejeição
 
 ### v1
@@ -147,6 +153,11 @@ retornava `true` a outra retornava `false`); inicialmente, optaram por uma
 macro, porém com os ciclos de revisões, terminaram fazendo uma das funções
 apenas retornar a negação da outra adicionando um comentário explicando a
 situação.
+
+> Semelhante ao caso de SUBSTITUTE_ALGORITHM, porém usando #define, substituiu switch
+> case por outra forma.
+
+> SUBSTITUTE_ALGORITHM?
 
 ## Motivos para aceitação/rejeição
 
@@ -190,6 +201,8 @@ Aceito ✓
 funções tinham uma lógica muito similar, então os autores criaram uma função
 mais genérica que aceitava um parâmetro adicional.
 
+> PARAMETERIZE_METHOD
+
 ## Motivos para aceitação/rejeição
 
 ### v1
@@ -215,6 +228,8 @@ Rejeitado ✗
 1 patch para o IIO com uma deduplicação usando o _parametize method_. Duas
 funções inicializavam de forma muito similar o driver do sensor de luz, e então
 criaram uma função que generaliza ambas através de parâmetros.
+
+> PARAMETERIZE_METHOD
 
 ## Motivos para aceitação/rejeição
 
@@ -271,6 +286,8 @@ tinham lógicas em comum e os autores criaram um helper pra elas, inicialmente,
 e moveram a parte em comum para dentro de um helper que já estava sendo chamado
 em ambas as funções, depois.
 
+> EXTRACT_METHOD
+
 ## Motivos para aceitação/rejeição
 
 ### v1
@@ -279,6 +296,9 @@ Um mantenedor apontou que este par de funções não fazia sentido adicionar est
 helper, pois já existia um helper que criava uma abstração em comum que tinha
 significado no contexto de desenvolvimento. Apesar de haver redução de linhas
 de código (bem pouco; -1), isto não era justificável.
+
+> Porém durante a deduplicação também foi adicionado comentários no código,
+> deixando maior.
 
 ### v2
 
@@ -321,6 +341,8 @@ Aceito ✓
 
 1 patch para o IIO com uma deduplicação usando o _extract method_. Duas funções
 tinham lógicas em comum e os autores criaram um helper pra elas.
+
+> EXTRACT_METHOD
 
 ## Motivos para aceitação/rejeição
 
@@ -386,6 +408,11 @@ implementação e propósito e os autores propuseram remover uma delas,
 centralizando o comportamento duplicado na outra. Com a evolução do patch, a
 série evoluiu e a deduplicação acabou sendo resolvida com um _inline method_
 usando funções helper.
+
+> substituindo `sca3000_read_data_short` e `sca3000_read_data` por `spi_w8r8`.
+>
+> Acho mais correto usar o método:
+> REPLACE_INLINE_CODE_WITH_FUNCTION_CALL
 
 ## Motivos para aceitação/rejeição
 
@@ -457,7 +484,12 @@ Rejeitado ✗
 
 ## Contexto
 
-1 patch para o IIO com uma deduplicação usando o _extract method_. Em uma função, havia uma lógica de inicialiazação de alguns dispositivos que era duplicada, então os autores propuseram extrair esta parte duplicada em uma `struct`.
+1 patch para o IIO com uma deduplicação usando o _extract method_. Em uma
+função, havia uma lógica de inicialiazação de alguns dispositivos que era
+duplicada, então os autores propuseram extrair esta parte duplicada em uma
+`struct`.
+
+> Talvez usando o método SUBSTITUTE_ALGORITHM, faça mais sentido.
 
 ## Motivos para aceitação/rejeição
 
@@ -466,6 +498,8 @@ Rejeitado ✗
 O mantenedor principal comentou que, apesar da deduplicação reduzir LOCs (e
 talvez melhorar a performance), neste contexto legibilidade é prioridade e, na
 visão dele, o patch piorava o código neste quesito.
+
+> Melhorar a perfomance usando loops?
 
 ## Boas aspas
 
@@ -501,6 +535,8 @@ acordo com o autor do patch, o fato de ambas as funções terem argumentos
 code_, somado ao fato de no datasheet não haver nenhuma menção (de acordo com o
 autor) sobre o esses parâmetros definirem algo sobre os registradores.
 
+> INLINE_METHOD
+
 ## Motivos para aceitação/rejeição
 
 ### v1
@@ -535,13 +571,16 @@ do display, a função `hpd_ack()` era duplicada em praticamente todos, com
 mínima mudança, de forma que o autor propôs duas funções de biblioteca que
 cobriam todos os casos.
 
+> Talvez foi utilizado o método: PULL_UP_METHOD.
+> Devido a forma que é utilizado orientação a objetos em c...
+
 ## Motivos para aceitação/rejeição
 
 ### v1
 
 O patch só não foi aceito de cara, pois havia um número de erros de coding
-style, os quais o mantenedor apontou que, ao serem resolvidos, ele iria
-integrar o patch.
+style, reportado pelo Alex Hung, os quais o mantenedor apontou que, ao serem
+resolvidos, ele iria integrar o patch.
 
 ### v2
 

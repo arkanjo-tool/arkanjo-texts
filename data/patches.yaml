@@ -8,6 +8,9 @@
 # no_response   enviado, mas não houve resposta registrada
 # dropped       abandonado/removido pelo autor ou pela série
 
+# ----------------------------------------------------------
+# year 2026
+
 - gid: 1
   messageId: "https://lore.kernel.org/amd-gfx/20260421200236.30927-1-andrebueno.mac@gmail.com/"
   context: "MAC0470/5856 (2026)"
@@ -18,7 +21,11 @@
     Takeaway 1
     Takeaway 5?
 
-    CROSS_VERSION_FUNCTION_REUSE
+    Inicialmente na v1 foi feito EXTRACT_METHOD, porém após
+    sugestão do mantenedor, a versão mais recente fez uma chamada para a versão
+    mais antiga.
+
+    REPLACE_INLINE_CODE_WITH_FUNCTION_CALL
 
 - gid: 2
   messageId:
@@ -45,7 +52,7 @@
     specific to one generation."
     Christian König
 
-    CROSS_VERSION_FUNCTION_REUSE
+    REPLACE_INLINE_CODE_WITH_FUNCTION_CALL
 
 - gid: 3
   messageId: "https://lore.kernel.org/amd-gfx/20260417090841.6190-1-erick.am@usp.br/"
@@ -60,7 +67,7 @@
     "Additional to that the separation was intentional."
     Christian König
 
-    COMMON_SUBSYSTEM_HELPER
+    EXTRACT_METHOD
 
 - gid: 4
   messageId: "https://lore.kernel.org/amd-gfx/20260415164029.52537-1-leonardocesar@usp.br/"
@@ -78,7 +85,7 @@
     "[...] probably just copy and pasted over when we brought up gfx12."
     Alex Deucher
 
-    COMMON_SUBSYSTEM_HELPER
+    EXTRACT_METHOD
 
 - gid: 5
   messageId: 
@@ -95,7 +102,7 @@
     "Isn't the new table also prone to errors? Neither is very complicated.
     Seems like the advantage is rather the reduction in verbosity."
 
-    TABLE_REFACTORING
+    SUBSTITUTE_ALGORITHM
 
 - gid: 6
   messageId:
@@ -112,7 +119,7 @@
     "This feels like a helper that doesn't necessarily add much value."
     Jonathan Cameron
 
-    COMMON_SUBSYSTEM_HELPER
+    INLINE_METHOD
 
 - gid: 7
   messageId: "https://lore.kernel.org/amd-gfx/20260418201545.20673-1-andrejhirata@usp.br/"
@@ -127,7 +134,7 @@
     intentionally separated.""
     Christian König
 
-    COMMON_SUBSYSTEM_HELPER
+    EXTRACT_METHOD
 
 - gid: 8
   messageId: "https://lore.kernel.org/amd-gfx/20260520224217.17615-1-ryan.oliveiraf@usp.br/"
@@ -136,7 +143,7 @@
   state: no_response
 
   notes: |
-    COMMON_SUBSYSTEM_HELPER
+    EXTRACT_METHOD
 
 - gid: 9
   messageId: "https://lore.kernel.org/amd-gfx/20260429173646.7653-1-ulissespaixao@usp.br/"
@@ -154,7 +161,7 @@
     (me_id) part and just go over all gfx and compute rings to search for the
     matching me and pipe."
 
-    COMMON_SUBSYSTEM_HELPER
+    EXTRACT_METHOD
 
 - gid: 10
   messageId: "https://lore.kernel.org/amd-gfx/20260420032858.10286-1-giovannauchoa@usp.br/"
@@ -176,7 +183,7 @@
     "I can kind of go either way on this."
     Alex Deucher
 
-    COMMON_SUBSYSTEM_HELPER
+    PULL_UP_METHOD
 
 - gid: 11
   messageId: 
@@ -201,7 +208,7 @@
     start questioning if it is a good idea."
     Jonathan Cameron
 
-    PARAMETERIZED_CONFIG
+    PARAMETERIZE_METHOD
 
 - gid: 12
   messageId:
@@ -214,7 +221,7 @@
   notes: |
     Takeaway 2
 
-    PARAMETERIZED_CONFIG
+    PARAMETERIZE_METHOD
 
 - gid: 1
   messageId: "https://lore.kernel.org/amd-gfx/20260331015202.51017-1-guilherme.bozi@usp.br/"
@@ -223,7 +230,7 @@
   state: no_response
 
   notes: |
-    COMMON_SUBSYSTEM_HELPER
+    EXTRACT_METHOD
 
 - gid: 2
   messageId: "https://lore.kernel.org/linux-iio/20260405213725.25426-2-guilherme.bozi@usp.br/"
@@ -231,11 +238,17 @@
   similarity: 100
   state: accepted
 
+  notes: |
+    SUBSTITUTE_ALGORITHM
+
 - gid: 3
   messageId: "https://lore.kernel.org/linux-iio/20260414093018.7153-1-guilherme.bozi@usp.br/"
   context: "Author (2026)"
   similarity: 100
   state: accepted
+
+  notes: |
+    SUBSTITUTE_ALGORITHM
 
 - gid: 4
   messageId: 
@@ -254,7 +267,7 @@
     problems..."
     Christian König
 
-    TABLE_REFACTORING
+    SUBSTITUTE_ALGORITHM
 
 - gid: 5
   messageId: 
@@ -274,7 +287,32 @@
     "messing up the backends"
     Christian König
 
-    COMMON_SUBSYSTEM_HELPER
+    EXTRACT_METHOD
+
+#
+# PULL_UP_METHOD -> move uma função para um lugar base, para ser
+# compartilhado com outros.
+#
+# EXTRACT_METHOD -> Trecho duplicado vira uma função nova, chamada nos dois
+# lugares.
+#
+# Esses conceitos fazem sentido em orientação a objetos, mas e nor kernel?
+# Nem todos os casos que estão marcados como EXTRACT_METHOD, tenho certeza
+# disso, parecem ser PULL_UP_METHOD, considerando a forma de usar orientação a 
+# objetos em c.
+#
+# ---
+#
+# REPLACE_INLINE_CODE_WITH_FUNCTION_CALL -> substitui um trecho por uma função
+# já existente
+#
+# INLINE_METHOD -> remove uma função e substitui suas chamadas pelo próprio
+# corpo da função.
+#
+# SUBSTITUTE_ALGORITHM
+#
+# PARAMETERIZE_METHOD -> pode ser usado configurações extras via struct ou
+# via parâmetros, para combinar métodos semelhantes.
 
 # Takeaway T5 (Abstraction Scope): Maintainers may reject or redirect a
 # deduplication when duplicated code does not share an appropriate abstraction
