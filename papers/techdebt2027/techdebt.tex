@@ -1,0 +1,147 @@
+% https://conf.researchr.org/track/TechDebt-2027/TechDebt-2027-main#call-Call-for-Papers
+
+% Short Papers (up to 5 pages, plus 2 pages for references only): Early stages
+% of research, new ideas, visions, and/or reflections; or technical debt-related
+% tools.
+
+\documentclass[10pt,conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote.
+% If that is unneeded, please comment it out.
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\usepackage{threeparttable} % recommended IEEEtran package
+
+% extra packages
+\usepackage{multirow}
+
+\begin{document}
+
+% https://tex.stackexchange.com/questions/458204/ieeetran-document-class-how-to-align-five-authors-properly
+\makeatletter
+\newcommand{\linebreakand}{%
+  \end{@IEEEauthorhalign}
+  \hfill\mbox{}\par
+  \mbox{}\hfill\begin{@IEEEauthorhalign}
+}
+\makeatother
+
+% Sub-titles are not captured for https://ieeexplore.ieee.org and should not be
+% used
+\title{Conference Paper Title\thanks{This study was financed, in part, by the São Paulo Research Foundation (FAPESP), Brasil. Process Number \#2025/13979-2.}}
+
+\author{%
+\IEEEauthorblockN{Gabriel Almeida}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+gabrielsousa230@usp.br%
+}
+\and
+\IEEEauthorblockN{Guilherme Ivo}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+guilherme.bozi@usp.br%
+}
+\and
+\IEEEauthorblockN{Natália Salvino André}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+natalia.andre@ime.usp.br%
+}
+\linebreakand
+\IEEEauthorblockN{Paulo Meirelles}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+paulormm@ime.usp.br%
+}
+}
+
+\maketitle
+
+% CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, or Math in Paper
+% Title or Abstract.
+
+% \begin{abstract}
+
+% \end{abstract}
+
+\begin{IEEEkeywords}
+Linux kernel, Code Quality, Deduplication, Maintainers
+\end{IEEEkeywords}
+
+\section{Introduction}\label{sec:introduction}
+
+\section{Results and Discussion}\label{sec:results-and-discussion}
+
+\begin{table*}[!t]
+\centering
+\caption{Summary of newcomer deduplication contributions\tnote{a}.}
+\begin{threeparttable}
+\begin{tabular}{ c c c c l l c }
+\hline
+\textbf{Year} & \textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Refactoring Technique} & \textbf{Diff} \\
+\hline
+% 2025
+\multirow[t]{13}{*}{2025}
+  & 0 & AMD & 100\% & Accepted (v4) & Pull Up Method & \texttt{+114/-520} \\
+  & \multirow[t]{2}{*}{1} & AMD & 90\% & Accepted (v2) & Inline Method & \texttt{+90/-489} \\
+  & & IIO & 100\% & Rejected (v1) & Pull Up Method & \texttt{+2/-12} \\
+  & 2 & IIO & 100\% & Rejected (v2) & Extract Method & \texttt{+7/-14} \\
+  & 3 & IIO & 100\% & Rejected (v1) & Parameterize Method & \texttt{+23/-27} \\
+  & 4 & IIO & 100\% & Accepted (v1) & Parameterize Method & \texttt{+12/-30} \\
+  & 5 & IIO & 100\% & Accepted (v3) & Substitute Algorithm & \texttt{+2/-7} \\
+  & 6 & IIO & 90\% & Accepted (v1) & Parameterize Method & \texttt{+17/-70} \\
+  & 7 & IIO & 90\% & Rejected (v1) & Parameterize Method & \texttt{+95/-92} \\
+  & 8 & IIO & 90\% & Accepted (v3) & Extract Method & \texttt{+20/-36} \\
+  & 9 & IIO & 90\% & Accepted (v4) & Extract Method & \texttt{+20/-16} \\
+  & 10 & IIO & 90\% & Accepted (v6) & Replace Inline Code with Function Call & \texttt{+149/-243} \\
+  & 11 & IIO & 90\% & Rejected (v1) & Substitute Algorithm & \texttt{+32/-58} \\
+% 2026
+\multirow[t]{12}{*}{2026}
+  & \multirow[t]{5}{*}{0} & AMD & 100\% & No response & Extract Method & \texttt{+86/-114} \\
+  & & IIO & 100\% & Accepted (v1) & Substitute Algorithm & \texttt{+15/-32} \\ 
+  & & IIO & 100\% & Accepted (v4) & Substitute Algorithm & \texttt{+71/-119} \\ 
+  & & AMD & 90\% & Accepted (v1) & Substitute Algorithm & \texttt{+1274/-2035} \\ 
+  & & AMD & 100\% & Accepted (v3) & Extract Method & \texttt{+41/-124} \\ 
+  & 1 & AMD & 100\% & Accepted (v2) & Replace Inline Code with Function Call & \texttt{+12/-61} \\
+  & 2 & AMD & 100\% & Accepted (v2) & Replace Inline Code with Function Call & \texttt{+13/-42} \\
+  & 3 & AMD & 100\% & Rejected (v1) & Extract Method & \texttt{+61/-94} \\
+  & 4 & AMD & 100\% & Accepted (v4) & Extract Method & \texttt{+56/-102} \\
+  & 5 & IIO & 100\% & Accepted (v4) & Substitute Algorithm & \texttt{+29/-66} \\
+  & 6 & IIO & 100\% & Accepted (v4) & Inline Method & \texttt{+42/-88} \\
+  & 7 & AMD & 100\% & Rejected (v1) & Extract Method & \texttt{+131/-190} \\
+  & 8 & AMD & 100\% & No response & Extract Method & \texttt{+42/-75} \\
+  & 9 & AMD & 100\% & Accepted (v6) & Extract Method & \texttt{+54/-80} \\
+  & 10 & AMD & 100\% & Rejected (v1) & Pull Up Method & \texttt{+47/-124} \\
+  & 11 & IIO & 90\% & Rejected (v1) & Parameterize Method & \texttt{+62/-68} \\
+  & 12 & IIO & 90\% & Dropped (v2) & Parameterize Method & \texttt{+42/-60} \\
+\hline
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item[a] A table summarizing group contributions, including subsystem (AMD or IIO), similarity threshold, patch status (Accepted, Rejected, Dropped or No response), refactoring techniques based on Fowler's refactoring catalog, and code differentials showing lines added and removed.
+\end{tablenotes}
+\end{threeparttable}
+\end{table*}
+
+
+\nocite{arcanjo2025arkanjo}
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,references}
+
+\end{document}
