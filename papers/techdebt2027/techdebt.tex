@@ -85,6 +85,34 @@ Linux kernel, Code Quality, Deduplication, Maintainers
 
 \section{Introduction}\label{sec:introduction}
 
+\section{Related work}\label{sec:related_work}
+
+Wang and Godfrey~\cite{wang2014intentional} searched the commit history of the Linux kernel for messages that mention ``duplicated code'' and found 348 commits, which they call intentional clone refactoring. After matching these commits against clone detection results, they found that clones associated with intentional clone refactoring account for fewer than 1\% of all detected clone changes. According to the authors, this result suggests that most clone refactoring is not mentioned in commit messages. The authors argue that intentional clone refactoring data may reveal how clones are managed in practice, and that the ways of removing duplication are a key to this understanding. However, they do not investigate these patterns, and their dataset also includes commits that create or modify duplicated code. Our work addresses this point by examining only patches that remove duplication and identifying the technique each one applies. In our second step, we follow a similar idea of relying on what developers state about their own changes, but we manually analyze patches from the kernel mailing lists instead of matching keywords in commit messages.
+
+Other studies proposed ways of reducing duplication in the kernel. Kadav and Swift~\cite{kadav2012drivers} found that 8\% of all Linux driver code is very similar to other driver code and, after inspecting the clusters of similar functions, suggested three methods to reduce it: procedural abstraction, which moves the shared code to a library, better support for multiple chipsets in a single driver, and table-driven programming. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 Linux clone sets into three categories and suggested a treatment for each one: library functions, aspects, or leaving the clones unchanged. Kumar et al.~\cite{kumar2016bigclones} took a different path and kept the kernel code
+as it is, representing duplicated files and directories as templates in a layer above the code, which eliminated 30--50\% of the code in the groups they studied. In these three studies, the techniques come from researchers who analyzed the code from the outside, and none of them was submitted to kernel maintainers. In contrast, we study techniques that were applied in real patches
+and accepted in code review.
+
+The work closest to ours is the study by Arcanjo et
+al.~\cite{arcanjo2026repeat}, which this paper extends. The authors detected duplicated functions in the AMDGPU and IIO subsystems, submitted deduplication patches, and analyzed 13 patch interactions with maintainers. They identified
+four factors that lead maintainers to tolerate duplication, and therefore to reject its removal: driver-forking, readability, integration overhead, and performance. That study explains when and why deduplication is rejected or accepted. It names the refactoring used in each contribution, such as moving identical functions to a shared library, parameterizing a method, or extracting helpers, but only as part of the account of each review, without characterizing or comparing these techniques. We follow the same participant observation approach and add the patches submitted by the group over 2026. Our focus, however, is on the accepted patches and on the techniques they apply. We also go beyond the patches of our own group and analyze additional samples from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge.
+
+\section{Methodology}\label{sec:methodology}
+
+This study extends the work of Arcanjo et al.~\cite{arcanjo2026repeat} with a new focus, which is to understand how deduplication is done in the Linux kernel and to characterize the techniques applied in the patches. To find the
+duplications to be removed, we used the same tool as that study, ArKanjo~\cite{arcanjo2025arkanjo}, a command-line tool that detects duplicated
+functions in large C codebases and works more accurately with Type-1 and Type-2 clones. We also followed its methodology, with a complete participant observation, in which we submitted
+deduplication patches ourselves, followed by a participant-as-observer observation, in which students of a university
+course~\cite{tadokoro2025guidelines} also submitted deduplication patches. In 2026,
+17 new patches were submitted to the AMDGPU and IIO subsystems, targeting Type-1 and Type-2 duplications found with similarity thresholds of 90\% and 100\%. Together with the 13 patches of the previous study, our analysis covers 30 patches. Then, to validate the deduplication techniques we found, we analyzed a sample of threads from four kernel mailing lists: amd-gfx,
+linux-iio, iommu, and linux-i2c. Since these patches were sent outside the course, this sample broadens our corpus and allows us to check whether their techniques match the ones we observed or whether new techniques appear.
+
+\subsection{Participant Observation}\label{subsec:participant-observation}
+
+In the complete participant observation, three authors of this paper submitted six of the 17 new deduplication patches, two to the AMDGPU
+subsystem and four to the IIO subsystem. With these interactions, we sought to understand how the contribution process to the kernel works and to map the interactions with maintainers. For each
+patch, we followed the same process. First, we used ArKanjo to detect duplications in the two subsystems. Then, we analyzed the duplicated code and chose a refactoring technique to remove the duplication. Finally, we submitted the patch to the subsystem mailing list and analyzed the interactions with the maintainers during the review.
+
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
 \begin{table*}[!t]
