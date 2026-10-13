@@ -88,11 +88,49 @@ Linux kernel, Code Quality, Deduplication, Maintainers
 \section{Related work}\label{sec:introduction}
 um paragrafo por tema. O que os trabalhos faziam e no final de cada paragrafo diz como nosso trabalho se difere do deles. Tres paragrafos.
 
-artigos que quero citar: when do you repeat yourself. Investigating intentional clone refactoring.
+artigos que quero citar: when do you repeat yourself. 
+Managing big clones to ease evolution: Linux kernel example.
+Investigating intentional clone refactoring.
 Understanding Modern Device Drivers.
 Improving Modularity by Refactoring Code Clones: A Feasibility Study on Linux.
-O paralelo com nosso trabalhp: nosso artigo vai focar no estudo dos patches de deduplicação aceitos pela comunidade do linux kernel. Ele é uma evolução do when do you repeat yourself. Vamos seguir na abordagem de avaliar os aptches enviados e observados pelo grupo durante observação participante, pois temos novos envios do ultimo ano, verificando as caracteristicas dos patches aceitos e focando em quais tecnicas foram aplicadas para fazer a deduplicação. depois dessa abordagem vamos analisar manualmente mais material diretamente das listas do kernel para ver se as abordagens de refactor aparecem em outras amostras ou se novas formas de refactor aparecem.
-O que eu quero: que vc diga que tema posso abordar em cada paragrafo com base nos conteudos q ja selecionei (verifique se tds os arquivos selecionados foram publicados em locais com revisao por pares). E agrupe esses artigos para em cada paragrafo adequado. Duvida: deveria citar
+
+Parágrafo 1: remoção de duplicação no histórico do kernel.
+  - Artigo: Wang & Godfrey (2014).
+  - 348 commits que citam "duplicated code"; clones ligados a refatoração
+  - Contraste: ele mede se a remoção intencional acontece, não como ela é feita. Além disso, o
+    conjunto dele inclui commits que criam ou modificam duplicação, não só os que removem.
+  - é o precedente metodológico da segunda etapa, a análise manual das listas.
+
+  Parágrafo 2: técnicas propostas por pesquisadores para reduzir duplicação no kernel.
+  - Artigos: Kadav & Swift (2012), Kumar et al. (2016), Yu & Ramaswamy (2008).
+  - Kadav & Swift: 8% do código de drivers é muito similar a outro código. Após inspeção visual
+    dos agrupamentos, os autores propõem três formas de reduzir: abstração procedural (mover o
+    código comum para uma biblioteca), melhor suporte a múltiplos chipsets e programação dirigida
+    por tabelas (Seção 5.2, conferido no PDF).
+  - Kumar et al.: templates ART, com 30–50% de redundância eliminada nos exemplos.
+  - Yu & Ramaswamy: abordagem de refatoração por categoria de clone.
+  - Contraste: nos três, a técnica é prescrita por quem analisa o código de fora, e nenhuma foi
+    submetida a mantenedores. Vocês estudam técnicas que passaram pela revisão.
+  - As três formas de Kadav & Swift servem de vocabulário de comparação: as técnicas dos patches
+    aceitos coincidem com elas ou aparecem outras?
+
+  Parágrafo 3: a perspectiva dos mantenedores e o antecedente direto.
+  - Artigos: Kapser & Godfrey (2008), em uma frase, e When Do You Repeat Yourself?.
+  - Kapser & Godfrey abre o parágrafo: duplicação pode ser decisão de design; é a origem de
+    driver-forking.
+  - O artigo do grupo explica quando e por que a deduplicação é tolerada ou aceita (T1–T4), com 13
+    interações.
+  - Contraste, que precisa ser explícito por ser evolução do mesmo grupo: aquele artigo trata dos
+    fatores de aceitação; este trata das técnicas, com os envios novos do último ano e com a
+    checagem em amostras das listas.
+
+citar o Cloning considered harmful
+
+  - É a referência que um revisor da área de clones espera ver.
+  - T1 vem dele, então o artigo que vocês estendem depende dele.
+  - O template dos padrões dele tem um campo "Management", sobre como lidar com cada tipo de
+    clone, o que toca o seu tema. O fichamento só registra que o campo existe
+
 
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
