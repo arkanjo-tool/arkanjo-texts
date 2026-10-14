@@ -95,9 +95,7 @@ and accepted in code review.
 
 The work closest to ours is the study by Arcanjo et
 al.~\cite{arcanjo2026repeat}, which this paper extends. The authors detected duplicated functions in the AMDGPU and IIO subsystems, submitted deduplication patches, and analyzed 13 patch interactions with maintainers. They identified
-four factors that lead maintainers to tolerate duplication, and therefore to reject its removal: driver-forking, readability, integration overhead, and performance. That study explains when and why deduplication is rejected or accepted, but it does not examine how the accepted patches removed the
-duplication. We follow the same participant observation approach and add the patches submitted by the group over 2026. Our focus, however, is on the accepted patches and on the techniques they
-apply. We also go beyond the patches of our own group and analyze additional samples from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge. 
+four factors that lead maintainers to tolerate duplication, and therefore to reject its removal: driver-forking, readability, integration overhead, and performance. That study explains when and why deduplication is rejected or accepted. It names the refactoring used in each contribution, such as moving identical functions to a shared library, parameterizing a method, or extracting helpers, but only as part of the account of each review, without characterizing or comparing these techniques. We follow the same participant observation approach and add the patches submitted by the group over 2026. Our focus, however, is on the accepted patches and on the techniques they apply. We also go beyond the patches of our own group and analyze additional samples from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge.
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
