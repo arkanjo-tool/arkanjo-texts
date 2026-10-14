@@ -89,57 +89,15 @@ Linux kernel, Code Quality, Deduplication, Maintainers
 
 Wang and Godfrey~\cite{wang2014intentional} searched the commit history of the Linux kernel for messages that mention ``duplicated code'' and found 348 commits, which they call intentional clone refactoring. After matching these commits against clone detection results, they found that clones associated with intentional clone refactoring account for fewer than 1\% of all detected clone changes. According to the authors, this result suggests that most clone refactoring is not mentioned in commit messages. The authors argue that intentional clone refactoring data may reveal how clones are managed in practice, and that the ways of removing duplication are a key to this understanding. However, they do not investigate these patterns, and their dataset also includes commits that create or modify duplicated code. Our work addresses this point by examining only patches that remove duplication and identifying the technique each one applies. In our second step, we follow a similar idea of relying on what developers state about their own changes, but we manually analyze patches from the kernel mailing lists instead of matching keywords in commit messages.
 
-Other studies proposed ways of reducing duplication in the kernel. Kadav and Swift~\cite{kadav2012drivers} found that 8\% of all Linux driver code is very similar to other driver code and, after inspecting the clusters of similar functions, suggested three methods to reduce it: procedural abstraction, which moves the shared code to a library, better support for multiple chipsets in a single driver, and table-driven programming. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 clone sets of Linux 2.4.20 into three categories and suggested a treatment for each one: library functions, aspects, or leaving the clones unchanged. Kumar et al.~\cite{kumar2016bigclones} took a different path and kept the kernel code
+Other studies proposed ways of reducing duplication in the kernel. Kadav and Swift~\cite{kadav2012drivers} found that 8\% of all Linux driver code is very similar to other driver code and, after inspecting the clusters of similar functions, suggested three methods to reduce it: procedural abstraction, which moves the shared code to a library, better support for multiple chipsets in a single driver, and table-driven programming. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 Linux clone sets into three categories and suggested a treatment for each one: library functions, aspects, or leaving the clones unchanged. Kumar et al.~\cite{kumar2016bigclones} took a different path and kept the kernel code
 as it is, representing duplicated files and directories as templates in a layer above the code, which eliminated 30--50\% of the code in the groups they studied. In these three studies, the techniques come from researchers who analyzed the code from the outside, and none of them was submitted to kernel maintainers. In contrast, we study techniques that were applied in real patches
 and accepted in code review.
-um paragrafo por tema. Na hora de citar os artigos tem que dizer de forma simples e direta o que tais artigos fizeram e dizer como nosso trabalho se difere do deles. Serão tres paragrafos no total.
 
-
-Parágrafo 1: remoção de duplicação no histórico do kernel.
-  - Artigo: Wang & Godfrey (2014).
-  - 348 commits que citam "duplicated code"; clones ligados a refatoração
-  - Contraste: ele mede se a remoção intencional acontece, não como ela é feita. Além disso, o
-    conjunto dele inclui commits que criam ou modificam duplicação, não só os que removem.
-  - é o precedente metodológico da segunda etapa, a análise manual das listas.
-
-  Parágrafo 2: técnicas propostas por pesquisadores para reduzir duplicação no kernel.
-  - Artigos: Kadav & Swift (2012), Kumar et al. (2016), Yu & Ramaswamy (2008).
-  - Kadav & Swift: 8% do código de drivers é muito similar a outro código. Após inspeção visual
-    dos agrupamentos, os autores propõem três formas de reduzir: abstração procedural (mover o
-    código comum para uma biblioteca), melhor suporte a múltiplos chipsets e programação dirigida
-    por tabelas (Seção 5.2, conferido no PDF).
-  - Kumar et al.: templates ART, com 30–50% de redundância eliminada nos exemplos.
-  - Yu & Ramaswamy: abordagem de refatoração por categoria de clone.
-  - Contraste: nos três, a técnica é prescrita por quem analisa o código de fora, e nenhuma foi
-    submetida a mantenedores. Vocês estudam técnicas que passaram pela revisão.
-  - As três formas de Kadav & Swift servem de vocabulário de comparação: as técnicas dos patches
-    aceitos coincidem com elas ou aparecem outras?
-
-  Parágrafo 3: a perspectiva dos mantenedores e o antecedente direto.
-  - Artigos: When Do You Repeat Yourself?.
-  - Kapser & Godfrey abre o parágrafo: duplicação pode ser decisão de design; é a origem de
-    driver-forking.
-  - O artigo do grupo explica quando e por que a deduplicação é tolerada ou aceita (T1–T4), com 13
-    interações.
-  - Contraste, que precisa ser explícito por ser evolução do mesmo grupo: aquele artigo trata dos
-    fatores que levaram a rejeição de patches de deduplicação; este trata das técnicas, com os envios novos do último ano e com a
-    checagem em amostras das listas.
-
-
-no total:
-  1. When Do You Repeat Yourself? Voices from the Trenches of Linux Kernel Maintainers on Code 
-     Duplication. Arcanjo, Tadokoro, Spessoto, Passos, Meirelles. TechDebt '26, p. 47–52. DOI
-     10.1145/3794915.3795783.
-  3. Investigating Intentional Clone Refactoring. Wang, Godfrey. Electronic Communications of the 
-     EASST, v. 63, 2014 (IWSC 2014). DOI 10.14279/tuj.eceasst.63.915.
-  4. Understanding Modern Device Drivers. Kadav, Swift. ASPLOS 2012. DOI 10.1145/2150976.2150987.
-  5. Managing Big Clones to Ease Evolution: Linux Kernel Example. Kumar, Jarzabek, Dan. FedCSIS
-     2016, p. 1727–1736. DOI 10.15439/2016F173.
-  6. Improving Modularity by Refactoring Code Clones: A Feasibility Study on Linux. Yu, Ramaswamy.
-     ACM SIGSOFT Software Engineering Notes, v. 33, n. 2, 2008. DOI 10.1145/1350802.1350816. Este
-     é o único sem revisão por pares.
-
-
+The work closest to ours is the study by Arcanjo et
+al.~\cite{arcanjo2026repeat}, which this paper extends. The authors detected duplicated functions in the AMDGPU and IIO subsystems, submitted deduplication patches, and analyzed 13 patch interactions with maintainers. They identified
+four factors that lead maintainers to tolerate duplication, and therefore to reject its removal: driver-forking, readability, integration overhead, and performance. That study explains when and why deduplication is rejected or accepted, but it does not examine how the accepted patches removed the
+duplication. We follow the same participant observation approach and add the patches submitted by the group over 2026. Our focus, however, is on the accepted patches and on the techniques they
+apply. We also go beyond the patches of our own group and analyze additional samples from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge. 
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
