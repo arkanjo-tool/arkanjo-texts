@@ -88,18 +88,9 @@ Linux kernel, Code Quality, Deduplication, Maintainers
 \section{Related work}\label{sec:introduction}
 
 Wang and Godfrey~\cite{wang2014intentional} searched the commit history of the
-Linux kernel for messages that mention ``duplicated code'' and found 348 such
-commits. After matching these commits against clone detection results in four
-subsystems, they reported that intentional clone refactoring accounts for fewer
-than 1\% of all detected clone changes. Their dataset shows that developers
-rarely remove duplication on purpose, but it does not describe how the removal
-is done, and it also includes commits that create or modify duplicated code.
-The authors themselves point to the ways of removing duplication as an open
-research opportunity. Our work addresses this point: we examine only patches
-that remove duplication and identify the technique each one applies. In our
-second step, we follow a similar idea of relying on what developers state
-about their own changes, but we manually analyze patches from the kernel
-mailing lists instead of matching keywords in commit messages.
+Linux kernel for messages that mention ``duplicated code'' and found 348 commits, then matching these commits against clone detection results in four subsystems. Their dataset shows that developers rarely remove duplication on purpose, but it does not describe how the removal
+is done, and it also includes commits that create or modify duplicated code. The authors themselves point to the ways of removing duplication as an open research opportunity. Our work addresses this point: (n quero usar : aqui) we examine only patches that remove duplication and identify the technique each one applies. In our second step, we follow a similar idea of relying on what developers state about their own changes, but we manually analyze patches from the kernel mailing lists instead of matching keywords in commit messages.
+
 um paragrafo por tema. Na hora de citar os artigos tem que dizer de forma simples e direta o que tais artigos fizeram e dizer como nosso trabalho se difere do deles. Serão tres paragrafos no total.
 
 
