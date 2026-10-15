@@ -102,9 +102,11 @@ four factors that lead maintainers to tolerate duplication, and therefore to rej
 This study extends the work of Arcanjo et al.~\cite{arcanjo2026repeat} with a new focus, which is to understand how deduplication is done in the Linux kernel and to characterize the techniques applied in the patches. To find the
 duplications to be removed, we used the same tool as that study, ArKanjo~\cite{arcanjo2025arkanjo}, a command-line tool that detects duplicated
 functions in large C codebases by comparing the functions with TF-IDF vectors and cosine similarity, and that works more accurately with Type-1 and Type-2 clones. We also followed its
-methodology, with a complete participant observation followed by a participant-as-observer observation, in which students of a university
-course~\cite{tadokoro2025guidelines} submitted deduplication patches. In 2026, 17 new patches were submitted to the AMDGPU and IIO subsystems, targeting Type-1 and Type-2 duplications found with similarity thresholds of 90\% and 100\%. Together with the 13 patches of the previous study, our analysis covers 30 patches. Then, to validate the deduplication techniques we found, we
-analyzed a sample of threads from four kernel mailing lists: amd-gfx, linux-iio, iommu, and linux-i2c. Since these patches were sent outside the course, this sample broadens our corpus and allows us to check whether their techniques match the ones we observed or whether new techniques appear.
+methodology, with a complete participant observation, in which we submitted
+deduplication patches ourselves, followed by a participant-as-observer observation, in which students of a university
+course~\cite{tadokoro2025guidelines} also submitted deduplication patches. In 2026,
+17 new patches were submitted to the AMDGPU and IIO subsystems, targeting Type-1 and Type-2 duplications found with similarity thresholds of 90\% and 100\%. Together with the 13 patches of the previous study, our analysis covers 30 patches. Then, to validate the deduplication techniques we found, we analyzed a sample of threads from four kernel mailing lists: amd-gfx,
+linux-iio, iommu, and linux-i2c. Since these patches were sent outside the course, this sample broadens our corpus and allows us to check whether their techniques match the ones we observed or whether new techniques appear.
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
