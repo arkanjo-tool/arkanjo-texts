@@ -110,6 +110,10 @@ linux-iio, iommu, and linux-i2c. Since these patches were sent outside the cours
 
 \subsection{ParticipantObservation}\label{subsec:participant-observation}
 
+In the complete participant observation, three authors of this paper submitted six of the 17 new deduplication patches, two to the AMDGPU
+subsystem and four to the IIO subsystem. With these interactions, we sought to understand how the contribution process to the kernel works and to map the interactions with maintainers. For each
+patch, we followed the same process. First, we used ArKanjo to detect duplications in the two subsystems. Then, we analyzed the duplicated code and chose a refactoring technique to remove the duplication. Finally, we submitted the patch to the subsystem mailing list and analyzed the interactions with the maintainers during the review.
+
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
 \begin{table*}[!t]
