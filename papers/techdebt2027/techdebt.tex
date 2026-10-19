@@ -84,7 +84,9 @@ paulormm@ime.usp.br%
 % Title or Abstract.
 
 \begin{abstract}
-
+Code duplication is a well-known source of technical debt, but little is known about how developers of large, long-lived systems actually pay it back. We study this in the Linux kernel, where changes are publicly reviewed on mailing lists before it reaches the mainline. Our goal is to understand how clones are refactored in practice, which refactoring techniques developers apply and how maintainers receive deduplication patches. We combine two sources of evidence. First, through participant observation, we submitted deduplication patches to the AMDGPU and
+IIO subsystems and followed their review. Together with patches from a prior study, these form a corpus of 30 patches. Second, we analyzed the clone refactoring patches found in a sample of kernel mailing-list threads and identified the techniques they apply using Fowler's refactoring
+catalog.  Of the 30 submitted patches, x were accepted, most of them only after several revisions, which shows that maintainers actively shape how a duplication is refactored...
 \end{abstract}
 
 \begin{IEEEkeywords}
