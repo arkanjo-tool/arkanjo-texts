@@ -84,9 +84,7 @@ paulormm@ime.usp.br%
 % Title or Abstract.
 
 \begin{abstract}
-Code duplication is a well-known source of technical debt, but little is known about how developers of large, long-lived systems actually pay it back. We study this in the Linux kernel, where changes are publicly reviewed on mailing lists before it reaches the mainline. Our goal is to understand how clones are refactored in practice, which refactoring techniques developers apply and how maintainers receive deduplication patches. We combine two sources of evidence. First, through participant observation, we submitted deduplication patches to the AMDGPU and
-IIO subsystems and followed their review. Together with patches from a prior study, these form a corpus of 30 patches. Second, we analyzed the clone refactoring patches found in a sample of kernel mailing-list threads and identified the techniques they apply using Fowler's refactoring
-catalog.  Of the 30 submitted patches, x were accepted, most of them only after several revisions, which shows that maintainers actively shape how a duplication is refactored...
+Code duplication is a well-known source of technical debt, but little is known about how developers of large, long-lived systems actually pay it back. We investigate code deduplication in the Linux kernel, where changes are publicly reviewed on mailing lists before they reach the mainline. Our goal is to understand how clones are refactored in practice, which refactoring techniques developers apply, and how maintainers receive deduplication patches. We combine two sources of evidence. First, through participant observation, we submitted deduplication patches to the AMDGPU and IIO subsystems and followed their review. Together with patches from a prior study, these form a corpus of 30 patches. Second, we analyzed the clone refactoring patches found in a sample of kernel mailing-list threads and classified the techniques they apply using Fowler's refactoring catalog, including function extraction, parameterization, and algorithm substitution. We use this second dataset to examine whether the techniques observed in our contributions also appear in other kernel contributions. Of the 30 submitted patches, 18 were accepted (60\%), most after multiple revisions, highlighting the role of code review in shaping deduplication patches. This study provides empirical evidence of the refactoring techniques used to remove code duplication in the Linux kernel and examines how these techniques relate to the kernel's review process.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -136,37 +134,37 @@ patch, we followed the same process. First, we used ArKanjo to detect duplicatio
 % 2025
 \multirow[t]{13}{*}{2025}
   & 0 & AMD & 100\% & Accepted (v4), Merged & Pull Up Method & \texttt{+114/-520} \\
-  & \multirow[t]{2}{*}{1} & AMD & 90\% & Accepted (v2), Merged & Inline Method & \texttt{+90/-489} \\
+  & \multirow[t]{2}{*}{1} & AMD & 90\% & Accepted (v2), Merged & Inline Function & \texttt{+90/-489} \\
   & & IIO & 100\% & Rejected (v1) & Pull Up Method & \texttt{+2/-12} \\
-  & 2 & IIO & 100\% & Rejected (v2) & Extract Method & \texttt{+16/-20} \\
-  & 3 & IIO & 100\% & Rejected (v1) & Parameterize Method & \texttt{+23/-27} \\
-  & 4 & IIO & 100\% & Accepted (v1), Merged & Parameterize Method & \texttt{+12/-30} \\
+  & 2 & IIO & 100\% & Rejected (v2) & Extract Function & \texttt{+16/-20} \\
+  & 3 & IIO & 100\% & Rejected (v1) & Parameterize Function & \texttt{+23/-27} \\
+  & 4 & IIO & 100\% & Accepted (v1), Merged & Parameterize Function & \texttt{+12/-30} \\
   & 5 & IIO & 100\% & Accepted (v3), Merged & Substitute Algorithm & \texttt{+2/-7} \\
-  & 6 & IIO & 90\% & Accepted (v1), Merged & Parameterize Method & \texttt{+17/-70} \\
-  & 7 & IIO & 90\% & Rejected (v1) & Parameterize Method & \texttt{+95/-92} \\
-  & 8 & IIO & 90\% & Accepted (v3), Merged & Extract Method & \texttt{+20/-36} \\
-  & 9 & IIO & 90\% & Accepted (v4), Merged & Extract Method & \texttt{+20/-16} \\
+  & 6 & IIO & 90\% & Accepted (v1), Merged & Parameterize Function & \texttt{+17/-70} \\
+  & 7 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+95/-92} \\
+  & 8 & IIO & 90\% & Accepted (v3), Merged & Extract Function & \texttt{+20/-36} \\
+  & 9 & IIO & 90\% & Accepted (v4), Merged & Extract Function & \texttt{+20/-16} \\
   & 10 & IIO & 90\% & Accepted (v6) & Replace Inline Code with Function Call & \texttt{+149/-243} \\
   & 11 & IIO & 90\% & Rejected (v1) & Substitute Algorithm & \texttt{+32/-58} \\
 % 2026
 \multirow[t]{12}{*}{2026}
-  & \multirow[t]{5}{*}{0} & AMD & 100\% & No response & Extract Method & \texttt{+86/-114} \\
+  & \multirow[t]{5}{*}{0} & AMD & 100\% & No response & Extract Function & \texttt{+86/-114} \\
   & & IIO & 100\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+15/-32} \\
   & & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+71/-119} \\
   & & AMD & 90\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+1274/-2035} \\
-  & & AMD & 100\% & Accepted (v3), Merged & Extract Method & \texttt{+41/-124} \\
+  & & AMD & 100\% & Accepted (v3), Merged & Extract Function & \texttt{+41/-124} \\
   & 1 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+12/-61} \\
   & 2 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+13/-42} \\
-  & 3 & AMD & 100\% & Rejected (v1) & Extract Method & \texttt{+61/-94} \\
-  & 4 & AMD & 100\% & Accepted (v4), Merged & Extract Method & \texttt{+56/-102} \\
+  & 3 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+61/-94} \\
+  & 4 & AMD & 100\% & Accepted (v4), Merged & Extract Function & \texttt{+56/-102} \\
   & 5 & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+29/-66} \\
-  & 6 & IIO & 100\% & Accepted (v4), Merged & Inline Method & \texttt{+42/-88} \\
-  & 7 & AMD & 100\% & Rejected (v1) & Extract Method & \texttt{+131/-190} \\
-  & 8 & AMD & 100\% & No response & Extract Method & \texttt{+42/-75} \\
-  & 9 & AMD & 100\% & Accepted (v6), Merged & Extract Method & \texttt{+66/-89} \\
+  & 6 & IIO & 100\% & Accepted (v4), Merged & Inline Function & \texttt{+42/-88} \\
+  & 7 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+131/-190} \\
+  & 8 & AMD & 100\% & No response & Extract Function & \texttt{+42/-75} \\
+  & 9 & AMD & 100\% & Accepted (v6), Merged & Extract Function & \texttt{+66/-89} \\
   & 10 & AMD & 90\% & Rejected (v1) & Pull Up Method & \texttt{+47/-124} \\
-  & 11 & IIO & 90\% & Rejected (v1) & Parameterize Method & \texttt{+63/-62} \\
-  & 12 & IIO & 90\% & Dropped (v2) & Parameterize Method & \texttt{+42/-60} \\
+  & 11 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+63/-62} \\
+  & 12 & IIO & 90\% & Dropped (v2) & Parameterize Function & \texttt{+42/-60} \\
 \hline
 \end{tabular}
 \begin{tablenotes}[flushleft]
