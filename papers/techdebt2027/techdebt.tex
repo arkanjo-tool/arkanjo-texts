@@ -16,6 +16,9 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 
+\usepackage{todonotes}
+\setuptodonotes{inline}
+
 \usepackage{threeparttable} % recommended IEEEtran package
 
 % extra packages
@@ -85,8 +88,7 @@ paulormm@ime.usp.br%
 
 \begin{abstract}
 Code duplication is a well-known source of technical debt, but little is known about how developers of large, long-lived systems actually pay it back. We investigate code deduplication in the Linux kernel, where changes are publicly reviewed on mailing lists before they reach the upstream repository (mainline). Our goal is to understand how clones are refactored in practice, which refactoring techniques developers apply, and how maintainers receive deduplication patches. We combine two sources of evidence. First, through an ethnographic study, we submitted deduplication patches to the AMDGPU and IIO subsystems and followed their review process. We qualitatively analyzing 30 contributions, classifying the refactoring techniques applied and discussed with maintainers according to Fowler's refactoring catalog. Second, we mined the clone refactoring patches found in a sample of kernel mailing-list threads and quantitatively analyzed XX contributions to measure how frequently each technique is applied and to identify whether additional techniques emerge.
-% Das contribuicoes aceitas (x de 316, x%), observamos que esse tipo de divida tecnica pode ser pagas usando tecnicas de refatoracao como. traz as tecnicas nos resultados (including function extraction, parameterization, and algorithm substitution. )
-
+\todo{Das contribuicoes aceitas (x de 316, x\%), observamos que esse tipo de divida tecnica pode ser pagas usando tecnicas de refatoracao como. traz as tecnicas nos resultados (including function extraction, parameterization, and algorithm substitution. )}
 This study provides empirical evidence of the refactoring techniques used to remove code duplication in the Linux kernel and examines how these techniques relate to the kernel's review process.
 \end{abstract}
 
@@ -189,10 +191,12 @@ review shaped the final form of the patches.
 \end{threeparttable}
 \end{table*}
 
-%Talvez uma sessão para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C
+\todo{Talvez uma sessão para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C}
 
 \subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
-% Sera mesmo que o 2025 G5 é SUBSTITUTE_FUNCTION? Nn deveria ser o REPLACE_INLINE? Pq eles trocam um switch case por pela negação de outra ja existente
+
+\todo{Sera mesmo que o 2025 G5 é SUBSTITUTE\_FUNCTION? Nn deveria ser o REPLACE\_INLINE? Pq eles trocam um switch case por pela negação de outra ja existente}
+
 We classified techniques TEC3, TEC5, and TEC6 as those that reuse or simplify existing code. Since the
 kernel is a free software project that has been available for more than 30 years, there is often no need 
 to create something new, as the result one wants to achieve is already available for use. Of the 30 patches, 
@@ -247,7 +251,7 @@ were also identical, but the maintainer stated that they were intentionally kept
 In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
 or to all of them, which the textual similarity alone does not show.
 
-% Falar da TEC2 e TEC4
+\todo{Falar da TEC2 e TEC4}
 
 \subsection{How Review Reshapes the Refactoring}\label{subsec:how-review-reshapes-the-refactoring}
 % Falar de tecnicas que mudaram ao longo das versões
@@ -258,7 +262,8 @@ or to all of them, which the textual similarity alone does not show.
 % Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": Talvez seja necessário ter um maior conhecimento do subsistema para fazer um INLINE_FUNCTION e um REPLACE_INLINE
 
 \subsection{Deduplication in Other Kernel Contributions}
-% Depois de classificarmos o dataset
+
+\todo{Depois de classificarmos o dataset}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
