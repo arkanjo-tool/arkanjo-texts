@@ -122,6 +122,85 @@ subsystem and four to the IIO subsystem. With these interactions, we sought to u
 patch, we followed the same process. First, we used ArKanjo to detect duplications in the two subsystems. Then, we analyzed the duplicated code and chose a refactoring technique to remove the duplication. Finally, we submitted the patch to the subsystem mailing list and analyzed the interactions with the maintainers during the review.
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
+We classified the 30 patches according to the refactoring technique they apply, using Fowler's 
+catalog [?]. Six techniques appear in our corpus. Extract Function (TEC1) is the most frequent 
+with 10 patches, followed by Parameterize Function (TEC2) and Substitute Algorithm (TEC3) with 
+6 each, Pull Up Method (TEC4) and Replace Inline Code with Function Call (TEC5) 3 each, and 2 
+patches for Inline Function (TEC6). These techniques differ in whether they reuse code that already 
+exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
+following subsections, we describe how each group of techniques is applied in kernel and how code 
+review shaped the final form of the patches.
+
+%Talvez uma sessão para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C
+
+\subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
+% Sera mesmo que o 2025 G5 é SUBSTITUTE_FUNCTION? Nn deveria ser o REPLACE_INLINE? Pq eles trocam um switch case por pela negação de outra ja existente
+We classified techniques TEC3, TEC5, and TEC6 as those that reuse or simplify existing code. Since the
+kernel is a free software project that has been available for more than 30 years, there is often no need 
+to create something new, as the result one wants to achieve is already available for use. Of the 30 patches, 
+only 11 fall into this group, that is, about 37\%.
+
+When the duplicated function already exists in another hardware version,the reuse happens through 
+the function pointer tables that each version uses to register its callbacks. Group 2026 G2, for instance, found that
+\texttt{jpeg\_v3\_0} had an interrupt handler identical to the one in \texttt{jpeg\_v2\_0} and, 
+following a maintainer's suggestion, simply pointed \texttt{jpeg\_v3\_0\_irq\_funcs} to the previous version's
+function, removing the duplicate. In this case, no new code is needed: the refactoring consists of changing 
+which function the table references.
+
+In the TEC3 patches, the duplicated code was usually a sequence of \texttt{switch} cases that mapped 
+values in a very similar way. Groups 2025 G11, 2026 G5, and 2026 G0 replaced these \texttt{switch} cases 
+with lookup tables, so the mapping is described as data instead of control flow. However, this change is 
+not always seen as an obvious improvement. In 2026 G5, a maintainer questioned whether the new table 
+was really less prone to errors and concluded that the advantage was "rather the reduction in verbosity". 
+Group 2025 G5 took a different path: since the two duplicated functions returned opposite values, one of 
+them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
+the \texttt{switch} statment, but changes how the existing logic is expressed, and whether it is better depends 
+on how readable the result is.
+
+Besides that, deduplication does not always mean creating a new function. Group 2026 G6 applied TEC6 and 
+went in the different direction by following the maintainers' comments, it removed helper functions and incorporated 
+their logic directly where they were used. One of the maintainers noted that it was "a helper that doesn't necessarily 
+add much value". Here, the duplication was in the helper itself, and removing it made the code simpler 
+(according to the maintainer himself) . This shows that, in the kernel, a helper function is not always positive, and 
+it is necessary to examine case by case.
+
+
+\subsection{Introducing New Abstractions}\label{subsec:new-abstractions}
+
+The remaining techniques, Extract Function, Parameterize Function, and Pull Up Method, are those that 
+somehow add a new layer to the code: a new function, a function moved to a shared file, or a more general 
+function that combines the duplicated ones through parameters. These techniques were the most common 
+in our corpus, with 19 of the 30 patches, that is, about 63\%.
+
+In TEC1, the main difference between the two subsystems is where the extracted function is placed. 
+In the IIO patches from 2025 (groups 2025 G2, G8, and G9), the duplicated functions belonged to the 
+same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patches dealt 
+with functions duplicated across different hardware versions, a consequence of the driver forking practice already 
+observed in the subsystem [Citar arkanjo]. In these cases, the common function was moved to the generic layer of 
+the IP, such as \texttt{amdgpu\_gfx.c} (2026 G3, G4, and G9) and \texttt{amdgpu\_gmc.c} (2026 G7 and G8), or to a 
+new file created for this purpose (2026 G0). This shows that, in AMDGPU, extracting a function also means 
+choosing a place for it in the driver architecture, and, as discussed in Section~\ref{subsec:how-review-reshapes-the-refactoring}, 
+new files proposed by the patches were removed during review.
+
+Being identical, however, is not enough for a function to be moved to the generic layer. In 2026 G4, the 
+maintainers agreed that there was nothing specific to the hardware generation in the function and recognized 
+that it was "probably just copy and pasted over when we brought up gfx12". In 2026 G7, the duplicated functions 
+were also identical, but the maintainer stated that they were intentionally kept separated for each generation. 
+In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
+or to all of them, which the textual similarity alone does not show.
+
+% Falar da TEC2 e TEC4
+
+\subsection{How Review Reshapes the Refactoring}\label{subsec:how-review-reshapes-the-refactoring}
+% Falar de tecnicas que mudaram ao longo das versões
+% Acho que da para dizer que o patch da natalia mudou de tecnica pos revisão
+
+% Falar do meu patch como ele começou na ideia de criar um arquivo common novo e depois foi criado novas funções em arquivos ja existentes -> mudança de escopo da tecnica
+
+% Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": Talvez seja necessário ter um maior conhecimento do subsistema para fazer um INLINE_FUNCTION e um REPLACE_INLINE
+
+\subsection{Deduplication in Other Kernel Contributions}
+% Depois de classificarmos o dataset
 
 \begin{table*}[!t]
 \centering
