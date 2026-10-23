@@ -122,14 +122,67 @@ subsystem and four to the IIO subsystem. With these interactions, we sought to u
 patch, we followed the same process. First, we used ArKanjo to detect duplications in the two subsystems. Then, we analyzed the duplicated code and chose a refactoring technique to remove the duplication. Finally, we submitted the patch to the subsystem mailing list and analyzed the interactions with the maintainers during the review.
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
-We classified the 30 patches according to the refactoring technique they apply, using Fowler's 
+We classified the 30 patches for code deduplication according to the refactoring techniques they apply, using Fowler's 
 catalog~\cite{fowler2018refactoring}. Six techniques appear in our corpus. Extract Function (TEC1) is the most frequent 
 with 10 patches, followed by Parameterize Function (TEC2) and Substitute Algorithm (TEC3) with 
 6 each, Pull Up Method (TEC4) and Replace Inline Code with Function Call (TEC5) 3 each, and 2 
-patches for Inline Function (TEC6). These techniques differ in whether they reuse code that already 
+patches for Inline Function (TEC6). Table~\ref{lbl:patches-summary} lists all 30 patches and their corresponding refactoring techniques.
+These techniques differ in whether they reuse code that already
 exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
 following subsections, we describe how each group of techniques is applied in kernel and how code 
 review shaped the final form of the patches.
+
+\begin{table*}[!t]
+\centering
+\begin{threeparttable}
+  \caption{Summary of newcomer deduplication contributions\tnote{\textup{a}}.}
+  \label{lbl:patches-summary}
+\begin{tabular}{ c c c c l l c }
+\hline
+\textbf{Year} & \textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Refactoring Technique} & \textbf{Diff} \\
+\hline
+% 2025
+\multirow[t]{13}{*}{2025}
+  & 0 & AMD & 100\% & Accepted (v4), Merged & Pull Up Method & \texttt{+114/-520} \\
+  & \multirow[t]{2}{*}{1} & AMD & 90\% & Accepted (v2), Merged & Inline Function & \texttt{+90/-489} \\
+  & & IIO & 100\% & Rejected (v1) & Pull Up Method & \texttt{+2/-12} \\
+  & 2 & IIO & 100\% & Rejected (v2) & Extract Function & \texttt{+16/-20} \\
+  & 3 & IIO & 100\% & Rejected (v1) & Parameterize Function & \texttt{+23/-27} \\
+  & 4 & IIO & 100\% & Accepted (v1), Merged & Parameterize Function & \texttt{+12/-30} \\
+  & 5 & IIO & 100\% & Accepted (v3), Merged & Substitute Algorithm & \texttt{+2/-7} \\
+  & 6 & IIO & 90\% & Accepted (v1), Merged & Parameterize Function & \texttt{+17/-70} \\
+  & 7 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+95/-92} \\
+  & 8 & IIO & 90\% & Accepted (v3), Merged & Extract Function & \texttt{+20/-36} \\
+  & 9 & IIO & 90\% & Accepted (v4), Merged & Extract Function & \texttt{+20/-16} \\
+  & 10 & IIO & 90\% & Accepted (v6) & Replace Inline Code with Function Call & \texttt{+149/-243} \\
+  & 11 & IIO & 90\% & Rejected (v1) & Substitute Algorithm & \texttt{+32/-58} \\
+% 2026
+\multirow[t]{12}{*}{2026}
+  & \multirow[t]{5}{*}{0} & AMD & 100\% & No response & Extract Function & \texttt{+86/-114} \\
+  & & IIO & 100\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+15/-32} \\
+  & & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+71/-119} \\
+  & & AMD & 90\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+1274/-2035} \\
+  & & AMD & 100\% & Accepted (v3), Merged & Extract Function & \texttt{+41/-124} \\
+  & 1 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+12/-61} \\
+  & 2 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+13/-42} \\
+  & 3 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+61/-94} \\
+  & 4 & AMD & 100\% & Accepted (v4), Merged & Extract Function & \texttt{+56/-102} \\
+  & 5 & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+29/-66} \\
+  & 6 & IIO & 100\% & Accepted (v4), Merged & Inline Function & \texttt{+42/-88} \\
+  & 7 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+131/-190} \\
+  & 8 & AMD & 100\% & No response & Extract Function & \texttt{+42/-75} \\
+  & 9 & AMD & 100\% & Accepted (v6), Merged & Extract Function & \texttt{+66/-89} \\
+  & 10 & AMD & 90\% & Rejected (v1) & Pull Up Method & \texttt{+47/-124} \\
+  & 11 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+63/-62} \\
+  & 12 & IIO & 90\% & Dropped (v2) & Parameterize Function & \texttt{+42/-60} \\
+\hline
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item[a] A table summarizing group contributions, including subsystem (AMD or IIO), similarity threshold, patch status (Merged, Accepted, Rejected, Dropped, or No response), refactoring techniques based on Fowler's refactoring catalog~\cite{fowler2018refactoring}, and code differentials showing lines added and removed.
+\end{tablenotes}
+\end{threeparttable}
+\end{table*}
 
 %Talvez uma sessão para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C
 
@@ -201,58 +254,6 @@ or to all of them, which the textual similarity alone does not show.
 
 \subsection{Deduplication in Other Kernel Contributions}
 % Depois de classificarmos o dataset
-
-\begin{table*}[!t]
-\centering
-\begin{threeparttable}
-  \caption{Summary of newcomer deduplication contributions\tnote{\textup{a}}.}
-\begin{tabular}{ c c c c l l c }
-\hline
-\textbf{Year} & \textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Patch Status} & \textbf{Refactoring Technique} & \textbf{Diff} \\
-\hline
-% 2025
-\multirow[t]{13}{*}{2025}
-  & 0 & AMD & 100\% & Accepted (v4), Merged & Pull Up Method & \texttt{+114/-520} \\
-  & \multirow[t]{2}{*}{1} & AMD & 90\% & Accepted (v2), Merged & Inline Function & \texttt{+90/-489} \\
-  & & IIO & 100\% & Rejected (v1) & Pull Up Method & \texttt{+2/-12} \\
-  & 2 & IIO & 100\% & Rejected (v2) & Extract Function & \texttt{+16/-20} \\
-  & 3 & IIO & 100\% & Rejected (v1) & Parameterize Function & \texttt{+23/-27} \\
-  & 4 & IIO & 100\% & Accepted (v1), Merged & Parameterize Function & \texttt{+12/-30} \\
-  & 5 & IIO & 100\% & Accepted (v3), Merged & Substitute Algorithm & \texttt{+2/-7} \\
-  & 6 & IIO & 90\% & Accepted (v1), Merged & Parameterize Function & \texttt{+17/-70} \\
-  & 7 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+95/-92} \\
-  & 8 & IIO & 90\% & Accepted (v3), Merged & Extract Function & \texttt{+20/-36} \\
-  & 9 & IIO & 90\% & Accepted (v4), Merged & Extract Function & \texttt{+20/-16} \\
-  & 10 & IIO & 90\% & Accepted (v6) & Replace Inline Code with Function Call & \texttt{+149/-243} \\
-  & 11 & IIO & 90\% & Rejected (v1) & Substitute Algorithm & \texttt{+32/-58} \\
-% 2026
-\multirow[t]{12}{*}{2026}
-  & \multirow[t]{5}{*}{0} & AMD & 100\% & No response & Extract Function & \texttt{+86/-114} \\
-  & & IIO & 100\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+15/-32} \\
-  & & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+71/-119} \\
-  & & AMD & 90\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+1274/-2035} \\
-  & & AMD & 100\% & Accepted (v3), Merged & Extract Function & \texttt{+41/-124} \\
-  & 1 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+12/-61} \\
-  & 2 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+13/-42} \\
-  & 3 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+61/-94} \\
-  & 4 & AMD & 100\% & Accepted (v4), Merged & Extract Function & \texttt{+56/-102} \\
-  & 5 & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+29/-66} \\
-  & 6 & IIO & 100\% & Accepted (v4), Merged & Inline Function & \texttt{+42/-88} \\
-  & 7 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+131/-190} \\
-  & 8 & AMD & 100\% & No response & Extract Function & \texttt{+42/-75} \\
-  & 9 & AMD & 100\% & Accepted (v6), Merged & Extract Function & \texttt{+66/-89} \\
-  & 10 & AMD & 90\% & Rejected (v1) & Pull Up Method & \texttt{+47/-124} \\
-  & 11 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+63/-62} \\
-  & 12 & IIO & 90\% & Dropped (v2) & Parameterize Function & \texttt{+42/-60} \\
-\hline
-\end{tabular}
-\begin{tablenotes}[flushleft]
-\footnotesize
-\item[a] A table summarizing group contributions, including subsystem (AMD or IIO), similarity threshold, patch status (Merged, Accepted, Rejected, Dropped, or No response), refactoring techniques based on Fowler's refactoring catalog~\cite{fowler2018refactoring}, and code differentials showing lines added and removed.
-\end{tablenotes}
-\end{threeparttable}
-\end{table*}
-
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
