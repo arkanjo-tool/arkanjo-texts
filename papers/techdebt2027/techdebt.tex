@@ -97,8 +97,6 @@ Code duplication is a well-known source of technical debt, but little is known a
 This study provides empirical evidence of the refactoring techniques used to remove code duplication in the Linux kernel and examines how these techniques relate to the kernel's review process.
 \end{abstract}
 
-%nos resultados cruzar as tecnicas de refactor com os takeaways%
-
 \begin{IEEEkeywords}
 Linux kernel, Deduplication, Technical Debt, Refactoring
 \end{IEEEkeywords}
@@ -136,6 +134,16 @@ subsystem and four to the IIO subsystem. With these interactions, we sought to u
 patch series, we followed the same process. First, we used ArKanjo to detect duplications in the two subsystems. Then, we analyzed the duplicated code and chose a refactoring technique to remove the duplication. Finally, we submitted the patch series to the subsystem mailing list and analyzed the interactions with the maintainers during the review.
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
+
+\todo{%
+cruzar as tecnicas de refactor com os takeaways (e adicionar o takeaway 5?)
+
+e tentar adicionar mais comentarios como o feito na secao "Introducing New Abstractions"
+falando que uma refatoracao e consequencia do takeaway:
+"a consequence of the driver forking practice already
+observed in the subsystem"
+}
+
 We classified the 30 patch series for code deduplication according to the refactoring techniques they apply, using Fowler's 
 catalog~\cite{fowler2018refactoring}. Six techniques appear in our corpus. Extract Function (TEC1) is the most frequent 
 applied in 10 patch series, followed by Parameterize Function (TEC2) and Substitute Algorithm (TEC3) with 
@@ -198,7 +206,16 @@ review shaped the final form of the submissions.
 \end{threeparttable}
 \end{table*}
 
-\todo{Talvez uma sessão para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C}
+\todo{%
+Talvez uma sessão para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C
+
+https://martinfowler.com/articles/refactoring-2nd-ed.html
+
+``The reorientation towards a less class-centered view is a large part of this.'' (2nd edition)
+}
+\todo{%
+Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
+}
 
 \subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
 
@@ -244,8 +261,8 @@ in our corpus, with 19 of the 30 patch series, that is, about 63\%.
 In TEC1, the main difference between the two subsystems is where the extracted function is placed. 
 In the IIO patch series from 2025 (groups G2, G8, and G9), the duplicated functions belonged to the 
 same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patch series dealt 
-with functions duplicated across different hardware versions, a consequence of the driver forking practice already 
-observed in the subsystem [Citar arkanjo]. In these cases, the common function was moved to the generic layer of 
+with functions duplicated across different hardware versions, a consequence of the driver forking (T1) practice already 
+observed in the subsystem~\cite{arcanjo2026repeat}. In these cases, the common function was moved to the generic layer of 
 the IP, such as \texttt{amdgpu\_gfx.c} (G16, G17, and G22) and \texttt{amdgpu\_gmc.c} (G20 and G21), or to a 
 new file created for this purpose (G13). This shows that, in AMDGPU, extracting a function also means 
 choosing a place for it in the driver architecture, and, as discussed in Section~\ref{subsec:how-review-reshapes-the-refactoring}, 
