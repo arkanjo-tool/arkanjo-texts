@@ -24,6 +24,11 @@
 % extra packages
 \usepackage{multirow}
 
+\hyphenation{
+  ArKanjo
+  kernel Linux
+}
+
 \begin{document}
 
 % https://tex.stackexchange.com/questions/458204/ieeetran-document-class-how-to-align-five-authors-properly
@@ -116,13 +121,13 @@ four factors that lead maintainers to tolerate duplication, and therefore to rej
 
 This study extends the work of Arcanjo et al.~\cite{arcanjo2026repeat} with a new focus, which is to understand how deduplication is done in the Linux kernel and to characterize the techniques applied in the patches. To find the
 duplications to be removed, we used the same tool as that study, ArKanjo~\cite{arcanjo2025arkanjo}, a command-line tool that detects duplicated
-functions in large C codebases and works more accurately with Type-1 and Type-2 clones. We also followed its methodology, with a complete participant observation, in which we submitted
+functions in large C codebases and works more accurately with \mbox{Type-1} and \mbox{Type-2} clones. We also followed its methodology, with a complete participant observation, in which we submitted
 deduplication patches ourselves, followed by a participant-as-observer observation, in which students of a university
 course~\cite{tadokoro2025guidelines} also submitted deduplication patches. In 2026,
-17 new patch series were submitted to the AMDGPU and IIO subsystems, targeting Type-1 and Type-2 duplications found with similarity thresholds of 90\% and 100\%. Together with the 13 patch series from the previous study, our analysis covers 30 patch series.
+17 new patch series were submitted to the AMDGPU and IIO subsystems, targeting \mbox{Type-1} and \mbox{Type-2} duplications found with similarity thresholds of 90\% and 100\%. Together with the 13 patch series from the previous study, our analysis covers 30 patch series.
 Throughout this paper, we broadly refer to these development activities as developer ``contributions'', while we technically analyze and count them as individual ``patch series'' (which may consist of a single patch or multiple patches) in our evaluation.
-Then, to validate the deduplication techniques we found, we analyzed a sample of threads from four kernel mailing lists: amd-gfx,
-linux-iio, iommu, and linux-i2c. Since these contributions were sent outside the course, this sample broadens our corpus and allows us to check whether their techniques match the ones we observed or whether new techniques appear.
+Then, to validate the deduplication techniques we found, we analyzed a sample of threads from four kernel mailing lists: \mbox{amd-gfx},
+\mbox{linux-iio}, \mbox{iommu}, and \mbox{linux-i2c}. Since these contributions were sent outside the course, this sample broadens our corpus and allows us to check whether their techniques match the ones we observed or whether new techniques appear.
 
 \subsection{Participant Observation}\label{subsec:participant-observation}
 
@@ -215,7 +220,7 @@ In the TEC3 patch series, the duplicated code was usually a sequence of \texttt{
 values in a very similar way. Groups G11, G18, and G12 replaced these \texttt{switch} cases 
 with lookup tables, so the mapping is described as data instead of control flow. However, this change is 
 not always seen as an obvious improvement. In G18, a maintainer questioned whether the new table 
-was really less prone to errors and concluded that the advantage was "rather the reduction in verbosity". 
+was really less prone to errors and concluded that the advantage was ``rather the reduction in verbosity''. 
 Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
 them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
 the \texttt{switch} statement, but changes how the existing logic is expressed, and whether it is better depends 
@@ -223,8 +228,8 @@ on how readable the result is.
 
 Besides that, deduplication does not always mean creating a new function. Group G19 applied TEC6 and 
 went in the different direction by following the maintainers' comments, it removed helper functions and incorporated 
-their logic directly where they were used. One of the maintainers noted that it was "a helper that doesn't necessarily 
-add much value". Here, the duplication was in the helper itself, and removing it made the code simpler 
+their logic directly where they were used. One of the maintainers noted that it was ``a helper that doesn't necessarily 
+add much value''. Here, the duplication was in the helper itself, and removing it made the code simpler 
 (according to the maintainer himself) . This shows that, in the kernel, a helper function is not always positive, and 
 it is necessary to examine case by case.
 
@@ -248,7 +253,7 @@ new files proposed by the patch series were removed during review.
 
 Being identical, however, is not enough for a function to be moved to the generic layer. In G17, the 
 maintainers agreed that there was nothing specific to the hardware generation in the function and recognized 
-that it was "probably just copy and pasted over when we brought up gfx12". In G20, the duplicated functions 
+that it was ``probably just copy and pasted over when we brought up gfx12''. In G20, the duplicated functions 
 were also identical, but the maintainer stated that they were intentionally kept separated for each generation. 
 In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
 or to all of them, which the textual similarity alone does not show.
