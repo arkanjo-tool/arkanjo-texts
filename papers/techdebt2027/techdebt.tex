@@ -103,7 +103,7 @@ Linux kernel, Deduplication, Technical Debt, Refactoring
 
 \section{Introduction}\label{sec:introduction}
 
-Developers often reuse existing code by copying, pasting, and adapting it, a practice that accompanies the evolution of large, long-lived systems~\cite{kumar2016managing}. The resulting duplication is a well-known code smell~\cite{fowler2018refactoring} and, as such, a form of technical debt~\cite{kruchten2012technical}.
+Developers often reuse existing code by copying, pasting, and adapting it, a practice that accompanies the evolution of large, long-lived systems~\cite{kumar2016bigclones}. The resulting duplication is a well-known code smell~\cite{fowler2018refactoring} and, as such, a form of technical debt~\cite{kruchten2012technical}.
 However, cloning can be a deliberate design choice, as when developers fork existing code to support variations in hardware or platforms, or replicate boilerplate that the programming language cannot express in a more abstract form~\cite{kapser2008cloning}. Even so, duplicated code places a burden on maintenance. A change to one copy, such as a bug fix, must be propagated to all the others, and inconsistent changes to clones that should evolve together are a known source of faults~\cite{juergens2009clones,li2006cpminer}.
 
 \section{Related work}\label{sec:related_work}
