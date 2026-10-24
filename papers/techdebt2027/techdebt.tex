@@ -165,23 +165,23 @@ review shaped the final form of the patches.
   & 11 & IIO & 90\% & Rejected (v1) & Substitute Algorithm & \texttt{+32/-58} \\
 % 2026
 \multirow[t]{12}{*}{2026}
-  & \multirow[t]{5}{*}{0} & AMD & 100\% & No response & Extract Function & \texttt{+86/-114} \\
+  & \multirow[t]{4}{*}{12} & AMD & 100\% & No response & Extract Function & \texttt{+86/-114} \\
   & & IIO & 100\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+15/-32} \\
   & & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+71/-119} \\
   & & AMD & 90\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+1274/-2035} \\
-  & & AMD & 100\% & Accepted (v3), Merged & Extract Function & \texttt{+41/-124} \\
-  & 1 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+12/-61} \\
-  & 2 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+13/-42} \\
-  & 3 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+61/-94} \\
-  & 4 & AMD & 100\% & Accepted (v4), Merged & Extract Function & \texttt{+56/-102} \\
-  & 5 & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+29/-66} \\
-  & 6 & IIO & 100\% & Accepted (v4), Merged & Inline Function & \texttt{+42/-88} \\
-  & 7 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+131/-190} \\
-  & 8 & AMD & 100\% & No response & Extract Function & \texttt{+42/-75} \\
-  & 9 & AMD & 100\% & Accepted (v6), Merged & Extract Function & \texttt{+66/-89} \\
-  & 10 & AMD & 90\% & Rejected (v1) & Pull Up Method & \texttt{+47/-124} \\
-  & 11 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+63/-62} \\
-  & 12 & IIO & 90\% & Dropped (v2) & Parameterize Function & \texttt{+42/-60} \\
+  & 13 & AMD & 100\% & Accepted (v3), Merged & Extract Function & \texttt{+41/-124} \\
+  & 14 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+12/-61} \\
+  & 15 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+13/-42} \\
+  & 16 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+61/-94} \\
+  & 17 & AMD & 100\% & Accepted (v4), Merged & Extract Function & \texttt{+56/-102} \\
+  & 18 & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+29/-66} \\
+  & 19 & IIO & 100\% & Accepted (v4), Merged & Inline Function & \texttt{+42/-88} \\
+  & 20 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+131/-190} \\
+  & 21 & AMD & 100\% & No response & Extract Function & \texttt{+42/-75} \\
+  & 22 & AMD & 100\% & Accepted (v6), Merged & Extract Function & \texttt{+66/-89} \\
+  & 23 & AMD & 90\% & Rejected (v1) & Pull Up Method & \texttt{+47/-124} \\
+  & 24 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+63/-62} \\
+  & 25 & IIO & 90\% & Dropped (v2) & Parameterize Function & \texttt{+42/-60} \\
 \hline
 \end{tabular}
 \begin{tablenotes}[flushleft]
@@ -195,7 +195,7 @@ review shaped the final form of the patches.
 
 \subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
 
-\todo{Sera mesmo que o 2025 G5 é SUBSTITUTE\_FUNCTION? Nn deveria ser o REPLACE\_INLINE? Pq eles trocam um switch case por pela negação de outra ja existente}
+\todo{Sera mesmo que o G5 é SUBSTITUTE\_FUNCTION? Nn deveria ser o REPLACE\_INLINE? Pq eles trocam um switch case por pela negação de outra ja existente}
 
 We classified techniques TEC3, TEC5, and TEC6 as those that reuse or simplify existing code. Since the
 kernel is a free software project that has been available for more than 30 years, there is often no need 
@@ -203,23 +203,23 @@ to create something new, as the result one wants to achieve is already available
 only 11 fall into this group, that is, about 37\%.
 
 When the duplicated function already exists in another hardware version,the reuse happens through 
-the function pointer tables that each version uses to register its callbacks. Group 2026 G2, for instance, found that
+the function pointer tables that each version uses to register its callbacks. Group G15, for instance, found that
 \texttt{jpeg\_v3\_0} had an interrupt handler identical to the one in \texttt{jpeg\_v2\_0} and, 
 following a maintainer's suggestion, simply pointed \texttt{jpeg\_v3\_0\_irq\_funcs} to the previous version's
 function, removing the duplicate. In this case, no new code is needed: the refactoring consists of changing 
 which function the table references.
 
 In the TEC3 patches, the duplicated code was usually a sequence of \texttt{switch} cases that mapped 
-values in a very similar way. Groups 2025 G11, 2026 G5, and 2026 G0 replaced these \texttt{switch} cases 
+values in a very similar way. Groups G11, G18, and G12 replaced these \texttt{switch} cases 
 with lookup tables, so the mapping is described as data instead of control flow. However, this change is 
-not always seen as an obvious improvement. In 2026 G5, a maintainer questioned whether the new table 
+not always seen as an obvious improvement. In G18, a maintainer questioned whether the new table 
 was really less prone to errors and concluded that the advantage was "rather the reduction in verbosity". 
-Group 2025 G5 took a different path: since the two duplicated functions returned opposite values, one of 
+Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
 them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
 the \texttt{switch} statment, but changes how the existing logic is expressed, and whether it is better depends 
 on how readable the result is.
 
-Besides that, deduplication does not always mean creating a new function. Group 2026 G6 applied TEC6 and 
+Besides that, deduplication does not always mean creating a new function. Group G19 applied TEC6 and 
 went in the different direction by following the maintainers' comments, it removed helper functions and incorporated 
 their logic directly where they were used. One of the maintainers noted that it was "a helper that doesn't necessarily 
 add much value". Here, the duplication was in the helper itself, and removing it made the code simpler 
@@ -235,18 +235,18 @@ function that combines the duplicated ones through parameters. These techniques 
 in our corpus, with 19 of the 30 patches, that is, about 63\%.
 
 In TEC1, the main difference between the two subsystems is where the extracted function is placed. 
-In the IIO patches from 2025 (groups 2025 G2, G8, and G9), the duplicated functions belonged to the 
+In the IIO patches from 2025 (groups G2, G8, and G9), the duplicated functions belonged to the 
 same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patches dealt 
 with functions duplicated across different hardware versions, a consequence of the driver forking practice already 
 observed in the subsystem [Citar arkanjo]. In these cases, the common function was moved to the generic layer of 
-the IP, such as \texttt{amdgpu\_gfx.c} (2026 G3, G4, and G9) and \texttt{amdgpu\_gmc.c} (2026 G7 and G8), or to a 
-new file created for this purpose (2026 G0). This shows that, in AMDGPU, extracting a function also means 
+the IP, such as \texttt{amdgpu\_gfx.c} (G16, G17, and G22) and \texttt{amdgpu\_gmc.c} (G20 and G21), or to a 
+new file created for this purpose (G13). This shows that, in AMDGPU, extracting a function also means 
 choosing a place for it in the driver architecture, and, as discussed in Section~\ref{subsec:how-review-reshapes-the-refactoring}, 
 new files proposed by the patches were removed during review.
 
-Being identical, however, is not enough for a function to be moved to the generic layer. In 2026 G4, the 
+Being identical, however, is not enough for a function to be moved to the generic layer. In G17, the 
 maintainers agreed that there was nothing specific to the hardware generation in the function and recognized 
-that it was "probably just copy and pasted over when we brought up gfx12". In 2026 G7, the duplicated functions 
+that it was "probably just copy and pasted over when we brought up gfx12". In G20, the duplicated functions 
 were also identical, but the maintainer stated that they were intentionally kept separated for each generation. 
 In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
 or to all of them, which the textual similarity alone does not show.
