@@ -121,7 +121,9 @@ and accepted in code review.
 
 The work closest to ours is the study by Arcanjo et
 al.~\cite{arcanjo2026repeat}, which this paper extends. The authors detected duplicated functions in the AMDGPU and IIO subsystems, submitted deduplication contributions, and analyzed 13 patch series interactions with maintainers. They identified
-four factors that lead maintainers to tolerate duplication, and therefore to reject its removal: driver-forking, readability, integration overhead, and performance. That study explains when and why deduplication is rejected or accepted. It names the refactoring used in each contribution, such as moving identical functions to a shared library, parameterizing a method, or extracting helpers, but only as part of the account of each review, without characterizing or comparing these techniques. We follow the same participant observation approach and add the patches submitted by the group over 2026. Our focus, however, is on the accepted contributions and on the techniques they apply. We also go beyond the patches of our own group and analyze additional samples from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge.
+four factors that lead maintainers to tolerate duplication, and therefore to reject its removal: driver-forking, readability, integration overhead, and performance. That study explains when and why deduplication is rejected or accepted. It names the refactoring used in each contribution, such as moving identical functions to a shared library, parameterizing a method, or extracting helpers, but only as part of the account of each review, without characterizing or comparing these techniques. We follow the same participant observation approach and extend its corpus with 17 new patch series submitted in 2026, six by the authors and the remaining by students of a university course. Our focus, however, is on the refactoring techniques these patches apply and on how maintainers receive them. We also go beyond the patches of our own group and analyze additional samples from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge.
+
+
 
 \section{Methodology}\label{sec:methodology}
 
@@ -132,8 +134,7 @@ deduplication patches ourselves, followed by a participant-as-observer observati
 course~\cite{tadokoro2025guidelines} also submitted deduplication patches. In 2026,
 17 new patch series were submitted to the AMDGPU and IIO subsystems, targeting \mbox{Type-1} and \mbox{Type-2} duplications found with similarity thresholds of 90\% and 100\%. Together with the 13 patch series from the previous study, our analysis covers 30 patch series.
 Throughout this paper, we broadly refer to these development activities as developer ``contributions'', while we technically analyze and count them as individual ``patch series'' (which may consist of a single patch or multiple patches) in our evaluation.
-Then, to validate the deduplication techniques we found, we analyzed a sample of threads from four kernel mailing lists: \mbox{amd-gfx},
-\mbox{linux-iio}, \mbox{iommu}, and \mbox{linux-i2c}. Since these contributions were sent outside the course, this sample broadens our corpus and allows us to check whether their techniques match the ones we observed or whether new techniques appear.
+Finally, to assess whether the techniques observed in our submissions also appear in contributions made independently of our group, we analyzed a sample from four kernel mailing lists: \mbox{amd-gfx}, \mbox{linux-iio}, \mbox{iommu}, and \mbox{linux-i2c}. This sample broadens our corpus and allows us to check whether the techniques match the ones we observed or whether new ones emerge.
 
 \subsection{Participant Observation}\label{subsec:participant-observation}
 
