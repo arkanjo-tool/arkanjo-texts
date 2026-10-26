@@ -115,9 +115,12 @@ To address this gap, we investigate how code clones are refactored in the Linux 
 
 Wang and Godfrey~\cite{wang2014intentional} searched the commit history of the Linux kernel for messages that mention ``duplicated code'' and found 348 commits, which they call intentional clone refactoring. After matching these commits against clone detection results, they found that clones associated with intentional clone refactoring account for fewer than 1\% of all detected clone changes. According to the authors, this result suggests that most clone refactoring is not mentioned in commit messages. The authors argue that intentional clone refactoring data may reveal how clones are managed in practice, and that the ways of removing duplication are a key to this understanding. However, they do not investigate these patterns, and their dataset also includes commits that create or modify duplicated code. Our work addresses this point by examining only contributions that remove duplication and identifying the technique each one applies. In our second step, we follow a similar idea of relying on what developers state about their own changes, but we manually analyze patch series from the kernel mailing lists instead of matching keywords in commit messages.
 
+\todo{nos tambem nao analisamos por palavras-chaves? usando o regex e, depois a analisa manual. Tambem comparamos com o jev os nossos resultados}
+
 Other studies proposed ways of reducing duplication in the kernel. Kadav and Swift~\cite{kadav2012drivers} found that 8\% of all Linux driver code is very similar to other driver code and, after inspecting the clusters of similar functions, suggested three methods to reduce it: procedural abstraction, which moves the shared code to a library, better support for multiple chipsets in a single driver, and table-driven programming. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 Linux clone sets into three categories and suggested a treatment for each one: library functions, aspects, or leaving the clones unchanged. Kumar et al.~\cite{kumar2016bigclones} took a different path and kept the kernel code
-as it is, representing duplicated files and directories as templates in a layer above the code, which eliminated 30--50\% of the code in the groups they studied. In these three studies, the techniques come from researchers who analyzed the code from the outside, and none of them was submitted to kernel maintainers. In contrast, we study techniques that were applied in real patches
-and accepted in code review.
+as it is, representing duplicated files and directories as templates in a layer above the code, which eliminated 30--50\% of the code in the groups they studied. In these three studies, the techniques come from researchers who analyzed the code from the outside, and none of them was submitted to kernel maintainers. In contrast, we study techniques applied in real patches that were submitted to maintainers and went through code review, whether they were eventually accepted or not.
+
+\todo{"none of them was submitted to kernel maintainers" declaração meio forte?}
 
 The work closest to ours is the study by Arcanjo et
 al.~\cite{arcanjo2026repeat}, which this paper extends. The authors detected duplicated functions in the AMDGPU and IIO subsystems, submitted deduplication contributions, and analyzed 13 patch series interactions with maintainers. They identified
@@ -141,6 +144,16 @@ In the complete participant observation, three authors of this paper submitted s
 subsystem and four to the IIO subsystem. With these interactions, we sought to understand how the contribution process to the kernel works and to map the interactions with maintainers. For each
 patch series, we followed the same process. First, we used ArKanjo to detect duplications in the two subsystems. Then, we analyzed the duplicated code and chose a refactoring technique to remove the duplication. Finally, we submitted the patch series to the subsystem mailing list and analyzed the interactions with the maintainers during the review.
 
+\todo{acho que falta a etapa que produz os resultados, como as series foram classificadas?}
+
+\todo{%
+Talvez uma seção para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C (limitação) e porque usamos o catálogo do Fowler (eu mantive as classificações do david)
+
+https://martinfowler.com/articles/refactoring-2nd-ed.html
+
+``The reorientation towards a less class-centered view is a large part of this.'' (2nd edition)
+}
+
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
 \todo{%
@@ -156,7 +169,7 @@ We classified the 30 patch series for code deduplication according to the refact
 catalog~\cite{fowler2018refactoring}. Six techniques appear in our corpus. Extract Function (TEC1) is the most frequent 
 applied in 10 patch series, followed by Parameterize Function (TEC2) and Substitute Algorithm (TEC3) with 
 6 each, Pull Up Method (TEC4) and Replace Inline Code with Function Call (TEC5) 3 each, and 2 
-patches for Inline Function (TEC6). Table~\ref{lbl:patches-summary} lists all 30 patches and their corresponding refactoring techniques.
+patches for Inline Function (TEC6). Table~\ref{lbl:patches-summary} lists all 30 contributions and their corresponding refactoring techniques.
 These techniques differ in whether they reuse code that already
 exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
 following subsections, we describe how each group of techniques is applied in the kernel and how code 
@@ -215,13 +228,6 @@ review shaped the final form of the submissions.
 \end{table*}
 
 \todo{%
-Talvez uma sessão para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C
-
-https://martinfowler.com/articles/refactoring-2nd-ed.html
-
-``The reorientation towards a less class-centered view is a large part of this.'' (2nd edition)
-}
-\todo{%
 Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
 }
 
@@ -234,7 +240,9 @@ kernel is a free software project that has been available for more than 30 years
 to create something new, as the result one wants to achieve is already available for use. Of the 30 patch series, 
 only 11 fall into this group, that is, about 37\%.
 
-When the duplicated function already exists in another hardware version,the reuse happens through 
+\todo{"Since the kernel is a free software project that has been available for more than 30 years", hipótese apresentada como fato}
+
+When the duplicated function already exists in another hardware version, the reuse happens through
 the function pointer tables that each version uses to register its callbacks. Group G15, for instance, found that
 \texttt{jpeg\_v3\_0} had an interrupt handler identical to the one in \texttt{jpeg\_v2\_0} and, 
 following a maintainer's suggestion, simply pointed \texttt{jpeg\_v3\_0\_irq\_funcs} to the previous version's
@@ -257,6 +265,8 @@ their logic directly where they were used. One of the maintainers noted that it 
 add much value''. Here, the duplication was in the helper itself, and removing it made the code simpler 
 (according to the maintainer himself) . This shows that, in the kernel, a helper function is not always positive, and 
 it is necessary to examine case by case.
+
+\todo{acho que devemos tomar cuidado com o TEC6, realmente trata de uma forma de deduplicação?}
 
 
 \subsection{Introducing New Abstractions}\label{subsec:new-abstractions}
