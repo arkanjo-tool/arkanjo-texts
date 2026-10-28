@@ -44,52 +44,54 @@
 
 % Sub-titles are not captured for https://ieeexplore.ieee.org and should not be
 % used
-\title{Paying Back Duplication Debt in the Linux Kernel: How Clones Are Refactored in Practice%
-%TODO:
-%\thanks{This study was financed, in part, by the São Paulo Research Foundation (FAPESP), Brasil. Process Number \#2025/13979-2.}%
+\title{Paying Back Duplication Debt in the Linux Kernel: How Code Clones Are Refactored in the Trenches}
+
+\author{
+ \IEEEauthorblockN{Anonymous Author(s)}
+ \IEEEauthorblockA{Anonymous Affiliation(s)}
 }
 
-\author{%
-\IEEEauthorblockN{Natália Salvino André}
-\IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
-São Paulo, Brazil \\
-natalia.andre@ime.usp.br%
-}
-\and
-\IEEEauthorblockN{Guilherme Ivo}
-\IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
-São Paulo, Brazil \\
-guilherme.bozi@usp.br%
-}
-\and
-\IEEEauthorblockN{Gabriel Almeida}
-\IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
-São Paulo, Brazil \\
-gabrielsousa230@usp.br%
-}
-\linebreakand
-\IEEEauthorblockN{David Tadokoro}
-\IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
-São Paulo, Brazil \\
-davidbtadokoro@ime.usp.br%
-}
-\and
-\IEEEauthorblockN{Paulo Meirelles}
-\IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
-São Paulo, Brazil \\
-paulormm@ime.usp.br%
-}
-}
+% \author{%
+% \IEEEauthorblockN{Natália Salvino André}
+% \IEEEauthorblockA{%
+% %\textit{dept. name of organization (of Aff.)} \\
+% \textit{University of São Paulo}\\
+% São Paulo, Brazil \\
+% natalia.andre@ime.usp.br%
+% }
+% \and
+% \IEEEauthorblockN{Guilherme Ivo}
+% \IEEEauthorblockA{%
+% %\textit{dept. name of organization (of Aff.)} \\
+% \textit{University of São Paulo}\\
+% São Paulo, Brazil \\
+% guilherme.bozi@usp.br%
+% }
+% \and
+% \IEEEauthorblockN{Gabriel Almeida}
+% \IEEEauthorblockA{%
+% %\textit{dept. name of organization (of Aff.)} \\
+% \textit{University of São Paulo}\\
+% São Paulo, Brazil \\
+% gabrielsousa230@usp.br%
+% }
+% \linebreakand
+% \IEEEauthorblockN{David Tadokoro}
+% \IEEEauthorblockA{%
+% %\textit{dept. name of organization (of Aff.)} \\
+% \textit{University of São Paulo}\\
+% São Paulo, Brazil \\
+% davidbtadokoro@ime.usp.br%
+% }
+% \and
+% \IEEEauthorblockN{Paulo Meirelles}
+% \IEEEauthorblockA{%
+% %\textit{dept. name of organization (of Aff.)} \\
+% \textit{University of São Paulo}\\
+% São Paulo, Brazil \\
+% paulormm@ime.usp.br%
+% }
+% }
 
 \maketitle
 
@@ -101,6 +103,18 @@ Code duplication is a well-known source of technical debt, but little is known a
 Among the 30 contributions, 9 of the 11 that reuse or simplify existing code were accepted, against 9 of the 19 that introduce new shared code, suggesting that maintainers resist new abstractions more than the reuse of existing ones. Extract Function was the most frequent technique in both datasets.
 This study provides empirical evidence of the refactoring techniques used to remove code duplication in the Linux kernel and examines how these techniques relate to the kernel's review process.
 \end{abstract}
+
+%%% Proposta de abstract vinda do sync com Paulo, David e Natalia (28/10/26)
+% \begin{abstract}
+% Code duplication is a well-known source of technical debt, but little is known about how developers of large, long-lived systems actually pay it back. We investigate code deduplication in the Linux kernel, where changes are publicly reviewed on mailing lists before they reach the upstream repository (mainline).
+%TODO: dada as características da comunidade e o rigor do processo de revisão (Lei de Linus entra), espera-se que certas dívidas técnicas sejam tratadas no processo de revisão antes de ser aceito e que n teriam chances de dedup simples
+% Our goal is to understand how clones are refactored in practice, which refactoring techniques developers apply, and how maintainers receive deduplication patches. We combine two sources of evidence.
+% First, through an ethnographic study, we submitted 30 deduplication patches to the AMDGPU and IIO subsystems and followed their review process. We qualitatively analyzed them, classifying the refactoring techniques applied and discussed with maintainers according to Fowler's refactoring catalog. Among our findings, we highlight that maintainers tend to resist deduplications that introduce new abstractions more than the reuse of existing ones, which are easier.
+% Second, we mined patches from the mailing lists for clone refactorings arriving in a sample of 71 contributions; we quantitatively analyzed the techniques applied to validate and expand the findings from our ethnographic study.
+% % Among the 30 contributions, 9 of the 11 that reuse or simplify existing code were accepted, against 9 of the 19 that introduce new shared code,  Extract Function was the most frequent technique in both datasets.
+% This study provides empirical evidence of the refactoring techniques used to remove code duplication in the Linux kernel by analyzing 101 clone refactorings, bringing insight on how these techniques relate to the acceptance of deduplication in the kernel's review process.
+% \end{abstract}
+%%% Proposta de abstract vinda do sync com Paulo, David e Natalia (28/10/26)
 
 \begin{IEEEkeywords}
 Linux kernel, Deduplication, Technical Debt, Refactoring
