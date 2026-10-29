@@ -251,12 +251,10 @@ Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
 
 \todo{Sera mesmo que o G5 é SUBSTITUTE\_FUNCTION? Nn deveria ser o REPLACE\_INLINE? Pq eles trocam um switch case por pela negação de outra ja existente}
 
-We classified techniques TEC3, TEC5, and TEC6 as those that reuse or simplify existing code. Since the
-kernel is a free software project that has been available for more than 30 years, there is often no need 
-to create something new, as the result one wants to achieve is already available for use. Of the 30 patch series, 
-only 11 fall into this group, that is, about 37\%.
-
-\todo{"Since the kernel is a free software project that has been available for more than 30 years", hipótese apresentada como fato}
+We classified techniques Substitute Algorithm, Replace Inline Code with Function Call, and Inline Function 
+as those that reuse or simplify existing code. Unlike the techniques in Section~\ref{subsec:new-abstractions}, 
+they remove the duplication without adding a new layer to the code. Of the 30 patch series, only 11 fall into 
+this group, that is, about 37\%.
 
 When the duplicated function already exists in another hardware version, the reuse happens through
 the function pointer tables that each version uses to register its callbacks. Group G15, for instance, found that
@@ -269,17 +267,21 @@ In the TEC3 patch series, the duplicated code was usually a sequence of \texttt{
 values in a very similar way. Groups G11, G18, and G12 replaced these \texttt{switch} cases 
 with lookup tables, so the mapping is described as data instead of control flow. However, this change is 
 not always seen as an obvious improvement. In G18, a maintainer questioned whether the new table 
-was really less prone to errors and concluded that the advantage was ``rather the reduction in verbosity''. 
-Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
-them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
-the \texttt{switch} statement, but changes how the existing logic is expressed, and whether it is better depends 
-on how readable the result is.
+was really less prone to errors and concluded that the advantage was “rather the reduction in verbosity”. 
+These cases reflect the readability factor (T2)~\cite{arcanjo2026repeat}: a lookup table is accepted when 
+it makes the mapping easier to read, as in G18, but G11 was rejected because the maintainer judged that 
+the code reduction did not compensate for the loss of readability.
+%Pensando em apagar isso:
+%Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
+%them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
+%the \texttt{switch} statement, but changes how the existing logic is expressed, and whether it is better depends 
+%on how readable the result is.
 
 Besides that, deduplication does not always mean creating a new function. Group G19 applied TEC6 and 
-went in the different direction by following the maintainers' comments, it removed helper functions and incorporated 
-their logic directly where they were used. One of the maintainers noted that it was ``a helper that doesn't necessarily 
-add much value''. Here, the duplication was in the helper itself, and removing it made the code simpler 
-(according to the maintainer himself) . This shows that, in the kernel, a helper function is not always positive, and 
+went in the different direction by following the maintainer's comments, it removed helper functions and incorporated 
+their logic directly where they were used. One of the maintainers noted that it was “a helper that doesn't necessarily 
+add much value”. Here, the duplication was in the helper itself, and removing it made the code simpler 
+(according to the maintainer himself). This shows that, in the kernel, a helper function is not always positive, and 
 it is necessary to examine case by case.
 
 \todo{acho que devemos tomar cuidado com o TEC6, realmente trata de uma forma de deduplicação?}
@@ -296,15 +298,15 @@ In TEC1, the main difference between the two subsystems is where the extracted f
 In the IIO patch series from 2025 (groups G2, G8, and G9), the duplicated functions belonged to the 
 same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patch series dealt 
 with functions duplicated across different hardware versions, a consequence of the driver forking (T1) practice already 
-observed in the subsystem~\cite{arcanjo2026repeat}. In these cases, the common function was moved to the generic layer of 
-the IP, such as \texttt{amdgpu\_gfx.c} (G16, G17, and G22) and \texttt{amdgpu\_gmc.c} (G20 and G21), or to a 
-new file created for this purpose (G13). This shows that, in AMDGPU, extracting a function also means 
-choosing a place for it in the driver architecture, and, as discussed in Section~\ref{subsec:how-review-reshapes-the-refactoring}, 
-new files proposed by the patch series were removed during review.
+observed in the subsystem~\cite{arcanjo2026repeat}. In these cases, the common function was moved to a generic layer shared by
+all hardware versions, such as \texttt{amdgpu\_gfx.c} (G16, G17, and G22) and \texttt{amdgpu\_gmc.c} (G20 and G21), or to a 
+proposed new file (G13). This shows that, in AMDGPU, extracting a function also means choosing a place for it in the driver 
+architecture, and, as discussed in Section~\ref{subsec:how-review-reshapes-the-refactoring}, new files proposed by the 
+patch series were removed during review.
 
 Being identical, however, is not enough for a function to be moved to the generic layer. In G17, the 
 maintainers agreed that there was nothing specific to the hardware generation in the function and recognized 
-that it was ``probably just copy and pasted over when we brought up gfx12''. In G20, the duplicated functions 
+that it was "probably just copy and pasted over when we brought up gfx12". In G20, the duplicated functions 
 were also identical, but the maintainer stated that they were intentionally kept separated for each generation. 
 In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
 or to all of them, which the textual similarity alone does not show.
