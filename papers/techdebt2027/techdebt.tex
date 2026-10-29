@@ -123,10 +123,12 @@ Linux kernel, Deduplication, Technical Debt, Refactoring
 Developers often reuse existing code by copying, pasting, and adapting it, a practice that accompanies the evolution of large, long-lived systems~\cite{kumar2016bigclones}. The resulting duplication is a well-known code smell~\cite{fowler2018refactoring} and, as such, a form of technical debt~\cite{kruchten2012technical}, whose cost is paid during maintenance. A change to one copy, such as a bug fix, must be propagated to all the others, and inconsistent changes to clones that should evolve together are a known source of faults~\cite{juergens2009clones}.
 
 Linus's Law states that ``given enough eyeballs, all bugs are shallow''~\cite{raymond1999cathedral}.
-In the Linux kernel, part of this examination takes place in a well-established and rigorous review process: patches are publicly reviewed on mailing lists before integration, and only about a third of them are eventually accepted~\cite{jiang2013patch}.
-Extending this reasoning to technical debt, one might expect such a process to also catch duplicated code before it is merged, leaving few opportunities for simple deduplication.
+In the Linux kernel, part of this examination takes place in a well-established and rigorous review process, in which patches are publicly reviewed on mailing lists before integration and only about a third of them are eventually accepted~\cite{jiang2013patch}.
+Extending this reasoning to technical debt, such a process would also be expected to catch duplicated code before it is merged, leaving few opportunities for simple deduplication.
 This expectation, however, does not seem to hold for duplication debt.
 A small-scale study in which deduplication patches were submitted to two kernel subsystems found that such opportunities remain in the code, and maintainers accepted 8 of the 13 submitted patches~\cite{arcanjo2026repeat}.
+
+
 
 
 
