@@ -130,9 +130,9 @@ A small-scale study in which deduplication patches were submitted to two kernel 
 
 In this context, we investigate how duplication debt is repaid in practice in the Linux kernel, examining which refactoring techniques developers use to remove clones and how maintainers respond to deduplication patches during review.
 To this end, we draw on two sources of evidence.
-First, we conducted an ethnographic study based on participant observation in the AMDGPU and IIO subsystems, in which we submitted deduplication patches ourselves and also followed the review of patches submitted by students during a university course, totaling 30 contributions.
-Second, we mined the kernel mailing lists for clone refactorings: a broad regular expression over duplication-related keywords retrieved 207 threads, which we manually analyzed to retain only those actually concerned with code duplication, resulting in 71 contributions.
-In both sources, we classified the refactoring techniques according to Fowler's refactoring catalog~\cite{fowler2018refactoring}.
+First, we conducted an ethnographic study based on participant observation in the AMDGPU and IIO subsystems, in which we submitted deduplication patches ourselves and also followed the review of patches submitted by students during a university course. We qualitatively analyzed these 30 contributions, classifying, according to Fowler's refactoring catalog~\cite{fowler2018refactoring},  the techniques they applied. Second, we mined the kernel mailing lists for clone refactorings, using a broad regular expression over duplication-related keywords that retrieved 207 threads, which we manually analyzed to retain only those actually concerned with code duplication, resulting in 71 contributions. We then quantitatively analyzed the refactoring techniques applied in these contributions, using the same catalog, to validate and expand the findings of the ethnographic study.
+
+
 
 
 
