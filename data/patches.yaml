@@ -1,4 +1,5 @@
 # gid não é um id único
+# gid_paper: valor do gid na tabela do paper (foi shiftado para não repetir com os de 2025)
 
 # state         Significado
 # -------------+--------------------------------------------
@@ -12,6 +13,7 @@
 # year 2026
 
 - gid: 1
+  gid_paper: 14
   messageId: "https://lore.kernel.org/amd-gfx/20260421200236.30927-1-andrebueno.mac@gmail.com/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
@@ -28,6 +30,7 @@
     REPLACE_INLINE_CODE_WITH_FUNCTION_CALL
 
 - gid: 2
+  gid_paper: 15
   messageId:
     - "https://lore.kernel.org/amd-gfx/20260422003911.33841-1-tiagodourado@usp.br/"
     - "https://lore.kernel.org/amd-gfx/20260626024948.19131-1-tiagodourado@usp.br/" # rename series
@@ -55,6 +58,7 @@
     REPLACE_INLINE_CODE_WITH_FUNCTION_CALL
 
 - gid: 3
+  gid_paper: 16
   messageId: "https://lore.kernel.org/amd-gfx/20260417090841.6190-1-erick.am@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
@@ -70,6 +74,7 @@
     EXTRACT_METHOD
 
 - gid: 4
+  gid_paper: 17
   messageId: "https://lore.kernel.org/amd-gfx/20260415164029.52537-1-leonardocesar@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
@@ -88,6 +93,7 @@
     EXTRACT_METHOD
 
 - gid: 5
+  gid_paper: 18
   messageId: 
     - "https://lore.kernel.org/linux-iio/20260418185422.166542-1-lucas.rabaquim@usp.br/"
     - "https://lore.kernel.org/linux-iio/20260419003557.45287-1-lucas.rabaquim@usp.br/" # rename series
@@ -105,6 +111,7 @@
     SUBSTITUTE_ALGORITHM
 
 - gid: 6
+  gid_paper: 19
   messageId:
     - "https://lore.kernel.org/linux-iio/20260417225959.16688-1-natalia.andre@ime.usp.br/"
     - "https://lore.kernel.org/linux-iio/20260421222210.16016-1-natalia.andre@ime.usp.br/" # rename series
@@ -122,6 +129,7 @@
     INLINE_METHOD
 
 - gid: 7
+  gid_paper: 20
   messageId: "https://lore.kernel.org/amd-gfx/20260418201545.20673-1-andrejhirata@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
@@ -137,6 +145,7 @@
     EXTRACT_METHOD
 
 - gid: 8
+  gid_paper: 21
   messageId: "https://lore.kernel.org/amd-gfx/20260520224217.17615-1-ryan.oliveiraf@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
@@ -146,6 +155,7 @@
     EXTRACT_METHOD
 
 - gid: 9
+  gid_paper: 22
   messageId: "https://lore.kernel.org/amd-gfx/20260429173646.7653-1-ulissespaixao@usp.br/"
   # https://lore.kernel.org/amd-gfx/20260731063128.3026783-4-Jesse.Zhang@amd.com/
   # https://lore.kernel.org/amd-gfx/CAJxfpZJDvFuz40a-euL0jRkPBR82M8Y5NxBrpABeP+EZScFxGw@mail.gmail.com/
@@ -164,6 +174,7 @@
     EXTRACT_METHOD
 
 - gid: 10
+  gid_paper: 23
   messageId: "https://lore.kernel.org/amd-gfx/20260420032858.10286-1-giovannauchoa@usp.br/"
   context: "MAC0470/5856 (2026)"
   similarity: 100
@@ -186,6 +197,7 @@
     PULL_UP_METHOD
 
 - gid: 11
+  gid_paper: 24
   messageId: 
     - "https://lore.kernel.org/linux-iio/20260423020922.4057-1-joaovictor.fernandes@usp.br/"
     - "https://lore.kernel.org/linux-iio/20260503031703.33330-1-joaovictor.fernandes@usp.br/"
@@ -211,6 +223,7 @@
     PARAMETERIZE_METHOD
 
 - gid: 12
+  gid_paper: 25
   messageId:
     - "https://lore.kernel.org/linux-iio/20260420201441.18055-1-gabrielblo@ime.usp.br/"
     - "https://lore.kernel.org/linux-iio/20260502234348.131563-1-gabrielblo@ime.usp.br/" # rename series
@@ -224,6 +237,7 @@
     PARAMETERIZE_METHOD
 
 - gid: 1
+  gid_paper: 12
   messageId: "https://lore.kernel.org/amd-gfx/20260331015202.51017-1-guilherme.bozi@usp.br/"
   context: "Author (2026)"
   similarity: 100
@@ -233,6 +247,7 @@
     EXTRACT_METHOD
 
 - gid: 2
+  gid_paper: 12
   messageId: "https://lore.kernel.org/linux-iio/20260405213725.25426-2-guilherme.bozi@usp.br/"
   context: "Author (2026)"
   similarity: 100
@@ -242,6 +257,7 @@
     SUBSTITUTE_ALGORITHM
 
 - gid: 3
+  gid_paper: 12
   messageId: "https://lore.kernel.org/linux-iio/20260414093018.7153-1-guilherme.bozi@usp.br/"
   context: "Author (2026)"
   similarity: 100
@@ -251,6 +267,7 @@
     SUBSTITUTE_ALGORITHM
 
 - gid: 4
+  gid_paper: 12
   messageId: 
     - "https://lore.kernel.org/amd-gfx/20260512190019.228440-1-guilherme.bozi@usp.br/"
     - "https://lore.kernel.org/amd-gfx/20260611195026.25125-1-guilherme.bozi@usp.br/" # resend
@@ -270,6 +287,7 @@
     SUBSTITUTE_ALGORITHM
 
 - gid: 5
+  gid_paper: 13
   messageId: 
     - "https://lore.kernel.org/amd-gfx/20260330224503.548284-1-gabrielsousa230@gmail.com/"
     - "https://lore.kernel.org/amd-gfx/20260424004910.21003-1-gabrielsousa230@gmail.com/" # rename series
