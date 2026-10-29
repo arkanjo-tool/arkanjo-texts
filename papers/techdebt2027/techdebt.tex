@@ -122,10 +122,14 @@ Linux kernel, Deduplication, Technical Debt, Refactoring
 
 Developers often reuse existing code by copying, pasting, and adapting it, a practice that accompanies the evolution of large, long-lived systems~\cite{kumar2016bigclones}. The resulting duplication is a well-known code smell~\cite{fowler2018refactoring} and, as such, a form of technical debt~\cite{kruchten2012technical}, whose cost is paid during maintenance. A change to one copy, such as a bug fix, must be propagated to all the others, and inconsistent changes to clones that should evolve together are a known source of faults~\cite{juergens2009clones}.
 
-Many studies have explored code duplication.
-Some of these studies propose techniques to detect clones~\cite{kamiya2002ccfinder,li2006cpminer,arcanjo2025arkanjo}. Empirical studies have questioned whether clones are as harmful as commonly assumed~\cite{kapser2008cloning,harder2017clones}, and clone refactoring has also been studied from source code and its version history~\cite{wang2014intentional,choi2012clones}.
-These studies tend to focus on the analysis of code artifacts, leaving out of view the discussions that shaped the changes they examine.
-To address this gap, we investigate how code clones are refactored in the Linux kernel, which refactoring techniques developers apply, and how maintainers receive deduplication patches, examining these decisions from within the community.
+Linus's Law states that ``given enough eyeballs, all bugs are shallow''~\cite{raymond1999cathedral}.
+In the Linux kernel, part of this examination takes place in a well-established and rigorous review process: patches are publicly reviewed on mailing lists before integration, and only about a third of them are eventually accepted~\cite{jiang2013patch}.
+Extending this reasoning to technical debt, one might expect such a process to also catch duplicated code before it is merged, leaving few opportunities for simple deduplication.
+This expectation, however, does not seem to hold for duplication debt.
+A small-scale study in which deduplication patches were submitted to two kernel subsystems found that such opportunities remain in the code, and maintainers accepted 8 of the 13 submitted patches~\cite{arcanjo2026repeat}.
+
+
+
 
 \section{Related work}\label{sec:related_work}
 
