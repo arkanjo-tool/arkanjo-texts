@@ -156,9 +156,12 @@ To understand how code duplication is removed in the Linux kernel, we combined t
 
 \subsection{Participant Observation}\label{subsec:participant-observation}
 
-We conducted the participant observation in the IIO and AMDGPU subsystems of the Linux kernel, adopting two of the observer roles described by Gold~\cite{gold1958roles}, complete participant and participant as observer.
-In both roles, the duplications addressed by the patches were identified with ArKanjo~\cite{arcanjo2025arkanjo}, a tool for detecting function-level code duplication in the Linux kernel. We consider each patch series, including all its versions, as one contribution.
-In total, we analyzed 30 contributions, 13 of which had been analyzed in a previous study~\cite{arcanjo2026repeat}, and 17 of which are new, 6 submitted by the authors and 11 by students.
+We adopted an ethnographic approach to observe how deduplication patches are received from within the kernel community, following each decision as it happens rather than reconstructing it afterwards from code artifacts. We conducted this participant observation in the IIO and AMDGPU subsystems of the Linux kernel, adopting two of the observer roles described by Gold~\cite{gold1958roles}, complete participant and participant as observer. In both roles, the duplications addressed by the patches were identified with ArKanjo~\cite{arcanjo2025arkanjo}, a tool for detecting function-level code duplication in the Linux kernel. We consider each patch series, including all its versions, as one contribution.
+In total, we analyzed 30 contributions, 13 of which had been analyzed in a previous study~\cite{arcanjo2026repeat} and 17 of which are new.
+
+In the complete participant role, we contributed to the kernel ourselves, selecting duplications reported by the tool, preparing deduplication patches, submitting them to the subsystem mailing lists, and interacting with maintainers during review, which resulted in 6 of the 17 new contributions.
+
+In the participant as observer role, we followed contributions submitted by students during a university course in the first semester of 2026. We mentored them during the submission process and followed the reviews they received from maintainers. The students submitted the remaining 11 new contributions.
 
 
 \todo{acho que falta a etapa que produz os resultados, como as series foram classificadas?}
