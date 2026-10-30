@@ -152,15 +152,9 @@ We also analyze contributions from the kernel mailing lists, to check whether th
 
 \section{Methodology}\label{sec:methodology}
 
-This study extends the work of Arcanjo et al.~\cite{arcanjo2026repeat} with a new focus, which is to understand how deduplication is done in the Linux kernel and to characterize the techniques applied in the patches. To find the
-duplications to be removed, we used the same tool as that study, ArKanjo~\cite{arcanjo2025arkanjo}, a command-line tool that detects duplicated
-functions in large C codebases and works more accurately with \mbox{Type-1} and \mbox{Type-2} clones. We also followed its methodology, with a complete participant observation, in which we submitted
-deduplication patches ourselves, followed by a participant-as-observer observation, in which students of a university
-course~\cite{tadokoro2025guidelines} also submitted deduplication patches. In 2026,
-17 new patch series were submitted to the AMDGPU and IIO subsystems, targeting \mbox{Type-1} and \mbox{Type-2} duplications found with similarity thresholds of 90\% and 100\%. Together with the 13 patch series from the previous study, our analysis covers 30 patch series.
-Throughout this paper, we broadly refer to these development activities as developer ``contributions'', while we technically analyze and count them as individual ``patch series'' (which may consist of a single patch or multiple patches) in our evaluation.
-Then, to validate the deduplication techniques we found, we analyzed a sample of threads from four kernel mailing lists: \mbox{amd-gfx},
-\mbox{linux-iio}, \mbox{iommu}, and \mbox{linux-i2c}. Since these contributions were sent outside the course, this sample broadens our corpus and allows us to check whether their techniques match the ones we observed or whether new techniques appear.
+To understand how code duplication is removed in the Linux kernel, we combined two complementary sources of evidence. Through participant observation, we followed deduplication patches from their submission through their discussion with maintainers, which gave us an in-depth view of how these contributions are received. Through mining the kernel mailing lists, we collected deduplication contributions beyond those we followed, which allowed us to check whether the techniques observed in the first source also appear in a broader sample. We then classified the refactoring techniques in both samples according to Fowler's catalog~\cite{fowler2018refactoring}, analyzing the first qualitatively and the second quantitatively. The following subsections describe each of these steps in detail.
+
+
 
 \subsection{Participant Observation}\label{subsec:participant-observation}
 
