@@ -27,6 +27,7 @@
 
 % extra packages
 \usepackage{multirow}
+\usepackage{tabularx}
 
 \hyphenation{
   ArKanjo
@@ -211,57 +212,65 @@ exists in the kernel or introduce a new abstraction, and in where the shared cod
 following subsections, we describe how each group of techniques is applied in the kernel and how code 
 review shaped the final form of the submissions.
 
-\begin{table*}[!t]
+\begin{table}[!t]
 \centering
 \begin{threeparttable}
   \caption{Summary of newcomer deduplication contributions\tnote{\textup{a}}.}
   \label{lbl:patches-summary}
-\begin{tabular}{ c c c c l l c }
+\begin{tabularx}{\linewidth}{ c c c X c }
 \hline
-\textbf{Year} & \textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Series Status} & \textbf{Refactoring Technique} & \textbf{Diff} \\
+\textbf{GID} & \textbf{SS} & \textbf{SML} & \textbf{Refactoring Technique} & \textbf{Diff} \\
 \hline
 % 2025
-\multirow[t]{13}{*}{2025}
-  & 0 & AMD & 100\% & Accepted (v4), Merged & Pull Up Method & \texttt{+114/-520} \\
-  & \multirow[t]{2}{*}{1} & AMD & 90\% & Accepted (v2), Merged & Pull Up Method & \texttt{+90/-489} \\
-  & & IIO & 100\% & Rejected (v1) & Inline Function & \texttt{+2/-12} \\
-  & 2 & IIO & 100\% & Rejected (v2) & Extract Function & \texttt{+16/-20} \\
-  & 3 & IIO & 100\% & Rejected (v1) & Parameterize Function & \texttt{+23/-27} \\
-  & 4 & IIO & 100\% & Accepted (v1), Merged & Parameterize Function & \texttt{+12/-30} \\
-  & 5 & IIO & 100\% & Accepted (v3), Merged & Substitute Algorithm & \texttt{+2/-7} \\
-  & 6 & IIO & 90\% & Accepted (v1), Merged & Parameterize Function & \texttt{+17/-70} \\
-  & 7 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+95/-92} \\
-  & 8 & IIO & 90\% & Accepted (v3), Merged & Extract Function & \texttt{+20/-36} \\
-  & 9 & IIO & 90\% & Accepted (v4), Merged & Extract Function & \texttt{+20/-16} \\
-  & 10 & IIO & 90\% & Accepted (v6) & Replace Inline Code with Function Call & \texttt{+149/-243} \\
-  & 11 & IIO & 90\% & Rejected (v1) & Substitute Algorithm & \texttt{+32/-58} \\
+0 & AMD & 100\% & Pull Up Method & \texttt{+114/-520} \\
+\multirow[t]{2}{*}{1} & AMD & 90\% & Pull Up Method & \texttt{+90/-489} \\
+& IIO & 100\% & Inline Function & \texttt{+2/-12} \\
+2 & IIO & 100\% & Extract Function & \texttt{+16/-20} \\
+3 & IIO & 100\% & Parameterize Function & \texttt{+23/-27} \\
+4 & IIO & 100\% & Parameterize Function & \texttt{+12/-30} \\
+5 & IIO & 100\% & Substitute Algorithm & \texttt{+2/-7} \\
+6 & IIO & 90\% & Parameterize Function & \texttt{+17/-70} \\
+7 & IIO & 90\% & Parameterize Function & \texttt{+95/-92} \\
+8 & IIO & 90\% & Extract Function & \texttt{+20/-36} \\
+9 & IIO & 90\% & Extract Function & \texttt{+20/-16} \\
+10 & IIO & 90\% & Replace Inline Code with Function Call & \texttt{+149/-243} \\
+11 & IIO & 90\% & Substitute Algorithm & \texttt{+32/-58} \\
 % 2026
-\multirow[t]{12}{*}{2026}
-  & \multirow[t]{4}{*}{12} & AMD & 100\% & No response & Extract Function & \texttt{+86/-114} \\
-  & & IIO & 100\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+15/-32} \\
-  & & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+71/-119} \\
-  & & AMD & 90\% & Accepted (v1), Merged & Substitute Algorithm & \texttt{+1274/-2035} \\
-  & 13 & AMD & 100\% & Accepted (v3), Merged & Extract Function & \texttt{+41/-124} \\
-  & 14 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+12/-61} \\
-  & 15 & AMD & 100\% & Accepted (v2), Merged & Replace Inline Code with Function Call & \texttt{+13/-42} \\
-  & 16 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+61/-94} \\
-  & 17 & AMD & 100\% & Accepted (v4), Merged & Extract Function & \texttt{+56/-102} \\
-  & 18 & IIO & 100\% & Accepted (v4), Merged & Substitute Algorithm & \texttt{+29/-66} \\
-  & 19 & IIO & 100\% & Accepted (v4), Merged & Inline Function & \texttt{+42/-88} \\
-  & 20 & AMD & 100\% & Rejected (v1) & Extract Function & \texttt{+131/-190} \\
-  & 21 & AMD & 100\% & No response & Extract Function & \texttt{+42/-75} \\
-  & 22 & AMD & 100\% & Accepted (v6), Merged & Extract Function & \texttt{+66/-89} \\
-  & 23 & AMD & 90\% & Rejected (v1) & Pull Up Method & \texttt{+47/-124} \\
-  & 24 & IIO & 90\% & Rejected (v1) & Parameterize Function & \texttt{+63/-62} \\
-  & 25 & IIO & 90\% & Dropped (v2) & Parameterize Function & \texttt{+42/-60} \\
+\multirow[t]{4}{*}{12} & AMD & 100\% & Extract Function & \texttt{+86/-114} \\
+& IIO & 100\% & Substitute Algorithm & \texttt{+15/-32} \\
+& IIO & 100\% & Substitute Algorithm & \texttt{+71/-119} \\
+& AMD & 90\% & Substitute Algorithm & \texttt{+1274/-2035} \\
+13 & AMD & 100\% & Extract Function & \texttt{+41/-124} \\
+14 & AMD & 100\% & Replace Inline Code with Function Call & \texttt{+12/-61} \\
+15 & AMD & 100\% & Replace Inline Code with Function Call & \texttt{+13/-42} \\
+16 & AMD & 100\% & Extract Function & \texttt{+61/-94} \\
+17 & AMD & 100\% & Extract Function & \texttt{+56/-102} \\
+18 & IIO & 100\% & Substitute Algorithm & \texttt{+29/-66} \\
+19 & IIO & 100\% & Inline Function & \texttt{+42/-88} \\
+20 & AMD & 100\% & Extract Function & \texttt{+131/-190} \\
+21 & AMD & 100\% & Extract Function & \texttt{+42/-75} \\
+22 & AMD & 100\% & Extract Function & \texttt{+66/-89} \\
+23 & AMD & 90\% & Pull Up Method & \texttt{+47/-124} \\
+24 & IIO & 90\% & Parameterize Function & \texttt{+63/-62} \\
+25 & IIO & 90\% & Parameterize Function & \texttt{+42/-60} \\
 \hline
-\end{tabular}
+\end{tabularx}
 \begin{tablenotes}[flushleft]
 \footnotesize
-\item[a] A table summarizing group contributions, including subsystem (AMD or IIO), similarity threshold, series status (Merged, Accepted, Rejected, Dropped, or No response), refactoring techniques based on Fowler's refactoring catalog~\cite{fowler2018refactoring}, and code differentials showing lines added and removed.
+\item[a] A table summarizing group contributions, including subsystem (AMD or IIO), similarity threshold, refactoring techniques based on Fowler's refactoring catalog~\cite{fowler2018refactoring}, and code differentials showing lines added and removed.
 \end{tablenotes}
 \end{threeparttable}
-\end{table*}
+\end{table}
+
+\todo{%
+  * remover o ano, e comentar no texto como ficou a divisao.
+
+  * comentar os diffs grandes
+
+  * mudar de GID para ID => revisar no texto os trechos escritos com Groups
+
+  * as tecnicas devem ser usadas para mostrar que de forma simples, é possivel resolver deduplicacoes de forma nao complexa, para outros contribuidores podemre atuar
+}
 
 \todo{%
 Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
