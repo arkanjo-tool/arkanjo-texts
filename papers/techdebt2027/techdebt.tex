@@ -15,6 +15,8 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{framed}
+\FrameSep2pt
 
 \usepackage{todonotes}
 \setuptodonotes{inline}
@@ -271,17 +273,16 @@ When the duplicated function already exists in another hardware version, the reu
 the function pointer tables that each version uses to register its callbacks. Group G15, for instance, found that
 \texttt{jpeg\_v3\_0} had an interrupt handler identical to the one in \texttt{jpeg\_v2\_0} and, 
 following a maintainer's suggestion, simply pointed \texttt{jpeg\_v3\_0\_irq\_funcs} to the previous version's
-function, removing the duplicate. In this case, no new code is needed: the refactoring consists of changing 
-which function the table references.
+function, removing the duplicate. In this case, no new code is needed.
 
 In the TEC3 patch series, the duplicated code was usually a sequence of \texttt{switch} cases that mapped 
 values in a very similar way. Groups G11, G18, and G12 replaced these \texttt{switch} cases 
 with lookup tables, so the mapping is described as data instead of control flow. However, this change is 
 not always seen as an obvious improvement. In G18, a maintainer questioned whether the new table 
 was really less prone to errors and concluded that the advantage was “rather the reduction in verbosity”. 
-These cases reflect the readability factor (T2)~\cite{arcanjo2026repeat}: a lookup table is accepted when 
-it makes the mapping easier to read, as in G18, but G11 was rejected because the maintainer judged that 
-the code reduction did not compensate for the loss of readability.
+Thus, a lookup table is accepted when it makes the mapping easier to read, as in G18, but G11 was 
+rejected because the maintainer judged that the code reduction did not compensate for the loss of 
+readability, which is directly related to scenario (T2)~\cite{arcanjo2026repeat}.
 %Pensando em apagar isso:
 %Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
 %them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
@@ -292,8 +293,8 @@ Besides that, deduplication does not always mean creating a new function. Group 
 went in the different direction by following the maintainer's comments, it removed helper functions and incorporated 
 their logic directly where they were used. One of the maintainers noted that it was “a helper that doesn't necessarily 
 add much value”. Here, the duplication was in the helper itself, and removing it made the code simpler 
-(according to the maintainer himself). This shows that, in the kernel, a helper function is not always positive, and 
-it is necessary to examine case by case.
+(according to the maintainer himself). This shows that a helper function is not always positive, and it is necessary 
+to examine case by case.
 
 \todo{acho que devemos tomar cuidado com o TEC6, realmente trata de uma forma de deduplicação?}
 
@@ -322,15 +323,80 @@ were also identical, but the maintainer stated that they were intentionally kept
 In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
 or to all of them, which the textual similarity alone does not show.
 
-\todo{Falar da TEC2 e TEC4}
+Parameterize Function (TEC2) appeared only in IIO, and how the parameter is added matters. 
+In G4, the two functions differed only in the type of \texttt{struct} they used, and the group passed a 
+generic \texttt{struct} as a parameter, which was accepted. In G24, the common function received a 
+boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: “Here and below 
+the function is completely uglified. Even kernel documentation suggests to avoid bool parameters like this.” 
+In G7, the parameter forced the reader to look both at the function and at where the value was 
+set~\cite{arcanjo2026repeat}. Both series were rejected for readability reasons (T2).
+
+Pull Up Method (TEC4) differs from Extract Function in how much of the duplicated code becomes shared. 
+In Extract Function, only part of a function becomes a new shared function, whereas in Pull Up Method the 
+whole duplicated function is moved to a shared place. Group G1 illustrates this technique in the AMDGPU 
+display code, where the \texttt{hpd\_ack()} function was duplicated, with minimal changes, in the drivers of 
+several GPU generation. Instead of extracting parts of these copies, the author replaced them with two library 
+functions that covered all cases, so that each generation calls the shared implementation instead of keeping 
+its own copy.
+%Poderia falar de driver forking aqui tambem, mas acho que ficaria mta coisa repetindo o artigo antigo, não?
 
 \subsection{How Review Reshapes the Refactoring}\label{subsec:how-review-reshapes-the-refactoring}
-% Falar de tecnicas que mudaram ao longo das versões
-% Acho que da para dizer que o patch da natalia mudou de tecnica pos revisão
+% Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": 
+% Talvez seja necessário ter um maior conhecimento do subsistema para fazer um INLINE_FUNCTION e um REPLACE_INLINE
+A recurring pattern across some contributions is that maintainer review
+can redirect a patch, changing the abstraction scope, the refactoring
+technique, or both. Three contributions illustrate each of these outcomes.
 
-% Falar do meu patch como ele começou na ideia de criar um arquivo common novo e depois foi criado novas funções em arquivos ja existentes -> mudança de escopo da tecnica
+In G13, the first version consolidated the duplicated functions into a new 
+file, \texttt{amdgpu\_common.c}, intended to group functions shared across 
+the subsystem. A maintainer rejected this layout: “Please don't when they 
+are functional identical then move them a layer up instead of messing up the 
+backends.” He then argued that each function would fit better in a 
+different, already existing layer. Although the refactoring technique 
+remained the same across all revisions, the abstraction scope shifted to 
+follow the layering conventions already established in the subsystem.
 
-% Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": Talvez seja necessário ter um maior conhecimento do subsistema para fazer um INLINE_FUNCTION e um REPLACE_INLINE
+In G22, the opposite happened. The scope was kept, but the technique 
+changed. The contributor initially proposed a single generic function in 
+\texttt{amdgpu\_gfx.c} to replace \texttt{gfx\_v11\_0\_handle\_priv\_fault} 
+and \texttt{gfx\_v12\_0\_handle\_priv\_fault}, arguing that the two were 
+identical. In the first review, a maintainer pointed to a specific code 
+fragment and noted “Even when they are identical on gfx11 and gfx12 this 
+decoding here is HW specific and doesn't belong here.” The target layer was 
+not questioned, and \texttt{amdgpu\_gfx.c} remained the destination across 
+all revisions. As a result, the contributor switched from TEC4 to TEC1. Therefore, only 
+the generation-independent part was moved to \texttt{amdgpu\_gfx.c}, while 
+the hardware-specific decoding remained in each generation's own function.
+
+In G14, review changed both the scope and the technique. The first version 
+made \texttt{jpeg\_v5\_0\_1.c} and \texttt{jpeg\_v5\_0\_2.c} share a common 
+interrupt routine placed in a new file, \texttt{jpeg\_v5\_0\_interrupt.c}. 
+This proposal was rejected in the first review because the routine was not 
+common to the whole family and the maintainer pointed “This is not common to 
+jpeg v5.  jpeg\_v5\_0\_0.c has a different interrupt handler.” The maintainer then 
+suggested a narrower alternative: “I would just make the implementation in 
+jpeg\_v5\_0\_1.c non-static and then just use it directly in 
+jpeg\_v5\_0\_2.c.” The duplication was still removed, but the scope was 
+changed from a family-wide file to the two drivers that actually share the 
+behavior, and the technique changed accordingly (TEC5).
+
+Although the outcomes are different, the main concern is the same in all three cases. 
+The shared code either did not belong to the proposed layer or
+did not apply uniformly to every component that layer serves. These cases do
+not fit the four takeaways proposed in previous study~\cite{arcanjo2026repeat}. 
+However they relate to T1, since the objections derive from hardware-specific code, 
+the maintainers did not defend the duplication itself, nor did they invoke 
+readability (T2), integration overhead (T3), or performance (T4). This leads to the 
+fifth takeaway:
+
+\begin{framed}
+\textbf{Takeaway T5 (Abstraction Scope):} Maintainers may reject or redirect
+a deduplication when the duplicated code does not share an appropriate
+abstraction boundary. Consolidating such code into a shared layer can be
+considered inappropriate when the behavior does not apply uniformly to every
+component that the layer serves.
+\end{framed}
+
 
 \subsection{Deduplication in Other Kernel Contributions}
 
