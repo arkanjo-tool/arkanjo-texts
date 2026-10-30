@@ -127,7 +127,7 @@ Developers often reuse existing code by copying, pasting, and adapting it, a pra
 Linus's Law states that ``given enough eyeballs, all bugs are shallow''~\cite{raymond1999cathedral}.
 In the Linux kernel, part of this examination takes place in a well-established and rigorous review process, in which patches are publicly reviewed on mailing lists before integration and only about a third of them are eventually accepted~\cite{jiang2013patch}.
 Extending this reasoning to technical debt, such a process would also be expected to catch duplicated code before it is merged, leaving few opportunities for simple deduplication.
-This expectation, however, does not seem to hold for duplication debt, as duplicated code, from small fragments to entire files and directories, is still found in the kernel~\cite{kumar2016bigclones}.
+This expectation, however, does not seem to hold, as duplicated code, from small fragments to entire files and directories, is still found in the kernel~\cite{kumar2016bigclones}.
 
 In this context, we investigate how duplication debt is repaid in practice in the Linux kernel, examining which refactoring techniques developers use to remove clones and how maintainers respond to deduplication patches during review.
 To this end, we draw on two sources of evidence.
@@ -136,24 +136,22 @@ First, we conducted an ethnographic study based on participant observation in th
 In the ethnographic study, maintainers were more reluctant to accept deduplications that introduced new abstractions than those that reused abstractions already available in the kernel.
 In both sources, Extract Function was the most frequently applied technique. These findings suggest that deduplication is a suitable entry point for contributors with less experience in the kernel, since, although it requires understanding the duplicated code and its context, it involves relatively low complexity and can often be addressed with simple refactoring techniques. They also indicate that, despite its rigorous review process, the Linux kernel still carries duplication debt that is cheap to repay. With this study, we aim to draw attention to the duplication debt that remains to be repaid in the Linux kernel and to offer insights into how it can be addressed.
 
-
-
-
-
 \section{Related work}\label{sec:related_work}
 
-Wang and Godfrey~\cite{wang2014intentional} searched Linux kernel commit messages for ``duplicated code'' and found that these intentional clone refactorings account for fewer than 1\% of the clone changes detected in four subsystems, pointing to the ways of removing duplication as key to understanding clone management, without investigating them.
+Wang and Godfrey~\cite{wang2014intentional} searched Linux kernel commit messages for ``duplicated code'' and found that intentional clone refactorings account for fewer than 1\% of the clone changes detected in four subsystems, pointing to the ways of removing duplication as key to understanding clone management, without investigating them.
 Choi et al.~\cite{choi2012clones} investigated these ways by comparing versions of three open-source Java projects, and found that refactored clone pairs were mostly handled with two patterns from Fowler's catalog, Replace Method with Method Object and Extract Method. Unlike these studies, which infer clone refactorings from commit messages or code versions, we examine deduplication patches together with their review, both from within the community, by submitting and following patches, and on the kernel mailing lists, where the complete discussion of each contribution is available rather than only its commit message.
 
+Other studies proposed ways of reducing duplication in the kernel.
+Kadav and Swift~\cite{kadav2012drivers} found that 8\% of driver code is very similar to other driver code and suggested procedural abstraction, better support for multiple chipsets, and table-driven programming to reduce it.
+Yu and Ramaswamy~\cite{yu2008modularity} classified 903 clone sets into three categories and suggested library functions, aspects, or no change, depending on the category.
+Kumar et al.~\cite{kumar2016bigclones} represented duplicated files and directories as templates in a layer above the code, reducing redundant code by 30--50\% in the groups they studied.
+These techniques were proposed by researchers who analyzed the code from the outside, and none of these studies reports submitting the changes to kernel maintainers. In contrast, we study techniques applied in real patches that went through code review, whether they were accepted or not.
 
-Other studies proposed ways of reducing duplication in the kernel. Kadav and Swift~\cite{kadav2012drivers} found that 8\% of all Linux driver code is very similar to other driver code and, after inspecting the clusters of similar functions, suggested three methods to reduce it: procedural abstraction, which moves the shared code to a library, better support for multiple chipsets in a single driver, and table-driven programming. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 Linux clone sets into three categories and suggested a treatment for each one: library functions, aspects, or leaving the clones unchanged. Kumar et al.~\cite{kumar2016bigclones} took a different path and kept the kernel code
-as it is, representing duplicated files and directories as templates in a layer above the code, which eliminated 30--50\% of the code in the groups they studied. In these three studies, the techniques come from researchers who analyzed the code from the outside, and none of them was submitted to kernel maintainers. In contrast, we study techniques applied in real patches that were submitted to maintainers and went through code review, whether they were eventually accepted or not.
+Arcanjo et al.~\cite{arcanjo2026repeat} submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four factors under which maintainers tolerate duplication, namely driver-forking, readability, integration overhead, and performance.
+In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them.
+We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge.
 
-\todo{"none of them was submitted to kernel maintainers" declaração meio forte?}
 
-The work closest to ours is the study by Arcanjo et
-al.~\cite{arcanjo2026repeat}, which this paper extends. The authors detected duplicated functions in the AMDGPU and IIO subsystems, submitted deduplication contributions, and analyzed 13 patch series interactions with maintainers. They identified
-four factors that lead maintainers to tolerate duplication, and therefore to reject its removal: driver-forking, readability, integration overhead, and performance. That study explains when and why deduplication is rejected or accepted. It names the refactoring used in each contribution, such as moving identical functions to a shared library, parameterizing a method, or extracting helpers, but only as part of the account of each review, without characterizing or comparing these techniques. We follow the same participant observation approach and add the patches submitted by the group over 2026. Our focus, however, is on the accepted contributions and on the techniques they apply. We also go beyond the patches of our own group and analyze additional samples from the kernel mailing lists, to check whether the same techniques appear there or whether new ones emerge.
 
 \section{Methodology}\label{sec:methodology}
 
