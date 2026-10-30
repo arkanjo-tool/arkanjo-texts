@@ -154,13 +154,12 @@ We also analyze contributions from the kernel mailing lists, to check whether th
 
 To understand how code duplication is removed in the Linux kernel, we combined two complementary sources of evidence. Through participant observation, we followed deduplication patches from their submission through their discussion with maintainers, which gave us an in-depth view of how these contributions are received. Through mining the kernel mailing lists, we collected deduplication contributions beyond those we followed, which allowed us to check whether the techniques observed in the first source also appear in a broader sample. We then classified the refactoring techniques in both samples according to Fowler's catalog~\cite{fowler2018refactoring}, analyzing the first qualitatively and the second quantitatively. The following subsections describe each of these steps in detail.
 
-
-
 \subsection{Participant Observation}\label{subsec:participant-observation}
 
-In the complete participant observation, three authors of this paper submitted six of the 17 new deduplication patch series, two to the AMDGPU
-subsystem and four to the IIO subsystem. With these interactions, we sought to understand how the contribution process to the kernel works and to map the interactions with maintainers. For each
-patch series, we followed the same process. First, we used ArKanjo to detect duplications in the two subsystems. Then, we analyzed the duplicated code and chose a refactoring technique to remove the duplication. Finally, we submitted the patch series to the subsystem mailing list and analyzed the interactions with the maintainers during the review.
+We conducted the participant observation in the IIO and AMDGPU subsystems of the Linux kernel, adopting two of the observer roles described by Gold~\cite{gold1958roles}, complete participant and participant as observer.
+In both roles, the duplications addressed by the patches were identified with ArKanjo~\cite{arcanjo2025arkanjo}, a tool for detecting function-level code duplication in the Linux kernel. We consider each patch series, including all its versions, as one contribution.
+In total, we analyzed 30 contributions, 13 of which had been analyzed in a previous study~\cite{arcanjo2026repeat}, and 17 of which are new, 6 submitted by the authors and 11 by students.
+
 
 \todo{acho que falta a etapa que produz os resultados, como as series foram classificadas?}
 
