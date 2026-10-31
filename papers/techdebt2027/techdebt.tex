@@ -211,7 +211,7 @@ despite changing $3{,}309$ lines ($+1{,}274$ added, $-2{,}035$ deleted).
 \begin{table}[!t]
 \centering
 \begin{threeparttable}
-  \caption{Summary of newcomer deduplication contributions\tnote{\textup{a}}.}
+  \caption{Summary of Newcomer Deduplication Contributions\tnote{\textup{a}}.}
   \label{lbl:patches-summary}
 \begin{tabularx}{\columnwidth}{ c c c X c }
 \toprule
@@ -423,6 +423,34 @@ Maintainers also took part in choosing the technique. In several series, a maint
 
 In summary, the mailing lists showed the same short list of basic techniques, led by Extract Function, in subsystems we did not observe, with maintainers helping to choose the technique. This supports the view that deduplication can be approached with simple, well-known refactorings.
 
+\subsection{Implications for New Contributors}\label{subsec:implications}
+
+The observed refactorings also provide practical insights for contributors seeking to address code duplication in the kernel. Table~\ref{tab:recipes} summarizes how the identified techniques were applied in representative contributions and the main aspects that maintainers considered during review. These examples illustrate relatively localized changes that contributors can explore, while highlighting the importance of checking behavioral equivalence, readability, and architectural boundaries. Although these contributions involved clone detection and, in some cases, mentoring, they do not guarantee acceptance.
+
+\begin{table}[!b]
+\centering
+\begin{threeparttable}
+\caption{How Refactoring Techniques Are Applied, and What to Consider\tnote{\textup{a}}.}
+\label{tab:recipes}
+\begin{tabularx}{\columnwidth}{ >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X }
+\toprule
+\textbf{Technique} & \textbf{Simple case} & \textbf{Check before sending} \\
+\midrule
+Repl. Inline Code & Equivalent function exists in another hardware version (C20). & Point the callback table to it, and confirm the behavior is the same. \\
+Param. Func. & Functions differ only in a type (C6). & Avoid boolean parameters that send the reader back and forth (C29, C9). \\
+Extract Func. & Fragment repeated across hardware versions (C27). & Keep hardware-specific code in each version (C27); use an existing layer, not a new file (C18); check that the duplication is not intentional (C25). \\
+Subst. Algorithm & Repeated \texttt{switch} mapping values (C23). & Keep it only if readability holds (C13). \\
+Pull Up Method & Whole identical functions across versions (C2). & Confirm the behavior applies to every version the layer serves (T5). \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item[a] Technique names are abbreviated.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\todo{verificar se vale manter essa secao}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
