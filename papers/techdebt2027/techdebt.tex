@@ -402,10 +402,27 @@ considered inappropriate when the behavior does not apply uniformly to every
 component that the layer serves.
 \end{framed}
 
+\subsection{Deduplication in Other Kernel Contributions}\label{subsec:lore-techniques}
 
-\subsection{Deduplication in Other Kernel Contributions}
+To validate and expand the findings of our participant observation, we identified the refactoring techniques applied in the mailing-list series related to code duplication. Since a series may apply more than one technique, we count technique applications rather than series. Figure~\ref{fig:refactoring-heatmap} compares the share of each technique among these applications with the share among our submissions, showing whether the techniques observed in our 30 contributions also appear beyond the ones we followed and which new ones emerge.
 
-\todo{Depois de classificarmos o dataset}
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/refactoring_heatmap_relative.pdf}
+  \caption{Share of each refactoring technique among our submissions, all mailing lists, and each list.}
+  \label{fig:refactoring-heatmap}
+\end{figure}
+
+Extract Function was the most frequent technique in both sources. The techniques applied in our submissions also account for most of the applications in the mailing lists, including those related to the IOMMU and I2C subsystems, where we did not submit patches. Thus, the techniques we applied are also used by contributors outside our group and in subsystems beyond those included in our observations, indicating that these techniques are not specific to our contributions or the subsystems we observed.
+
+The mailing lists also revealed techniques that none of our submissions applied, namely Remove Dead Code, Pull Up Field, and Slide Statements. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer.
+
+Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the factors of the previous study~\cite{arcanjo2026repeat}.
+
+Maintainers also took part in choosing the technique. In several series, a maintainer suggested a deduplication that the contributor had not proposed, such as parameterizing a function repeated several times or reusing an implementation already available in the kernel, as also happened in C19 and C20. Consequently, a contributor does not need to identify the right technique beforehand, since the review can point to it.
+
+In summary, the mailing lists showed the same short list of basic techniques, led by Extract Function, in subsystems we did not observe, with maintainers helping to choose the technique. This supports the view that deduplication can be approached with simple, well-known refactorings.
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
