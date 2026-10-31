@@ -206,10 +206,18 @@ We classified the 30 patch series for code deduplication according to the refact
 catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function is the most frequent,
 applied in 10 patch series, followed by Parameterize Function with 6, Substitute Algorithm with 5,
 Replace Inline Code with Function Call with 4, and Pull Up Method with 3.
+All five techniques are well-known entries of Fowler's catalog, which suggests that deduplication
+can be addressed without complex refactorings.
 These techniques differ in whether they reuse code that already
 exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
 following subsections, we describe how each group of techniques is applied in the kernel and how code 
 review shaped the final form of the submissions.
+
+Most contributions were small. The median contribution removed $31$ lines of code, and 27 of the 30
+removed fewer than $100$. Three contributions (C9, C11, and C29) even added between $1$ and $4$ lines.
+Size did not determine how a contribution was received: the three largest ones (C1, C2, and C17,
+each with more than $390$ lines removed) were all accepted, and C17 was accepted in its first version
+despite changing $3{,}309$ lines ($+1{,}274$ added, $-2{,}035$ deleted).
 
 \begin{table}[!t]
 \centering
@@ -221,37 +229,37 @@ review shaped the final form of the submissions.
 \textbf{ID} & \textbf{SS} & \textbf{SML} & \textbf{Refactoring Technique} & \textbf{Diff} \\
 \hline
 % 2025
-C1 & AMD & 100\% & Pull Up Method & \texttt{+114/-520} \\
-C2 & AMD & 90\% & Pull Up Method & \texttt{+90/-489} \\
-C3 & IIO & 100\% & -- & \texttt{+2/-12} \\
-C4 & IIO & 100\% & Extract Function & \texttt{+16/-20} \\
-C5 & IIO & 100\% & Parameterize Function & \texttt{+23/-27} \\
-C6 & IIO & 100\% & Parameterize Function & \texttt{+12/-30} \\
-C7 & IIO & 100\% & Replace Inline Code with Function Call & \texttt{+2/-7} \\
-C8 & IIO & 90\% & Parameterize Function & \texttt{+17/-70} \\
-C9 & IIO & 90\% & Parameterize Function & \texttt{+95/-92} \\
-C10 & IIO & 90\% & Extract Function & \texttt{+20/-36} \\
-C11 & IIO & 90\% & Extract Function & \texttt{+20/-16} \\
-C12 & IIO & 90\% & Replace Inline Code with Function Call & \texttt{+149/-243} \\
-C13 & IIO & 90\% & Substitute Algorithm & \texttt{+32/-58} \\
+C1 & AMD & 100\% & Pull Up Method & $+114\,/\!-\!520$ \\
+C2 & AMD & 90\% & Pull Up Method & $+90\,/\!-\!489$ \\
+C3 & IIO & 100\% & -- & $+2\,/\!-\!12$ \\
+C4 & IIO & 100\% & Extract Function & $+16\,/\!-\!20$ \\
+C5 & IIO & 100\% & Parameterize Function & $+23\,/\!-\!27$ \\
+C6 & IIO & 100\% & Parameterize Function & $+12\,/\!-\!30$ \\
+C7 & IIO & 100\% & Replace Inline Code with Function Call & $+2\,/\!-\!7$ \\
+C8 & IIO & 90\% & Parameterize Function & $+17\,/\!-\!70$ \\
+C9 & IIO & 90\% & Parameterize Function & $+95\,/\!-\!92$ \\
+C10 & IIO & 90\% & Extract Function & $+20\,/\!-\!36$ \\
+C11 & IIO & 90\% & Extract Function & $+20\,/\!-\!16$ \\
+C12 & IIO & 90\% & Replace Inline Code with Function Call & $+149\,/\!-\!243$ \\
+C13 & IIO & 90\% & Substitute Algorithm & $+32\,/\!-\!58$ \\
 % 2026
-C14 & AMD & 100\% & Extract Function & \texttt{+86/-114} \\
-C15 & IIO & 100\% & Substitute Algorithm & \texttt{+15/-32} \\
-C16 & IIO & 100\% & Substitute Algorithm & \texttt{+71/-119} \\
-C17 & AMD & 90\% & Substitute Algorithm & \texttt{+1274/-2035} \\
-C18 & AMD & 100\% & Extract Function & \texttt{+41/-124} \\
-C19 & AMD & 100\% & Replace Inline Code with Function Call & \texttt{+12/-61} \\
-C20 & AMD & 100\% & Replace Inline Code with Function Call & \texttt{+13/-42} \\
-C21 & AMD & 100\% & Extract Function & \texttt{+61/-94} \\
-C22 & AMD & 100\% & Extract Function & \texttt{+56/-102} \\
-C23 & IIO & 100\% & Substitute Algorithm & \texttt{+29/-66} \\
-C24 & IIO & 100\% & -- & \texttt{+42/-88} \\
-C25 & AMD & 100\% & Extract Function & \texttt{+131/-190} \\
-C26 & AMD & 100\% & Extract Function & \texttt{+42/-75} \\
-C27 & AMD & 100\% & Extract Function & \texttt{+66/-89} \\
-C28 & AMD & 90\% & Pull Up Method & \texttt{+47/-124} \\
-C29 & IIO & 90\% & Parameterize Function & \texttt{+63/-62} \\
-C30 & IIO & 90\% & Parameterize Function & \texttt{+42/-60} \\
+C14 & AMD & 100\% & Extract Function & $+86\,/\!-\!114$ \\
+C15 & IIO & 100\% & Substitute Algorithm & $+15\,/\!-\!32$ \\
+C16 & IIO & 100\% & Substitute Algorithm & $+71\,/\!-\!119$ \\
+C17 & AMD & 90\% & Substitute Algorithm & $+1{,}274\,/\!-\!2{,}035$ \\
+C18 & AMD & 100\% & Extract Function & $+41\,/\!-\!124$ \\
+C19 & AMD & 100\% & Replace Inline Code with Function Call & $+12\,/\!-\!61$ \\
+C20 & AMD & 100\% & Replace Inline Code with Function Call & $+13\,/\!-\!42$ \\
+C21 & AMD & 100\% & Extract Function & $+61\,/\!-\!94$ \\
+C22 & AMD & 100\% & Extract Function & $+56\,/\!-\!102$ \\
+C23 & IIO & 100\% & Substitute Algorithm & $+29\,/\!-\!66$ \\
+C24 & IIO & 100\% & -- & $+42\,/\!-\!88$ \\
+C25 & AMD & 100\% & Extract Function & $+131\,/\!-\!190$ \\
+C26 & AMD & 100\% & Extract Function & $+42\,/\!-\!75$ \\
+C27 & AMD & 100\% & Extract Function & $+66\,/\!-\!89$ \\
+C28 & AMD & 90\% & Pull Up Method & $+47\,/\!-\!124$ \\
+C29 & IIO & 90\% & Parameterize Function & $+63\,/\!-\!62$ \\
+C30 & IIO & 90\% & Parameterize Function & $+42\,/\!-\!60$ \\
 \hline
 \end{tabularx}
 \begin{tablenotes}[flushleft]
@@ -262,13 +270,9 @@ C30 & IIO & 90\% & Parameterize Function & \texttt{+42/-60} \\
 \end{table}
 
 \todo{%
-  * comentar os diffs grandes
+* as tecnicas devem ser usadas para mostrar que de forma simples, é possivel resolver deduplicacoes (de forma nao complexa), para outros contribuidores podemre atuar
 
-  * as tecnicas devem ser usadas para mostrar que de forma simples, é possivel resolver deduplicacoes de forma nao complexa, para outros contribuidores podemre atuar
-}
-
-\todo{%
-Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
+* Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
 }
 
 \subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
