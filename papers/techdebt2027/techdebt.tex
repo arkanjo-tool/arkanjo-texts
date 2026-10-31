@@ -170,14 +170,14 @@ We mentored them during the submission process and followed the reviews they rec
 \subsection{Mailing Lists Mining} 
 
 To check whether the techniques observed in the participant observation also appear in contributions beyond those we followed, we mined e-mails from the kernel mailing lists available in the LKML5Ws dataset~\cite{passos2026lkml5ws}.
-We used four lists, iio, amd, linux-iommu, and linux-i2c.
+We used four lists, IIO, AMDGPU, IOMMU, and I2C.
 
 Since the dataset stores individual e-mails, we first reconstructed the discussion threads, linking each e-mail to its parent through the \texttt{In-Reply-To} header, falling back to the last identifier in the \texttt{References} header when \texttt{In-Reply-To} was missing or pointed to a message absent from the dataset.
 We then grouped the linked e-mails into threads,  and ordered the messages of each thread by date.
 
 Based on the vocabulary that contributors and maintainers used to discuss duplication during the participant observation, we built a regular expression to filter threads. Among the threads that matched it, we randomly selected 220 threads. 13 threads were excluded, 11 that contained only pull requests, which summarize patches discussed in other threads and include neither diffs nor discussion, 1 that was already part of another thread in the sample, and 1 whose duplication terms appeared only in text quoted from other messages, leaving 207 threads.
 
-Two authors independently labeled each of the 207 threads as related or not to code duplication, and resolved disagreements by consensus. This resulted in 71 threads related to code duplication, 25 from linux-iommu, 18 from amd, 15 from iio, and 13 from linux-i2c, which form the sample we analyzed.
+Two authors independently labeled each of the 207 threads as related or not to code duplication, and resolved disagreements by consensus. This resulted in 71 threads related to code duplication, 25 from IOMMU, 18 from AMDGPU, 15 from IIO, and 13 from I2C, which form the sample we analyzed.
 
 \todo{acrecentar referncia ao arquivo do sample e script}
 
