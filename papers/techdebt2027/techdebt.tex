@@ -18,6 +18,8 @@
 \usepackage{framed}
 \FrameSep2pt
 
+\usepackage{booktabs}
+
 \usepackage{todonotes}
 \setuptodonotes{inline}
 % NOTE: uncomment to remove todonotes
@@ -141,15 +143,12 @@ In both sources, Extract Function was the most frequently applied technique. The
 
 Wang and Godfrey~\cite{wang2014intentional} searched Linux kernel commit messages for ``duplicated code'' and found that these intentional clone refactorings account for fewer than 1\% of the clone changes detected in four subsystems. Choi et al.~\cite{choi2012clones} examined how clones are refactored by comparing versions of three open-source Java projects, and found that refactored clone pairs were mostly handled with two patterns from Fowler's catalog, Replace Method with Method Object and Extract Method. Unlike these studies, which infer clone refactorings from commit messages or code versions, we examine deduplication patches together with their review, both from within the community, by submitting and following patches, and on the kernel mailing lists, where the complete discussion of each contribution is available rather than only its commit message.
 
-
 Other studies proposed ways of reducing duplication in the kernel.
 Kadav and Swift~\cite{kadav2012drivers} found that 8\% of driver code is very similar to other driver code and suggested procedural abstraction, better support for multiple chipsets, and table-driven programming to reduce it. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 clone sets into three categories and suggested library functions, aspects, or no change, depending on the category. Kumar et al.~\cite{kumar2016bigclones} represented duplicated files and directories as templates in a layer above the code, reducing redundant code by 30--50\% in the groups they studied. These techniques were proposed by researchers who analyzed the code from the outside, and none of these studies reports submitting the changes to kernel maintainers. In contrast, we study techniques applied in real patches submitted to kernel maintainers.
 
 Arcanjo et al.~\cite{arcanjo2026repeat} submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four factors under which maintainers tolerate duplication, namely driver-forking, readability, integration overhead, and performance.
 In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them.
 We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear or whether new ones emerge.
-
-
 
 \section{Methodology}\label{sec:methodology}
 
@@ -165,7 +164,6 @@ In the complete participant role, we contributed to the kernel ourselves, select
 
 In the participant as observer role, we followed contributions submitted by students during a university course in the first semester of 2026.
 We mentored them during the submission process and followed the reviews they received from maintainers. The students submitted the remaining 11 new contributions.
-
 
 \subsection{Mailing Lists Mining} 
 
@@ -224,10 +222,10 @@ despite changing $3{,}309$ lines ($+1{,}274$ added, $-2{,}035$ deleted).
 \begin{threeparttable}
   \caption{Summary of newcomer deduplication contributions\tnote{\textup{a}}.}
   \label{lbl:patches-summary}
-\begin{tabularx}{\linewidth}{ c c c X c }
-\hline
+\begin{tabularx}{\columnwidth}{ c c c X c }
+\toprule
 \textbf{ID} & \textbf{SS} & \textbf{SML} & \textbf{Refactoring Technique} & \textbf{Diff} \\
-\hline
+\midrule
 % 2025
 C1 & AMD & 100\% & Pull Up Method & $+114\,/\!-\!520$ \\
 C2 & AMD & 90\% & Pull Up Method & $+90\,/\!-\!489$ \\
@@ -260,7 +258,7 @@ C27 & AMD & 100\% & Extract Function & $+66\,/\!-\!89$ \\
 C28 & AMD & 90\% & Pull Up Method & $+47\,/\!-\!124$ \\
 C29 & IIO & 90\% & Parameterize Function & $+63\,/\!-\!62$ \\
 C30 & IIO & 90\% & Parameterize Function & $+42\,/\!-\!60$ \\
-\hline
+\bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]
 \footnotesize
