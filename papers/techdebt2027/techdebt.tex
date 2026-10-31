@@ -191,15 +191,6 @@ https://martinfowler.com/articles/refactoring-2nd-ed.html
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
-\todo{%
-cruzar as tecnicas de refactor com os takeaways (e adicionar o takeaway 5?)
-
-e tentar adicionar mais comentarios como o feito na secao "Introducing New Abstractions"
-falando que uma refatoracao e consequencia do takeaway:
-"a consequence of the driver forking practice already
-observed in the subsystem"
-}
-
 We classified the 30 patch series for code deduplication according to the refactoring techniques they apply, using Fowler's 
 catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function is the most frequent,
 applied in 10 patch series, followed by Parameterize Function with 6, Substitute Algorithm with 5,
@@ -268,9 +259,14 @@ C30 & IIO & 90\% & Parameterize Function & $+42\,/\!-\!60$ \\
 \end{table}
 
 \todo{%
-* as tecnicas devem ser usadas para mostrar que de forma simples, é possivel resolver deduplicacoes (de forma nao complexa), para outros contribuidores podemre atuar
+Objetivo da secao: as tecnicas devem ser usadas para mostrar que, de forma simples, e possivel resolver deduplicacoes (de forma nao complexa), para que outros contribuidores possam atuar.
+}
+\todo{%
+* Simplificar a apresentacao das tecnicas: usa-las para caracterizar formas de resolver duplicacoes (extrair uma funcao, reutilizar uma implementacao existente, trocar codigo repetido por chamada de funcao, parametrizar), mostrando que sao mudancas localizadas, e evitar tratar cada tecnica como contribuicao em si ou gastar espaco com definicoes.
 
-* Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
+* Cruzar as tecnicas com os takeaways (e adicionar o takeaway 5), e comentar, como foi feito em ``Introducing New Abstractions'', que uma refatoracao e consequencia de um takeaway: ``a consequence of the driver forking practice already observed in the subsystem''.
+
+* Alterar o termo takeaways. Sugestoes: Contextos ou Cenarios.
 }
 
 \subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
