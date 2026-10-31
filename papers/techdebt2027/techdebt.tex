@@ -203,9 +203,9 @@ observed in the subsystem"
 }
 
 We classified the 30 patch series for code deduplication according to the refactoring techniques they apply, using Fowler's 
-catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function is the most frequent 
-applied in 10 patch series, followed by Parameterize Function and Substitute Algorithm with 
-6 each, and Pull Up Method and Replace Inline Code with Function Call 3 each.
+catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function is the most frequent,
+applied in 10 patch series, followed by Parameterize Function with 6, Substitute Algorithm with 5,
+Replace Inline Code with Function Call with 4, and Pull Up Method with 3.
 These techniques differ in whether they reuse code that already
 exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
 following subsections, we describe how each group of techniques is applied in the kernel and how code 
@@ -227,7 +227,7 @@ C3 & IIO & 100\% & -- & \texttt{+2/-12} \\
 C4 & IIO & 100\% & Extract Function & \texttt{+16/-20} \\
 C5 & IIO & 100\% & Parameterize Function & \texttt{+23/-27} \\
 C6 & IIO & 100\% & Parameterize Function & \texttt{+12/-30} \\
-C7 & IIO & 100\% & Substitute Algorithm & \texttt{+2/-7} \\
+C7 & IIO & 100\% & Replace Inline Code with Function Call & \texttt{+2/-7} \\
 C8 & IIO & 90\% & Parameterize Function & \texttt{+17/-70} \\
 C9 & IIO & 90\% & Parameterize Function & \texttt{+95/-92} \\
 C10 & IIO & 90\% & Extract Function & \texttt{+20/-36} \\
@@ -272,8 +272,6 @@ Alterar o termo takeaways, sugestoes: Contextos ou Cenarios
 }
 
 \subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
-
-\todo{Sera mesmo que o ID 7 é SUBSTITUTE\_FUNCTION? Nn deveria ser o REPLACE\_INLINE? Pq eles trocam um switch case por pela negação de outra ja existente}
 
 We classified techniques Substitute Algorithm and Replace Inline Code with Function Call 
 as those that reuse or simplify existing code. Unlike the techniques in Section~\ref{subsec:new-abstractions}, 

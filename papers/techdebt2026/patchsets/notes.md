@@ -157,7 +157,7 @@ situação.
 > Semelhante ao caso de SUBSTITUTE_ALGORITHM, porém usando #define, substituiu switch
 > case por outra forma.
 
-> SUBSTITUTE_ALGORITHM?
+> REPLACE_INLINE_CODE_WITH_FUNCTION_CALL
 
 ## Motivos para aceitação/rejeição
 
