@@ -203,9 +203,9 @@ observed in the subsystem"
 }
 
 We classified the 30 patch series for code deduplication according to the refactoring techniques they apply, using Fowler's 
-catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function (TEC1) is the most frequent 
-applied in 10 patch series, followed by Parameterize Function (TEC2) and Substitute Algorithm (TEC3) with 
-6 each, and Pull Up Method (TEC4) and Replace Inline Code with Function Call (TEC5) 3 each.
+catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function is the most frequent 
+applied in 10 patch series, followed by Parameterize Function and Substitute Algorithm with 
+6 each, and Pull Up Method and Replace Inline Code with Function Call 3 each.
 These techniques differ in whether they reuse code that already
 exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
 following subsections, we describe how each group of techniques is applied in the kernel and how code 
@@ -286,7 +286,7 @@ the function pointer tables that each version uses to register its callbacks. In
 following a maintainer's suggestion, simply pointed \texttt{jpeg\_v3\_0\_irq\_funcs} to the previous version's
 function, removing the duplicate. In this case, no new code is needed.
 
-In the TEC3 patch series, the duplicated code was usually a sequence of \texttt{switch} cases that mapped 
+In the Substitute Algorithm patch series, the duplicated code was usually a sequence of \texttt{switch} cases that mapped 
 values in a very similar way. Contributions C13, C17, and C23 replaced these \texttt{switch} cases 
 with lookup tables, so the mapping is described as data instead of control flow. However, this change is 
 not always seen as an obvious improvement. In contribution C23, a maintainer questioned whether the new table 
@@ -315,8 +315,8 @@ somehow add a new layer to the code: a new function, a function moved to a share
 function that combines the duplicated ones through parameters. These techniques were the most common 
 in our corpus, with 19 of the 30 patch series, that is, about 63\%.
 
-In TEC1, the main difference between the two subsystems is where the extracted function is placed. 
-In the IIO patch series, contributions C4, C10, and C11, the duplicated functions belonged to the 
+For Extract Function, the main difference between the two subsystems is where the extracted function is placed. 
+In the IIO contributions C4, C10, and C11, the duplicated functions belonged to the 
 same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patch series dealt 
 with functions duplicated across different hardware versions, a consequence of the driver forking (T1) practice already 
 observed in the subsystem~\cite{arcanjo2026repeat}. In these cases, the common function was moved to a generic layer shared by
@@ -332,7 +332,7 @@ were also identical, but the maintainer stated that they were intentionally kept
 In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
 or to all of them, which the textual similarity alone does not show.
 
-Parameterize Function (TEC2) appeared only in IIO, and how the parameter is added matters. 
+Parameterize Function appeared only in IIO, and how the parameter is added matters. 
 In contribution C6, the two functions differed only in the type of \texttt{struct} they used, and the contributor passed a 
 generic \texttt{struct} as a parameter, which was accepted. In C29, the common function received a 
 boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: ``Here and below 
@@ -340,11 +340,11 @@ the function is completely uglified. Even kernel documentation suggests to avoid
 In C9, the parameter forced the reader to look both at the function and at where the value was 
 set~\cite{arcanjo2026repeat}. Both series were rejected for readability reasons (T2).
 
-Pull Up Method (TEC4) differs from Extract Function in how much of the duplicated code becomes shared. 
+Pull Up Method differs from Extract Function in how much of the duplicated code becomes shared. 
 In Extract Function, only part of a function becomes a new shared function, whereas in Pull Up Method the 
 whole duplicated function is moved to a shared place. Contribution C2 illustrates this technique in the AMDGPU 
 display code, where the \texttt{hpd\_ack()} function was duplicated, with minimal changes, in the drivers of 
-several GPU generation. Instead of extracting parts of these copies, the contributor replaced them with two library 
+several GPU generations. Instead of extracting parts of these copies, the contributor replaced them with two library 
 functions that covered all cases, so that each generation calls the shared implementation instead of keeping 
 its own copy.
 %Poderia falar de driver forking aqui tambem, mas acho que ficaria mta coisa repetindo o artigo antigo, não?
@@ -373,7 +373,7 @@ identical. In the first review, a maintainer pointed to a specific code
 fragment and noted ``Even when they are identical on gfx11 and gfx12 this 
 decoding here is HW specific and doesn't belong here''. The target layer was 
 not questioned, and \texttt{amdgpu\_gfx.c} remained the destination across 
-all revisions. As a result, the contributor switched from TEC4 to TEC1. Therefore, only 
+all revisions. As a result, the contributor switched from Pull Up Method to Extract Function. Therefore, only 
 the generation-independent part was moved to \texttt{amdgpu\_gfx.c}, while 
 the hardware-specific decoding remained in each generation's own function.
 
@@ -387,7 +387,7 @@ suggested a narrower alternative: ``I would just make the implementation in
 jpeg\_v5\_0\_1.c non-static and then just use it directly in 
 jpeg\_v5\_0\_2.c''. The duplication was still removed, but the scope was 
 changed from a family-wide file to the two drivers that actually share the 
-behavior, and the technique changed accordingly (TEC5).
+behavior, and the technique changed accordingly, to Replace Inline Code with Function Call.
 
 Although the outcomes are different, the main concern is the same in all three cases. 
 The shared code either did not belong to the proposed layer or
