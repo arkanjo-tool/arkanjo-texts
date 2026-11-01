@@ -146,9 +146,7 @@ Wang and Godfrey~\cite{wang2014intentional} searched Linux kernel commit message
 Other studies proposed ways of reducing duplication in the kernel.
 Kadav and Swift~\cite{kadav2012drivers} found that 8\% of driver code is very similar to other driver code and suggested procedural abstraction, better support for multiple chipsets, and table-driven programming to reduce it. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 clone sets into three categories and suggested library functions, aspects, or no change, depending on the category. Kumar et al.~\cite{kumar2016bigclones} represented duplicated files and directories as templates in a layer above the code, reducing redundant code by 30--50\% in the groups they studied. These techniques were proposed by researchers who analyzed the code from the outside, and none of these studies reports submitting the changes to kernel maintainers. In contrast, we study techniques applied in real patches submitted to kernel maintainers.
 
-Arcanjo et al.~\cite{arcanjo2026repeat} submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four factors under which maintainers tolerate duplication, namely driver-forking, readability, integration overhead, and performance.
-In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them.
-We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear or whether new ones emerge.
+In previous work~[Anonymized] submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four factors under which maintainers tolerate duplication, namely driver-forking, readability, integration overhead, and performance. In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them. We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear or whether new ones emerge.
 
 \section{Methodology}\label{sec:methodology}
 
@@ -175,19 +173,13 @@ We then grouped the linked e-mails into threads,  and ordered the messages of ea
 
 Based on the vocabulary that contributors and maintainers used to discuss duplication during the participant observation, we built a regular expression to filter threads. Among the threads that matched it, we randomly selected 220 threads. 13 threads were excluded, 11 that contained only pull requests, which summarize patches discussed in other threads and include neither diffs nor discussion, 1 that was already part of another thread in the sample, and 1 whose duplication terms appeared only in text quoted from other messages, leaving 207 threads.
 
-Two authors independently labeled each of the 207 threads as related or not to code duplication, and resolved disagreements by consensus. This resulted in 71 threads related to code duplication, 25 from IOMMU, 18 from AMDGPU, 15 from IIO, and 13 from I2C, which form the sample we analyzed.
+Two authors independently labeled each of the 207 threads as related or not to code duplication, and resolved disagreements by consensus. This resulted in 71 threads related to code duplication, 25 from IOMMU, 18 from AMDGPU, 15 from IIO, and 13 from I2C, which form the sample we analyzed. The labeled threads and the details of the sample selection are available in our replication package.\footnote{\texttt{https://anonymous.4open.science/r/linux-refactorings-2E24/}}
 
-\todo{acrecentar referncia ao arquivo do sample e script}
+\subsection{Refactoring Technique Analysis}\label{sec:technique_analysis}
 
-\todo{acho que falta a etapa que produz os resultados, como as series foram classificadas?}
-
-\todo{%
-Talvez uma seção para discutir como interpretamos as técnicas do Fowler(voltadas para POO) para codigos em C (limitação) e porque usamos o catálogo do Fowler (eu mantive as classificações do david)
-
-https://martinfowler.com/articles/refactoring-2nd-ed.html
-
-``The reorientation towards a less class-centered view is a large part of this.'' (2nd edition)
-}
+We classified the refactoring techniques according to Fowler's catalog~\cite{fowler2018refactoring}, starting with the participant observation contributions. For each of the 30 contributions, we examined the code changes in its patches and compared them with the descriptions and examples of the refactorings in the catalog, assigning the technique that best matched the changes.
+We then analyzed these contributions qualitatively, relating the technique applied in each one to how maintainers received it. Next, we applied the same classification to the 71 mailing list contributions. Some of these patch series addressed more than one change, and in these cases we assigned a technique to each change, so that a single contribution may account for more than one technique.
+Finally, we analyzed this sample quantitatively, counting how often each technique was applied.
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
