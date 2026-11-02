@@ -210,7 +210,7 @@ two of the 18 accepted.
 %%%%
 %TODO:
 \todo{esse parágrafo pode ser removido se nós não usarmos os takeaways nos resultados.}
-Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways there): drivers are cloned on purpose to give new hardware a starting point and keep drivers independent (T1); maintainers prefer the clearer code over the shorter one (T2); the gain is too small to justify the upstreaming effort (T3); and duplication stays where abstracting it would slow the code (T4). We add a fifth, abstraction scope (T5).
+Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways there): drivers are cloned on purpose to give new hardware a starting point and keep drivers independent (T1); maintainers prefer the clearer code over the shorter one (T2); the gain is too small to justify the upstreaming effort (T3); and duplication stays where abstracting it would slow the code (T4). To these, we add the scope of abstraction (T5) in Section \ref{subsec:how-review-reshapes-the-refactoring}.
 %%%%
 
 \begin{table}[!t]
@@ -271,10 +271,6 @@ C30 & IIO & Dropped\hfill(v2) & Param. Func. & $+42\,/\!-\!60$ \\
 
 \subsection{Ways of removing a clone}\label{subsec:reusing-and-simplifying}
 
-For each technique, we also relate the refactoring to the scenarios under which maintainers
-tolerate duplication, identified in a previous study~[Anonymized] and there called
-takeaways: driver-forking (T1), readability (T2), integration overhead (T3), and performance (T4),
-to which we add abstraction scope (T5) in Section~\ref{subsec:how-review-reshapes-the-refactoring}.
 The techniques that reuse and simplify existing code, Replace Inline Code with Function Call and Substitute 
 Algorithm, were also the ones most easily accepted: 8 of their 9 contributions were accepted, 
 against 9 of the 19 contributions that introduce a new abstraction\footnote{C3 and C24 were not assigned a deduplication technique and are not counted in either group.}.
@@ -287,13 +283,15 @@ so the new function simply stayed in the same file. In AMDGPU, the copies were s
 versions as a consequence of driver-forking (T1), and the new function was placed in a generic layer
 already shared by these versions, such as \texttt{amdgpu\_gfx.c} and \texttt{amdgpu\_gmc.c}. 
 In C22, this was enough to remove the duplication: the maintainers agreed that nothing 
-in the function was specific to a hardware generation, recognized that it was ``probably just 
+in the function was specific to a hardware generation, one of them speculated that it was ``probably just 
 copy and pasted over when we brought up gfx12'', and accepted the patch series. 
 In C25, the duplicated functions were also identical, but the maintainer stated that they
 were intentionally kept separated for each generation, and the patch series was rejected. Both
-duplications derive from driver-forking (T1), but only the first was accidental. Thus, extracting the
+duplications derive from driver-forking (T1), but only the first appears to have been accidental. Thus, extracting the
 function is the simple part of the task, while what requires attention from the contributor is checking
 whether the duplication was intended.
+
+Extract Function was not always the easy case. C4 was dropped because the name of the new helper was questioned and the gain was seen as too small to justify the upstreaming effort (T2, T3). The status ``Dropped'' therefore covers explicit rejection as well as series that simply stopped.
 
 Pull Up Method, in turn, moves a whole duplicated function, rather than only a fragment, to a shared
 place and can remove a large amount of code with a simple change. In C2, the \texttt{hpd\_ack()} function
@@ -327,19 +325,22 @@ readability (T2), the same scenario can also work against it: in C13, the mainta
 code reduction did not compensate for the loss of readability, and the patch series was rejected.
 
 Parameterize Function, which appeared only in IIO, merges similar functions into a single one that
-receives their difference as a parameter. In C6, the two functions differed only in the type of
-\texttt{struct} they used, so the contributor passed a generic \texttt{struct} as a parameter, and the
-patch was accepted in its first version, also fixing a bug. The simplicity of
-this technique, however, depends on how the parameter is added. In C29, the common function received a
-boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: ``Here and
-below the function is completely uglified. Even kernel documentation suggests to avoid bool parameters
-like this.'' Besides this readability concern (T2), another maintainer noted that a deduplication that
-adds lines to the code, as C29 did, should be questioned, which relates to whether the change is worth
-integrating (T3). Thus, a parameter works well when it captures the only difference between the
-functions, as in C6, and not when it becomes a flag that the reader must follow inside the shared function.
+receives their difference as a parameter. Only 2 of the 6 series that used it were accepted. In C6, the
+functions differed only in the type of \texttt{struct}, so a generic \texttt{struct} was passed as a parameter,
+and the patch was accepted in its first version, also fixing a bug. The dropped series were questioned on
+readability and gain rather than on correctness (T2). In C5, a maintainer judged that the reduction was not significant
+enough to justify the more complex code. In C9, the main objection was that wrapping the code scattered what used
+to be close together, so the reviewer had to look at the function and at where the value was set. In C29,
+the common function received a boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer
+replied: ``Here and below the function is completely uglified. Even kernel documentation suggests to avoid
+bool parameters like this''. Another maintainer noted that a deduplication that adds lines, as C29 did, should
+be questioned (T3). In our cases, parameterizing worked when the parameter captured the only difference
+between the functions, as in C6, and not when it became a flag or moved the point where the behavior is
+decided away from the reader.
 
-Overall, the techniques we observed are well-known and result in localized changes, so a contributor
-does not need complex refactorings to repay duplication debt in the kernel. What requires more attention
+Overall, the techniques we observed are well known and result in localized changes. What the reviews add is why a clone was not removed: it was kept on purpose (T1), the result would be harder to read (T2), the gain did not justify the integration effort (T3), or the shared code would sit on a performance-sensitive path (T4). These scenarios are not fixed rules, since maintainers of the same subsystem disagreed on them, as in C28. Table~\ref{tab:recipes}  relates each technique to an accepted case and to the concerns raised in the others. Moreover, code review often reshapes the refactoring itself, showing how the maintainers' knowledge of the subsystem can influence the final form of a contribution.
+
+Overall, the techniques we observed are well-known and result in localized changes. What requires more attention
 is checking, before sending the patch, the scenario in which the duplication exists: whether it is
 intentional (T1), whether the result remains readable (T2), whether the improvement justifies the effort
 of integrating it (T3), whether the code lies on a performance-sensitive path (T4), and whether the
@@ -382,21 +383,23 @@ made \texttt{jpeg\_v5\_0\_1.c} and \texttt{jpeg\_v5\_0\_2.c} share a common
 interrupt routine placed in a new file, \texttt{jpeg\_v5\_0\_interrupt.c}. 
 This proposal was dropped in the first review because the routine was not 
 common to the whole family and the maintainer pointed ``This is not common to 
-jpeg v5. jpeg\_v5\_0\_0.c has a different interrupt handler''. The maintainer then 
+jpeg v5.  \texttt{jpeg\_v5\_0\_0.c} has a different interrupt handler''. The maintainer then 
 suggested a narrower alternative: ``I would just make the implementation in 
-jpeg\_v5\_0\_1.c non-static and then just use it directly in 
-jpeg\_v5\_0\_2.c''. The duplication was still removed, but the scope was 
+\texttt{jpeg\_v5\_0\_1.c} non-static and then just use it directly in 
+\texttt{jpeg\_v5\_0\_2.c}''. The duplication was still removed, but the scope was 
 changed from a family-wide file to the two drivers that actually share the 
 behavior, and the technique changed accordingly, to Replace Inline Code with Function Call.
 
 Although the outcomes are different, the main concern is the same in all three cases. 
 The shared code either did not belong to the proposed layer or
-did not apply uniformly to every component that layer serves. These cases do
-not fit the four scenarios proposed in previous study~[Anonymized]. 
-However they relate to T1, since the objections derive from hardware-specific code, 
-the maintainers did not defend the duplication itself, nor did they invoke 
-readability (T2), integration overhead (T3), or performance (T4). This leads to the 
-fifth scenario:
+did not apply uniformly to every component that layer serves. These cases do not fit the
+four scenarios proposed in the previous study~[Anonymized]. They are adjacent to T1, since
+the objections derive from hardware-specific code, but the maintainers did not defend the
+independence of the drivers as such. In C19 and C27, code that looked identical was not
+shared knowledge: another driver of the family has a different handler, and part of the
+decoding is hardware-specific. In C18, the objection concerned which existing layer should
+hold the code. Nor did the maintainers invoke readability (T2), integration overhead (T3),
+or performance (T4). This leads to the fifth scenario:
 
 \begin{framed}
 \textbf{Takeaway T5 (Abstraction Scope):} Maintainers may reject or redirect
@@ -433,17 +436,17 @@ The observed refactorings also provide practical insights for contributors seeki
 
 \begin{table}[!b]
 \centering
-\caption{How Refactoring Techniques Are Applied, and What to Consider.}
+\caption{How Refactoring Techniques Were Accepted and What Concerns Were Raised in Review.}
 \label{tab:recipes}
 \begin{tabularx}{\columnwidth}{ >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X }
 \toprule
-\textbf{Technique} & \textbf{Simple case} & \textbf{Check before sending} \\
+\textbf{Technique} & \textbf{Accepted case} & \textbf{Concern raised in review} \\
 \midrule
-Repl. Inline Code & Equivalent function exists in another hardware version (C20). & Point the callback table to it, and confirm the behavior is the same. \\
-Param. Func. & Functions differ only in a type (C6). & Avoid boolean parameters that send the reader back and forth (C29, C9). \\
-Extract Func. & Fragment repeated across hardware versions (C27). & Keep hardware-specific code in each version (C27); use an existing layer, not a new file (C18); check that the duplication is not intentional (C25). \\
-Subst. Algorithm & Repeated \texttt{switch} mapping values (C23). & Keep it only if readability holds (C13). \\
-Pull Up Method & Whole identical functions across versions (C2). & Confirm the behavior applies to every version the layer serves (T5). \\
+Repl. Inline Code & The callback table points to an existing handler (C20). & One call retained an internal helper instead of using the existing handler (C12). \\
+Param. Func. & Functions differ only in the type of a struct parameter (C6). & Readability, scattered logic, and additional lines were raised as concerns (C5, C9, C29). \\
+Extract Func. & Code is duplicated across hardware generations (C22). & Some copies were intentionally retained (C25). Concerns were also raised about helper naming and limited benefits (C4). \\
+Subst. Algorithm & A lookup table reduces verbosity compared to repeated \texttt{switch} statements (C23). & The replacement may compromise readability (C13). \\
+Pull Up Method & An entire function is shared across hardware generations (C2). & Maintaining independence between generations was raised as a concern (C28). \\
 \bottomrule
 \end{tabularx}
 \end{table}
