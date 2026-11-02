@@ -192,8 +192,6 @@ We classified the 30 patch series for code deduplication according to the refact
 catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function is the most frequent,
 applied in 10 patch series, followed by Parameterize Function with 6, Substitute Algorithm with 5,
 Replace Inline Code with Function Call with 4, and Pull Up Method with 3.
-All five techniques are well-known entries of Fowler's catalog, which suggests that deduplication
-can be addressed without complex refactorings.
 These techniques differ in whether they reuse code that already
 exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
 following subsections, we describe how each group of techniques is applied in the kernel and how code 
@@ -201,15 +199,16 @@ review shaped the final form of the submissions.
 
 Most contributions were small. The median contribution removed $31$ lines of code, and 27 of the 30
 removed fewer than $100$. Three contributions (C9, C11, and C29) even added between $1$ and $4$ lines.
-Size did not determine how a contribution was received: the three largest ones (C1, C2, and C17,
-each with more than $390$ lines removed) were all accepted, and C17 was accepted in its first version
-despite changing $3{,}309$ lines ($+1{,}274$ added, $-2{,}035$ deleted).
+Large series were not a barrier (the three largest, C1, C2, and C17, were accepted), but very small
+ones were dropped more often, five of the 12 dropped series removed at most $10$ lines, against
+two of the 18 accepted.
 
 %%%%
 % EXPLICAÇÃO TAKEAWAYS
 % 
 % também pode virar uma tabela
 %%%%
+%TODO:
 \todo{esse parágrafo pode ser removido se nós não usarmos os takeaways nos resultados.}
 Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways there): drivers are cloned on purpose to give new hardware a starting point and keep drivers independent (T1); maintainers prefer the clearer code over the shorter one (T2); the gain is too small to justify the upstreaming effort (T3); and duplication stays where abstracting it would slow the code (T4). We add a fifth, abstraction scope (T5).
 %%%%
@@ -223,8 +222,9 @@ Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways ther
 \toprule
 \textbf{ID} & \textbf{SS} & \textbf{Series Status} & \textbf{Technique} & \textbf{Diff} \\
 \midrule
-% 2025
+% 2024
 C1 & AMD & Accepted (v4) & Pull Up Method & $+114\,/\!-\!520$ \\
+% 2025
 C2 & AMD & Accepted\hfill(v2) & Pull Up Method & $+90\,/\!-\!489$ \\
 C3 & IIO & Dropped\hfill(v1) & -- & $+2\,/\!-\!12$ \\
 C4 & IIO & Dropped\hfill(v2) & Extract Func. & $+16\,/\!-\!20$ \\
@@ -264,11 +264,25 @@ C30 & IIO & Dropped\hfill(v2) & Param. Func. & $+42\,/\!-\!60$ \\
 \end{threeparttable}
 \end{table}
 
+%TODO:
 \todo{%
 Objetivo da secao: as tecnicas devem ser usadas para mostrar que, de forma simples, e possivel resolver deduplicacoes (de forma nao complexa), para que outros contribuidores possam atuar.
 }
 \todo{%
 * Simplificar a apresentacao das tecnicas: usa-las para caracterizar formas de resolver duplicacoes (extrair uma funcao, reutilizar uma implementacao existente, trocar codigo repetido por chamada de funcao, parametrizar), mostrando que sao mudancas localizadas, e evitar tratar cada tecnica como contribuicao em si ou gastar espaco com definicoes.
+
+SUGESTAO:
+    A. Ways of removing a clone
+       aqui pode juntar as secoes "Reusing and Simplifying Existing Code" e "Introducing New Abstractions" de forma mais simplificada
+       nao sei se precisa dividir nesses dois tipos, para evitar explicar muito as definicoes, pode ser algo:
+        * Extrair (Extract Function e Pull Up Method)
+        * Reusar o que já existe (Replace Inline Code)
+        * Substitute Algorithm
+        * Parametrizar
+    B. How Review Reshapes the Refactoring
+    C. When series are dropped (?)
+    D. Deduplication in Other Kernel Contributions
+    E. Implications for New Contributors (?)
 
 * Cruzar as tecnicas com os takeaways (e adicionar o takeaway 5), e comentar, como foi feito em ``Introducing New Abstractions'', que uma refatoracao e consequencia de um takeaway: ``a consequence of the driver-forking practice already observed in the subsystem''.
 }
@@ -417,24 +431,23 @@ To validate and expand the findings of our participant observation, we identifie
   \label{fig:refactoring-heatmap}
 \end{figure}
 
-Extract Function was the most frequent technique in both sources. The techniques applied in our submissions also account for most of the applications in the mailing lists, including those related to the IOMMU and I2C subsystems, where we did not submit patches. Thus, the techniques we applied are also used by contributors outside our group and in subsystems beyond those included in our observations, indicating that these techniques are not specific to our contributions or the subsystems we observed.
+Extract Function was the most frequent technique overall in both sources. The techniques applied in our submissions also account for most of the applications in the mailing lists, including those related to the IOMMU and I2C subsystems, where we did not submit patches. Thus, the techniques we applied are also used by contributors outside our group and in subsystems beyond those included in our observations, indicating that these techniques are not specific to our contributions or the subsystems we observed.
 
-The mailing lists also revealed techniques that none of our submissions applied, namely Remove Dead Code, Pull Up Field, and Slide Statements. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer.
+The mailing lists also revealed techniques that none of our submissions applied, namely Remove Dead Code, Pull Up Field, and Slide Statements. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer. ArKanjo reports function-level clones, so changes to fields and statements fall outside its reach; in some cases, they appear as preparatory steps for a later extraction.
 
-Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the scenarios of the previous study~[Anonymized].
+Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the scenarios of the previous study~[Anonymized]. In some threads, reviewers asked contributors to build on existing code instead of adding a copy. Review thus catches duplication at its origin, before it reaches mainline, and the duplication that remains is what escaped review or was tolerated.
 
 Maintainers also took part in choosing the technique. In several series, a maintainer suggested a deduplication that the contributor had not proposed, such as parameterizing a function repeated several times or reusing an implementation already available in the kernel, as also happened in C19 and C20. Consequently, a contributor does not need to identify the right technique beforehand, since the review can point to it.
 
-In summary, the mailing lists showed the same short list of basic techniques, led by Extract Function, in subsystems we did not observe, with maintainers helping to choose the technique. This supports the view that deduplication can be approached with simple, well-known refactorings.
+In summary, the mailing lists showed the same short list of basic techniques, led by Extract Function, in subsystems we did not observe, with maintainers helping to choose the technique. The lists show the same short set of basic techniques in subsystems we did not observe.
 
 \subsection{Implications for New Contributors}\label{subsec:implications}
 
-The observed refactorings also provide practical insights for contributors seeking to address code duplication in the kernel. Table~\ref{tab:recipes} summarizes how the identified techniques were applied in representative contributions and the main aspects that maintainers considered during review. These examples illustrate relatively localized changes that contributors can explore, while highlighting the importance of checking behavioral equivalence, readability, and architectural boundaries. Although these contributions involved clone detection and, in some cases, mentoring, they do not guarantee acceptance.
+The observed refactorings also provide practical insights for contributors seeking to address code duplication in the kernel. Table~\ref{tab:recipes} summarizes how the identified techniques were applied in representative contributions and the main aspects that maintainers considered during review. These examples illustrate relatively localized changes that contributors can explore, while highlighting the importance of checking behavioral equivalence, readability, and architectural boundaries.
 
 \begin{table}[!b]
 \centering
-\begin{threeparttable}
-\caption{How Refactoring Techniques Are Applied, and What to Consider\tnote{\textup{a}}.}
+\caption{How Refactoring Techniques Are Applied, and What to Consider.}
 \label{tab:recipes}
 \begin{tabularx}{\columnwidth}{ >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X }
 \toprule
@@ -447,14 +460,7 @@ Subst. Algorithm & Repeated \texttt{switch} mapping values (C23). & Keep it only
 Pull Up Method & Whole identical functions across versions (C2). & Confirm the behavior applies to every version the layer serves (T5). \\
 \bottomrule
 \end{tabularx}
-\begin{tablenotes}[flushleft]
-\footnotesize
-\item[a] Technique names are abbreviated.
-\end{tablenotes}
-\end{threeparttable}
 \end{table}
-
-\todo{verificar se vale manter essa secao}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
