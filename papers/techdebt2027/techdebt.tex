@@ -146,7 +146,7 @@ Wang and Godfrey~\cite{wang2014intentional} searched Linux kernel commit message
 Other studies proposed ways of reducing duplication in the kernel.
 Kadav and Swift~\cite{kadav2012drivers} found that 8\% of driver code is very similar to other driver code and suggested procedural abstraction, better support for multiple chipsets, and table-driven programming to reduce it. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 clone sets into three categories and suggested library functions, aspects, or no change, depending on the category. Kumar et al.~\cite{kumar2016bigclones} represented duplicated files and directories as templates in a layer above the code, reducing redundant code by 30--50\% in the groups they studied. These techniques were proposed by researchers who analyzed the code from the outside, and none of these studies reports submitting the changes to kernel maintainers. In contrast, we study techniques applied in real patches submitted to kernel maintainers.
 
-In previous work~[Anonymized] submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four factors under which maintainers tolerate duplication, namely driver-forking, readability, integration overhead, and performance. In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them. We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear or whether new ones emerge.
+In previous work~[Anonymized] submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four factors under which maintainers tolerate duplication, namely driver-forking (T1), readability (T2), integration overhead (T3), and performance (T4). In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them. We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear or whether new ones emerge.
 
 \section{Methodology}\label{sec:methodology}
 
@@ -199,6 +199,15 @@ removed fewer than $100$. Three contributions (C9, C11, and C29) even added betw
 Size did not determine how a contribution was received: the three largest ones (C1, C2, and C17,
 each with more than $390$ lines removed) were all accepted, and C17 was accepted in its first version
 despite changing $3{,}309$ lines ($+1{,}274$ added, $-2{,}035$ deleted).
+
+%%%%
+% EXPLICAÇÃO TAKEAWAYS
+% 
+% também pode virar uma tabela
+%%%%
+\todo{esse parágrafo pode ser removido se nós não usarmos os takeaways nos resultados.}
+Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways there): drivers are cloned on purpose to give new hardware a starting point and keep drivers independent (T1); maintainers prefer the clearer code over the shorter one (T2); the gain is too small to justify the upstreaming effort (T3); and duplication stays where abstracting it would slow the code (T4). We add a fifth, abstraction scope (T5).
+%%%%
 
 \begin{table}[!t]
 \centering
@@ -256,7 +265,7 @@ Objetivo da secao: as tecnicas devem ser usadas para mostrar que, de forma simpl
 \todo{%
 * Simplificar a apresentacao das tecnicas: usa-las para caracterizar formas de resolver duplicacoes (extrair uma funcao, reutilizar uma implementacao existente, trocar codigo repetido por chamada de funcao, parametrizar), mostrando que sao mudancas localizadas, e evitar tratar cada tecnica como contribuicao em si ou gastar espaco com definicoes.
 
-* Cruzar as tecnicas com os takeaways (e adicionar o takeaway 5), e comentar, como foi feito em ``Introducing New Abstractions'', que uma refatoracao e consequencia de um takeaway: ``a consequence of the driver forking practice already observed in the subsystem''.
+* Cruzar as tecnicas com os takeaways (e adicionar o takeaway 5), e comentar, como foi feito em ``Introducing New Abstractions'', que uma refatoracao e consequencia de um takeaway: ``a consequence of the driver-forking practice already observed in the subsystem''.
 
 * Alterar o termo takeaways. Sugestoes: Contextos ou Cenarios.
 }
@@ -306,7 +315,7 @@ in our corpus, with 19 of the 30 patch series, that is, about 63\%.
 For Extract Function, the main difference between the two subsystems is where the extracted function is placed. 
 In the IIO contributions C4, C10, and C11, the duplicated functions belonged to the 
 same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patch series dealt 
-with functions duplicated across different hardware versions, a consequence of the driver forking (T1) practice already 
+with functions duplicated across different hardware versions, a consequence of the driver-forking (T1) practice already 
 observed in the subsystem~\cite{arcanjo2026repeat}. In these cases, the common function was moved to a generic layer shared by
 all hardware versions, such as \texttt{amdgpu\_gfx.c} (contributions C21, C22, and C27) and \texttt{amdgpu\_gmc.c} (contributions C25 and C26), or to a 
 proposed new file (C18). This shows that, in AMDGPU, extracting a function also means choosing a place for it in the driver 
@@ -335,7 +344,7 @@ display code, where the \texttt{hpd\_ack()} function was duplicated, with minima
 several GPU generations. Instead of extracting parts of these copies, the contributor replaced them with two library 
 functions that covered all cases, so that each generation calls the shared implementation instead of keeping 
 its own copy.
-%Poderia falar de driver forking aqui tambem, mas acho que ficaria mta coisa repetindo o artigo antigo, não?
+%Poderia falar de driver-forking aqui tambem, mas acho que ficaria mta coisa repetindo o artigo antigo, não?
 
 \subsection{How Review Reshapes the Refactoring}\label{subsec:how-review-reshapes-the-refactoring}
 % Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": 
