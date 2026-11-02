@@ -440,6 +440,13 @@ In this study, we examined how duplication debt is repaid in the Linux kernel, c
 Our results show that, despite the kernel's rigorous review process, deduplication opportunities remain in the code and can often be addressed with simple refactoring techniques, and that maintainers are more receptive when these refactorings reuse abstractions already available in the kernel.
 These opportunities are therefore a suitable entry point for contributors with less experience in the kernel.
 
+We raise two hypotheses for why such simple duplications persist.
+First, since review on the mailing lists centers on the changes proposed in each patch, it may be difficult for maintainers to notice that new code duplicates code already present elsewhere in the kernel.
+Second, in terms of the principal and interest of technical debt~\cite{seaman2011measuring}, that is, the effort required to pay off a debt and the extra effort incurred while it remains unpaid, these duplications seem to have a low principal, since simple techniques remove them, and possibly a low interest in the short term, since their cost only materializes when one of the copies needs to change.
+Debt with low interest tends to be a low priority for maintainers, who may leave it in the code, where its low principal allows contributors who are not maintainers to repay it.
+Investigating these hypotheses, for instance by interviewing maintainers, is a direction for future work.
+
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
