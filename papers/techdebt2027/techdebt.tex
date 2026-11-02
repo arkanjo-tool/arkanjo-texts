@@ -214,47 +214,47 @@ Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways ther
 \begin{threeparttable}
   \caption{Summary of Newcomer Deduplication Contributions\tnote{\textup{a}}.}
   \label{lbl:patches-summary}
-\begin{tabularx}{\columnwidth}{ c c c X c }
+\begin{tabularx}{\columnwidth}{ c c l X c }
 \toprule
-\textbf{ID} & \textbf{SS} & \textbf{SML} & \textbf{Refactoring Technique} & \textbf{Diff} \\
+\textbf{ID} & \textbf{SS} & \textbf{Series Status} & \textbf{Technique} & \textbf{Diff} \\
 \midrule
 % 2025
-C1 & AMD & 100\% & Pull Up Method & $+114\,/\!-\!520$ \\
-C2 & AMD & 90\% & Pull Up Method & $+90\,/\!-\!489$ \\
-C3 & IIO & 100\% & -- & $+2\,/\!-\!12$ \\
-C4 & IIO & 100\% & Extract Function & $+16\,/\!-\!20$ \\
-C5 & IIO & 100\% & Parameterize Function & $+23\,/\!-\!27$ \\
-C6 & IIO & 100\% & Parameterize Function & $+12\,/\!-\!30$ \\
-C7 & IIO & 100\% & Replace Inline Code with Function Call & $+2\,/\!-\!7$ \\
-C8 & IIO & 90\% & Parameterize Function & $+17\,/\!-\!70$ \\
-C9 & IIO & 90\% & Parameterize Function & $+95\,/\!-\!92$ \\
-C10 & IIO & 90\% & Extract Function & $+20\,/\!-\!36$ \\
-C11 & IIO & 90\% & Extract Function & $+20\,/\!-\!16$ \\
-C12 & IIO & 90\% & Replace Inline Code with Function Call & $+149\,/\!-\!243$ \\
-C13 & IIO & 90\% & Substitute Algorithm & $+32\,/\!-\!58$ \\
+C1 & AMD & Accepted (v4) & Pull Up Method & $+114\,/\!-\!520$ \\
+C2 & AMD & Accepted\hfill(v2) & Pull Up Method & $+90\,/\!-\!489$ \\
+C3 & IIO & Dropped\hfill(v1) & -- & $+2\,/\!-\!12$ \\
+C4 & IIO & Dropped\hfill(v2) & Extract Func. & $+16\,/\!-\!20$ \\
+C5 & IIO & Dropped\hfill(v1) & Param. Func. & $+23\,/\!-\!27$ \\
+C6 & IIO & Accepted\hfill(v1) & Param. Func. & $+12\,/\!-\!30$ \\
+C7 & IIO & Accepted\hfill(v3) & Repl. Inline Code & $+2\,/\!-\!7$ \\
+C8 & IIO & Accepted\hfill(v1) & Param. Func. & $+17\,/\!-\!70$ \\
+C9 & IIO & Dropped\hfill(v1) & Param. Func. & $+95\,/\!-\!92$ \\
+C10 & IIO & Accepted\hfill(v3) & Extract Func. & $+20\,/\!-\!36$ \\
+C11 & IIO & Accepted\hfill(v4) & Extract Func. & $+20\,/\!-\!16$ \\
+C12 & IIO & Accepted\hfill(v6) & Repl. Inline Code & $+149\,/\!-\!243$ \\
+C13 & IIO & Dropped\hfill(v1) & Subst. Algorithm & $+32\,/\!-\!58$ \\
 % 2026
-C14 & AMD & 100\% & Extract Function & $+86\,/\!-\!114$ \\
-C15 & IIO & 100\% & Substitute Algorithm & $+15\,/\!-\!32$ \\
-C16 & IIO & 100\% & Substitute Algorithm & $+71\,/\!-\!119$ \\
-C17 & AMD & 90\% & Substitute Algorithm & $+1{,}274\,/\!-\!2{,}035$ \\
-C18 & AMD & 100\% & Extract Function & $+41\,/\!-\!124$ \\
-C19 & AMD & 100\% & Replace Inline Code with Function Call & $+12\,/\!-\!61$ \\
-C20 & AMD & 100\% & Replace Inline Code with Function Call & $+13\,/\!-\!42$ \\
-C21 & AMD & 100\% & Extract Function & $+61\,/\!-\!94$ \\
-C22 & AMD & 100\% & Extract Function & $+56\,/\!-\!102$ \\
-C23 & IIO & 100\% & Substitute Algorithm & $+29\,/\!-\!66$ \\
-C24 & IIO & 100\% & -- & $+42\,/\!-\!88$ \\
-C25 & AMD & 100\% & Extract Function & $+131\,/\!-\!190$ \\
-C26 & AMD & 100\% & Extract Function & $+42\,/\!-\!75$ \\
-C27 & AMD & 100\% & Extract Function & $+66\,/\!-\!89$ \\
-C28 & AMD & 90\% & Pull Up Method & $+47\,/\!-\!124$ \\
-C29 & IIO & 90\% & Parameterize Function & $+63\,/\!-\!62$ \\
-C30 & IIO & 90\% & Parameterize Function & $+42\,/\!-\!60$ \\
+C14 & AMD & Dropped\hfill(v1) & Extract Func. & $+86\,/\!-\!114$ \\
+C15 & IIO & Accepted\hfill(v1) & Subst. Algorithm & $+15\,/\!-\!32$ \\
+C16 & IIO & Accepted\hfill(v4) & Subst. Algorithm & $+71\,/\!-\!119$ \\
+C17 & AMD & Accepted\hfill(v1) & Subst. Algorithm & {\scriptsize$+$}$1{,}274\,/${\scriptsize$-$}$2{,}035$ \\
+C18 & AMD & Accepted\hfill(v3) & Extract Func. & $+41\,/\!-\!124$ \\
+C19 & AMD & Accepted\hfill(v2) & Repl. Inline Code & $+12\,/\!-\!61$ \\
+C20 & AMD & Accepted\hfill(v2) & Repl. Inline Code & $+13\,/\!-\!42$ \\
+C21 & AMD & Dropped\hfill(v1) & Extract Func. & $+61\,/\!-\!94$ \\
+C22 & AMD & Accepted\hfill(v4) & Extract Func. & $+56\,/\!-\!102$ \\
+C23 & IIO & Accepted\hfill(v4) & Subst. Algorithm & $+29\,/\!-\!66$ \\
+C24 & IIO & Accepted\hfill(v4) & -- & $+42\,/\!-\!88$ \\
+C25 & AMD & Dropped\hfill(v1) & Extract Func. & $+131\,/\!-\!190$ \\
+C26 & AMD & Dropped\hfill(v1) & Extract Func. & $+42\,/\!-\!75$ \\
+C27 & AMD & Accepted\hfill(v6) & Extract Func. & $+66\,/\!-\!89$ \\
+C28 & AMD & Dropped\hfill(v1) & Pull Up Method & $+47\,/\!-\!124$ \\
+C29 & IIO & Dropped\hfill(v1) & Param. Func. & $+63\,/\!-\!62$ \\
+C30 & IIO & Dropped\hfill(v2) & Param. Func. & $+42\,/\!-\!60$ \\
 \bottomrule
 \end{tabularx}
 \begin{tablenotes}[flushleft]
 \footnotesize
-\item[a] A table summarizing contributions, including subsystem (AMD or IIO), similarity threshold, refactoring techniques based on Fowler's refactoring catalog~\cite{fowler2018refactoring}, and code differentials showing lines added and removed.
+\item[a] A table summarizing contributions, including subsystem (AMD or IIO), series status (Accepted or Dropped), refactoring techniques based on Fowler's refactoring catalog~\cite{fowler2018refactoring}, and code differentials showing lines added and removed.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
