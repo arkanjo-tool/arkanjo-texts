@@ -161,7 +161,7 @@ To understand how code duplication is removed in the Linux kernel, we combined t
 
 We adopted an ethnographic approach to observe how deduplication patches are received from within the kernel community, following each decision as it happens rather than reconstructing it afterwards from code artifacts.
 We conducted this participant observation in the IIO and AMDGPU subsystems of the Linux kernel, adopting two of the observer roles described by Gold~\cite{gold1958roles}, complete participant and participant as observer. In both roles, the duplications addressed by the patches were identified with ArKanjo~\cite{arcanjo2025arkanjo}, a tool for detecting function-level code duplication in the Linux kernel. We consider each patch series, including all its versions, as one contribution.
-In total, we qualitatively analyzed 30 contributions, 13 of which had been analyzed in a previous study~\cite{arcanjo2026repeat} (C1 to C13) and 17 of which are new (C14 to C30), all listed in Table~\ref{lbl:patches-summary}.
+In total, we qualitatively analyzed 30 contributions, 13 of which had been analyzed in a previous study~[Anonymized] (C1 to C13) and 17 of which are new (C14 to C30), all listed in Table~\ref{lbl:patches-summary}.
 
 In the complete participant role, we contributed to the kernel ourselves, selecting duplications reported by the tool, preparing deduplication patches, submitting them to the subsystem mailing lists, and interacting with maintainers during review, which resulted in 6 of the 17 new contributions.
 
@@ -293,7 +293,7 @@ not always seen as an obvious improvement. In contribution C23, a maintainer que
 was really less prone to errors and concluded that the advantage was ``rather the reduction in verbosity''. 
 Thus, a lookup table is accepted when it makes the mapping easier to read, as in C23, but C13 was 
 dropped after the maintainer judged that the code reduction did not compensate for the loss of 
-readability, which is directly related to scenario (T2)~\cite{arcanjo2026repeat}.
+readability, which is directly related to scenario (T2)~[Anonymized].
 %Pensando em apagar isso:
 %Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
 %them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
@@ -319,7 +319,7 @@ For Extract Function, the main difference between the two subsystems is where th
 In the IIO contributions C4, C10, and C11, the duplicated functions belonged to the 
 same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patch series dealt 
 with functions duplicated across different hardware versions, a consequence of the driver-forking (T1) practice already 
-observed in the subsystem~\cite{arcanjo2026repeat}. In these cases, the common function was moved to a generic layer shared by
+observed in the subsystem~[Anonymized]. In these cases, the common function was moved to a generic layer shared by
 all hardware versions, such as \texttt{amdgpu\_gfx.c} (contributions C21, C22, and C27) and \texttt{amdgpu\_gmc.c} (contributions C25 and C26), or to a 
 proposed new file (C18). This shows that, in AMDGPU, extracting a function also means choosing a place for it in the driver 
 architecture, and, as discussed in Section~\ref{subsec:how-review-reshapes-the-refactoring}, new files proposed by the 
@@ -338,7 +338,7 @@ generic \texttt{struct} as a parameter, which was accepted. In C29, the common f
 boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: ``Here and below 
 the function is completely uglified. Even kernel documentation suggests to avoid bool parameters like this.'' 
 In C9, the parameter forced the reader to look both at the function and at where the value was 
-set~\cite{arcanjo2026repeat}. Both series were dropped for readability reasons (T2).
+set~[Anonymized]. Both series were dropped for readability reasons (T2).
 
 Pull Up Method differs from Extract Function in how much of the duplicated code becomes shared. 
 In Extract Function, only part of a function becomes a new shared function, whereas in Pull Up Method the 
@@ -392,7 +392,7 @@ behavior, and the technique changed accordingly, to Replace Inline Code with Fun
 Although the outcomes are different, the main concern is the same in all three cases. 
 The shared code either did not belong to the proposed layer or
 did not apply uniformly to every component that layer serves. These cases do
-not fit the four scenarios proposed in previous study~\cite{arcanjo2026repeat}. 
+not fit the four scenarios proposed in previous study~[Anonymized]. 
 However they relate to T1, since the objections derive from hardware-specific code, 
 the maintainers did not defend the duplication itself, nor did they invoke 
 readability (T2), integration overhead (T3), or performance (T4). This leads to the 
@@ -421,7 +421,7 @@ Extract Function was the most frequent technique in both sources. The techniques
 
 The mailing lists also revealed techniques that none of our submissions applied, namely Remove Dead Code, Pull Up Field, and Slide Statements. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer.
 
-Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the scenarios of the previous study~\cite{arcanjo2026repeat}.
+Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the scenarios of the previous study~[Anonymized].
 
 Maintainers also took part in choosing the technique. In several series, a maintainer suggested a deduplication that the contributor had not proposed, such as parameterizing a function repeated several times or reusing an implementation already available in the kernel, as also happened in C19 and C20. Consequently, a contributor does not need to identify the right technique beforehand, since the review can point to it.
 
