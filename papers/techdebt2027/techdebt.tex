@@ -15,8 +15,6 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
-\usepackage{framed}
-\FrameSep2pt
 
 \usepackage{booktabs}
 
@@ -389,15 +387,10 @@ independence of the drivers as such. In C19 and C27, code that looked identical 
 shared knowledge: another driver of the family has a different handler, and part of the
 decoding is hardware-specific. In C18, the objection concerned which existing layer should
 hold the code. Nor did the maintainers invoke readability (T2), integration overhead (T3),
-or performance (T4). This leads to the fifth scenario:
-
-\begin{framed}
-\textbf{Takeaway T5 (Abstraction Scope):} Maintainers may reject or redirect
-a deduplication when the duplicated code does not share an appropriate
-abstraction boundary. Consolidating such code into a shared layer can be
-considered inappropriate when the behavior does not apply uniformly to every
-component that the layer serves.
-\end{framed}
+or performance (T4). This leads to a fifth scenario (T5): maintainers may reject or redirect
+a deduplication when the duplicated code does not share an appropriate abstraction boundary.
+Consolidating such code into a shared layer can be considered inappropriate when the behavior
+does not apply uniformly to every component that the layer serves.
 
 \subsection{Deduplication in Other Kernel Contributions}\label{subsec:lore-techniques}
 
