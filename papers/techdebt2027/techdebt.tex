@@ -207,7 +207,7 @@ two of the 18 accepted.
 % também pode virar uma tabela
 %%%%
 %TODO:
-\todo{esse parágrafo pode ser removido se nós não usarmos os takeaways nos resultados.}
+% \todo{esse parágrafo pode ser removido se nós não usarmos os takeaways nos resultados.}
 Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways there): drivers are cloned on purpose to give new hardware a starting point and keep drivers independent (T1); maintainers prefer the clearer code over the shorter one (T2); the gain is too small to justify the upstreaming effort (T3); and duplication stays where abstracting it would slow the code (T4). To these, we add the scope of abstraction (T5) in Section \ref{subsec:how-review-reshapes-the-refactoring}.
 %%%%
 
@@ -262,10 +262,8 @@ C30 & IIO & Dropped\hfill(v2) & Param. Func. & $+42\,/\!-\!60$ \\
 \end{threeparttable}
 \end{table}
 
-%TODO:
-\todo{%
-* Simplificar a apresentacao das tecnicas: usa-las para caracterizar formas de resolver duplicacoes (extrair uma funcao, reutilizar uma implementacao existente, trocar codigo repetido por chamada de funcao, parametrizar), mostrando que sao mudancas localizadas, e evitar tratar cada tecnica como contribuicao em si ou gastar espaco com definicoes.
-}
+%NOTE:
+% * Simplificar a apresentacao das tecnicas: usa-las para caracterizar formas de resolver duplicacoes (extrair uma funcao, reutilizar uma implementacao existente, trocar codigo repetido por chamada de funcao, parametrizar), mostrando que sao mudancas localizadas, e evitar tratar cada tecnica como contribuicao em si ou gastar espaco com definicoes.
 
 \subsection{Ways of removing a clone}\label{subsec:reusing-and-simplifying}
 
@@ -394,16 +392,17 @@ does not apply uniformly to every component that the layer serves.
 
 \subsection{Deduplication in Other Kernel Contributions}\label{subsec:lore-techniques}
 
-To validate and expand the findings of our participant observation, we identified the refactoring techniques applied in the mailing-list series related to code duplication. Since a series may apply more than one technique, we count technique applications rather than series. Figure~\ref{fig:refactoring-heatmap} compares the share of each technique among these applications with the share among our submissions, showing whether the techniques observed in our 30 contributions also appear beyond the ones we followed and which new ones emerge.
+To validate and expand the findings of our participant observation, we identified the refactoring techniques applied in the mailing-list series related to code duplication. Since a series may apply more than one technique, we count technique applications rather than series.
+%Figure~\ref{fig:refactoring-heatmap} compares the share of each technique among these applications with the share among our submissions, showing whether the techniques observed in our 30 contributions also appear beyond the ones we followed and which new ones emerge.
 
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=\columnwidth]{figures/refactoring_heatmap_relative.pdf}
-  \caption{Share of contributions that apply each refactoring technique: our submitted series and the mailing-list threads. A thread with several changes counts once per technique.}
-  \label{fig:refactoring-heatmap}
-\end{figure}
+% \begin{figure}[!t]
+%   \centering
+%   \includegraphics[width=\columnwidth]{figures/refactoring_heatmap_relative.pdf}
+%   \caption{Share of contributions that apply each refactoring technique: our submitted series and the mailing-list threads. A thread with several changes counts once per technique.}
+%   \label{fig:refactoring-heatmap}
+% \end{figure}
 
-Extract Function was the most frequent technique overall in both sources. The techniques applied in our submissions also account for most of the applications in the mailing lists, including those related to the IOMMU and I2C subsystems, where we did not submit patches. Thus, the techniques we applied are also used by contributors outside our group and in subsystems beyond those included in our observations, indicating that these techniques are not specific to our contributions or the subsystems we observed.
+Extract Function was the most frequent technique overall in both datasets, accounting for a third of the applications in our corpus and remaining the most common in the mailing lists. The techniques applied in our submissions also accounted for most of the applications in the broader sample, including those related to the IOMMU and I2C subsystems, where we did not submit patches.
 
 The mailing lists also revealed techniques that none of our submissions applied, namely Remove Dead Code, Pull Up Field, and Slide Statements. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer. ArKanjo reports function-level clones, so changes to fields and statements fall outside its reach; in some cases, they appear as preparatory steps for a later extraction.
 
