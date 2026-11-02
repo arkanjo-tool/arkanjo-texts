@@ -125,22 +125,19 @@ Linux kernel, Deduplication, Technical Debt, Refactoring
 
 Developers often reuse existing code by copying, pasting, and adapting it, a practice that accompanies the evolution of large, long-lived systems~\cite{kumar2016bigclones}. The resulting duplication is a well-known code smell~\cite{fowler2018refactoring} and, as such, a form of technical debt~\cite{kruchten2012technical}, whose cost is paid during maintenance. A change to one copy, such as a bug fix, must be propagated to all the others, and inconsistent changes to clones that should evolve together are a known source of faults~\cite{juergens2009clones}.
 
-Linus's Law states that ``given enough eyeballs, all bugs are shallow''~\cite{raymond1999cathedral}.
-In the Linux kernel, part of this examination takes place in a well-established and rigorous review process, in which patches are publicly reviewed on mailing lists before integration and only about a third of them are eventually accepted~\cite{jiang2013patch}.
-Extending this reasoning to technical debt, such a process would also be expected to catch duplicated code before it is merged, leaving few opportunities for simple deduplication.
+Linus's Law states that \textit{``given enough eyeballs, all bugs are shallow''}~\cite{raymond1999cathedral}.
+In its birthplace, the Linux kernel, this law manifests as a well-established and rigorous review process, in which contributions (called \textit{patches}) are publicly reviewed on mailing lists before integration~\cite{linux_process_mailinglist}, and only about a third are accepted~\cite{jiang2013patch}.
+Extending this reasoning to technical debt, such a process would also be expected to catch, for instance, duplicated code before it is merged, leaving few opportunities for simple deduplication.
 This expectation, however, does not seem to hold, as duplicated code, from small fragments to entire files and directories, is still found in the kernel~\cite{kumar2016bigclones}.
 
-In this context, we investigate how duplication debt is repaid in practice in the Linux kernel, examining which refactoring techniques developers use to remove clones and how maintainers respond to deduplication patches during review.
+In this context, we investigate how the Linux community manages duplication debt by examining how it attributes the \textit{interest} and \textit{principal}~\cite{seaman2011measuring} of code clones and proposed repayments.
 To this end, we draw on two sources of evidence.
-First, we conducted an ethnographic study based on participant observation in the AMDGPU and IIO subsystems, in which we submitted deduplication patches ourselves and also followed the review of patches submitted by students during a university course. We qualitatively analyzed these 30 contributions, classifying, according to Fowler's refactoring catalog~\cite{fowler2018refactoring},  the techniques they applied. Second, we mined the kernel mailing lists for clone refactorings, using a broad regular expression over duplication-related keywords that retrieved 207 threads, which we manually analyzed to retain only those actually concerned with code duplication, resulting in 71 threads. We then quantitatively analyzed the refactoring techniques applied in these contributions, using the same catalog, to validate and expand the findings of the ethnographic study.
+First, we conducted an ethnographic study in the AMDGPU and IIO subsystems, in which we submitted 30 deduplication patches and followed their review process. For each, we qualitatively analyzed and classified the techniques applied according to Fowler's refactoring catalog~\cite{fowler2018refactoring}. Second, we mined the kernel mailing lists, filtering for clone refactorings, resulting in the selection of 71 threads. We then quantitatively analyzed the refactoring techniques applied, using the same catalog, to validate and expand on the ethnographic study's findings.
 
-In the ethnographic study, maintainers were more reluctant to accept deduplications that introduced new abstractions than those that reused abstractions already available in the kernel.
-In both sources, Extract Function was the most frequently applied technique. These findings suggest that deduplication is a suitable entry point for contributors with less experience in the kernel, since, although it requires understanding the duplicated code and its context, it involves relatively low complexity and can often be addressed with simple refactoring techniques. They also indicate that, despite its rigorous review process, the Linux kernel still carries duplication debt that is cheap to repay. With this study, we aim to draw attention to the duplication debt that remains to be repaid in the Linux kernel and to offer insights into how it can be addressed.
+From our results, we highlight: (1) duplication debt is present throughout the Linux project and often explicitly acknowledged by the community; (2) maintainers were more reluctant to accept repayments that introduced new kernel abstractions than those that reused existing ones; and (3) basic refactoring techniques, like \textit{Extract Function}, were the most applied in accepted repayments.
+Among other things, these findings suggest that, despite the rigorous review process, duplication debts with low principal and low interest that are reasonably cheap to repay exist for different reasons, e.g., prioritization of repayments, fostering new contributors, and the distributed nature of the project. In this sense, a suitable entry point for contributors with less experience in the kernel is deduplication patches, which can often be addressed with simple refactoring techniques and are valuable to the Linux community.
 
-%TODO:
-%``cheap to repay''
-%
-%acho que poderia ser alterado esse termo, pois, considerando a quantidade de versões, pode não ser tão fácil, pelos números, está mais próximo de patches pequenos.
+With this study, we aim to draw attention to the management of duplication debt that remains to be repaid in the Linux kernel and to offer insights into how it can be addressed.
 
 \section{Related work}\label{sec:related_work}
 
