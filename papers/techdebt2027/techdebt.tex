@@ -146,7 +146,7 @@ Wang and Godfrey~\cite{wang2014intentional} searched Linux kernel commit message
 Other studies proposed ways of reducing duplication in the kernel.
 Kadav and Swift~\cite{kadav2012drivers} found that 8\% of driver code is very similar to other driver code and suggested procedural abstraction, better support for multiple chipsets, and table-driven programming to reduce it. Yu and Ramaswamy~\cite{yu2008modularity} classified 903 clone sets into three categories and suggested library functions, aspects, or no change, depending on the category. Kumar et al.~\cite{kumar2016bigclones} represented duplicated files and directories as templates in a layer above the code, reducing redundant code by 30--50\% in the groups they studied. These techniques were proposed by researchers who analyzed the code from the outside, and none of these studies reports submitting the changes to kernel maintainers. In contrast, we study techniques applied in real patches submitted to kernel maintainers.
 
-In previous work~[Anonymized] submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four factors under which maintainers tolerate duplication, namely driver-forking (T1), readability (T2), integration overhead (T3), and performance (T4). In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them. We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear or whether new ones emerge.
+In previous work~[Anonymized] submitted deduplication patches to the AMDGPU and IIO subsystems and, from 13 patch series, identified four scenarios under which maintainers tolerate duplication, namely driver-forking (T1), readability (T2), integration overhead (T3), and performance (T4). In that study, the refactoring used in each contribution appears only as part of the account of each review, without being characterized or compared. We follow the same participant observation approach and expand the sample to 30 contributions, focusing on the techniques they apply and on how maintainers receive them. We also analyze contributions from the kernel mailing lists, to check whether the same techniques appear or whether new ones emerge.
 
 \section{Methodology}\label{sec:methodology}
 
@@ -387,11 +387,11 @@ behavior, and the technique changed accordingly, to Replace Inline Code with Fun
 Although the outcomes are different, the main concern is the same in all three cases. 
 The shared code either did not belong to the proposed layer or
 did not apply uniformly to every component that layer serves. These cases do
-not fit the four takeaways proposed in previous study~\cite{arcanjo2026repeat}. 
+not fit the four scenarios proposed in previous study~\cite{arcanjo2026repeat}. 
 However they relate to T1, since the objections derive from hardware-specific code, 
 the maintainers did not defend the duplication itself, nor did they invoke 
 readability (T2), integration overhead (T3), or performance (T4). This leads to the 
-fifth takeaway:
+fifth scenario:
 
 \begin{framed}
 \textbf{Takeaway T5 (Abstraction Scope):} Maintainers may reject or redirect
@@ -416,7 +416,7 @@ Extract Function was the most frequent technique in both sources. The techniques
 
 The mailing lists also revealed techniques that none of our submissions applied, namely Remove Dead Code, Pull Up Field, and Slide Statements. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer.
 
-Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the factors of the previous study~\cite{arcanjo2026repeat}.
+Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the scenarios of the previous study~\cite{arcanjo2026repeat}.
 
 Maintainers also took part in choosing the technique. In several series, a maintainer suggested a deduplication that the contributor had not proposed, such as parameterizing a function repeated several times or reusing an implementation already available in the kernel, as also happened in C19 and C20. Consequently, a contributor does not need to identify the right technique beforehand, since the review can point to it.
 
