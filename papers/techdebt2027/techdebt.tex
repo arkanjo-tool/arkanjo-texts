@@ -194,8 +194,8 @@ applied in 10 patch series, followed by Parameterize Function with 6, Substitute
 Replace Inline Code with Function Call with 4, and Pull Up Method with 3.
 These techniques differ in whether they reuse code that already
 exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
-following subsections, we describe how each group of techniques is applied in the kernel and how code 
-review shaped the final form of the submissions.
+following paragraphs, we use representative contributions to describe how each technique is applied in the 
+kernel, and Section~\ref{subsec:how-review-reshapes-the-refactoring} discusses how code review shaped the final form of the submissions.
 
 Most contributions were small. The median contribution removed $31$ lines of code, and 27 of the 30
 removed fewer than $100$. Three contributions (C9, C11, and C29) even added between $1$ and $4$ lines.
@@ -287,81 +287,85 @@ SUGESTAO:
 * Cruzar as tecnicas com os takeaways (e adicionar o takeaway 5), e comentar, como foi feito em ``Introducing New Abstractions'', que uma refatoracao e consequencia de um takeaway: ``a consequence of the driver-forking practice already observed in the subsystem''.
 }
 
-\subsection{Reusing and Simplifying Existing Code}\label{subsec:reusing-and-simplifying}
+\subsection{Ways of removing a clone}\label{subsec:reusing-and-simplifying}
 
-We classified techniques Substitute Algorithm and Replace Inline Code with Function Call 
-as those that reuse or simplify existing code. Unlike the techniques in Section~\ref{subsec:new-abstractions}, 
-they remove the duplication without adding a new layer to the code. Of the 30 patch series, only 9 fall into 
-this group, that is, about 30\%.
+For each technique, we also relate the refactoring to the scenarios under which maintainers
+tolerate duplication, identified in a previous study~[Anonymized] and there called
+takeaways: driver-forking (T1), readability (T2), integration overhead (T3), and performance (T4),
+to which we add abstraction scope (T5) in Section~\ref{subsec:how-review-reshapes-the-refactoring}.
+The techniques that reuse and simplify existing code, Replace Inline Code with Function Call and Substitute 
+Algorithm, were also the ones most easily accepted: 8 of their 9 contributions were accepted, 
+against 9 of the 19 contributions that introduce a new abstraction\footnote{C3 and C24 were not assigned a deduplication technique and are not counted in either group.}.
+We describe the techniques grouped by how they remove the clone: extracting the repeated code,
+reusing what already exists, substituting the algorithm, and parameterizing similar functions.
 
-When the duplicated function already exists in another hardware version, the reuse happens through
-the function pointer tables that each version uses to register its callbacks. In contribution C20, the contributor found that
-\texttt{jpeg\_v3\_0} had an interrupt handler identical to the one in \texttt{jpeg\_v2\_0} and, 
-following a maintainer's suggestion, simply pointed \texttt{jpeg\_v3\_0\_irq\_funcs} to the previous version's
-function, removing the duplicate. In this case, no new code is needed.
+Extract Function, the most frequent technique, only requires moving the repeated fragment into a new
+function and calling it from each copy. In IIO, the duplicated functions belonged to the same driver,
+so the new function simply stayed in the same file. In AMDGPU, the copies were spread across hardware
+versions as a consequence of driver-forking (T1), and the new function was placed in a generic layer
+already shared by these versions, such as \texttt{amdgpu\_gfx.c} and \texttt{amdgpu\_gmc.c}. 
+In C22, this was enough to remove the duplication: the maintainers agreed that nothing 
+in the function was specific to a hardware generation, recognized that it was ``probably just 
+copy and pasted over when we brought up gfx12'', and accepted the patch series. 
+In C25, the duplicated functions were also identical, but the maintainer stated that they
+were intentionally kept separated for each generation, and the patch series was rejected. Both
+duplications derive from driver-forking (T1), but only the first was accidental. Thus, extracting the
+function is the simple part of the task, while what requires attention from the contributor is checking
+whether the duplication was intended.
 
-In the Substitute Algorithm patch series, the duplicated code was usually a sequence of \texttt{switch} cases that mapped 
-values in a very similar way. Contributions C13, C17, and C23 replaced these \texttt{switch} cases 
-with lookup tables, so the mapping is described as data instead of control flow. However, this change is 
-not always seen as an obvious improvement. In contribution C23, a maintainer questioned whether the new table 
-was really less prone to errors and concluded that the advantage was ``rather the reduction in verbosity''. 
-Thus, a lookup table is accepted when it makes the mapping easier to read, as in C23, but C13 was 
-dropped after the maintainer judged that the code reduction did not compensate for the loss of 
-readability, which is directly related to scenario (T2)~[Anonymized].
-%Pensando em apagar isso:
-%Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
-%them was replaced by the negation of the other. In this case, the refactoring does not change the way we see 
-%the \texttt{switch} statement, but changes how the existing logic is expressed, and whether it is better depends 
-%on how readable the result is.
+Pull Up Method, in turn, moves a whole duplicated function, rather than only a fragment, to a shared
+place and can remove a large amount of code with a simple change. In C2, the \texttt{hpd\_ack()} function
+was duplicated, with minimal changes, in the drivers of several GPU generations, a consequence of driver
+forking (T1)~[Anonymized], and the contributor replaced these copies with two library functions
+that covered all cases, which was accepted. In C28, however, the same technique was rejected precisely
+because of driver-forking (T1): one maintainer initially accepted the patch series, but another dropped it,
+arguing that keeping the code independent for each generation had avoided problems in the past.
 
-% acho que a tecnica de Inline Function nao pode ser tratada como deduplicacao
-%Besides that, deduplication does not always mean creating a new function. In contribution C24, the contributor applied TEC6 and 
-%went in the different direction by following the maintainer's comments, it removed helper functions and incorporated 
-%their logic directly where they were used. One of the maintainers noted that it was ``a helper that doesn't necessarily 
-%add much value''. Here, the duplication was in the helper itself, and removing it made the code simpler 
-%(according to the maintainer himself). This shows that a helper function is not always positive, and it is necessary 
-%to examine case by case.
+Replace Inline Code with Function Call removes the duplication without writing any new code, since
+the function that replaces the repeated code already exists and the contributor only needs to call it.
+Noticing that the repeated code can be replaced by an existing function, however, requires some
+investigation of the subsystem, and maintainers can point it out during review. In C20, the contributor 
+found that the interrupt handler of \texttt{jpeg\_v3\_0} was identical to the one in 
+\texttt{jpeg\_v2\_0} and, following a maintainer's suggestion, pointed the callback table of the 
+newer version to the older function, removing the duplicate. This duplication
+is a consequence of driver-forking (T1), as the newer hardware version kept its own copy of a function
+already implemented for the previous one. In IIO, C12 applied the same technique by replacing 
+duplicated functions with calls to SPI helpers already available in the kernel. 
+The only exception was a single occurrence that reads large buffers, which, at the maintainer's 
+request, kept using an internal helper, since the generic ones would harm performance (T4)~[Anonymized].
 
-\subsection{Introducing New Abstractions}\label{subsec:new-abstractions}
+Substitute Algorithm was also simple to apply when the duplicated code was a sequence of \texttt{switch}
+cases that mapped values in a very similar way. In these cases, the contributor only had to list the
+values of each case in a lookup table, so that the mapping is described as data instead of control flow.
+In C23, a maintainer questioned whether the new table was really less prone to errors than the \texttt{switch}
+cases, but concluded that its advantage was ``rather the reduction in verbosity'', and the patch series
+was accepted. The same replacement also scales to larger changes, as in C17, the largest contribution
+in our corpus, which was accepted in its first version. Since the gain of this technique comes mostly in
+readability (T2), the same scenario can also work against it: in C13, the maintainer judged that the
+code reduction did not compensate for the loss of readability, and the patch series was rejected.
 
-The remaining techniques, Extract Function, Parameterize Function, and Pull Up Method, are those that 
-somehow add a new layer to the code: a new function, a function moved to a shared file, or a more general 
-function that combines the duplicated ones through parameters. These techniques were the most common 
-in our corpus, with 19 of the 30 patch series, that is, about 63\%.
+Parameterize Function, which appeared only in IIO, merges similar functions into a single one that
+receives their difference as a parameter. In C6, the two functions differed only in the type of
+\texttt{struct} they used, so the contributor passed a generic \texttt{struct} as a parameter, and the
+patch was accepted in its first version, also fixing a bug. The simplicity of
+this technique, however, depends on how the parameter is added. In C29, the common function received a
+boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: ``Here and
+below the function is completely uglified. Even kernel documentation suggests to avoid bool parameters
+like this.'' Besides this readability concern (T2), another maintainer noted that a deduplication that
+adds lines to the code, as C29 did, should be questioned, which relates to whether the change is worth
+integrating (T3). Thus, a parameter works well when it captures the only difference between the
+functions, as in C6, and not when it becomes a flag that the reader must follow inside the shared function.
 
-For Extract Function, the main difference between the two subsystems is where the extracted function is placed. 
-In the IIO contributions C4, C10, and C11, the duplicated functions belonged to the 
-same driver, and the common function stayed in the same file. In AMDGPU, all Extract Function patch series dealt 
-with functions duplicated across different hardware versions, a consequence of the driver-forking (T1) practice already 
-observed in the subsystem~[Anonymized]. In these cases, the common function was moved to a generic layer shared by
-all hardware versions, such as \texttt{amdgpu\_gfx.c} (contributions C21, C22, and C27) and \texttt{amdgpu\_gmc.c} (contributions C25 and C26), or to a 
-proposed new file (C18). This shows that, in AMDGPU, extracting a function also means choosing a place for it in the driver 
-architecture, and, as discussed in Section~\ref{subsec:how-review-reshapes-the-refactoring}, new files proposed by the 
-patch series were removed during review.
-
-Being identical, however, is not enough for a function to be moved to the generic layer. In contribution C22, the 
-maintainers agreed that there was nothing specific to the hardware generation in the function and recognized 
-that it was ``probably just copy and pasted over when we brought up gfx12''. In contribution C25, the duplicated functions 
-were also identical, but the maintainer stated that they were intentionally kept separated for each generation. 
-In practice, what decides if the code can be shared is whether its behavior belongs to a single hardware generation 
-or to all of them, which the textual similarity alone does not show.
-
-Parameterize Function appeared only in IIO, and how the parameter is added matters. 
-In contribution C6, the two functions differed only in the type of \texttt{struct} they used, and the contributor passed a 
-generic \texttt{struct} as a parameter, which was accepted. In C29, the common function received a 
-boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: ``Here and below 
-the function is completely uglified. Even kernel documentation suggests to avoid bool parameters like this.'' 
-In C9, the parameter forced the reader to look both at the function and at where the value was 
-set~[Anonymized]. Both series were dropped for readability reasons (T2).
-
-Pull Up Method differs from Extract Function in how much of the duplicated code becomes shared. 
-In Extract Function, only part of a function becomes a new shared function, whereas in Pull Up Method the 
-whole duplicated function is moved to a shared place. Contribution C2 illustrates this technique in the AMDGPU 
-display code, where the \texttt{hpd\_ack()} function was duplicated, with minimal changes, in the drivers of 
-several GPU generations. Instead of extracting parts of these copies, the contributor replaced them with two library 
-functions that covered all cases, so that each generation calls the shared implementation instead of keeping 
-its own copy.
-%Poderia falar de driver-forking aqui tambem, mas acho que ficaria mta coisa repetindo o artigo antigo, não?
+Overall, the techniques we observed are well-known and result in localized changes, so a contributor
+does not need complex refactorings to repay duplication debt in the kernel. What requires more attention
+is checking, before sending the patch, the scenario in which the duplication exists: whether it is
+intentional (T1), whether the result remains readable (T2), whether the improvement justifies the effort
+of integrating it (T3), whether the code lies on a performance-sensitive path (T4), and whether the
+shared code applies to every component that the target layer serves (T5). These scenarios are not fixed
+rules, since maintainers of the same subsystem disagreed on them, as in C28. Table~\ref{tab:recipes} 
+summarizes, for each technique, a simple case from our corpus and what to check before sending the 
+patch. Moreover, code review often reshapes the refactoring itself, showing how the maintainers' 
+knowledge of the subsystem can influence the final form of a contribution.
 
 \subsection{How Review Reshapes the Refactoring}\label{subsec:how-review-reshapes-the-refactoring}
 % Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": 
