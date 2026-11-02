@@ -289,7 +289,7 @@ with lookup tables, so the mapping is described as data instead of control flow.
 not always seen as an obvious improvement. In contribution C23, a maintainer questioned whether the new table 
 was really less prone to errors and concluded that the advantage was ``rather the reduction in verbosity''. 
 Thus, a lookup table is accepted when it makes the mapping easier to read, as in C23, but C13 was 
-rejected because the maintainer judged that the code reduction did not compensate for the loss of 
+dropped after the maintainer judged that the code reduction did not compensate for the loss of 
 readability, which is directly related to scenario (T2)~\cite{arcanjo2026repeat}.
 %Pensando em apagar isso:
 %Group G5 took a different path: since the two duplicated functions returned opposite values, one of 
@@ -335,7 +335,7 @@ generic \texttt{struct} as a parameter, which was accepted. In C29, the common f
 boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: ``Here and below 
 the function is completely uglified. Even kernel documentation suggests to avoid bool parameters like this.'' 
 In C9, the parameter forced the reader to look both at the function and at where the value was 
-set~\cite{arcanjo2026repeat}. Both series were rejected for readability reasons (T2).
+set~\cite{arcanjo2026repeat}. Both series were dropped for readability reasons (T2).
 
 Pull Up Method differs from Extract Function in how much of the duplicated code becomes shared. 
 In Extract Function, only part of a function becomes a new shared function, whereas in Pull Up Method the 
@@ -377,7 +377,7 @@ the hardware-specific decoding remained in each generation's own function.
 In C19, review changed both the scope and the technique. The first version 
 made \texttt{jpeg\_v5\_0\_1.c} and \texttt{jpeg\_v5\_0\_2.c} share a common 
 interrupt routine placed in a new file, \texttt{jpeg\_v5\_0\_interrupt.c}. 
-This proposal was rejected in the first review because the routine was not 
+This proposal was dropped in the first review because the routine was not 
 common to the whole family and the maintainer pointed ``This is not common to 
 jpeg v5. jpeg\_v5\_0\_0.c has a different interrupt handler''. The maintainer then 
 suggested a narrower alternative: ``I would just make the implementation in 
