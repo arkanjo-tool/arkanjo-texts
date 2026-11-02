@@ -329,7 +329,9 @@ be questioned (T3). In our cases, parameterizing worked when the parameter captu
 between the functions, as in C6, and not when it became a flag or moved the point where the behavior is
 decided away from the reader.
 
-Overall, the techniques we observed are well known and result in localized changes. What the reviews add is why a clone was not removed: it was kept on purpose (T1), the result would be harder to read (T2), the gain did not justify the integration effort (T3), or the shared code would sit on a performance-sensitive path (T4). These scenarios are not fixed rules, since maintainers of the same subsystem disagreed on them, as in C28. Table~\ref{tab:recipes}  relates each technique to an accepted case and to the concerns raised in the others. Moreover, code review often reshapes the refactoring itself, showing how the maintainers' knowledge of the subsystem can influence the final form of a contribution.
+Overall, the techniques we observed are well known and result in localized changes. What the reviews add is why a clone was not removed: it was kept on purpose (T1), the result would be harder to read (T2), the gain did not justify the integration effort (T3), or the shared code would sit on a performance-sensitive path (T4). These scenarios are not fixed rules, since maintainers of the same subsystem disagreed on them, as in C28.
+%Table~\ref{tab:recipes}  relates each technique to an accepted case and to the concerns raised in the others.
+Moreover, code review often reshapes the refactoring itself, showing how the maintainers' knowledge of the subsystem can influence the final form of a contribution.
 
 \subsection{How Review Reshapes the Refactoring}\label{subsec:how-review-reshapes-the-refactoring}
 % Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": 
@@ -407,26 +409,26 @@ Maintainers also took part in choosing the technique. In several series, a maint
 
 In summary, the mailing lists showed the same short list of basic techniques, led by Extract Function, in subsystems we did not observe, with maintainers helping to choose the technique.
 
-\subsection{Implications for New Contributors}\label{subsec:implications}
+% \subsection{Implications for New Contributors}\label{subsec:implications}
 
-The observed refactorings also provide practical insights for contributors seeking to address code duplication in the kernel. Table~\ref{tab:recipes} summarizes how the identified techniques were applied in representative contributions and the main aspects that maintainers considered during review. These examples illustrate relatively localized changes that contributors can explore, while highlighting the importance of checking behavioral equivalence, readability, and architectural boundaries.
+% The observed refactorings also provide practical insights for contributors seeking to address code duplication in the kernel. Table~\ref{tab:recipes} summarizes how the identified techniques were applied in representative contributions and the main aspects that maintainers considered during review. These examples illustrate relatively localized changes that contributors can explore, while highlighting the importance of checking behavioral equivalence, readability, and architectural boundaries.
 
-\begin{table}[!b]
-\centering
-\caption{How Refactoring Techniques Were Accepted and What Concerns Were Raised in Review.}
-\label{tab:recipes}
-\begin{tabularx}{\columnwidth}{ >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X }
-\toprule
-\textbf{Technique} & \textbf{Accepted case} & \textbf{Concern raised in review} \\
-\midrule
-Repl. Inline Code & The callback table points to an existing handler (C20). & One call retained an internal helper instead of using the existing handler (C12). \\
-Param. Func. & Functions differ only in the type of a struct parameter (C6). & Readability, scattered logic, and additional lines were raised as concerns (C5, C9, C29). \\
-Extract Func. & Code is duplicated across hardware generations (C22). & Some copies were intentionally retained (C25). Concerns were also raised about helper naming and limited benefits (C4). \\
-Subst. Algorithm & A lookup table reduces verbosity compared to repeated \texttt{switch} statements (C23). & The replacement may compromise readability (C13). \\
-Pull Up Method & An entire function is shared across hardware generations (C2). & Maintaining independence between generations was raised as a concern (C28). \\
-\bottomrule
-\end{tabularx}
-\end{table}
+% \begin{table}[!b]
+% \centering
+% \caption{How Refactoring Techniques Were Accepted and What Concerns Were Raised in Review.}
+% \label{tab:recipes}
+% \begin{tabularx}{\columnwidth}{ >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X }
+% \toprule
+% \textbf{Technique} & \textbf{Accepted case} & \textbf{Concern raised in review} \\
+% \midrule
+% Repl. Inline Code & The callback table points to an existing handler (C20). & One call retained an internal helper instead of using the existing handler (C12). \\
+% Param. Func. & Functions differ only in the type of a struct parameter (C6). & Readability, scattered logic, and additional lines were raised as concerns (C5, C9, C29). \\
+% Extract Func. & Code is duplicated across hardware generations (C22). & Some copies were intentionally retained (C25). Concerns were also raised about helper naming and limited benefits (C4). \\
+% Subst. Algorithm & A lookup table reduces verbosity compared to repeated \texttt{switch} statements (C23). & The replacement may compromise readability (C13). \\
+% Pull Up Method & An entire function is shared across hardware generations (C2). & Maintaining independence between generations was raised as a concern (C28). \\
+% \bottomrule
+% \end{tabularx}
+% \end{table}
 
 \section{Concluding Remarks}\label{sec:conclusion}
 
