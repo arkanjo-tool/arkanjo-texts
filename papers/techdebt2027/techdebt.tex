@@ -135,7 +135,7 @@ To this end, we draw on two sources of evidence.
 First, we conducted an ethnographic study in the AMDGPU and IIO subsystems, in which we submitted 30 deduplication patches and followed their review process. For each, we qualitatively analyzed and classified the techniques applied according to Fowler's refactoring catalog~\cite{fowler2018refactoring}. Second, we mined the kernel mailing lists, filtering for clone refactorings, resulting in the selection of 71 threads. We then quantitatively analyzed the refactoring techniques applied, using the same catalog, to validate and expand on the ethnographic study's findings.
 
 From our results, we highlight: (1) duplication debt is present throughout the Linux project and often explicitly acknowledged by the community; (2) maintainers were more reluctant to accept repayments that introduced new kernel abstractions than those that reused existing ones; and (3) basic refactoring techniques, like \textit{Extract Function}, were the most applied in accepted repayments.
-Among other things, these findings suggest that, despite the rigorous review process, duplication debts with low principal and low interest that are reasonably cheap to repay exist for different reasons, e.g., prioritization of repayments, fostering new contributors, and the distributed nature of the project. In this sense, a suitable entry point for contributors with less experience in the kernel is deduplication patches, which can often be addressed with simple refactoring techniques and are valuable to the Linux community.
+Among other things, these findings suggest that, despite the rigorous review process, duplication debts with low principal and low interest that are reasonably cheap to repay exist for different reasons, e.g., the distributed nature of the project, fostering new contributors, and prioritization of repayments. In this sense, a suitable entry point for contributors with less experience in the kernel is deduplication patches, which can often be addressed with simple refactoring techniques and are valuable to the Linux community.
 
 With this study, we aim to draw attention to the management of duplication debt that remains to be repaid in the Linux kernel and to offer insights into how it can be addressed.
 
@@ -184,35 +184,12 @@ Finally, we analyzed this sample quantitatively, counting how often each techniq
 
 \section{Results and Discussion}\label{sec:results-and-discussion}
 
-We classified the 30 patch series for code deduplication according to the refactoring techniques they apply, using Fowler's 
-catalog~\cite{fowler2018refactoring}. Five techniques appear in our corpus (Table~\ref{lbl:patches-summary}): Extract Function is the most frequent,
-applied in 10 patch series, followed by Parameterize Function with 6, Substitute Algorithm with 5,
-Replace Inline Code with Function Call with 4, and Pull Up Method with 3.
-These techniques differ in whether they reuse code that already
-exists in the kernel or introduce a new abstraction, and in where the shared code is placed. In the 
-following paragraphs, we use representative contributions to describe how each technique is applied in the 
-kernel, and Section~\ref{subsec:how-review-reshapes-the-refactoring} discusses how code review shaped the final form of the submissions.
+From the participant observation, five techniques from Fowler's catalog~\cite{fowler2018refactoring} appear in our corpus (Table~\ref{lbl:patches-summary}): \textit{Extract Function} is the most frequent, applied in 10 patch series, followed by \textit{Parameterize Function} with 6, \textit{Substitute Algorithm} with 5, \textit{Replace Inline Code with Function Call} with 4, and \textit{Pull Up Method} with 3. These techniques differ in whether they reuse existing kernel code or introduce a new abstraction, and in where the shared code is placed.
 
-Most contributions were small. The median contribution removed $31$ lines of code, and 27 of the 30
-removed fewer than $100$. Three contributions (C9, C11, and C29) even added between $1$ and $4$ lines.
-Large series were not a barrier (the three largest, C1, C2, and C17, were accepted), but very small
-ones were dropped more often; five of the 12 dropped series removed at most $10$ lines, compared with
-two of the 18 accepted.
-
-%%%%
-% EXPLICAÇÃO TAKEAWAYS
-% 
-% também pode virar uma tabela
-%%%%
-%TODO:
-% \todo{esse parágrafo pode ser removido se nós não usarmos os takeaways nos resultados.}
-Scenarios T1-T4 come from our previous study~[Anonymized] (called takeaways there): drivers are cloned on purpose to give new hardware a starting point and keep drivers independent (T1); maintainers prefer the clearer code over the shorter one (T2); the gain is too small to justify the upstreaming effort (T3); and duplication stays where abstracting it would slow the code (T4). To these, we add the scope of abstraction (T5) in Section \ref{subsec:how-review-reshapes-the-refactoring}.
-%%%%
-
-\begin{table}[!t]
+\begin{table}[ht]
 \centering
 \begin{threeparttable}
-  \caption{Summary of Newcomer Deduplication Contributions\tnote{\textup{a}}.}
+  \caption{Summary of Participant Observation Contributions\tnote{\textup{a}}.}
   \label{lbl:patches-summary}
 \begin{tabularx}{\columnwidth}{ c c l X c }
 \toprule
@@ -255,162 +232,80 @@ C30 & IIO & Dropped\hfill(v2) & Param. Func. & $+42\,/\!-\!60$ \\
 \end{tabularx}
 \begin{tablenotes}[flushleft]
 \footnotesize
-\item[a] A table summarizing contributions, including subsystem (AMD or IIO), series status (Accepted or Dropped), refactoring techniques based on Fowler's refactoring catalog~\cite{fowler2018refactoring}, and code differentials showing lines added and removed.
+\item[a] Table summarizing contributions, including subsystem (AMD or IIO), series status (Accepted or Dropped), refactoring techniques based on Fowler's refactoring catalog, and lines added and removed.
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
+
+Section~\ref{subsec:reusing-and-simplifying} uses representative contributions to describe how each technique is applied in the kernel, Section~\ref{subsec:how-review-reshapes-the-refactoring} discusses how code review shaped the final form of the submissions, and Section~\ref{subsec:lore-techniques} crosses the findings of the participant observation with what was detected in the mailing list mining.
+
+% Most contributions were small. The median contribution removed $31$ lines of code, and 27 of the 30 removed fewer than $100$. Three contributions (C9, C11, and C29) even added between $1$ and $4$ lines. Large series were not a barrier (the three largest, C1, C2, and C17, were accepted), but very small ones were dropped more often; five of the 12 dropped series removed at most $10$ lines, compared with two of the 18 accepted.
+
+%%%%
+% EXPLICAÇÃO TAKEAWAYS
+% 
+% também pode virar uma tabela
+%%%%
+%TODO:
+% \todo{esse parágrafo pode ser removido se nós não usarmos os takeaways nos resultados.}
+% Scenarios T1-T4 come from our previous study~[x] (called takeaways there): drivers are cloned on purpose to give new hardware a starting point and keep drivers independent (T1); maintainers prefer the clearer code over the shorter one (T2); the gain is too small to justify the upstreaming effort (T3); and duplication stays where abstracting it would slow the code (T4). To these, we add the scope of abstraction (T5) in Section \ref{subsec:how-review-reshapes-the-refactoring}.
+%%%%
 
 %NOTE:
 % * Simplificar a apresentacao das tecnicas: usa-las para caracterizar formas de resolver duplicacoes (extrair uma funcao, reutilizar uma implementacao existente, trocar codigo repetido por chamada de funcao, parametrizar), mostrando que sao mudancas localizadas, e evitar tratar cada tecnica como contribuicao em si ou gastar espaco com definicoes.
 
 \subsection{Ways of removing a clone}\label{subsec:reusing-and-simplifying}
 
-The techniques that reuse and simplify existing code, Replace Inline Code with Function Call and Substitute 
-Algorithm, were also the ones most easily accepted: 8 of their 9 contributions were accepted, 
-against 9 of the 19 contributions that introduce a new abstraction\footnote{C3 and C24 were not assigned a deduplication technique and are not counted in either group.}.
-We describe the techniques grouped by how they remove the clone: extracting the repeated code,
-reusing what already exists, substituting the algorithm, and parameterizing similar functions.
+The techniques that reuse and simplify existing code, Replace Inline Code with Function Call and Substitute Algorithm, were also the ones most easily accepted: 8 of their 9 contributions were accepted, compared with 9 of the 19 contributions that introduce a new abstraction\footnote{C3 and C24 were not assigned a deduplication technique and are not counted in either group}. We describe the techniques grouped by how they remove the clone: extracting the repeated code, reusing what already exists, substituting the algorithm, and parameterizing similar functions.
 
-Extract Function, the most frequent technique, only requires moving the repeated fragment into a new
-function and calling it from each copy. In IIO, duplicated functions were part of the same driver,
-so the new function simply remained in the same file. In AMDGPU, the copies were spread across hardware
-versions due to driver-forking (T1), and the new function was placed in a generic layer
-already shared by these versions, such as \texttt{amdgpu\_gfx.c} and \texttt{amdgpu\_gmc.c}. 
-In C22, this was enough to remove the duplication: the maintainers agreed that nothing 
-in the function was specific to a hardware generation, one of them speculated that it was ``probably just 
-copy and pasted over when we brought up gfx12'', and accepted the patch series. 
-In C25, the duplicated functions were also identical, but the maintainer stated that they
-were intentionally kept separated for each generation, and the patch series was rejected. Both
-duplications derive from driver-forking (T1), but only the first appears to have been accidental. Thus, extracting the
-function is the simple part of the task, while what requires attention from the contributor is checking
-whether the duplication was intended.
+Extract Function, the most frequent technique, only requires moving the repeated fragment into a new function and calling it from each copy. In IIO, duplicated functions were part of the same driver, so the new function simply remained in the same file. In AMDGPU, the copies were spread across hardware versions due to driver-forking, and the new function was placed in a generic layer already shared by these versions, such as \texttt{amdgpu\_gfx.c} and \texttt{amdgpu\_gmc.c}. In C22, this was enough to remove the duplication: the maintainers agreed that nothing in the function was specific to a hardware generation; one of them speculated that it was \textit{``probably just copy and pasted over when we brought up gfx12''}, and accepted the patch series. In C25, the duplicated functions were also identical, but the maintainer stated that they were intentionally kept separated for each generation, and the patch series was rejected. Both duplications derive from driver-forking, but only the first appears to have been accidental. Thus, extracting the function is the simple part of the task, while what requires the contributor's attention is checking whether the duplication was intended.
 
-Extract Function was not always the easy case. C4 was dropped because the new helper was questioned, and the gain was seen as too small to justify the upstreaming effort (T2, T3). The status ``Dropped'' therefore covers explicit rejection as well as series that stopped.
+Extract Function was not always an easy case. C4 was dropped because the new helper was questioned, and the gain was seen as too small to justify the upstreaming effort. The status \texttt{Dropped} therefore covers both explicit rejection and series that have stopped.
 
-Pull Up Method, in turn, moves a whole duplicated function, rather than just a fragment, to a shared
-place and can remove a large amount of code with a simple change. In C2, the \texttt{hpd\_ack()} function
-was duplicated, with minimal changes, in the drivers of several GPU generations, a consequence of driver
-forking (T1)~[Anonymized], and the contributor replaced these copies with two library functions
-that covered all cases, which was accepted. In C28, however, the same technique was rejected precisely
-because of driver-forking (T1): one maintainer initially accepted the patch series, but another dropped it,
-arguing that keeping the code independent for each generation had avoided problems in the past.
+Pull Up Method, in turn, moves a whole duplicated function, rather than just a fragment, to a shared place and can remove a large amount of code with a simple change. In C2, the \texttt{hpd\_ack()} function was duplicated, with minimal changes, in the drivers of several GPU generations, a consequence of driver forking, and the contributor replaced these copies with two library functions that covered all cases, which was accepted. In C28, however, the same technique was rejected precisely because of driver-forking: one maintainer initially accepted the patch series, but another dropped it, arguing that keeping the code independent for each generation had avoided problems in the past.
 
-Replace Inline Code with Function Call removes the duplication without writing any new code, since
-the function that replaces the repeated code already exists and the contributor only needs to call it.
-Noticing that an existing function can replace the repeated code, however, requires some
-investigation of the subsystem, and maintainers can point it out during review. In C20, the contributor 
-found that the interrupt handler of \texttt{jpeg\_v3\_0} was identical to the one in 
-\texttt{jpeg\_v2\_0} and, following a maintainer's suggestion, pointed the callback table of the 
-newer version to the older function, removing the duplicate. This duplication
-is a consequence of driver-forking (T1), as the newer hardware version kept its own copy of a function
-already implemented for the previous one. In IIO, C12 applied the same technique by replacing 
-duplicated functions with calls to SPI helpers already available in the kernel. 
-The only exception was a single occurrence that reads large buffers, which, at the maintainer's 
-request, kept using an internal helper since the generic ones would harm performance (T4)~[Anonymized].
+Replace Inline Code with Function Call removes the duplication without writing any new code, since the function that replaces the repeated code already exists and the contributor only needs to call it. Noticing that an existing function can replace the repeated code, however, requires some investigation of the subsystem, and maintainers can point it out during review. In C20, the contributor found that the interrupt handler in \texttt{jpeg\_v3\_0} was identical to that in \texttt{jpeg\_v2\_0} and, following a maintainer's suggestion, pointed the newer version's callback table to the older function, removing the duplicate. This duplication is another consequence of driver-forking, as the newer hardware version kept its own copy of a function already implemented for the previous one. In IIO, C12 applied the same technique by replacing duplicated functions with calls to SPI helpers already available in the kernel. The only exception was a single occurrence that reads large buffers, which, at the maintainer's request, continued to use an internal helper since the generic ones would harm performance~[x].
 
-Substitute Algorithm was also simple to apply when the duplicated code was a sequence of \texttt{switch}
-cases that mapped values in a very similar way. In these cases, the contributor only had to list the
-values of each case in a lookup table, so that the mapping is described as data instead of control flow.
-In C23, a maintainer questioned whether the new table was really less prone to errors than the \texttt{switch}
-cases, but concluded that its advantage was ``rather the reduction in verbosity'', and the patch series
-was accepted. The same replacement also scales to larger changes, as in C17, the largest contribution
-in our corpus, which was accepted in its first version. Since the gain of this technique comes mostly in
-readability (T2), the same scenario can also work against it: in C13, the maintainer judged that the
-code reduction did not compensate for the loss of readability, and the patch series was rejected.
+Substitute Algorithm was also simple to apply when the duplicated code consisted of a sequence of \texttt{switch} cases that mapped values in a very similar way. In these cases, the contributor only had to list the values for each case in a lookup table, so the mapping is described as data rather than control flow. In C23, a maintainer questioned whether the new table was really less prone to errors than the \texttt{switch} cases, but concluded that its advantage was \textit{``rather the reduction in verbosity''}, and the patch series was accepted. The same replacement also scales to larger changes; for example, in C17, the largest contribution in our corpus, it was accepted in its first version. Since the gain of this technique comes mostly in readability, the same scenario can also work against it: in C13, the maintainer judged that the code reduction did not compensate for the loss of readability, and the patch series was rejected.
 
-Parameterize Function, which appeared only in IIO, merges similar functions into a single one that
-receives their difference as a parameter. Only 2 of the 6 series that used it were accepted. In C6, the
-functions differed only in the type of \texttt{struct}, so a generic \texttt{struct} was passed as a parameter,
-and the patch was accepted in its first version, also fixing a bug. The dropped series were questioned on
-readability and gain rather than on correctness (T2). In C5, a maintainer judged that the reduction was not significant
-enough to justify the more complex code. In C9, the main objection was that wrapping the code scattered what used
-to be close together, so the reviewer had to look at the function and at where the value was set. In C29,
-the common function received a boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer
-replied: ``Here and below the function is completely uglified. Even kernel documentation suggests to avoid
-bool parameters like this''. Another maintainer noted that a deduplication that adds lines, as C29 did, should
-be questioned (T3). In our cases, parameterizing worked when the parameter captured the only difference
-between the functions, as in C6, and not when it became a flag or moved the point where the behavior is
-decided away from the reader.
+Parameterize Function, which appeared only in IIO, merges similar functions into a single function that receives their differences as parameters. Only 2 of the 6 series that used it were accepted. In C6, the functions differed only in the type of \texttt{struct}, so a generic \texttt{struct} was passed as a parameter, and the patch was accepted in its first version, also fixing a bug. The dropped series were questioned on readability and gain rather than on correctness. In C5, a maintainer judged that the reduction was not significant enough to justify the more complex code. In C9, the main objection was that wrapping the code scattered what used to be close together, so the reviewer had to look at the function and at where the value was set. In C29, the common function received a boolean parameter (\texttt{is\_accel}) and several levels of pointers, and a maintainer replied: \textit{``Here and below the function is completely uglified. Even kernel documentation suggests to avoid bool parameters like this''}. Another maintainer noted that a deduplication that adds lines, as C29 did, should be questioned. In our cases, parameterizing worked when the parameter captured the only difference between the functions, as in C6, and not when it became a flag or shifted the point at which the behavior is decided away from the reader.
 
-Overall, the techniques we observed are well known and result in localized changes. What the reviews add is why a clone was not removed: it was kept on purpose (T1), the result would be harder to read (T2), the gain did not justify the integration effort (T3), or the shared code would sit on a performance-sensitive path (T4). These scenarios are not fixed rules, since maintainers of the same subsystem disagreed on them, as in C28.
-%Table~\ref{tab:recipes}  relates each technique to an accepted case and to the concerns raised in the others.
+Overall, the techniques we observed are well known and result in localized changes. What the reviews add is why a clone was not removed: it was kept on purpose, the result would be harder to read, the gain did not justify the integration effort, or the shared code would sit on a performance-sensitive path. These scenarios are not fixed rules, since maintainers of the same subsystem disagreed on them, as in C28.
+
 Moreover, code review often reshapes the refactoring itself, showing how the maintainers' knowledge of the subsystem can influence the final form of a contribution.
 
 \subsection{How Review Reshapes the Refactoring}\label{subsec:how-review-reshapes-the-refactoring}
 % Talvez falar sobre o baixo numero de patches da categoria "Reusing and Simplifying Existing Code": 
 % Talvez seja necessário ter um maior conhecimento do subsistema para fazer um INLINE_FUNCTION e um REPLACE_INLINE
-A recurring pattern across some contributions is that maintainer review
-can redirect a patch, changing the abstraction scope, the refactoring
-technique, or both. Three contributions illustrate each of these outcomes.
+A recurring pattern across some contributions is that maintainer review can redirect a patch, changing the abstraction scope, the refactoring technique, or both. Three contributions illustrate each of these outcomes.
 
-In C18, the first version consolidated the duplicated functions into a new 
-file, \texttt{amdgpu\_common.c}, intended to group functions shared across 
-the subsystem. A maintainer rejected this layout: ``Please don't when they 
-are functional identical then move them a layer up instead of messing up the 
-backends.'' He then argued that each function would fit better in a 
-different, already existing layer. Although the refactoring technique 
-remained the same across all revisions, the abstraction scope shifted to 
-follow the layering conventions already established in the subsystem.
+In C18, the first version consolidated the duplicated functions into a new file, \texttt{amdgpu\_common.c}, intended to group functions shared across the subsystem. A maintainer rejected this layout: \textit{``Please don't when they are functional identical then move them a layer up instead of messing up the backends.''} He then argued that each function would fit better in a different, already existing layer. Although the refactoring technique remained the same across all revisions, the scope of abstraction shifted to align with the layering conventions already established in the subsystem.
 
-In C27, the opposite happened. The scope was kept, but the technique 
-changed. The contributor initially proposed a single generic function in 
-\texttt{amdgpu\_gfx.c} to replace \texttt{gfx\_v11\_0\_handle\_priv\_fault} 
-and \texttt{gfx\_v12\_0\_handle\_priv\_fault}, arguing that the two were 
-identical. In the first review, a maintainer pointed to a specific code 
-fragment and noted ``Even when they are identical on gfx11 and gfx12 this 
-decoding here is HW specific and doesn't belong here''. The target layer was 
-not questioned, and \texttt{amdgpu\_gfx.c} remained the destination across 
-all revisions. As a result, the contributor switched from Pull Up Method to Extract Function. Therefore, only 
-the generation-independent part was moved to \texttt{amdgpu\_gfx.c}, while 
-the hardware-specific decoding remained in each generation's own function.
+In C27, the opposite happened. The scope was kept, but the technique changed. The contributor initially proposed a single generic function in \texttt{amdgpu\_gfx.c} to replace \texttt{gfx\_v11\_0\_handle\_priv\_fault} and \texttt{gfx\_v12\_0\_handle\_priv\_fault}, arguing that the two were identical. In the first review, a maintainer pointed to a specific code fragment and noted \textit{``Even when they are identical on gfx11 and gfx12 this decoding here is HW specific and doesn't belong here''}. The target layer was not questioned, and \texttt{amdgpu\_gfx.c} remained the destination across all revisions. As a result, the contributor switched from Pull Up Method to Extract Function. Therefore, only the generation-independent part was moved to \texttt{amdgpu\_gfx.c}, while the hardware-specific decoding remained in each generation's own function.
 
-In C19, review changed both the scope and the technique. The first version 
-made \texttt{jpeg\_v5\_0\_1.c} and \texttt{jpeg\_v5\_0\_2.c} share a common 
-interrupt routine placed in a new file, \texttt{jpeg\_v5\_0\_interrupt.c}. 
-This proposal was dropped in the first review because the routine was not 
-common to the whole family and the maintainer pointed ``This is not common to 
-jpeg v5.  \texttt{jpeg\_v5\_0\_0.c} has a different interrupt handler''. The maintainer then 
-suggested a narrower alternative: ``I would just make the implementation in 
-\texttt{jpeg\_v5\_0\_1.c} non-static and then just use it directly in 
-\texttt{jpeg\_v5\_0\_2.c}''. The duplication was still removed, but the scope was 
-changed from a family-wide file to the two drivers that actually share the 
-behavior, and the technique changed accordingly, to Replace Inline Code with Function Call.
+In C19, the review changed both the scope and the technique. The first version made \texttt{jpeg\_v5\_0\_1.c} and \texttt{jpeg\_v5\_0\_2.c} share a common interrupt routine placed in a new file, \texttt{jpeg\_v5\_0\_interrupt.c}. This proposal was dropped in the first review because the routine was not common to the whole family, and the maintainer pointed out that \textit{``This is not common to jpeg v5.  \texttt{jpeg\_v5\_0\_0.c} has a different interrupt handler''}. The maintainer then suggested a narrower alternative: \textit{``I would just make the implementation in \texttt{jpeg\_v5\_0\_1.c} non-static and then just use it directly in \texttt{jpeg\_v5\_0\_2.c}''}. The duplication was still removed, but the scope was narrowed from a family-wide file to the two drivers that actually exhibit the behavior, and the technique was changed accordingly to Replace Inline Code with Function Call.
 
-Although the outcomes are different, the main concern is the same in all three cases. 
-The shared code either did not belong to the proposed layer or
-did not apply uniformly to every component that layer serves. These cases do not fit the
-four scenarios proposed in the previous study~[Anonymized]. They are adjacent to T1, since
-the objections derive from hardware-specific code, but the maintainers did not defend the
-independence of the drivers as such. In C19 and C27, code that looked identical was not
-shared knowledge: another driver of the family has a different handler, and part of the
-decoding is hardware-specific. In C18, the objection concerned which existing layer should
-hold the code. Nor did the maintainers invoke readability (T2), integration overhead (T3),
-or performance (T4). This leads to a fifth scenario (T5): maintainers may reject or redirect
-a deduplication when the duplicated code does not share an appropriate abstraction boundary.
-Consolidating such code into a shared layer can be considered inappropriate when the behavior
-does not apply uniformly to every component that the layer serves.
+Although the outcomes are different, the main concern is the same in all three cases. The shared code either did not belong to the proposed layer or did not apply uniformly to all components the layer serves. These cases do not fit the four scenarios proposed in the previous study~[x]. Even though they are adjacent to the driver-forking scenario, because the objections stem from hardware-specific code, the maintainers did not defend the drivers' independence as such. In C19 and C27, code that looked identical was not shared knowledge: another driver of the family has a different handler, and part of the decoding is hardware-specific. In C18, the objection concerned which existing layer should hold the code. Nor did the maintainers invoke readability, integration overhead, or performance. This leads to a \textbf{new scenario}: maintainers may reject or redirect a deduplication when the duplicated code does not share an appropriate abstraction boundary. Consolidating such code into a shared layer may be inappropriate when the behavior does not apply uniformly to every component the layer serves.
 
 \subsection{Deduplication in Other Kernel Contributions}\label{subsec:lore-techniques}
 
-To validate and expand the findings of our participant observation, we identified the refactoring techniques applied in the mailing-list series related to code duplication. Since a series may apply more than one technique, we count technique applications rather than series.
-%Figure~\ref{fig:refactoring-heatmap} compares the share of each technique among these applications with the share among our submissions, showing whether the techniques observed in our 30 contributions also appear beyond the ones we followed and which new ones emerge.
+To validate and expand the findings of our participant observation, we identified the refactoring techniques applied in the mailing lists related to code duplication. Since a patch series may apply more than one technique, we count technique applications rather than series.
+Fig.~\ref{fig:refactoring-heatmap} compares the share of each technique among these applications with the share among our submissions, showing whether the techniques observed in our 30 contributions also appear beyond the ones we followed and which new ones emerge.
 
-% \begin{figure}[!t]
-%   \centering
-%   \includegraphics[width=\columnwidth]{figures/refactoring_heatmap_relative.pdf}
-%   \caption{Share of contributions that apply each refactoring technique: our submitted series and the mailing-list threads. A thread with several changes counts once per technique.}
-%   \label{fig:refactoring-heatmap}
-% \end{figure}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/refactoring_heatmap_relative.pdf}
+  \caption{Share of contributions that apply each refactoring technique: our submitted series and the mailing list threads.}
+  \label{fig:refactoring-heatmap}
+\end{figure}
 
-Extract Function was the most frequent technique overall in both datasets, accounting for a third of the applications in our corpus and remaining the most common in the mailing lists. The techniques applied in our submissions also accounted for most of the applications in the broader sample, including those related to the IOMMU and I2C subsystems, where we did not submit patches.
-
-The mailing lists also revealed techniques that none of our submissions applied, namely Remove Dead Code, Pull Up Field, and Slide Statements. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer. ArKanjo reports function-level clones, so changes to fields and statements fall outside its reach; in some cases, they appear as preparatory steps for a later extraction.
-
-Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the scenarios of the previous study~[Anonymized]. In some threads, reviewers asked contributors to build on existing code instead of adding a copy. Review thus catches duplication at its origin, before it reaches mainline, and the duplication that remains is what escaped review or was tolerated.
-
+Extract Function was the most frequent technique overall in both datasets, accounting for a third of the applications in our corpus and remaining the most common in the mailing lists. The techniques used in our submissions also accounted for most of the applications in the broader sample, including those related to the IOMMU and I2C subsystems, for which we did not submit patches.
+The mailing lists also revealed techniques that none of our submissions applied, namely \textit{Remove Dead Code}, \textit{Pull Up Field}, and \textit{Slide Statements}. Pull Up Field moves fields repeated across structures to a shared one. Remove Dead Code was used both for unused code and for implementations that became redundant after equivalent functionality was made available elsewhere in the kernel, such as in a core layer.
+%ArKanjo reports function-level clones, so changes to fields and statements fall outside its reach; in some cases, they appear as preparatory steps for a later extraction.
+Series without a catalog technique show that deciding whether to remove duplication is part of the task. Some introduced shared code to prevent future duplication rather than to remove an existing clone, and others tolerated duplication across distinct drivers, where abstracting would cost more than it would gain. In other cases, maintainers prevented duplication at its origin, asking the contributor to build on an existing driver instead of adding a new one. These cases are in line with the scenarios of the previous study~[x]. In some threads, reviewers asked contributors to build on existing code rather than add a copy. Review thus catches duplication at its origin, before it reaches mainline, and the duplication that remains is what escaped review or was tolerated.
 Maintainers also took part in choosing the technique. In several series, a maintainer suggested a deduplication that the contributor had not proposed, such as parameterizing a function repeated several times or reusing an implementation already available in the kernel, as also happened in C19 and C20. Consequently, a contributor does not need to identify the right technique beforehand, since the review can point to it.
 
-In summary, the mailing lists showed the same short list of basic techniques, led by Extract Function, in subsystems we did not observe, with maintainers helping to choose the technique.
+In summary, the mailing list mining showed the same set of basic techniques with similar recurrences in subsystems we did not observe, and maintainers helping to choose the technique.
 
 % \subsection{Implications for New Contributors}\label{subsec:implications}
 
@@ -435,11 +330,11 @@ In summary, the mailing lists showed the same short list of basic techniques, le
 
 \section{Concluding Remarks}\label{sec:conclusion}
 
-In this study, we examined how duplication debt is repaid in the Linux kernel, combining participant observation with the analysis of deduplication contributions mined from the kernel mailing lists.
+In this study, we examined how duplication debt is repaid in the Linux kernel by combining participant observation with analysis of deduplication contributions mined from the kernel mailing lists.
 Our results show that, despite the kernel's rigorous review process, deduplication opportunities remain in the code and can often be addressed with simple refactoring techniques, and that maintainers are more receptive when these refactorings reuse abstractions already available in the kernel.
-These opportunities are therefore a suitable entry point for contributors with less experience in the kernel.
 
-We raise two hypotheses for why such simple duplications persist. First, since review on the mailing lists centers on the changes proposed in each patch, it may be difficult for maintainers to notice that new code duplicates code already present elsewhere in the kernel. Second, in terms of the principal and interest of technical debt~\cite{seaman2011measuring}, that is, the effort required to pay off a debt and the extra effort incurred while it remains unpaid, these duplications seem to have a low principal, since simple techniques remove them, and possibly a low interest in the short term, since their cost only materializes when one of the copies needs to change. Debt with low interest tends to be a low priority for maintainers, who may leave it in the code, where its low principal allows contributors who are not maintainers to repay it.
+These opportunities are therefore a suitable entry point for contributors with less experience in the kernel.
+We raise three hypotheses, which are not mutually exclusive, as to why such simple duplications persist. First, since the review process centers around a particular development context, it may be difficult for maintainers to notice that new code duplicates code already present elsewhere in the kernel. Second, localized duplications of low interest tend to be low priority, since their cost only materializes when one of the copies needs to be changed. Third, duplications with low principal and low interest are real, actionable potential patches to foster new contributors, without seriously degrading the quality of the code if they are not paid.
 
 \section{Replication Package}\label{sec:replication-package}
 
