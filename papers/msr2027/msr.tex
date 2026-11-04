@@ -1,0 +1,136 @@
+% https://2027.msrconf.org/track/msr-2027-data-and-tool-showcase-track
+
+% Data and Tool Showcase Track (maximum 4 pages, plus 1 additional page of
+% references)
+%
+% * a description of the data source,
+% * a description of the methodology used to gather the data (including 
+%   rovenance and the tool used to create/generate/gather the data, if any),
+% * a description of the storage mechanism, including a schema if applicable,
+% * if the data has been used by the authors or others, a description of how
+%   this was done including references to previously published papers,
+% * a description of the originality of the dataset (that is, even if the
+%   dataset has been used in a published paper, its complete description must be
+%   unpublished) and similar existing datasets (if any),
+% * ideas for future research questions that could be answered using the
+%   dataset,
+% * ideas for further improvements that could be made to the dataset, and
+% * any limitations and/or challenges in creating or using the dataset.
+%
+% If authors developed software to collect, process, or generate the dataset,
+% the paper should be accompanied by the source code of the tools, along with
+% clear documentation on how to run the tools to recreate the dataset. The tools
+% should be open source, accompanied by an appropriate open source license; the
+% source code should be citable, i.e., refer to a specific release and have a
+%
+
+\documentclass[10pt,conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote.
+% If that is unneeded, please comment it out.
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\usepackage{threeparttable} % recommended IEEEtran package
+
+% extra packages
+\usepackage{url}
+
+\usepackage{booktabs}
+
+\usepackage{multirow}
+\usepackage{tabularx}
+
+\usepackage{todonotes}
+\setuptodonotes{inline}
+% NOTE: uncomment to remove todonotes
+%\presetkeys{todonotes}{disable}{}
+
+\hyphenation{
+  ArKanjo
+  kernel Linux
+}
+
+\begin{document}
+
+% https://tex.stackexchange.com/questions/458204/ieeetran-document-class-how-to-align-five-authors-properly
+\makeatletter
+\newcommand{\linebreakand}{%
+  \end{@IEEEauthorhalign}
+  \hfill\mbox{}\par
+  \mbox{}\hfill\begin{@IEEEauthorhalign}
+}
+\makeatother
+
+% Sub-titles are not captured for https://ieeexplore.ieee.org and should not be
+% used
+\title{Code Duplication in the Linux Kernel: A Dataset of Discussions, Patches, and Mainline Changes}
+
+% Submissions will undergo single-anonymous peer review.
+\author{%
+\IEEEauthorblockN{Natália Salvino André}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+natalia.andre@ime.usp.br%
+}
+\and
+\IEEEauthorblockN{Guilherme Ivo}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+guilherme.bozi@usp.br%
+}
+\and
+\IEEEauthorblockN{Gabriel Almeida}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+gabrielsousa230@usp.br%
+}
+\linebreakand
+\IEEEauthorblockN{David Tadokoro}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+davidbtadokoro@ime.usp.br%
+}
+\and
+\IEEEauthorblockN{Paulo Meirelles}
+\IEEEauthorblockA{%
+%\textit{dept. name of organization (of Aff.)} \\
+\textit{University of São Paulo}\\
+São Paulo, Brazil \\
+paulormm@ime.usp.br%
+}
+}
+
+\maketitle
+
+% CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, or Math in Paper
+% Title or Abstract.
+
+\begin{abstract}
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+Linux kernel, Code Duplication, Mailing Lists, Mining Software Repositories
+\end{IEEEkeywords}
+
+\nocite{passos2026lkml5ws}
+\nocite{linux_process_mailinglist}
+
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,references}
+
+\end{document}
