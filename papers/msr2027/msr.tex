@@ -151,14 +151,14 @@ architecture, it still contains duplicated code, including large clones of
 files and directories~\cite{kumar2016bigclones}. Since its code and development history are publicly available in large volume, exploring how the kernel deals with this form of technical debt can offer valuable insights into how developers manage this debt in practice.
 
 Prior work has explored this history only partially. Wang and Godfrey searched the Linux commit
-history for the phrase ``duplicated code'' to build a dataset of intentional
+history for the phrase \textit{``duplicated code''} to build a dataset of intentional
 clone refactoring~\cite{wang2014intentional}. Their search relies on a single
 phrase and sees only merged changes, missing
-rejected and the review discussions around the topic. These discussions take place on the kernel mailing lists, making them a natural source for closing this gap. Mining them, however, is not straightforward, since duplication is rarely mentioned in developer communication. In commit messages, for instance, only 348 of the 28{,}538 analyzed by Wang and Godfrey mention duplicated
+rejected and the review discussions around the topic. These discussions take place on the kernel mailing lists~\cite{linux_process_mailinglist}, making them a natural source for closing this gap. Mining them, however, is not straightforward, since duplication is rarely mentioned in developer communication. In commit messages, for instance, only 348 of the 28{,}538 analyzed by Wang and Godfrey mention duplicated
 code~\cite{wang2014intentional}. Finding the relevant threads among millions of emails therefore requires a systematic selection process.
 
-In this paper, we present LKML5Ws-duplication, a dataset of Linux kernel
-mailing-list threads about code duplication. It builds on LKML5Ws~\cite{passos2026lkml5ws}, a dataset of the emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
+In this paper, we present {\scshape LKML5Ws--duplication}, a dataset of Linux kernel
+mailing-list threads about code duplication. It builds on {\scshape LKML5Ws}~\cite{passos2026lkml5ws}, a dataset of the emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
 mainline kernel.
 
 From 3.7 million threads in 206 mailing lists, we classify 186{,}432 threads
@@ -167,9 +167,20 @@ whole discussion around it. Of these threads, 33{,}209 are linked to 84{,}964
 mainline commits. This dataset supports studies of how kernel developers handle
 duplication, bringing complete discussions on the topic, including patches that maintainers rejected or ignored.
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/pipeline.pdf}
+  \caption{Overview of the dataset construction pipeline.}
+  \label{fig:pipeline}
+\end{figure*}
 
-\nocite{passos2026lkml5ws}
-\nocite{linux_process_mailinglist}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/yearly_area.pdf}%
+  \vspace{-10pt}
+  \caption{Yearly proportion of threads across duplication-related categories. Stacked areas represent the four duplication-related categories, showing their respective proportions of all threads analyzed each year.}
+  \label{fig:yearlyarea}
+\end{figure}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
