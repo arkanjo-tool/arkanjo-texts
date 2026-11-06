@@ -136,7 +136,13 @@ maintained for over three decades by a large community. Despite its careful
 architecture, it still contains duplicated code, including large clones of
 files and directories~\cite{kumar2016bigclones}. Since its code and development history are publicly available in large volume, exploring how the kernel deals with this form of technical debt can offer valuable insights into how developers manage this debt in practice.
 
-Prior work has explored this history only partially
+Prior work has explored this history only partially. Wang and Godfrey searched the Linux commit
+history for the phrase ``duplicated code'' to build a dataset of intentional
+clone refactoring~\cite{wang2014intentional}. Their search relies on a single
+phrase and sees only merged changes, missing
+rejected and the review discussions around the topic. These discussions take place on the kernel mailing lists, making them a natural source for closing this gap. Mining them, however, is not straightforward, since duplication is rarely mentioned in developer communication. In commit messages, for instance, only 348 of the 28{,}538 analyzed by Wang and Godfrey mention duplicated
+code~\cite{wang2014intentional}. Finding the relevant threads among millions of emails therefore requires a systematic selection process.
+
 
 \nocite{passos2026lkml5ws}
 \nocite{linux_process_mailinglist}
