@@ -147,6 +147,12 @@ In this paper, we present LKML5Ws-duplication, a dataset of Linux kernel
 mailing-list threads about code duplication. It builds on LKML5Ws~\cite{passos2026lkml5ws}, a dataset of the emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
 mainline kernel.
 
+From 3.7 million threads in 206 mailing lists, we classify 186{,}432 threads
+as being about code duplication, providing the content of each thread with the
+whole discussion around it. Of these threads, 33{,}209 are linked to 84{,}964
+mainline commits. This dataset supports studies of how kernel developers handle
+duplication, bringing complete discussions on the topic, including patches that maintainers rejected or ignored.
+
 
 \nocite{passos2026lkml5ws}
 \nocite{linux_process_mailinglist}
