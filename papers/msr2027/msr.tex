@@ -120,7 +120,21 @@ paulormm@ime.usp.br%
 % Title or Abstract.
 
 \begin{abstract}
-Code duplication is one of the most common forms of technical debt. It makes maintenance more laborious and can lead to inconsistencies, such as a bug being fixed in one copy but not in the others. In a large, long-lived project like the Linux kernel, decisions about duplicated code are debated in the open on mailing lists, where developers propose, question and reject refactorings, shared helpers and copied implementations. These discussions are a rich source for understanding how duplication debt is handled in practice, but they are buried among millions of unrelated emails. We present a dataset of Linux kernel mailing list threads about code duplication, built on top of the LKML5Ws dataset. Our pipeline groups emails into threads and filters them in several stages. A regex filter first selects candidate threads, and an LLM-based classifier, evaluated against a sample labeled by human reviewers, then sorts each candidate into categories such as clone refactoring, preventive reuse and duplication discussion. Out of 3.7 million threads from 206 mailing lists, the classifier labels more than 186,000 threads as related to code duplication, and over 33,000 of them are linked to commits that reached the mainline kernel. Each thread includes its messages, its category with a confidence score, and its links to commits.
+Code duplication is one of the best-known forms of technical debt. It makes
+maintenance more laborious and can lead to inconsistencies, such as a bug being
+fixed in one copy but not in the others. In a large, long-lived project like
+the Linux kernel, decisions about duplicated code are debated in the open on
+mailing lists, where developers propose, question, and reject refactorings,
+shared helpers, and copied implementations. These discussions are a rich source
+for understanding how this debt is handled in practice, but they are buried
+among millions of unrelated emails. We present LKML5Ws-duplication, a dataset
+of Linux kernel mailing list threads about code duplication, built on top of
+the LKML5Ws dataset. Our pipeline groups emails into threads, in which a regex
+filter first selects candidate threads and an AI-based classifier sorts each candidate into categories. Out of 3.7 million threads from 206 mailing lists, the classifier
+labels more than 186{,}000 threads as related to code duplication, and over
+33{,}000 of them are linked to commits that reached the mainline kernel. Each
+thread includes its messages, its category with a confidence score, and its
+links to commits.
 \end{abstract}
 
 \begin{IEEEkeywords}
