@@ -39,6 +39,8 @@
 \usepackage{threeparttable} % recommended IEEEtran package
 
 % extra packages
+\usepackage[table]{xcolor}
+
 \usepackage{url}
 
 \usepackage{booktabs}
@@ -75,40 +77,35 @@
 \author{%
 \IEEEauthorblockN{Natália Salvino André}
 \IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
+\textit{University of São Paulo (IME-USP)}\\
 São Paulo, Brazil \\
 natalia.andre@ime.usp.br%
 }
 \and
 \IEEEauthorblockN{Guilherme Ivo}
 \IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
+\textit{University of São Paulo (IME-USP)}\\
 São Paulo, Brazil \\
 guilherme.bozi@usp.br%
 }
 \and
 \IEEEauthorblockN{Gabriel Almeida}
 \IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
+\textit{University of São Paulo (ICMC-USP)}\\
 São Paulo, Brazil \\
 gabrielsousa230@usp.br%
 }
 \linebreakand
 \IEEEauthorblockN{David Tadokoro}
 \IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
+\textit{University of São Paulo (IME-USP)}\\
 São Paulo, Brazil \\
 davidbtadokoro@ime.usp.br%
 }
 \and
 \IEEEauthorblockN{Paulo Meirelles}
 \IEEEauthorblockA{%
-%\textit{dept. name of organization (of Aff.)} \\
-\textit{University of São Paulo}\\
+\textit{University of São Paulo (IME-USP)}\\
 São Paulo, Brazil \\
 paulormm@ime.usp.br%
 }
@@ -157,8 +154,8 @@ phrase and sees only merged changes, missing
 rejected and the review discussions around the topic. These discussions take place on the kernel mailing lists~\cite{linux_process_mailinglist}, making them a natural source for closing this gap. Mining them, however, is not straightforward, since duplication is rarely mentioned in developer communication. In commit messages, for instance, only 348 of the 28,538 analyzed by Wang and Godfrey mention duplicated
 code~\cite{wang2014intentional}. Finding the relevant threads among millions of emails therefore requires a systematic selection process.
 
-In this paper, we present {\scshape LKML5Ws--duplication}, a dataset of Linux kernel
-mailing-list threads about code duplication. It builds on {\scshape LKML5Ws}~\cite{passos2026lkml5ws}, a dataset of the emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
+In this paper, we present \textsc{LKlone}, a dataset of Linux kernel
+mailing-list threads about code duplication. It builds on \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset of the emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
 mainline kernel.
 
 From 3.7 million threads in 206 mailing lists, we classify 186,432 threads
@@ -181,6 +178,39 @@ duplication, bringing complete discussions on the topic, including patches that 
   \caption{Yearly proportion of threads across duplication-related categories. Stacked areas represent the four duplication-related categories, showing their respective proportions of all threads analyzed each year.}
   \label{fig:yearlyarea}
 \end{figure}
+
+\begin{table}[t]
+  \centering
+  \caption{Parquet dataset schema. Each row represents a mailing-list thread.}
+  \label{tab:dataset-schema}
+  \footnotesize
+  \begin{tabularx}{\columnwidth}{@{} l l X @{}}
+    \toprule
+    \textbf{Column} & \textbf{Type} & \textbf{Description} \\
+    \midrule
+    \texttt{thread\_id} & String & Unique identifier of the thread. \\
+    \texttt{list} & String & Mailing list from which the thread originated. \\
+    \texttt{n\_messages} & Int64 & Number of messages in the thread. \\
+    \texttt{message\_ids} & List[String] & Message identifiers in chronological order. \\
+    \texttt{date} & Timestamp & Date of the first message. \\
+    \texttt{subject} & String & Subject of the first message. \\
+    % is\_duplication\_candidate
+    \texttt{dup\_candidate} & Boolean & Indicates whether the thread matches the regex pre-filter. \\
+    \texttt{thread\_content} & String & Concatenated content of the messages. \\
+    \texttt{category} & String & Classification assigned to the thread. \\
+    \texttt{category\_confidence} & Double & Confidence score of the classification. \\
+    \texttt{commit\_matches} & List[Struct] & Commits associated with messages in the thread. \\
+    \midrule
+    \multicolumn{3}{@{}l}{\textit{Fields of \texttt{commit\_matches}}} \\
+    \addlinespace[2pt]
+    \texttt{message\_id} & String & Message associated with the commit. \\
+    \texttt{commit\_hash} & String & Hash of the mainline commit. \\
+    \texttt{status} & String & Matching method: \texttt{LINK}, \texttt{EXACT}, or \texttt{AMBIGUOUS}. \\
+    % candidate\_message\_ids
+    \texttt{ambiguous\_ids} & List[String] & Candidate messages when the match is ambiguous. \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
