@@ -124,7 +124,7 @@ the Linux kernel, decisions about duplicated code are debated in the open on
 mailing lists, where developers propose, question, and reject refactorings,
 shared helpers, and copied implementations. These discussions are a rich source
 for understanding how this debt is handled in practice, but they are buried
-among millions of unrelated emails. We present LKML5Ws-duplication, a dataset
+among millions of unrelated emails. We present LKlones, a dataset
 of Linux kernel mailing list threads about code duplication, built on top of
 the LKML5Ws dataset. Our pipeline groups emails into threads, in which a regex
 filter first selects candidate threads and an AI-based classifier sorts each candidate into categories. Out of 3.7 million threads from 206 mailing lists, the classifier
@@ -141,7 +141,7 @@ Linux kernel, Code Duplication, Mailing Lists, Mining Software Repositories
 \section{Introduction}
 
 Code duplication is one of the best-known forms of technical debt, being the
-first entry in Fowler's catalog of code smells~\cite{fowler2018refactoring}. This debt can be observed in large and
+first entry in Fowler's catalog of code smells~\cite{fowler1999refactoring}. This debt can be observed in large and
 relevant software projects, such as the Linux kernel, a widely known project
 maintained for over three decades by a large community. Despite its careful
 architecture, it still contains duplicated code, including large clones of
@@ -155,14 +155,18 @@ rejected and the review discussions around the topic. These discussions take pla
 code~\cite{wang2014intentional}. Finding the relevant threads among millions of emails therefore requires a systematic selection process.
 
 In this paper, we present \textsc{LKlone}, a dataset of Linux kernel
-mailing-list threads about code duplication. It builds on \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset of the emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
+mailing-list threads about code duplication. It builds on \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset with almost 30 million emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
 mainline kernel.
 
-From 3.7 million threads in 206 mailing lists, we classify 186,432 threads
+From 23,8 million of emails, 3.7 million threads in 206 mailing lists, we classify 186,432 threads
 as being about code duplication, providing the content of each thread with the
-whole discussion around it. Of these threads, 33,209 are linked to 84,964
+whole discussion around it. Of these threads, 33,209 are linked to
 mainline commits. This dataset supports studies of how kernel developers handle
 duplication, bringing complete discussions on the topic, including patches that maintainers rejected or ignored.
+
+% dataset collection and processing
+% showcase: dada o subconjunto de clone refactoring, usar o jev para encontrar os motivos. Aplicações relacionadas aos trabalhos ja realizados (foco na comunidade de divida tecnica) que se beneficiariam do nosso dataset
+% background: clones (conceito, se der, falar dos tipos t1-t4), mailing lists, patch (esclarecer que ha codigo aqui), thread, commit mainline 
 
 \begin{figure*}[t]
   \centering
