@@ -330,14 +330,57 @@ and is publicly available on Zenodo~\cite{lkones-dataset} at \url{https://doi.or
 % algo sobre "Dataset and Tool", igual do LKML5Ws
 
 % NOTE: tudo aqui é AND/OR
-\todo{future research questions}
-
 \todo{further improvements}
 
-\todo{showcase: dada o subconjunto de clone refactoring, usar o jev para encontrar os motivos. Aplicações relacionadas aos trabalhos ja realizados (foco na comunidade de divida tecnica) que se beneficiariam do nosso dataset%
+\section{Related Datasets}\label{sec:related}
 
-\textit{if the data has been used by the authors or others, a description of how this was done including references to previously published papers,}
-}
+Wang and Godfrey~\cite{wang2014intentional} built a dataset of intentional
+clone refactoring in the Linux kernel by searching commit messages for the
+phrase \textit{``duplicated code''}. Since it starts from the commit history,
+it covers only merged changes and leaves out the review discussions around
+them. \textsc{LKlones} starts from the mailing lists instead, so it also
+includes patches that never reached the mainline and discussions in which no
+patch acts on duplication, and it selects threads with a broader vocabulary and
+an LLM classifier rather than a single phrase.
+
+Xu and Zhou~\cite{xu2018patchwork} collected 666,550 patches sent to the main
+Linux kernel mailing list (LKML) between 2008 and 2017, together with their
+review comments, from the kernel Patchwork. They link 139,664 of these patches
+to mainline commits by matching the commit author time to the email send time,
+falling back to the commit subject. \textsc{LKlones} shares the goal of linking
+discussions to commits, but covers 206 subsystem lists instead of LKML alone,
+rebuilds complete threads from the email headers instead of relying on
+Patchwork, and focuses on threads about code duplication.
+
+\section{Showcase}\label{sec:showcase}
+
+\textsc{LKlones} can help close gaps in prior studies of code duplication in
+the Linux kernel. Wang and Godfrey~\cite{wang2014intentional} note that
+little is known about the design decisions that drive clone refactoring, since
+commit messages rarely record them. In \textsc{LKlones}, these decisions can be
+studied by selecting the threads whose \texttt{category} is \textit{clone
+refactoring} or \textit{clone and reuse}, optionally above a
+\texttt{category\_confidence} threshold, and keeping those with more than one
+message (\texttt{n\_messages}), that is, those that likely received feedback. The
+\texttt{thread\_content} of these threads holds the patch description, where
+the author justifies the refactoring, and the replies, where reviewers
+question it, suggest alternatives, or ask for new versions. Splitting them by
+whether \texttt{commit\_matches} is empty separates decisions that reached the
+mainline from those that did not.
+
+The dataset also supports other kinds of analysis. For instance, the
+\texttt{date} and \texttt{category} columns show how the presence of
+duplication in the discussions has grown over time and how the threads are distributed
+across categories. Figure~\ref{fig:yearlyarea} shows that the share of
+threads about duplication grew steadily, from about 1\% of all threads in
+2005 to about 8\% in 2025.
+
+Another research question that the dataset can help answer is why some clone
+refactoring patches are rejected. Filtering the threads classified as clone
+refactoring with no entry in \texttt{commit\_matches} yields refactorings that
+likely never reached the mainline. An LLM can then
+be applied again to the \texttt{thread\_content} of these threads
+to identify the reasons for rejection raised by reviewers.
 
 \begin{figure}[!ht]
   \centering
@@ -353,4 +396,3 @@ and is publicly available on Zenodo~\cite{lkones-dataset} at \url{https://doi.or
 \bibliography{IEEEabrv,references}
 
 \end{document}
-% dataset collection and processing
