@@ -135,7 +135,7 @@ links to commits.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Linux kernel, Code Duplication, Mailing Lists, Mining Software Repositories
+Linux kernel, Code Duplication, Mailing Lists
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -164,9 +164,108 @@ whole discussion around it. Of these threads, 33,209 are linked to
 mainline commits. This dataset supports studies of how kernel developers handle
 duplication, bringing complete discussions on the topic, including patches that maintainers rejected or ignored.
 
-% dataset collection and processing
+
+\section{Data collection and processing}
+
+
 % showcase: dada o subconjunto de clone refactoring, usar o jev para encontrar os motivos. Aplicações relacionadas aos trabalhos ja realizados (foco na comunidade de divida tecnica) que se beneficiariam do nosso dataset
-% background: clones (conceito, se der, falar dos tipos t1-t4), mailing lists, patch (esclarecer que ha codigo aqui), thread, commit mainline 
+% background: clones (conceito, se der, falar dos tipos t1-t4), mailing lists, patch (esclarecer que ha codigo aqui), thread, commit mainline
+
+Figure~\ref{fig:pipeline} summarizes the five-step pipeline that builds
+\textsc{LKlone}. Once the threads are assembled, no step removes data, and each step
+only adds columns to the dataset, so users can apply their own filters.
+
+\subsection{Collect}
+
+The input is \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset of the
+mailing lists hosted on \texttt{lore.kernel.org} with one email per row. \textsc{LKML5Ws}
+also covers lists unrelated to the kernel source code, such as the Git mailing
+list. To keep only kernel development, we accept a list when it is the official
+list of a subsystem in the kernel \texttt{MAINTAINERS} file that covers files of
+the repository, in at least one release between v2.6.30 and v7.2. This criterion
+keeps 206 of the 353 lists of \textsc{LKML5Ws} in our dataset.
+
+\subsection{Thread Construction}
+
+A single email rarely tells the whole story of a patch. Since we want
+the complete discussion, we group the emails into threads. Emails are linked to their parents through the \texttt{In-Reply-To} header and
+grouped into threads with a union-find structure. When the parent is missing
+from \textsc{LKML5Ws}, the last identifier in the \texttt{References} header is used
+instead. Messages within a thread are kept in chronological order. This is the
+only step that removes data, as we discard pull requests (e.g., \texttt{[GIT PULL]}),
+which only summarize patches discussed in other threads, and messages sent by
+bots, such as syzbot. The result is 3.7 million threads
+built from 23.8 million emails.
+
+Since duplication is rarely discussed, a regular-expression pre-filter then
+flags the threads that may be about it. We built the regular expressions from a vocabulary analysis, in which two
+reviewers manually inspected a sample of threads and identified the terms
+that developers use when discussing duplication, such as \textit{duplicat*},
+\textit{dedup*}, \textit{redundant*}, \textit{copy-paste}, and phrases like
+``move into a common helper''. The same analysis revealed recurring false
+positives, such as ``redundant null check'' and ``duplicate include'', which
+we added as exclusions. Quoted text is ignored, so that each passage only counts
+in the message where it was written. The pre-filter flags 373,264 candidate
+threads (\texttt{is\_duplication\_candidate}), and only these receive the
+concatenated text of their messages (\texttt{thread\_content}).
+
+\subsection{Classify}
+
+The pre-filter favors recall, so many candidates are not actually about
+duplication. To separate them, a large language model (LLM) decides whether
+each candidate thread is related to duplication. In preliminary tests, the
+model performed poorly when asked yes-or-no questions directly. We therefore
+guide it with five categories that describe what we consider related to
+duplication. A thread is \textit{clone refactoring} when a patch consolidates
+existing copies into a single place, \textit{preventive reuse} when a patch
+avoids writing a copy by reusing or sharing code, and \textit{clone and reuse}
+when both occur in the same thread. It is \textit{duplication discussion} when
+participants discuss duplication but no patch acts on it, and
+\textit{not duplication} otherwise. The categories serve only as guidance, and
+the first four are mapped to \textit{yes}, while the last is mapped to
+\textit{no}.
+
+We use Jev~\cite{typesafe_jev}, version 1.13.0, selected after comparing it with other
+LLMs. We frame the task as a choice question, in which Jev picks one of the five
+categories for each thread. Instead of free-form text, Jev returns the
+probability of each category, which keeps the output structured and
+reproducible across runs. The
+chosen category and its probability are stored in \texttt{category} and
+\texttt{category\_confidence}, letting users set their own confidence threshold.
+Threads longer than the model context are truncated,
+keeping the first message and the passages around the pre-filter terms.
+
+To evaluate the classifier, two authors independently labeled 313
+threads sampled from four lists, reaching 87.9\% agreement (Cohen's
+$\kappa = 0.82$) and resolving disagreements by consensus.
+On the binary decision, Jev reaches 84.7\% accuracy, with 95.3\% recall and
+70.3\% precision for threads about duplication. The classifier thus rarely misses
+relevant threads, and users who need higher precision can rely on
+\texttt{category\_confidence}. In total, 186,432 threads are classified as being
+about duplication.
+
+\subsection{Match}
+
+We then link the threads to the commits that reached the mainline kernel. For
+each commit in the mainline history, we search for the email that introduced
+it. A commit is linked to an email with status
+\texttt{LINK} when its \texttt{Link:} trailer cites the email Message-ID.
+Otherwise, it is linked with status \texttt{EXACT} when the author email (or its
+hash) and the author date match the sender and date of a patch email, or with
+status \texttt{AMBIGUOUS} when more than one email matches, in which case all
+candidates are kept. These links are stored in \texttt{commit\_matches}. Overall,
+33,209 threads about duplication are linked to 84,964 distinct commits.
+
+\subsection{Anonymize and Publish}
+
+We use the anonymized release of \textsc{LKML5Ws}, in which the names and
+email addresses of participants are already replaced by SHA-1 hashes, but
+Message-IDs are kept in clear text. Since a Message-ID often embeds the
+sender's address or host name, we complete this anonymization by applying the
+same hash to every Message-ID in the output. Each thread is identified by the hash of its first
+message (\texttt{thread\_id}). The resulting dataset is stored in Apache Parquet, with one
+row per thread and the columns described in Table~\ref{tab:dataset-schema},
+and is publicly available on Zenodo\todo{colocar Zenodo DOI}.
 
 \begin{figure*}[t]
   \centering
@@ -220,3 +319,4 @@ duplication, bringing complete discussions on the topic, including patches that 
 \bibliography{IEEEabrv,references}
 
 \end{document}
+% dataset collection and processing
