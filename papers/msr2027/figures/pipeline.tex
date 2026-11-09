@@ -1,0 +1,209 @@
+\documentclass[10pt,conference]{IEEEtran}
+
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\tikzset{>=latex}
+% \usepackage{showframe}
+
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength{\PreviewBorder}{0pt}
+\pagestyle{empty}
+
+\begin{document}
+
+\makeatletter
+
+\newlength{\height}
+\newlength{\legendH}
+\setlength{\legendH}{0.5cm}
+
+\newlength{\boxHeight}
+\setlength{\boxHeight}{3cm}
+\setlength{\height}{\dimexpr\boxHeight+\legendH\relax}
+
+\@ifundefined{pW}{%
+    \newlength{\pW}\newlength{\pG}\newlength{\pC}%
+    \newlength{\pXb}\newlength{\pXc}\newlength{\pXd}\newlength{\pXe}%
+}{}
+\setlength{\pG}{0.5cm}
+\setlength{\pW}{\dimexpr(\textwidth-4\pG)/5\relax}
+\setlength{\pC}{0.5\pW}
+\setlength{\pXb}{\dimexpr\pW+\pG\relax}
+\setlength{\pXc}{\dimexpr2\pW+2\pG\relax}
+\setlength{\pXd}{\dimexpr3\pW+3\pG\relax}
+\setlength{\pXe}{\dimexpr4\pW+4\pG\relax}
+
+\definecolor{stepfill}{HTML}{D6E4EB}
+\definecolor{stepdraw}{HTML}{4C8BA8}
+\definecolor{llmfill}{HTML}{F1DEDB}
+\definecolor{llmdraw}{HTML}{C47164}
+\definecolor{outputfill}{HTML}{D6E4EB}
+\definecolor{outputdraw}{HTML}{4C8BA8}
+
+\tikzset{
+    panel/.style = {
+        draw=black!85,
+        fill=white,
+        rounded corners=3pt,
+        line width=0.4pt
+    },
+    output panel/.style = {
+        draw=outputdraw!70!black,
+        fill=white,
+        rounded corners=3pt,
+        line width=0.9pt
+    },
+    hr/.style = {
+        black!15,
+        line width=0.3pt
+    },
+    mini/.style = {
+        draw=black!45,
+        fill=black!4,
+        line width=0.4pt
+    },
+    badge/.style = {
+        circle,
+        inner sep=0pt,
+        minimum size=0.42cm,
+        text=white,
+        font=\footnotesize\bfseries
+    },
+    step node/.style = {
+        draw=stepdraw,
+        fill=stepfill,
+        rounded corners=2pt,
+        line width=0.4pt,
+        inner sep=2pt,
+        minimum height=0.3cm,
+        font=\scriptsize,
+        align=center
+    },
+    llm node/.style = {
+        draw=llmdraw,
+        fill=llmfill,
+        rounded corners=2pt,
+        line width=0.4pt,
+        inner sep=2pt,
+        minimum height=0.26cm,
+        font=\scriptsize,
+        align=center
+    },
+    out node/.style = {
+        draw=outputdraw,
+        fill=outputfill,
+        rounded corners=2pt,
+        line width=0.4pt,
+        inner sep=2pt,
+        minimum height=0.3cm,
+        font=\scriptsize,
+        align=center
+    },
+    flow/.style = {
+        -{Stealth[length=4pt,width=3.5pt]},
+        line width=0.5pt,
+        black!85
+    },
+}
+
+\providecommand{\fromtop}[1]{\boxHeight - #1 cm}
+
+\providecommand{\stepframe}[4]{%
+    \draw[#1] (0,0) rectangle (\pW, \boxHeight - 0.05cm);
+    \node[badge,fill=#2] at (0.3,\fromtop{0.35}) {#3};
+    \node[anchor=west,inner sep=0pt,font=\footnotesize\bfseries] at (0.62,\fromtop{0.35}) {#4};
+    \draw[hr] (0.12,\fromtop{0.68}) -- (\pW - 0.12cm,\fromtop{0.68});
+}
+
+\providecommand{\legendbox}[2]{%
+    \tikz[baseline=-0.7ex]\fill[fill=#2]
+        (0,-0.1) rectangle (0.33,0.1);}
+
+\providecommand{\pcaption}[1]{%
+    \node[anchor=north,align=center,font=\scriptsize,inner sep=0pt,
+          text width=\dimexpr\pW-0.2cm\relax] at (\pC,\fromtop{2.05}) {#1};
+}
+
+\begin{tikzpicture}
+    \path[use as bounding box] (-0.5 pt,0) rectangle (\textwidth+0.5 pt,\height);
+
+\@ifpackageloaded{showframe}{%
+    \draw[black, line width=0.5 pt] (-1.0 pt,0) rectangle (\textwidth,\height);
+}{}
+
+\begin{scope}[yshift=\legendH]
+
+\begin{scope}
+    \stepframe{panel}{stepdraw}{1}{Collect}
+    \draw[flow] (\pW,0.5\boxHeight) -- (\pW+\pG,0.5\boxHeight);
+    \begin{scope}[xshift=\pC]
+        \foreach \i in {0,1,2}{%
+            \draw[mini,xshift=\i*0.13cm,yshift=-\i*0.1cm]
+                (-0.7,\fromtop{1.47}) rectangle ++(0.95,0.58);}
+        \draw[mini,fill=none] (-0.44,\fromtop{1.09}) -- (0.035,\fromtop{1.41})
+                              -- (0.51,\fromtop{1.09});
+    \end{scope}
+    \pcaption{e-mails from the\\\textsc{LKML5Ws} mailing lists}
+\end{scope}
+
+\begin{scope}[xshift=\pXb]
+    \stepframe{panel}{stepdraw}{2}{Group}
+    \draw[flow] (\pW,0.5\boxHeight) -- (\pW+\pG,0.5\boxHeight);
+    \begin{scope}[xshift=\pC]
+        \draw[mini,fill=none]
+            (0,\fromtop{0.97}) -- (-0.4,\fromtop{1.27}) -- (-0.65,\fromtop{1.57})
+            (-0.4,\fromtop{1.27}) -- (-0.15,\fromtop{1.57})
+            (0,\fromtop{0.97}) -- (0.4,\fromtop{1.27}) -- (0.4,\fromtop{1.57});
+        \foreach \x/\y in {0/0.97,-0.4/1.27,0.4/1.27,-0.65/1.57,-0.15/1.57,0.4/1.57}
+            \fill[stepdraw] (\x,\fromtop{\y}) circle (0.06cm);
+    \end{scope}
+    \pcaption{threads built and flagged\\by a \mbox{regex pre-filter}}
+\end{scope}
+
+\begin{scope}[xshift=\pXc]
+    \stepframe{panel}{llmdraw}{3}{Classify}
+    \draw[flow] (\pW,0.5\boxHeight) -- (\pW+\pG,0.5\boxHeight);
+    \begin{scope}[xshift=\pC]
+        \node[llm node,minimum width=1.7cm] at (0,\fromtop{1.04}) {refactoring};
+        \node[llm node,minimum width=1.7cm] at (0,\fromtop{1.34}) {reuse};
+        \node[llm node,minimum width=1.7cm] at (0,\fromtop{1.64}) {discussion};
+    \end{scope}
+    \pcaption{LLM assigns one of\\5 categories}
+\end{scope}
+
+\begin{scope}[xshift=\pXd]
+    \stepframe{panel}{stepdraw}{4}{Match}
+    \draw[flow] (\pW,0.5\boxHeight) -- (\pW+\pG,0.5\boxHeight);
+    \begin{scope}[xshift=\pC]
+        \node[step node,minimum width=1.4cm] (m) at (0,\fromtop{1.04}) {e-mail};
+        \node[step node,minimum width=1.4cm] (c) at (0,\fromtop{1.64}) {commit};
+        \draw[flow] (m) -- (c);
+    \end{scope}
+    \pcaption{e-mail patches to\\mainline commits}
+\end{scope}
+
+\begin{scope}[xshift=\pXe]
+    \stepframe{output panel}{outputdraw}{5}{Publish}
+    \begin{scope}[xshift=\pC]
+        \node[out node,minimum width=1.4cm] (t) at (0,\fromtop{1.04}) {list=*.parquet};
+        \node[out node,minimum width=1.4cm,dashed] (z) at (0,\fromtop{1.64}) {Zenodo};
+        \draw[flow] (t) -- (z);
+    \end{scope}
+    \pcaption{package and upload\\the dataset}
+\end{scope}
+
+\end{scope}
+
+\node[anchor=west,font=\scriptsize,inner sep=0pt] at (0,0.22cm) {%
+    \legendbox{stepfill}{stepdraw}\;Deterministic step\hspace{2.0em}%
+    \legendbox{llmfill}{llmdraw}\;LLM step};
+
+\end{tikzpicture}
+
+\makeatother
+
+\end{document}

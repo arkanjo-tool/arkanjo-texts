@@ -3,7 +3,19 @@
 MAIN = msr
 BIB  = references.bib
 
+FIGURES_DIR = figures
+
+FIGURES = $(FIGURES_DIR)/pipeline.pdf
+
 all: pdf
+
+figures: $(FIGURES)
+
+$(FIGURES_DIR)/%.pdf: $(FIGURES_DIR)/%.tex
+	pdflatex -interaction=nonstopmode -halt-on-error \
+		-output-directory=$(FIGURES_DIR)/ \
+		-jobname=$* \
+		$<
 
 pdf: $(MAIN).tex $(BIB)
 	pdflatex $(MAIN).tex

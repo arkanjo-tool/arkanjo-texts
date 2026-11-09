@@ -375,13 +375,6 @@ across categories. Figure~\ref{fig:yearlyarea} shows that the share of
 threads about duplication grew steadily, from about 1\% of all threads in
 2005 to about 8\% in 2025.
 
-Another research question that the dataset can help answer is why some clone
-refactoring patches are rejected. Filtering the threads classified as clone
-refactoring with no entry in \texttt{commit\_matches} yields refactorings that
-likely never reached the mainline. An LLM can then
-be applied again to the \texttt{thread\_content} of these threads
-to identify the reasons for rejection raised by reviewers.
-
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=\columnwidth]{figures/yearly_area.pdf}%
@@ -389,6 +382,13 @@ to identify the reasons for rejection raised by reviewers.
   \caption{Yearly proportion of threads across duplication-related categories. Stacked areas represent the four duplication-related categories, showing their respective proportions of all threads analyzed each year.}
   \label{fig:yearlyarea}
 \end{figure}
+
+Another research question that the dataset can help answer is why some clone
+refactoring patches are rejected. Filtering the threads classified as clone
+refactoring with no entry in \texttt{commit\_matches} yields refactorings that
+likely never reached the mainline. An LLM can then
+be applied again to the \texttt{thread\_content} of these threads
+to identify the reasons for rejection raised by reviewers.
 
 \cleardoublepage
 
