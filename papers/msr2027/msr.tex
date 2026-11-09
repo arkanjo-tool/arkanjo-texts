@@ -186,11 +186,17 @@ duplication, bringing complete discussions on the topic, including patches that 
 
 \textbf{Threads and mainline.} Each email has a unique Message-ID, and a reply references its parent through the \texttt{In-Reply-To} and \texttt{References} headers. The chain of replies forms a \emph{thread}, which gathers the patch, the review comments, and often revised versions of the same patch. Accepted patches become commits in the maintainer's tree, and may later be merged into higher-level trees through pull requests, which are also sent by email (\texttt{[GIT PULL]}), until they reach the \emph{mainline} kernel, the tree from which official releases are made~\cite{jiang2013patch}.The kernel documentation recommends that patches carry \texttt{Link} trailers pointing to related discussions, preferably on Kernel Lore~\cite{kernelMailingListsDoc}, but this is not mandatory, and its use varies across subsystems. Rejected or ignored patches may never reach the mainline, so their discussions exist only on the mailing lists.
 
-\section{Data collection and processing}
+\section{Data Collection and Processing}
 
 Figure~\ref{fig:pipeline} summarizes the five-step pipeline that builds
 \textsc{LKlones}. Once the threads are assembled, no step removes data, and each step
 only adds columns to the dataset, so users can apply their own filters.
+
+\todo{Versões do kernel
+
+* explicar a versão inicial (v2.6.30), relacionado a primeira versao do git.
+* versão mais recente do kernel no dataset.
+}
 
 \subsection{Collect}
 
@@ -202,7 +208,7 @@ list of a subsystem in the kernel \texttt{MAINTAINERS} file that covers files of
 the repository, in at least one release between v2.6.30 and v7.2. This criterion
 keeps 206 of the 353 lists of \textsc{LKML5Ws} in our dataset.
 
-\subsection{Thread Construction}
+\subsection{Thread Reconstruction}
 
 % ja explicado no background
 
@@ -262,7 +268,7 @@ concatenated text of their messages, stored in the \texttt{thread\_content} colu
   \end{tabularx}
 \end{table}
 
-\subsection{Classify}
+\subsection{Duplication Classification}
 
 The pre-filter favors recall, so many candidates are not actually about
 duplication. To separate them, a large language model (LLM) decides whether
@@ -277,6 +283,8 @@ participants discuss duplication but no patch acts on it, and
 \textit{not duplication} otherwise. The categories serve only as guidance, and
 the first four are mapped to \textit{yes}, while the last is mapped to
 \textit{no}.
+
+\todo{talvez possa adicionar as comparacoes com as outras LLMs, para facilitar a reprodubilidade}
 
 We use \textsc{Jev}~\cite{typesafe_jev}, version 1.13.0, selected after comparing it with other
 LLMs. We frame the task as a choice question, in which \textsc{Jev} picks one of the five
@@ -297,11 +305,7 @@ relevant threads, and users who need higher precision can rely on
 \texttt{category\_confidence}. In total, 186,432 threads are classified as being
 about duplication.
 
-\subsection{Match}
-
-Since the \texttt{Link} trailer is not present in all commits, we use it
-when available and fall back to other criteria otherwise. A commit is linked
-with status \texttt{LINK} when
+\subsection{Commit Matching}
 
 We then link the threads to the commits that reached the mainline kernel. For
 each commit in the mainline history, we search for the email that introduced
@@ -313,6 +317,10 @@ hash) and the author date match the sender and date of a patch email, or with
 status \texttt{AMBIGUOUS} when more than one email matches, in which case all
 candidates are kept. These links are stored in \texttt{commit\_matches} column. Overall,
 33,209 threads about duplication are linked to 84,964 distinct commits.
+
+\todo{
+* quantidade de correspondências obtidas por LINK, EXACT e AMBIGUOUS?
+}
 
 \subsection{Anonymize and Publish}
 
@@ -328,8 +336,17 @@ and is publicly available on Zenodo~\cite{lkones-dataset} at \url{https://doi.or
 % verificar se colocamos "at \url{...}" aqui ou apenas na secao onde falamos
 % algo sobre "Dataset and Tool", igual do LKML5Ws
 
+\todo{Dataset Statistics}
+
 % NOTE: tudo aqui é AND/OR
-\todo{further improvements}
+\todo{Further Improvements}
+\todo{%
+Limitations
+
+* discussões sobre duplicação que não utilizam os termos das expressões regulares não são identificadas
+
+* o matching de commits pode produzir associações ambíguas ou incorretas
+}
 
 \section{Related Datasets}\label{sec:related}
 
@@ -388,6 +405,14 @@ refactoring with no entry in \texttt{commit\_matches} yields refactorings that
 likely never reached the mainline. An LLM can then
 be applied again to the \texttt{thread\_content} of these threads
 to identify the reasons for rejection raised by reviewers.
+
+\todo{Ethical Considerations?}
+
+\todo{Conclusion}
+
+\section*{Data and Software Availability}
+
+The dataset is publicly available on Zenodo: \url{https://doi.org/10.5281/zenodo.23307333}. The source code of \textsc{LKlones}, together with its usage instructions, is available at \url{https://gitlab.com/ccsl-usp/codev/arkanjo-research/lkml5ws-data-analysis}.
 
 \cleardoublepage
 
