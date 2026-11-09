@@ -55,7 +55,6 @@
 
 \hyphenation{
   ArKanjo
-  kernel Linux
   LKlones
 }
 
@@ -147,7 +146,7 @@ Linux kernel, Code Duplication, Mailing Lists
 
 Code duplication is one of the best-known forms of technical debt, being the
 first entry in Fowler's catalog of code smells~\cite{fowler1999refactoring}. This debt can be observed in large and
-relevant software projects, such as the Linux kernel, a widely known project
+relevant software projects, such as the \mbox{Linux kernel}, a widely known project
 maintained for over three decades by a large community. Despite its careful
 architecture, it still contains duplicated code, including large clones of
 files and directories~\cite{kumar2016bigclones}. Since its code and development history are publicly available in large volume, exploring how the kernel deals with this form of technical debt can offer valuable insights into how developers manage this debt in practice.
@@ -160,7 +159,7 @@ rejected and the review discussions around the topic. These discussions take pla
 code~\cite{wang2014intentional}. Finding the relevant threads among millions of emails therefore requires a systematic selection process.
 
 In this paper, we present \textsc{LKlones}, a dataset of Linux kernel
-mailing-list threads about code duplication. It builds on \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset with almost 30 million emails exchanged on the Linux kernel mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
+mailing-list threads about code duplication. It builds on \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset with almost 30 million emails exchanged on the \mbox{Linux kernel} mailing lists. A pipeline builds the dataset, starting with the reconstruction of the threads of each list, since the discussion around a patch involves several emails. It then identifies the threads about duplication by combining a regular-expression filter with an AI-based classification. Finally, it links these threads to the commits that reached the
 mainline kernel.
 
 From 23.8 million of emails, 3.7 million threads in 206 mailing lists, we classify 186,432 threads
@@ -183,7 +182,7 @@ duplication, bringing complete discussions on the topic, including patches that 
 
 \textbf{Code clones.} A code clone is a fragment of source code that is identical or similar to another fragment, often resulting from copying and pasting. The literature commonly distinguishes four types of code clones~\cite{roy2009comparison}: Type-1 (identical except for whitespace and comments), Type-2 (also allowing changes to identifiers and literals), Type-3 (allowing the addition, removal, or modification of statements), and Type-4 (syntactically different but semantically equivalent). Developers rarely use the terminology established in clone detection research in discussions, preferring expressions such as \textit{duplicate}, \textit{deduplication}, or \textit{copy-paste}, among others.
 
-\textbf{Mailing lists and patches.} The Linux kernel is organized into \emph{subsystems}, each typically associated with a set of maintainers, one or more mailing lists, and a Git repository (\emph{kernel tree}). The \texttt{MAINTAINERS} file identifies the maintainers, lists each subsystem's maintainers, files, and mailing lists. Contributions are sent as \emph{patches} by email to the subsystem's list~\cite{kernelMailingListsDoc}. Mailing lists remain the primary communication channel, and key maintainers consider them the most suitable solution for such a decentralized project~\cite{kernelEmailUsage}. These discussions are publicly archived in \emph{Kernel Lore}~\cite{kernelLore}, making the development process and its associated discussions accessible for analysis. A patch is an email with a title (subject), a descriptive commit message (body), the proposed \emph{code} change in a format similar to \texttt{git diff}, and \emph{trailers} such as \texttt{Signed-off-by}, \texttt{Reviewed-by}, and \texttt{Link}.
+\textbf{Mailing lists and patches.} The \mbox{Linux kernel} is organized into \emph{subsystems}, each typically associated with a set of maintainers, one or more mailing lists, and a Git repository (\emph{kernel tree}). The \texttt{MAINTAINERS} file identifies the maintainers, lists each subsystem's maintainers, files, and mailing lists. Contributions are sent as \emph{patches} by email to the subsystem's list~\cite{kernelMailingListsDoc}. Mailing lists remain the primary communication channel, and key maintainers consider them the most suitable solution for such a decentralized project~\cite{kernelEmailUsage}. These discussions are publicly archived in \emph{Kernel Lore}~\cite{kernelLore}, making the development process and its associated discussions accessible for analysis. A patch is an email with a title (subject), a descriptive commit message (body), the proposed \emph{code} change in a format similar to \texttt{git diff}, and \emph{trailers} such as \texttt{Signed-off-by}, \texttt{Reviewed-by}, and \texttt{Link}.
 
 \textbf{Threads and mainline.} Each email has a unique Message-ID, and a reply references its parent through the \texttt{In-Reply-To} and \texttt{References} headers. The chain of replies forms a \emph{thread}, which gathers the patch, the review comments, and often revised versions of the same patch. Accepted patches become commits in the maintainer's tree, and may later be merged into higher-level trees through pull requests, which are also sent by email (\texttt{[GIT PULL]}), until they reach the \emph{mainline} kernel, the tree from which official releases are made~\cite{jiang2013patch}.The kernel documentation recommends that patches carry \texttt{Link} trailers pointing to related discussions, preferably on Kernel Lore~\cite{kernelMailingListsDoc}, but this is not mandatory, and its use varies across subsystems. Rejected or ignored patches may never reach the mainline, so their discussions exist only on the mailing lists.
 
@@ -335,7 +334,7 @@ and is publicly available on Zenodo~\cite{lkones-dataset} at \url{https://doi.or
 \section{Related Datasets}\label{sec:related}
 
 Wang and Godfrey~\cite{wang2014intentional} built a dataset of intentional
-clone refactoring in the Linux kernel by searching commit messages for the
+clone refactoring in the \mbox{Linux kernel} by searching commit messages for the
 phrase \textit{``duplicated code''}. Since it starts from the commit history,
 it covers only merged changes and leaves out the review discussions around
 them. \textsc{LKlones} starts from the mailing lists instead, so it also
@@ -344,7 +343,7 @@ patch acts on duplication, and it selects threads with a broader vocabulary and
 an LLM classifier rather than a single phrase.
 
 Xu and Zhou~\cite{xu2018patchwork} collected 666,550 patches sent to the main
-Linux kernel mailing list (LKML) between 2008 and 2017, together with their
+\mbox{Linux kernel} mailing list (LKML) between 2008 and 2017, together with their
 review comments, from the kernel Patchwork. They link 139,664 of these patches
 to mainline commits by matching the commit author time to the email send time,
 falling back to the commit subject. \textsc{LKlones} shares the goal of linking
@@ -355,7 +354,7 @@ Patchwork, and focuses on threads about code duplication.
 \section{Showcase}\label{sec:showcase}
 
 \textsc{LKlones} can help close gaps in prior studies of code duplication in
-the Linux kernel. Wang and Godfrey~\cite{wang2014intentional} note that
+the \mbox{Linux kernel}. Wang and Godfrey~\cite{wang2014intentional} note that
 little is known about the design decisions that drive clone refactoring, since
 commit messages rarely record them. In \textsc{LKlones}, these decisions can be
 studied by selecting the threads whose \texttt{category} is \textit{clone
