@@ -338,16 +338,6 @@ and is publicly available on Zenodo~\cite{lkones-dataset} at \url{https://doi.or
 
 \todo{Dataset Statistics}
 
-% NOTE: tudo aqui é AND/OR
-\todo{Further Improvements}
-\todo{%
-Limitations
-
-* discussões sobre duplicação que não utilizam os termos das expressões regulares não são identificadas
-
-* o matching de commits pode produzir associações ambíguas ou incorretas
-}
-
 \section{Related Datasets}\label{sec:related}
 
 Wang and Godfrey~\cite{wang2014intentional} built a dataset of intentional
@@ -429,6 +419,28 @@ a clear benefit.
 \todo{Ethical Considerations?}
 
 \todo{Conclusion}
+
+\section{Limitations and Further Improvements}\label{sec:limitations}
+
+\textbf{Threads missed by the pre-filter.} The regular-expression pre-filter
+only selects threads that use the terms identified in our vocabulary analysis,
+so discussions about duplication phrased in other ways are not identified. A
+future version can extend the vocabulary with the terms found in the missed
+threads, and complement the regular expressions with a semantic search that
+does not depend on exact terms.
+
+\textbf{Ambiguous or incorrect commit links.} The commit matching relies on the
+\texttt{Link} trailer when it is present and otherwise on the author and date
+of the patch, which may yield \texttt{AMBIGUOUS} links or incorrect
+\texttt{EXACT} links. Likewise, a thread without \texttt{commit\_matches} was
+not necessarily rejected, since its patch may have reached the mainline with no
+detectable link. A more robust alternative is to link patches to commits by the
+content of the change instead of its metadata. The idea is that a patch and a
+commit represent the same change when they leave the code in the same state, so
+the code itself becomes the evidence of the link, regardless of who applied the
+patch or when. Since this matching depends neither on the presence of the
+\texttt{Link} trailer nor on the author and date, it could reduce ambiguous and
+incorrect links and recover the links of threads that currently have none.
 
 \section*{Data and Software Availability}
 
