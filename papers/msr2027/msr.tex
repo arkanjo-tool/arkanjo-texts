@@ -71,11 +71,7 @@
 
 % Sub-titles are not captured for https://ieeexplore.ieee.org and should not be
 % used
-\title{LKlones: A Dataset of Linux Kernel Mailing List Discussions on Code Duplication%
-%TODO: adicionar bolsas do Paulo e do David
-% \thanks{This study was financed, in part, by the São Paulo Research Foundation (FAPESP), Brasil. Process Number \#25/22416-1}%
-}
-
+\title{LKlones: A Dataset of Linux Kernel Mailing List Discussions on Code Duplication}
 
 % Submissions will undergo single-anonymous peer review.
 \author{%
@@ -174,13 +170,15 @@ duplication, bringing complete discussions on the topic, including patches that 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{figures/pipeline.pdf}
-  \vspace{-20pt}
+  \vspace{-15pt}
   \caption{Overview of the dataset construction pipeline.}
   \label{fig:pipeline}
   \vspace{-5pt}
 \end{figure*}
 
 \section{Background}\label{sec:background}
+
+\todo{verificar se vale manter os tipos dos clones, não usamos durante o texto}
 
 \textbf{Code clones.} A code clone is a fragment of source code that is identical or similar to another fragment, often resulting from copying and pasting. The literature commonly distinguishes four types of code clones~\cite{roy2009comparison}: Type-1 (identical except for whitespace and comments), Type-2 (also allowing changes to identifiers and literals), Type-3 (allowing the addition, removal, or modification of statements), and Type-4 (syntactically different but semantically equivalent). Developers rarely use the terminology established in clone detection research in discussions, preferring expressions such as \textit{duplicate}, \textit{deduplication}, or \textit{copy-paste}, among others.
 
@@ -267,7 +265,6 @@ concatenated text of their messages, stored in the \texttt{thread\_content} colu
     \texttt{ambiguous\_ids} & List[String] & Candidate messages when the match is ambiguous. \\
     \bottomrule
   \end{tabularx}
-  \vspace{-5pt}
 \end{table}
 
 \subsection{Duplication Classification}
@@ -340,8 +337,6 @@ and is publicly available on Zenodo~\cite{lkones-dataset} at \url{https://doi.or
 \label{sec:overview}
 
 Table~\ref{tab:dataset-categories} summarizes \textsc{LKlones} by category. Of the 373,264 candidate threads, the classifier assigns 186,432 (5.0\% of all threads) to the four duplication categories and 186,832 to \emph{not duplication}, so about half of the candidates are false positives, as expected from a filter designed for recall. The classifier is less certain about the threads it assigns to a duplication category (median confidence 0.75, with 27.3\% reaching 0.9) than about those it discards (0.95), and least certain about \emph{clone and reuse} (0.46). Threads about duplication have a median of 15 messages, but \texttt{n\_messages} also counts the other patches of a series, so it does not by itself indicate that reviewers replied.
-
-\vspace{-5pt}
 
 \begin{table}[ht]
   \centering
@@ -453,7 +448,7 @@ a clear benefit.
 
 \todo{Ethical Considerations?}
 
-\todo{Conclusion}
+\todo{Conclusion?}
 
 \section{Limitations and Further Improvements}\label{sec:limitations}
 
@@ -481,7 +476,11 @@ incorrect links and recover the links of threads that currently have none.
 
 The dataset is publicly available on Zenodo: \url{https://doi.org/10.5281/zenodo.23307333}. The source code of \textsc{LKlones}, together with its usage instructions, is available at \url{https://gitlab.com/ccsl-usp/codev/arkanjo-research/lkml5ws-data-analysis}.
 
-\cleardoublepage
+\section*{Acknowledgements}
+
+The São Paulo Research Foundation -- FAPESP (Proc. 2025/05395-0, 2025/22416-1) and the São Paulo State Data Analysis System Foundation -- SEADE (FAPESP Proc. 2023/18026-8) partially financed this study.
+
+\clearpage
 
 \bibliographystyle{IEEEtran}
 \bibliography{IEEEabrv,references}
