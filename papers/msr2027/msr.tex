@@ -380,9 +380,7 @@ refactoring} or \textit{clone and reuse}, optionally above a
 message (\texttt{n\_messages}), that is, those that likely received feedback. The
 \texttt{thread\_content} of these threads holds the patch description, where
 the author justifies the refactoring, and the replies, where reviewers
-question it, suggest alternatives, or ask for new versions. Splitting them by
-whether \texttt{commit\_matches} is empty separates decisions that reached the
-mainline from those that did not.
+question it, suggest alternatives, or ask for new versions.
 
 The dataset also supports other kinds of analysis. For instance, the
 \texttt{date} and \texttt{category} columns show how the presence of
@@ -400,11 +398,33 @@ threads about duplication grew steadily, from about 1\% of all threads in
 \end{figure}
 
 Another research question that the dataset can help answer is why some clone
-refactoring patches are rejected. Filtering the threads classified as clone
-refactoring with no entry in \texttt{commit\_matches} yields refactorings that
-likely never reached the mainline. An LLM can then
-be applied again to the \texttt{thread\_content} of these threads
-to identify the reasons for rejection raised by reviewers.
+refactoring patches never reach the mainline. To illustrate it, we use the
+\texttt{linux-iio} threads in \textsc{LKlones}. We select
+the 95 threads classified as \textit{clone refactoring} with
+\texttt{category\_confidence} $\geq 0.9$, keep those with an empty
+\texttt{commit\_matches}, that is, those whose patch version has no
+corresponding mainline commit, and keep those in which someone other than the
+author of the first message replied. Since the hashed identities are
+consistent within a thread, the senders can be recovered by parsing
+\texttt{thread\_content}. This leaves 55 threads. An LLM
+(GPT-5.4 nano) then reads the \texttt{thread\_content} of each of them,
+labels its review outcome, and summarizes the reviewers' feedback in one
+sentence. The outcome is one of four labels. \textit{Changes requested}
+covers threads in which reviewers accept removing the duplication and only
+ask for adjustments. \textit{Approach questioned} covers threads in which reviewers
+question the deduplication itself, for instance its readability or
+actual benefit. \textit{Applied} serves as a check on \texttt{commit\_matches}. If a
+maintainer states that the patch was applied, it may have reached the tree
+and the matching missed it, for example because the maintainer modified the patch.
+Finally, a thread is labeled \textit{unclear} when it does not fit any of the
+other labels. The analysis script is available in the \textsc{LKlones} repository together with the resulting CSV
+file.
+
+In this sample, the threads in which reviewers questioned the
+deduplication itself point to a recurring reason, namely that the abstraction
+cost more than the duplication it removed. Reviewers said that lookup tables,
+macros, or shared helpers made the code less readable or added churn without
+a clear benefit.
 
 \todo{Ethical Considerations?}
 
