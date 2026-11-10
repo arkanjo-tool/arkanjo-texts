@@ -51,7 +51,7 @@
 \usepackage{todonotes}
 \setuptodonotes{inline}
 % NOTE: uncomment to remove todonotes
-%\presetkeys{todonotes}{disable}{}
+% \presetkeys{todonotes}{disable}{}
 
 \hyphenation{
   ArKanjo
@@ -86,7 +86,7 @@ São Paulo, Brazil \\
 natalia.andre@ime.usp.br%
 }
 \and
-\IEEEauthorblockN{Guilherme Ivo}
+\IEEEauthorblockN{Guilherme Ivo Bozi}
 \IEEEauthorblockA{%
 \textit{University of São Paulo (IME-USP)}\\
 São Paulo, Brazil \\
@@ -174,8 +174,10 @@ duplication, bringing complete discussions on the topic, including patches that 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{figures/pipeline.pdf}
+  \vspace{-20pt}
   \caption{Overview of the dataset construction pipeline.}
   \label{fig:pipeline}
+  \vspace{-5pt}
 \end{figure*}
 
 \section{Background}\label{sec:background}
@@ -192,11 +194,10 @@ Figure~\ref{fig:pipeline} summarizes the five-step pipeline that builds
 \textsc{LKlones}. Once the threads are assembled, no step removes data, and each step
 only adds columns to the dataset, so users can apply their own filters.
 
-\todo{Versões do kernel
-
-* explicar a versão inicial (v2.6.30), relacionado a primeira versao do git.
-* versão mais recente do kernel no dataset.
-}
+% TODO: Versões do kernel
+%
+% * explicar a versão inicial (v2.6.30)
+% * versão mais recente do kernel no dataset é a v7.1.
 
 \subsection{Collect}
 
@@ -266,6 +267,7 @@ concatenated text of their messages, stored in the \texttt{thread\_content} colu
     \texttt{ambiguous\_ids} & List[String] & Candidate messages when the match is ambiguous. \\
     \bottomrule
   \end{tabularx}
+  \vspace{-5pt}
 \end{table}
 
 \subsection{Duplication Classification}
@@ -317,10 +319,8 @@ hash) and the author date match the sender and date of a patch email, or with
 status \texttt{AMBIGUOUS} when more than one email matches, in which case all
 candidates are kept. These links are stored in \texttt{commit\_matches} column. Overall,
 33,209 threads about duplication are linked to 84,964 distinct commits.
-
-\todo{
-* quantidade de correspondências obtidas por LINK, EXACT e AMBIGUOUS?
-}
+Of the 196,649 entries in \texttt{commit\_matches}, 57.5\% have status
+\texttt{LINK}, 37.0\% \texttt{EXACT}, and 5.5\% \texttt{AMBIGUOUS}.
 
 \subsection{Anonymize and Publish}
 
@@ -336,7 +336,42 @@ and is publicly available on Zenodo~\cite{lkones-dataset} at \url{https://doi.or
 % verificar se colocamos "at \url{...}" aqui ou apenas na secao onde falamos
 % algo sobre "Dataset and Tool", igual do LKML5Ws
 
-\todo{Dataset Statistics}
+\section{Dataset Overview}
+\label{sec:overview}
+
+Table~\ref{tab:dataset-categories} summarizes \textsc{LKlones} by category. Of the 373,264 candidate threads, the classifier assigns 186,432 (5.0\% of all threads) to the four duplication categories and 186,832 to \emph{not duplication}, so about half of the candidates are false positives, as expected from a filter designed for recall. The classifier is less certain about the threads it assigns to a duplication category (median confidence 0.75, with 27.3\% reaching 0.9) than about those it discards (0.95), and least certain about \emph{clone and reuse} (0.46). Threads about duplication have a median of 15 messages, but \texttt{n\_messages} also counts the other patches of a series, so it does not by itself indicate that reviewers replied.
+
+\vspace{-5pt}
+
+\begin{table}[ht]
+  \centering
+  \begin{threeparttable}
+  \caption{Threads per category\tnote{\textup{a}}.}
+  \label{tab:dataset-categories}
+  \footnotesize
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabularx}{\columnwidth}{ X r r r r }
+    \toprule
+    \textbf{Category} & \textbf{Threads} & \textbf{\%} & \textbf{Conf.} & \textbf{Linked (\%)} \\
+    \midrule
+    Clone refactoring & 71,860 & 1.9 & 0.76 & 24.2 \\
+    Preventive reuse & 56,845 & 1.5 & 0.67 & 16.8 \\
+    Clone and reuse & 1,098 & $<$0.1 & 0.46 & 16.1 \\
+    Duplication discussion & 56,629 & 1.5 & 0.84 & 10.7 \\
+    \midrule
+    \textit{Duplication-related} & 186,432 & 5.0 & 0.75 & 17.8 \\
+    Not duplication & 186,832 & 5.1 & 0.95 & 21.8 \\
+    Not a candidate & 3,325,611 & 89.9 & -- & -- \\
+    \midrule
+    \textit{Total} & 3,698,875 & 100.0 & -- & -- \\
+    \bottomrule
+  \end{tabularx}
+    \begin{tablenotes}[flushleft]
+    \footnotesize
+    \item[a] Percentages (\%) refer to all threads. Conf. is the median of \texttt{category\_confidence}. Linked is the share of threads with at least one mainline commit.
+    \end{tablenotes}
+  \end{threeparttable}
+\end{table}
 
 \section{Related Datasets}\label{sec:related}
 
@@ -383,7 +418,7 @@ threads about duplication grew steadily, from about 1\% of all threads in
   \centering
   \includegraphics[width=\columnwidth]{figures/yearly_area.pdf}%
   \vspace{-10pt}
-  \caption{Yearly proportion of threads across duplication-related categories. Stacked areas represent the four duplication-related categories, showing their respective proportions of all threads analyzed each year.}
+  \caption{Yearly proportion of all threads in each duplication-related category (stacked areas).}
   \label{fig:yearlyarea}
 \end{figure}
 
