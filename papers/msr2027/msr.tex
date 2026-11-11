@@ -51,7 +51,7 @@
 \usepackage{todonotes}
 \setuptodonotes{inline}
 % NOTE: uncomment to remove todonotes
-\presetkeys{todonotes}{disable}{}
+% \presetkeys{todonotes}{disable}{}
 
 \hyphenation{
   ArKanjo
@@ -275,44 +275,15 @@ Table~\ref{tab:dataset-categories} summarizes \textsc{LKlones} by thread categor
 
 \section{Related Datasets}\label{sec:related}
 
-Wang and Godfrey~\cite{wang2014intentional} built a dataset of intentional
-clone refactoring in the \mbox{Linux kernel} by searching commit messages for the
-phrase \textit{``duplicated code''}. Since it starts from the commit history,
-it covers only merged changes and leaves out the review discussions around
-them. \textsc{LKlones} starts from the mailing lists instead, so it also
-includes patches that never reached the mainline and discussions in which no
-patch acts on duplication, and it selects threads with a broader vocabulary and
-an LLM classifier rather than a single phrase.
+Wang and Godfrey~\cite{wang2014intentional} built a dataset of intentional clone refactoring in the \mbox{Linux kernel} by searching commit messages for the phrase \textit{``duplicated code''}. Since it starts with the commit history, it covers only merged changes and excludes the review discussions around them. \textsc{LKlones} starts from the mailing lists instead, so it also includes patches that never reached the mainline and discussions in which no patch acts on duplication, and it selects threads with a broader vocabulary and an LLM classifier rather than a single phrase.
 
-Xu and Zhou~\cite{xu2018patchwork} collected 666,550 patches sent to the main
-\mbox{Linux kernel} mailing list (LKML) between 2008 and 2017, together with their
-review comments, from the kernel Patchwork. They link 139,664 of these patches
-to mainline commits by matching the commit author time to the email send time,
-falling back to the commit subject. \textsc{LKlones} shares the goal of linking
-discussions to commits, but covers 206 subsystem lists instead of LKML alone,
-rebuilds complete threads from the email headers instead of relying on
-Patchwork, and focuses on threads about code duplication.
+Xu and Zhou~\cite{xu2018patchwork} collected 666,550 patches sent to the main \mbox{Linux kernel} mailing list (LKML) between 2008 and 2017, together with their review comments, from the kernel Patchwork. They link 139,664 of these patches to mainline commits by matching the commit author time to the email send time, falling back to the commit subject. \textsc{LKlones} shares the goal of linking discussions to commits, but covers 206 subsystem lists instead of LKML alone, rebuilds complete threads from the email headers instead of relying on Patchwork, and focuses on threads about code duplication.
 
 \section{Showcase}\label{sec:showcase}
 
-\textsc{LKlones} can help close gaps in prior studies of code duplication in
-the \mbox{Linux kernel}. Wang and Godfrey~\cite{wang2014intentional} note that
-little is known about the design decisions that drive clone refactoring, since
-commit messages rarely record them. In \textsc{LKlones}, these decisions can be
-studied by selecting the threads whose \texttt{category} is \textit{clone
-refactoring} or \textit{clone and reuse}, optionally above a
-\texttt{category\_confidence} threshold, and keeping those with more than one
-message (\texttt{n\_messages}), that is, those that likely received feedback. The
-\texttt{thread\_content} of these threads holds the patch description, where
-the author justifies the refactoring, and the replies, where reviewers
-question it, suggest alternatives, or ask for new versions.
+\textsc{LKlones} can help close gaps in prior studies of code duplication in the \mbox{Linux kernel}. Wang and Godfrey~\cite{wang2014intentional} note that little is known about the design decisions that drive clone refactoring, since commit messages rarely record them. In \textsc{LKlones}, these decisions can be studied by selecting the threads whose \texttt{category} is \textit{clone refactoring} or \textit{clone and reuse}, optionally above a \texttt{category\_confidence} threshold, and keeping those with more than one message (\texttt{n\_messages}), that is, those that likely received feedback. The \texttt{thread\_content} of these threads holds the patch description, where the author justifies the refactoring, and the replies, where reviewers question it, suggest alternatives, or ask for new versions.
 
-The dataset also supports other kinds of analysis. For instance, the
-\texttt{date} and \texttt{category} columns show how the presence of
-duplication in the discussions has grown over time and how the threads are distributed
-across categories. Figure~\ref{fig:yearlyarea} shows that the share of
-threads about duplication grew steadily, from about 1\% of all threads in
-2005 to about 8\% in 2025.
+The dataset also supports other kinds of analysis. For instance, the \texttt{date} and \texttt{category} columns show how the topic of duplication in the Linux mailing lists has grown over time and how threads are distributed across categories. Figure~\ref{fig:yearlyarea} shows that the share of threads about duplication grew steadily, from about 1\% of all threads in 2005 to about 8\% in 2025.
 
 \begin{figure}[!ht]
   \centering
@@ -322,60 +293,19 @@ threads about duplication grew steadily, from about 1\% of all threads in
   \label{fig:yearlyarea}
 \end{figure}
 
-Another research question that the dataset can help answer is why some clone
-refactoring patches never reach the mainline. To illustrate it, we use the
-\texttt{linux-iio} threads in \textsc{LKlones}. We select
-the 95 threads classified as \textit{clone refactoring} with
-\texttt{category\_confidence} $\geq 0.9$, keep those with an empty
-\texttt{commit\_matches}, that is, those whose patch version has no
-corresponding mainline commit, and keep those in which someone other than the
-author of the first message replied. Since the hashed identities are
-consistent within a thread, the senders can be recovered by parsing
-\texttt{thread\_content}. This leaves 55 threads. An LLM
-(GPT-5.4 nano) then reads the \texttt{thread\_content} of each of them,
-labels its review outcome, and summarizes the reviewers' feedback in one
-sentence. The outcome is one of four labels. \textit{Changes requested}
-covers threads in which reviewers accept removing the duplication and only
-ask for adjustments. \textit{Approach questioned} covers threads in which reviewers
-question the deduplication itself, for instance its readability or
-actual benefit. \textit{Applied} serves as a check on \texttt{commit\_matches}. If a
-maintainer states that the patch was applied, it may have reached the tree
-and the matching missed it, for example because the maintainer modified the patch.
-Finally, a thread is labeled \textit{unclear} when it does not fit any of the
-other labels. The analysis script is available in the \textsc{LKlones} repository together with the resulting CSV
-file.
+An example of a research question that the dataset can help answer is \textit{``Why do some clone refactoring patches never reach the mainline?''} To illustrate this, we use the \texttt{linux-iio} threads in \textsc{LKlones}. We select the 95 threads classified as \textit{clone refactoring} with \texttt{category\_confidence} $\geq 0.9$, keep those with an empty \texttt{commit\_matches}, that is, those whose patch version has no corresponding mainline commit, and keep those in which someone other than the author of the first message replied. Since the hashed identities are consistent within a thread, the senders can be recovered by parsing \texttt{thread\_content}. This leaves 55 threads. An LLM (GPT-5.4 nano) then reads the \texttt{thread\_content} of each of them, labels its review outcome, and summarizes the reviewers' feedback in one sentence. The outcome is one of four labels. \textit{Changes requested} covers threads in which reviewers accept the removal of the duplication and only ask for adjustments. \textit{Approach questioned} covers threads in which reviewers question the deduplication itself, for instance its readability or actual benefit. \textit{Applied} serves as a check on \texttt{commit\_matches}. If a maintainer states that the patch was applied, it may have reached the tree, and the matching missed it, for example because the maintainer modified the patch. Finally, a thread is labeled \textit{unclear} when it does not fit any of the other labels. The analysis script is available in the \textsc{LKlones} repository together with the resulting CSV file.
 
-In this sample, the threads in which reviewers questioned the
-deduplication itself point to a recurring reason, namely that the abstraction
-cost more than the duplication it removed. Reviewers said that lookup tables,
-macros, or shared helpers made the code less readable or added churn without
-a clear benefit.
-
-\todo{Ethical Considerations?}
-
-\todo{Conclusion?}
+In this sample, the threads in which reviewers questioned the deduplication itself point to a recurring reason, namely that the abstraction cost more than the duplication it removed. Reviewers said that lookup tables, macros, or shared helpers made the code less readable or added churn without a clear benefit.
 
 \section{Limitations and Further Improvements}\label{sec:limitations}
 
-\textbf{Threads missed by the pre-filter.} The regex pre-filter
-only selects threads that use the terms identified in our vocabulary analysis,
-so discussions about duplication phrased in other ways are not identified. A
-future version can extend the vocabulary with the terms found in the missed
-threads, and complement the regexes with a semantic search that
-does not depend on exact terms.
+\textbf{Threads missed by the pre-filter.} The regex pre-filter only selects threads that use the terms identified in our vocabulary analysis, so discussions about duplication phrased in other ways are not identified. A future version can extend the vocabulary with terms found in the missed threads and complement the regexes with a semantic search that does not rely on exact terms.
 
-\textbf{Ambiguous or incorrect commit links.} The commit matching relies on the
-\texttt{Link} trailer when it is present and otherwise on the author and date
-of the patch, which may yield \texttt{AMBIGUOUS} links or incorrect
-\texttt{EXACT} links. Likewise, a thread without \texttt{commit\_matches} was
-not necessarily rejected, since its patch may have reached the mainline with no
-detectable link. A more robust alternative is to link patches to commits by the
-content of the change instead of its metadata. The idea is that a patch and a
-commit represent the same change when they leave the code in the same state, so
-the code itself becomes the evidence of the link, regardless of who applied the
-patch or when. Since this matching depends neither on the presence of the
-\texttt{Link} trailer nor on the author and date, it could reduce ambiguous and
-incorrect links and recover the links of threads that currently have none.
+\textbf{Ambiguous or incorrect commit links.} Current commit matching relies on the \texttt{Link} trailer or the patch's author and date, which may yield \texttt{AMBIGUOUS} or incorrect \texttt{EXACT} links. Likewise, a thread lacking \texttt{commit\_matches} was not necessarily rejected, since its patch may have reached the mainline without a detectable link. A more robust alternative links patches to commits by change content rather than metadata. If a patch and commit leave the code in identical states, they represent the same change; thus, the code itself provides linkage evidence, regardless of who applied the patch or when. Because this approach depends neither on the \texttt{Link} trailer nor on author and date, it could reduce ambiguous and incorrect links while recovering those currently missing.
+
+\section{Conclusion}\label{sec:conclusion}
+
+We introduced \textsc{LKlones}, a dataset of 186,432 Linux kernel discussions on code duplication. By linking 33,209 threads to mainline commits, \textsc{LKlones} captures the complete decision-making process rather than just merged refactorings, empowering empirical research on technical debt management and deduplication trade-offs in the context of Linux development.
 
 \section*{Data and Software Availability}
 
