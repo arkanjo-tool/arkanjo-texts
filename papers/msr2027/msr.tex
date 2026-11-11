@@ -200,22 +200,22 @@ We use \textsc{Jev}~\cite{typesafe_jev}, version 1.13.0, selected after comparin
   \caption{Parquet dataset schema. Each row represents a mailing-list thread.}
   \label{tab:dataset-schema}
   \footnotesize
-  \begin{tabularx}{\columnwidth}{@{} l l X @{}}
+  \begin{tabularx}{\columnwidth}{@{} l @{\hspace{6pt}} l @{\hspace{7pt}} X @{}}
     \toprule
     \textbf{Column} & \textbf{Type} & \textbf{Description} \\
     \midrule
     \texttt{thread\_id} & String & Unique identifier of the thread. \\
     \texttt{list} & String & Originating mailing list. \\
-    \texttt{n\_messages} & Int64 & Number of messages in the thread. \\
-    \texttt{message\_ids} & List[String] & Message-IDs in chronological order. \\
-    \texttt{date} & Timestamp & Date of the first message. \\
+    \texttt{n\_messages} & Integer & Number of messages in the thread. \\
+    \texttt{message\_ids} & String[] & Message-IDs in chronological order. \\
+    \texttt{date} & Date & Date of the first message. \\
     \texttt{subject} & String & Subject of the first message. \\
     % is\_duplication\_candidate
     \texttt{dup\_candidate} & Boolean & Flag for regex pre-filter. \\
     \texttt{thread\_content} & String & Concatenated content of the messages. \\
     \texttt{category} & String & Classification assigned to the thread. \\
-    \texttt{category}\\\texttt{\ \ \ \_confidence} & Double & Confidence score of the classification. \\
-    \texttt{commit\_matches} & List[Struct] & Commits associated with thread. \\
+    \texttt{category\_confidence} & Double & Confidence score of the classification. \\
+    \texttt{commit\_matches} & Struct[] & Commits associated with thread. \\
     \midrule
     \multicolumn{3}{@{}l}{\textit{Fields of \texttt{commit\_matches}}} \\
     \addlinespace[2pt]
@@ -223,7 +223,7 @@ We use \textsc{Jev}~\cite{typesafe_jev}, version 1.13.0, selected after comparin
     \texttt{commit\_hash} & String & Hash of the mainline commit. \\
     \texttt{status} & String & \texttt{LINK}, \texttt{EXACT}, or \texttt{AMBIGUOUS}. \\
     % candidate\_message\_ids
-    \texttt{ambiguous\_ids} & List[String] & Candidate messages for \texttt{AMBIGUOUS}. \\
+    \texttt{ambiguous\_ids} & String[] & Candidate \texttt{AMBIGUOUS} messages. \\
     \bottomrule
   \end{tabularx}
 \end{table}
