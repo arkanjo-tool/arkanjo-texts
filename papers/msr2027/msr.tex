@@ -150,7 +150,7 @@ Prior work has explored this history only partially. Wang and Godfrey searched t
 In this paper, we present \textsc{LKlones}, a dataset of Linux kernel mailing list threads on code duplication. It builds on \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset with almost 30 million emails exchanged on the \mbox{Linux kernel} mailing lists. A pipeline builds the dataset, starting by reconstructing all the threads for each list, since a patch discussion involves several emails. It then identifies the threads about duplication by combining a \textit{regular expression} (regex) filter with an AI-based classification. Finally, it links these threads to the commits that reached the mainline kernel.
 
 %NOTE: Quis deixar bem "for dummies" aqui a questão do match do commit com alguma mensagem da thread indicar que teve um accept
-From 23.8 million emails and 3.7 million threads across 206 mailing lists, we classify 186,432 threads as about code duplication, providing the content of each thread along with the full discussion around it. Of these threads, 33,209 are linked to mainline commits, indicating they relate to merged changes. This dataset supports studies of how kernel developers handle duplication, bringing complete discussions on the topic, including patches that maintainers rejected or ignored.
+From 23.8 million emails and 3.7 million threads across 206 mailing lists, we classify 186,432 threads as code-duplication-related, providing the content of each thread along with the full discussion around it. Of these threads, 33,209 are linked to mainline commits, indicating they relate to merged changes. This dataset supports studies of how kernel developers handle duplication, providing complete discussions on the topic, including patches that maintainers rejected or ignored.
 
 \begin{figure*}[t]
   \centering
@@ -171,7 +171,7 @@ From 23.8 million emails and 3.7 million threads across 206 mailing lists, we cl
 
 \section{Data Collection and Processing}
 
-Figure~\ref{fig:pipeline} summarizes the five-step pipeline that builds \textsc{LKlones}. Once the threads are assembled, no step removes data, and each step only adds columns to the dataset so that users can apply their own filters.
+Figure~\ref{fig:pipeline} summarizes the five-step pipeline that builds \textsc{LKlones}. Once the threads are assembled, no step removes data; each step only adds columns to the dataset, allowing users to apply their own filters.
 
 % TODO: Versões do kernel
 %
@@ -187,17 +187,10 @@ The input is \textsc{LKML5Ws}~\cite{passos2026lkml5ws}, a dataset of the mailing
 %NOTE: Transformei o footnote do syzbot em ref pra ganhar espaço
 We group the emails into threads with a union-find structure over the \texttt{In-Reply-To} header, using the last identifier in \texttt{References} when the parent is missing from \textsc{LKML5Ws}. Messages within a thread are kept in chronological order. This is the only step that removes data, as we discard pull requests, which only summarize patches discussed in other threads, and messages sent by bots, such as \textsc{syzbot}\cite{syzbot}. The result is 3.7 million threads built from 23.8 million emails.
 
-Since duplication is rarely discussed, we use regex to pre-filter candidate threads. We built the regexes from a vocabulary analysis, in which two reviewers manually inspected a sample of threads and identified the terms that developers use when discussing duplication, such as \mbox{\textit{duplicat*}}, \mbox{\textit{dedup*}}, \mbox{\textit{redundant*}}, \mbox{\textit{copy-paste}}, and phrases like \textit{``move into a common helper''}. The same analysis revealed recurring false positives, such as \textit{``redundant null check''} and \textit{``duplicate include''}, which we added as exclusions. Quoted text is ignored, so that each excerpt only counts in the original message. The pre-filter flags 373,264 candidate threads using the \texttt{dup\_candidate} column (Table~\ref{tab:dataset-schema}), and only these receive the concatenated text of their messages, stored in the \texttt{thread\_content} column.
-
-\subsection{Duplication Classification}
-
-The pre-filter favors recall, so many candidates are not actually about duplication. To separate them, a large language model (LLM) decides whether each candidate thread is related to duplication. In preliminary tests, the model used performed poorly when asked yes-or-no questions directly. We therefore guide it with five categories that describe what we consider related to duplication. A thread is \textit{clone refactoring} when a patch consolidates existing copies into a single place, \textit{preventive reuse} when a patch avoids writing a copy by reusing or sharing code, and \textit{clone and reuse} when both occur in the same thread. It is \textit{duplication discussion} when participants discuss duplication, but no patch acts on it, and \textit{not duplication} otherwise. The categories serve only as guidance: the first four are mapped to \textit{yes}, and the last to \textit{no}.
-
-We use \textsc{Jev}~\cite{typesafe_jev}, version 1.13.0, selected after comparing it with other LLMs. We frame the task as a choice question, in which \textsc{Jev} picks one of the five categories for each thread. Instead of free-form text, \textsc{Jev} returns the probability for each category, thereby keeping the output structured and reproducible across runs. The chosen category and its probability are stored in the \texttt{category} and \texttt{category\_confidence} columns, respectively, allowing users to set their own confidence threshold. Threads longer than the model context are truncated, keeping the first message and the passages around the pre-filter terms.
 
 \begin{table}[ht]
   \centering
-  \caption{Parquet dataset schema. Each row represents a mailing-list thread.}
+  \caption{Parquet dataset schema. Each row represents a thread.}
   \label{tab:dataset-schema}
   \footnotesize
   \begin{tabularx}{\columnwidth}{@{} l l X @{}}
@@ -228,20 +221,29 @@ We use \textsc{Jev}~\cite{typesafe_jev}, version 1.13.0, selected after comparin
   \end{tabularx}
 \end{table}
 
+Since duplication is rarely discussed, we use regex to pre-filter candidate threads. We built the regexes from a vocabulary analysis, in which two reviewers manually inspected a sample of threads and identified the terms that developers use when discussing duplication, such as \mbox{\textit{duplicat*}}, \mbox{\textit{dedup*}}, \mbox{\textit{redundant*}}, \mbox{\textit{copy-paste}}, and phrases like \textit{``move into a common helper''}. The same analysis revealed recurring false positives, such as \textit{``redundant null check''} and \textit{``duplicate include''}, which we added as exclusions. Quoted text is ignored, so that each excerpt only counts in the original message. The pre-filter flags 373,264 candidate threads using the \texttt{dup\_candidate} column (Table~\ref{tab:dataset-schema}), and only these receive the concatenated text of their messages, stored in the \texttt{thread\_content} column.
+
+\subsection{Duplication Classification}
+
+The pre-filter favors recall, so many candidates are not actually about duplication. To separate them, a large language model (LLM) determines whether each candidate thread is a duplicate. In preliminary tests, the model used performed poorly when asked yes-or-no questions directly. We therefore guide it with five categories that describe what we consider related to duplication. A thread is \textit{clone refactoring} when a patch consolidates existing copies into a single place, \textit{preventive reuse} when a patch avoids writing a copy by reusing or sharing code, and \textit{clone and reuse} when both occur in the same thread. It is \textit{duplication discussion} when participants discuss duplication, but no patch acts on it, and \textit{not duplication} otherwise. The categories serve only as guidance: the first four are mapped to \textit{yes}, and the last to \textit{no}.
+
+We use \textsc{Jev}~\cite{typesafe_jev}, version 1.13.0, selected after comparing it with other LLMs. We frame the task as a choice question, in which \textsc{Jev} picks one of the five categories for each thread. Instead of free-form text, \textsc{Jev} returns the probability for each category, thereby keeping the output structured and reproducible across runs. The chosen category and its probability are stored in the \texttt{category} and \texttt{category\_confidence} columns, respectively, allowing users to set their own confidence threshold. Threads longer than the model context are truncated, keeping the first message and the passages around the pre-filter terms.
+
 To evaluate the classifier, two authors independently labeled 313 threads sampled from four lists, reaching 87.9\% agreement (Cohen's $\kappa = 0.82$) and resolving disagreements by consensus. On the binary decision, \textsc{Jev} reaches 84.7\% accuracy, with 95.3\% recall and 70.3\% precision for threads about duplication. The classifier thus rarely misses relevant threads, and users who need higher precision can rely on \texttt{category\_confidence}. In total, 186,432 threads are classified as related to duplication.
 
 \subsection{Commit Matching}
 
-After classifying the threads, we then link them to the commits in the mainline kernel. For each commit, we search for the email that introduced it. Since the \texttt{Link} trailer is not present in all commits, we fall back to other criteria. A commit is linked with status \texttt{LINK} when its \texttt{Link} trailer cites the email Message-ID of an email. Otherwise, it is linked with status \texttt{EXACT} when the commit author email and author date match the sender and date of a patch, or with status \texttt{AMBIGUOUS} when it matches to more than one patch, in which case all candidates are kept. These links are stored in the \texttt{commit\_matches} column. Overall, 33,209 threads about duplication are linked to 84,964 distinct commits. Of the 196,649 entries in \texttt{commit\_matches}, 57.5\% have status \texttt{LINK}, 37.0\% \texttt{EXACT}, and 5.5\% \texttt{AMBIGUOUS}.
+After classifying the threads, we then link them to the commits in the mainline kernel. For each commit, we search for the email that introduced it. Since the \texttt{Link} trailer is not present in all commits, we fall back to other criteria. A commit is linked with status \texttt{LINK} when its \texttt{Link} trailer cites the email Message-ID of an email. Otherwise, it is linked with status \texttt{EXACT} when the commit author email and author date match the sender and date of a patch, or with status \texttt{AMBIGUOUS} when it matches more than one patch, in which case all candidates are kept. These links are stored in the \texttt{commit\_matches} column. Overall, 33,209 threads about duplication are linked to 84,964 distinct commits. Of the 196,649 entries in \texttt{commit\_matches}, 57.5\% have status \texttt{LINK}, 37.0\% \texttt{EXACT}, and 5.5\% \texttt{AMBIGUOUS}.
 
 \subsection{Anonymization and Publication}
 
-We use the anonymized release of \textsc{LKML5Ws}, in which SHA-1 hashes already replace the names and email addresses of participants, but Message-IDs are kept in clear text. Since a Message-ID often embeds the sender's address or host name, we complete this anonymization by applying the same hash to every Message-ID in the output. Each thread is identified by the hash of its first message (\texttt{thread\_id}). The resulting dataset is stored in Apache Parquet, with one row per thread and the columns described in Table~\ref{tab:dataset-schema}.
+We use the anonymized release of \textsc{LKML5Ws}, in which SHA-1 hashes already replace participants' names and email addresses, but Message-IDs are kept in clear text. Since a Message-ID often embeds the sender's address or host name, we complete this anonymization by applying the same hash to every Message-ID in the output. Each thread is identified by the hash of its first message (\texttt{thread\_id}). The resulting dataset is stored in Apache Parquet, with one row per thread and the columns described in Table~\ref{tab:dataset-schema}.
+
 
 \section{Dataset Overview}
 \label{sec:overview}
 
-Table~\ref{tab:dataset-categories} summarizes \textsc{LKlones} by thread category. Of the 373,264 candidate threads, the classifier assigns 186,432 (5.0\% of all threads) to the four duplication categories and 186,832 to \emph{not duplication}, so about half of the candidates are false positives, as expected from a filter designed for recall. The classifier is less certain about the threads it assigns to a duplication category (median confidence 0.75, with 27.3\% reaching 0.9) than about those it discards (0.95), and least certain about \emph{clone and reuse} (0.46). Threads about duplication have a median of 15 messages, but \texttt{n\_messages} also counts other patches in a series, so it does not, by itself, indicate that reviewers replied.
+Table~\ref{tab:dataset-categories} summarizes \textsc{LKlones} by thread category. Of the 373,264 candidate threads, the classifier assigns 186,432 to the four duplication categories and 186,832 to \emph{not duplication}, so about half of the candidates are false positives, as expected from a filter designed for recall. The classifier is less certain about the threads it assigns to a duplication category (median confidence 0.75, with 27.3\% reaching 0.9) than about those it discards (0.95), and least certain about \emph{clone and reuse} (0.46). Threads about duplication have a median of 15 messages, but \texttt{n\_messages} also counts other patches in a series, so it does not, by itself, indicate that reviewers replied.
 
 \begin{table}[ht]
   \centering
@@ -283,15 +285,16 @@ Xu and Zhou~\cite{xu2018patchwork} collected 666,550 patches sent to the main \m
 
 \textsc{LKlones} can help close gaps in prior studies of code duplication in the \mbox{Linux kernel}. Wang and Godfrey~\cite{wang2014intentional} note that little is known about the design decisions that drive clone refactoring, since commit messages rarely record them. In \textsc{LKlones}, these decisions can be studied by selecting the threads whose \texttt{category} is \textit{clone refactoring} or \textit{clone and reuse}, optionally above a \texttt{category\_confidence} threshold, and keeping those with more than one message (\texttt{n\_messages}), that is, those that likely received feedback. The \texttt{thread\_content} of these threads holds the patch description, where the author justifies the refactoring, and the replies, where reviewers question it, suggest alternatives, or ask for new versions.
 
-The dataset also supports other kinds of analysis. For instance, the \texttt{date} and \texttt{category} columns show how the topic of duplication in the Linux mailing lists has grown over time and how threads are distributed across categories. Figure~\ref{fig:yearlyarea} shows that the share of threads about duplication grew steadily, from about 1\% of all threads in 2005 to about 8\% in 2025.
-
-\begin{figure}[!ht]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\columnwidth]{figures/yearly_area.pdf}%
   \vspace{-10pt}
   \caption{Yearly proportion of all threads in each duplication-related category (stacked areas).}
   \label{fig:yearlyarea}
 \end{figure}
+
+
+The dataset also supports other kinds of analysis. For instance, the \texttt{date} and \texttt{category} columns show how the topic of duplication in the Linux mailing lists has grown over time and how threads are distributed across categories. Figure~\ref{fig:yearlyarea} shows that the share of threads about duplication grew steadily, from about 1\% of all threads in 2005 to about 8\% in 2025.
 
 An example of a research question that the dataset can help answer is \textit{``Why do some clone refactoring patches never reach the mainline?''} To illustrate this, we use the \texttt{linux-iio} threads in \textsc{LKlones}. We select the 95 threads classified as \textit{clone refactoring} with \texttt{category\_confidence} $\geq 0.9$, keep those with an empty \texttt{commit\_matches}, that is, those whose patch version has no corresponding mainline commit, and keep those in which someone other than the author of the first message replied. Since the hashed identities are consistent within a thread, the senders can be recovered by parsing \texttt{thread\_content}. This leaves 55 threads. An LLM (GPT-5.4 nano) then reads the \texttt{thread\_content} of each of them, labels its review outcome, and summarizes the reviewers' feedback in one sentence. The outcome is one of four labels. \textit{Changes requested} covers threads in which reviewers accept the removal of the duplication and only ask for adjustments. \textit{Approach questioned} covers threads in which reviewers question the deduplication itself, for instance its readability or actual benefit. \textit{Applied} serves as a check on \texttt{commit\_matches}. If a maintainer states that the patch was applied, it may have reached the tree, and the matching missed it, for example because the maintainer modified the patch. Finally, a thread is labeled \textit{unclear} when it does not fit any of the other labels. The analysis script is available in the \textsc{LKlones} repository together with the resulting CSV file.
 
